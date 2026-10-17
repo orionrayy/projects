@@ -26,8 +26,8 @@ def measure_frame_pair(
     current: np.ndarray,
     *,
     cv2_module: Any | None = None,
-) -> dict[str, float | None]:
-    """Measure change and optional dense optical flow for two equal-sized gray frames."""
+) -> dict[str, Any]:
+    """Measure adjacent-frame change and optional dense flow with a spatial grid."""
     if previous.ndim != 2 or current.ndim != 2:
         raise ValueError("frames_must_be_2d_grayscale")
     if previous.shape != current.shape:
@@ -53,7 +53,7 @@ def measure_frame_pair(
         cx_norm = None
         cy_norm = None
 
-    result: dict[str, float | None] = {
+    result: dict[str, Any] = {
         "mean_abs_diff": mean_diff,
         "changed_pixel_ratio": changed_ratio,
         "histogram_delta": hist_delta,
@@ -62,11 +62,14 @@ def measure_frame_pair(
         "flow_mean_dx_px_frame": None,
         "flow_mean_dy_px_frame": None,
         "flow_mean_magnitude_px_frame": None,
+        "flow_magnitude_p90_px_frame": None,
+        "flow_moving_pixel_ratio": None,
         "flow_global_median_dx_px_frame": None,
         "flow_global_median_dy_px_frame": None,
         "flow_residual_mean_px_frame": None,
         "flow_coherence": None,
         "direction_deg_image_coordinates": None,
+        "flow_grid": None,
     }
 
     if cv2_module is None:
@@ -85,11 +88,14 @@ def measure_frame_pair(
     median_dy = float(np.median(fy))
     residual = np.sqrt((fx - median_dx) ** 2 + (fy - median_dy) ** 2)
     mean_vector_mag = math.hypot(mean_dx, mean_dy)
+    moving_mask = magnitude >= 0.5
 
     result.update({
         "flow_mean_dx_px_frame": mean_dx,
         "flow_mean_dy_px_frame": mean_dy,
         "flow_mean_magnitude_px_frame": mean_mag,
+        "flow_magnitude_p90_px_frame": float(np.percentile(magnitude, 90)),
+        "flow_moving_pixel_ratio": float(np.mean(moving_mask)),
         "flow_global_median_dx_px_frame": median_dx,
         "flow_global_median_dy_px_frame": median_dy,
         "flow_residual_mean_px_frame": float(residual.mean()),
@@ -99,6 +105,40 @@ def measure_frame_pair(
             if mean_vector_mag > 1e-5 else None
         ),
     })
+
+    # A compact spatial field summary preserves multi-region variation lost by one global mean.
+    # Grid cells are regions, not object identities or segmented object tracks.
+    grid_rows, grid_cols = 4, 6
+    height, width = magnitude.shape
+    grid: list[dict[str, Any]] = []
+    for grid_y in range(grid_rows):
+        y0, y1 = round(grid_y * height / grid_rows), round((grid_y + 1) * height / grid_rows)
+        for grid_x in range(grid_cols):
+            x0, x1 = round(grid_x * width / grid_cols), round((grid_x + 1) * width / grid_cols)
+            cell_fx = fx[y0:y1, x0:x1]
+            cell_fy = fy[y0:y1, x0:x1]
+            cell_mag = magnitude[y0:y1, x0:x1]
+            cell_mean_dx = float(cell_fx.mean())
+            cell_mean_dy = float(cell_fy.mean())
+            cell_mean_mag = float(cell_mag.mean())
+            grid.append({
+                "row": grid_y,
+                "column": grid_x,
+                "x0_norm": round(x0 / width, 4),
+                "y0_norm": round(y0 / height, 4),
+                "x1_norm": round(x1 / width, 4),
+                "y1_norm": round(y1 / height, 4),
+                "mean_dx_px_frame": cell_mean_dx,
+                "mean_dy_px_frame": cell_mean_dy,
+                "mean_magnitude_px_frame": cell_mean_mag,
+                "p90_magnitude_px_frame": float(np.percentile(cell_mag, 90)),
+                "moving_pixel_ratio": float(np.mean(cell_mag >= 0.5)),
+                "coherence": min(
+                    1.0,
+                    math.hypot(cell_mean_dx, cell_mean_dy) / max(cell_mean_mag, 1e-8),
+                ),
+            })
+    result["flow_grid"] = grid
     return result
 
 
