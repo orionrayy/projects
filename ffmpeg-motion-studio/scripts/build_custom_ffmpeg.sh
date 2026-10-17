@@ -56,6 +56,7 @@ cd "ffmpeg-$VERSION"
   --enable-libfreetype \
   --enable-libfontconfig \
   --enable-libfribidi \
+  --enable-libharfbuzz \
   --enable-libmp3lame \
   --enable-libopus \
   --enable-libvorbis \
@@ -98,7 +99,7 @@ cp "$WORK/regression/summary.json" "$BUNDLE/share/regression-summary.json"
   echo "Required Ubuntu build/runtime packages and resolved versions:"
   dpkg-query -W -f='${binary:Package}=${Version}\n' \
     build-essential pkg-config nasm yasm curl gnupg \
-    libass-dev libfreetype6-dev libfontconfig1-dev libfribidi-dev \
+    libass-dev libfreetype6-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev \
     libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx264-dev \
     libx265-dev libdav1d-dev libaom-dev libzimg-dev zlib1g-dev
 } > "$BUNDLE/share/build-manifest.txt"
