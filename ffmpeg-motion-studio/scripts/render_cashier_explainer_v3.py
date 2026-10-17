@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cashier-first V3: three question hooks, direct concept teaching, and beat-specific motion design."""
 from __future__ import annotations
-import argparse, json, math, time, zipfile
+import argparse, json, math, random, time, zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter
 import render_procedural_master_v2 as v2
@@ -19,7 +19,7 @@ SCENES = [
  {"id":6,"motif":"cfg_rules","title":"CFG: aturan yang membentuk ekspresi","short":"Grammar menentukan susunan yang sah","narration":"Context-Free Grammar atau CFG menetapkan produksi. Assignment berisi identifier, tanda sama dengan, dan ekspresi yang dibentuk oleh aturan."},
  {"id":7,"motif":"syntax_check","title":"Urutan token harus valid","short":"Tokenisasi tidak sama dengan parsing","narration":"Tokenisasi mengenali jenis unit; parser memeriksa urutannya. Token yang dikenal tetap bisa tersusun menjadi sintaks yang tidak valid."},
  {"id":8,"motif":"parse_tree","title":"Parse tree menunjukkan pembentukan","short":"Akar, cabang, lalu nilai","narration":"Parse tree memperlihatkan bagaimana ekspresi dibentuk: sebuah ekspresi dikurangi term, dengan angka pada daun pohon."},
- {"id":9,"motif":"precedence","title":"Prioritas operator mengubah hasil","short":"Perkalian dikelompokkan lebih dahulu","narration":"Pada dua tambah tiga kali empat, perkalian dikelompokkan lebih dahulu. Pohon sintaks menghasilkan empat belas, bukan dua puluh."},
+ {"id":9,"motif":"precedence","title":"Prioritas operator mengubah hasil","short":"Perkalian dikelompokkan lebih dahulu","narration":"Dalam prioritas operator, pada dua tambah tiga kali empat, perkalian dikelompokkan lebih dahulu. Pohon sintaks menghasilkan empat belas, bukan dua puluh."},
  {"id":10,"motif":"parentheses","title":"Tanda kurung mengubah kelompok","short":"Ekspresi yang berbeda, hasil yang berbeda","narration":"Pada buka kurung dua tambah tiga tutup kurung kali empat, penjumlahan terjadi dahulu dan hasilnya dua puluh."},
  {"id":11,"motif":"semantic_check","title":"Sintaks valid belum tentu bermakna","short":"Semantik memeriksa definisi dan nilai","narration":"Struktur bisa valid tetapi referensinya tidak ada. Pemeriksaan semantik memastikan item, harga, serta diskon memiliki nilai yang dapat dipakai."},
  {"id":12,"motif":"subtotal","title":"Harga barang membentuk subtotal","short":"Rp18.500 + Rp21.500 + Rp14.000","narration":"Tiga barang berharga delapan belas ribu lima ratus, dua puluh satu ribu lima ratus, dan empat belas ribu membentuk subtotal lima puluh empat ribu."},
