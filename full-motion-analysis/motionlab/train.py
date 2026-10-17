@@ -112,7 +112,10 @@ def train_corpus(
                 "frames_decoded": report["sampling"].get("frames_decoded"),
                 "analysis_schema": report.get("schema_version"),
             })
-        except (OSError, RuntimeError, ValueError, PermissionError) as exc:
+        except KeyboardInterrupt:
+        print(json.dumps({"status": "WATCH_STOPPED", "reason": "keyboard_interrupt"}), flush=True)
+        return 0
+    except (OSError, RuntimeError, ValueError, PermissionError) as exc:
             failures.append({"filename": path.name, "error": str(exc)[:500]})
 
     if not rows:
@@ -249,6 +252,143 @@ def train_corpus(
     return report
 
 
+
+def corpus_inventory_fingerprint(input_root: str | Path, *, max_videos: int = 100) -> tuple[str, int]:
+    """Fast local inventory checkpoint. SHA-256 of file contents is still verified during training."""
+    source = Path(input_root).expanduser().resolve(strict=True)
+    videos = discover_videos(source, max_videos=max_videos)
+    items: list[dict[str, Any]] = []
+    for path in videos:
+        stat = path.stat()
+        relative = path.name if source.is_file() else path.relative_to(source).as_posix()
+        items.append({
+            "relative_path": relative,
+            "size_bytes": int(stat.st_size),
+            "mtime_ns": int(stat.st_mtime_ns),
+        })
+    items.sort(key=lambda item: item["relative_path"])
+    return canonical_sha256(items), len(items)
+
+
+def watch_corpus(
+    input_root: str | Path,
+    output_dir: str | Path,
+    *,
+    poll_interval_s: int = 900,
+    retry_interval_s: int = 21600,
+    max_cycles: int | None = None,
+    **training_options: Any,
+) -> dict[str, Any]:
+    """Watch a local corpus and retrain on inventory changes with durable idempotent checkpoints.
+
+    This foreground loop only processes local files. It never downloads data or starts
+    background work detached from the caller. Failed/gated attempts are retried no more
+    often than retry_interval_s for an unchanged corpus.
+    """
+    import time as _time
+
+    poll_interval_s = max(30, min(86400, int(poll_interval_s)))
+    retry_interval_s = max(poll_interval_s, min(7 * 86400, int(retry_interval_s)))
+    output = Path(output_dir).expanduser().resolve()
+    output.mkdir(parents=True, exist_ok=True)
+    state_path = output / "watch_state.json"
+    try:
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+        if state.get("schema_version") != "fma.training-watch-state.v1":
+            state = {}
+    except (OSError, ValueError, json.JSONDecodeError):
+        state = {}
+    state.setdefault("history", [])
+    cycle = 0
+    last_result: dict[str, Any] = {"status": "WATCHING", "state_path": str(state_path)}
+
+    while True:
+        cycle += 1
+        now = _time.time()
+        try:
+            inventory_sha, inventory_count = corpus_inventory_fingerprint(
+                input_root, max_videos=int(training_options.get("max_videos", 100))
+            )
+        except (OSError, RuntimeError, ValueError, PermissionError) as exc:
+            last_result = {"status": "INVENTORY_ERROR", "error": str(exc)[:500]}
+            state.update({
+                "schema_version": "fma.training-watch-state.v1",
+                "last_check_unix_s": int(now),
+                "last_error": str(exc)[:500],
+            })
+            write_json_atomic(state_path, state)
+            print(json.dumps(last_result, ensure_ascii=False), flush=True)
+            if max_cycles is not None and cycle >= max_cycles:
+                return last_result
+            _time.sleep(poll_interval_s)
+            continue
+
+        previous_inventory = state.get("last_attempt_inventory_sha256")
+        last_attempt = float(state.get("last_attempt_unix_s") or 0)
+        previous_status = str(state.get("last_result_status") or "")
+        should_run = (
+            previous_inventory != inventory_sha
+            or not previous_inventory
+            or (
+                previous_status not in {"PROMOTED", "CANDIDATE_READY"}
+                and now - last_attempt >= retry_interval_s
+            )
+        )
+        state.update({
+            "schema_version": "fma.training-watch-state.v1",
+            "last_check_unix_s": int(now),
+            "current_inventory_sha256": inventory_sha,
+            "current_inventory_count": inventory_count,
+            "poll_interval_s": poll_interval_s,
+            "retry_interval_s": retry_interval_s,
+        })
+
+        if should_run:
+            try:
+                report = train_corpus(input_root, output, **training_options)
+                last_result = {
+                    "status": report["status"],
+                    "inventory_sha256": inventory_sha,
+                    "model_sha256": report.get("model_sha256"),
+                    "promotion_eligible": report.get("promotion_eligible"),
+                    "training_report_path": str((output / "training_report.json").resolve()),
+                }
+                last_error = None
+            except (OSError, RuntimeError, ValueError, PermissionError) as exc:
+                last_result = {
+                    "status": "ERROR",
+                    "inventory_sha256": inventory_sha,
+                    "error": str(exc)[:500],
+                }
+                last_error = str(exc)[:500]
+            state["last_attempt_inventory_sha256"] = inventory_sha
+            state["last_attempt_unix_s"] = int(_time.time())
+            state["last_result_status"] = str(last_result.get("status"))
+            state["last_result_model_sha256"] = last_result.get("model_sha256")
+            state["last_error"] = last_error
+            history = list(state.get("history", []))
+            history.append({
+                "attempt_unix_s": state["last_attempt_unix_s"],
+                "inventory_sha256": inventory_sha,
+                "status": last_result.get("status"),
+                "model_sha256": last_result.get("model_sha256"),
+                "error": last_error,
+            })
+            state["history"] = history[-30:]
+        else:
+            last_result = {
+                "status": "UNCHANGED_SKIPPED",
+                "inventory_sha256": inventory_sha,
+                "video_count": inventory_count,
+                "next_retry_after_s": max(0, retry_interval_s - int(now - last_attempt))
+                if previous_status not in {"PROMOTED", "CANDIDATE_READY"} else None,
+            }
+        write_json_atomic(state_path, state)
+        print(json.dumps(last_result, ensure_ascii=False), flush=True)
+        if max_cycles is not None and cycle >= max_cycles:
+            return last_result
+        _time.sleep(poll_interval_s)
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="motionlab-train", description="Train an unlabeled open-world relational model from local videos.")
     parser.add_argument("input", help="A video file or local directory of videos")
@@ -265,9 +405,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-windows-per-video", type=int, default=64, help="Deterministically sample at most this many temporal windows from each source video.")
     parser.add_argument("--auto-promote", action="store_true", help="Promote candidate only if all held-out and rights gates pass")
     parser.add_argument("--attest-rights", action="store_true", help="Attest that you have permission to process every video in this local corpus")
+    parser.add_argument("--watch", action="store_true", help="Stay in the foreground and retrain after the local corpus changes.")
+    parser.add_argument("--poll-seconds", type=int, default=900)
+    parser.add_argument("--retry-seconds", type=int, default=21600)
     args = parser.parse_args(argv)
     try:
-        report = train_corpus(
+        options = dict(
             args.input, args.output_dir,
             max_videos=args.max_videos,
             max_fps=args.max_fps,
@@ -282,6 +425,15 @@ def main(argv: list[str] | None = None) -> int:
             max_prototypes=args.max_prototypes,
             max_windows_per_video=args.max_windows_per_video,
         )
+        if args.watch:
+            watch_corpus(
+                args.input, args.output_dir,
+                poll_interval_s=args.poll_seconds,
+                retry_interval_s=args.retry_seconds,
+                **options,
+            )
+            return 0
+        report = train_corpus(args.input, args.output_dir, **options)
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["status"] != "CANDIDATE_NEEDS_EVIDENCE" else 3
     except (OSError, RuntimeError, ValueError, PermissionError) as exc:
