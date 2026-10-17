@@ -70,7 +70,7 @@ def rounded(d,box,fill,outline=None,r=18,w=2):
 def label(d,x,y,s,c=MUTED,size=14):
     d.text((x,y),s,font=font(size,"mono"),fill=c)
 def chip(d,x,y,w,h,s,c=CYAN,size=17,fill=PANEL):
-    rounded(d,(x,y,x+w,y+h,(*fill,245),(*c,220),13,2)
+    rounded(d,(x,y,x+w,y+h),(*fill,245),(*c,220),13,2)
     f=font(size,"mono"); d.text((x+(w-tw(d,s,f))/2,y+(h-size)/2-2),s,font=f,fill=(*c,255))
 def panel(d,box,c=BLUE):
     rounded(d,box,(*PANEL,245),(*c,150),21,2)
