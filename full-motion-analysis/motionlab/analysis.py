@@ -61,6 +61,57 @@ def _event(
     }
 
 
+def _local_motion_regions(grid: Any) -> list[dict[str, Any]]:
+    """Find adjacent high-residual grid regions without assigning object identity."""
+    if not isinstance(grid, list):
+        return []
+    active: dict[tuple[int, int], dict[str, Any]] = {}
+    for cell in grid:
+        if not isinstance(cell, dict):
+            continue
+        occupancy = cell.get("affine_residual_moving_pixel_ratio")
+        p90 = cell.get("affine_residual_p90_magnitude_px_frame")
+        if not isinstance(occupancy, (int, float)) or not isinstance(p90, (int, float)):
+            continue
+        if math.isfinite(float(occupancy)) and math.isfinite(float(p90)) and occupancy >= 0.08 and p90 >= 0.75:
+            active[(int(cell["row"]), int(cell["column"]))] = cell
+    regions: list[dict[str, Any]] = []
+    unseen = set(active)
+    while unseen:
+        seed = min(unseen)
+        unseen.remove(seed)
+        component = [seed]
+        frontier = [seed]
+        while frontier:
+            y, x = frontier.pop()
+            for neighbor in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1)):
+                if neighbor in unseen:
+                    unseen.remove(neighbor)
+                    frontier.append(neighbor)
+                    component.append(neighbor)
+        cells = [active[p] for p in component]
+        x0 = min(float(cell["x0_norm"]) for cell in cells)
+        y0 = min(float(cell["y0_norm"]) for cell in cells)
+        x1 = max(float(cell["x1_norm"]) for cell in cells)
+        y1 = max(float(cell["y1_norm"]) for cell in cells)
+        regions.append({
+            "grid_cells": [{"row": y, "column": x} for y, x in sorted(component)],
+            "cell_count": len(cells),
+            "bbox_norm_xyxy": [round(x0, 4), round(y0, 4), round(x1, 4), round(y1, 4)],
+            "centroid_norm_xy": [round((x0 + x1) / 2.0, 4), round((y0 + y1) / 2.0, 4)],
+            "mean_residual_magnitude_px_frame": float(np.mean([
+                float(cell["affine_residual_mean_magnitude_px_frame"]) for cell in cells
+            ])),
+            "p90_residual_magnitude_px_frame": float(np.max([
+                float(cell["affine_residual_p90_magnitude_px_frame"]) for cell in cells
+            ])),
+            "mean_residual_moving_pixel_ratio": float(np.mean([
+                float(cell["affine_residual_moving_pixel_ratio"]) for cell in cells
+            ])),
+        })
+    return regions
+
+
 def detect_event_candidates(rows: list[dict], fps: float) -> list[dict]:
     """Transparent heuristics. Event names are candidates, not semantic or causal claims."""
     if not rows:
@@ -137,6 +188,18 @@ def detect_event_candidates(rows: list[dict], fps: float) -> list[dict]:
                 {"angle_change_deg": angle, "previous_vector_px_frame": av,
                  "current_vector_px_frame": bv, "previous_magnitude": amag, "current_magnitude": bmag},
                 "A reversal in the scene-wide mean flow vector is not proof that a specific object reversed; multiple motions or camera motion can produce this signal.",
+            ))
+
+    # Local motion-region candidates are derived from flow unexplained by the fitted global affine transform.
+    # Components are image-grid regions, not persistent objects or semantic actions.
+    for r in rows[1:]:
+        grid = r.get("flow_grid")
+        for region_index, region in enumerate(_local_motion_regions(grid)):
+            events.append(_event(
+                "local_motion_region_candidate", r["frame_index"], r["timestamp_s"], "medium",
+                "FMA-LOCAL-RESIDUAL-001",
+                {"region_index": region_index, **region},
+                "A spatially coherent residual-flow region is not an object identity. It can arise from independently moving content, non-rigid motion, parallax, occlusion, rolling shutter, or a failed global-motion fit.",
             ))
 
     # Exact repeated decoded-frame runs. A static scene can be legitimate; keep that caveat explicit.
