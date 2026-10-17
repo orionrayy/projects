@@ -26,20 +26,23 @@ def _write_or_print(data: dict[str, Any], output: str | None) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="motionlab", description="Evidence-grounded motion analysis and FFmpeg video audit.")
+    parser = argparse.ArgumentParser(prog="motionlab", description="Open-world multiscale spatiotemporal analysis, corpus training, and FFmpeg video audit.")
     sub = parser.add_subparsers(dest="command", required=True)
 
     probe = sub.add_parser("probe", help="Read FFprobe metadata.")
     probe.add_argument("video")
 
-    analyze = sub.add_parser("analyze", help="Measure frame-to-frame motion and temporal event candidates.")
+    analyze = sub.add_parser("analyze", help="Analyze overlapping spatiotemporal blocks, multiscale signatures, and relational structure.")
     analyze.add_argument("video")
     analyze.add_argument("--output")
     analyze.add_argument("--max-fps", type=float, default=30.0)
     analyze.add_argument("--width", type=int, default=320)
     analyze.add_argument("--height", type=int, default=180)
     analyze.add_argument("--max-frames", type=int, default=100_000)
-    analyze.add_argument("--no-optical-flow", action="store_true")
+    analyze.add_argument("--no-optical-flow", action="store_true", help="Compatibility flag; v0.2 core does not use pairwise optical flow.")
+    analyze.add_argument("--window-frames", type=int, default=16)
+    analyze.add_argument("--window-stride", type=int, default=8)
+    analyze.add_argument("--model", help="Optional local relational model JSON for anonymous prototype/novelty scoring.")
 
     audit = sub.add_parser("audit", help="Run FFmpeg render quality checks.")
     audit.add_argument("video")
@@ -51,6 +54,18 @@ def build_parser() -> argparse.ArgumentParser:
     audit.add_argument("--require-audio", action="store_true")
     audit.add_argument("--max-fps", type=float, default=30.0)
     audit.add_argument("--max-frames", type=int, default=100_000)
+    train = sub.add_parser("train", help="Train an unlabeled relational model from a local video corpus.")
+    train.add_argument("input", help="Video file or directory; media stays local.")
+    train.add_argument("--output-dir", default="reports/openworld-training")
+    train.add_argument("--max-videos", type=int, default=500)
+    train.add_argument("--max-fps", type=float, default=8.0)
+    train.add_argument("--width", type=int, default=160)
+    train.add_argument("--height", type=int, default=90)
+    train.add_argument("--max-frames", type=int, default=20000)
+    train.add_argument("--window-frames", type=int, default=16)
+    train.add_argument("--window-stride", type=int, default=8)
+    train.add_argument("--auto-promote", action="store_true")
+    train.add_argument("--attest-rights", action="store_true", help="Attest you can lawfully process all local corpus videos.")
     return parser
 
 
@@ -58,12 +73,25 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
+        if args.command == "train":
+            from .train import train_corpus
+            result = train_corpus(
+                args.input, args.output_dir, max_videos=args.max_videos,
+                max_fps=args.max_fps, width=args.width, height=args.height,
+                max_frames=args.max_frames, window_frames=args.window_frames,
+                window_stride=args.window_stride, auto_promote=args.auto_promote,
+                rights_attested=args.attest_rights,
+            )
+            _write_or_print(result, None)
+            return 0 if result["status"] != "CANDIDATE_NEEDS_EVIDENCE" else 3
         if args.command == "probe":
             result = probe_media(args.video)
         elif args.command == "analyze":
             result = analyze_video(
                 args.video, max_fps=args.max_fps, width=args.width, height=args.height,
                 max_frames=args.max_frames, optical_flow=not args.no_optical_flow,
+                window_frames=args.window_frames, window_stride=args.window_stride,
+                model_path=args.model,
             )
             _write_or_print(result, args.output)
             return 0
