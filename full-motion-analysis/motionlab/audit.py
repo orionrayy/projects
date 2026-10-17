@@ -23,8 +23,8 @@ def audit_video(
     analysis = analyze_video(
         path,
         max_fps=max_fps,
-        width=320,
-        height=180,
+        width=160,
+        height=90,
         max_frames=max_frames,
         optical_flow=False,
     )
