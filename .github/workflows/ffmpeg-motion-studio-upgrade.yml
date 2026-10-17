@@ -8,7 +8,6 @@ on:
     # Keep this expensive build tied to its build recipe and the V1 renderer/tests; use workflow_dispatch for manual runs.
     paths:
       - "ffmpeg-motion-studio/scripts/build_custom_ffmpeg.sh"
-      - "ffmpeg-motion-studio/scripts/render_procedural_master.py"
       - "ffmpeg-motion-studio/scripts/test_procedural_master.py"
   workflow_dispatch:
 
