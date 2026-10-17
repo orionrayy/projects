@@ -25,8 +25,8 @@ class CashierFirstV3Tests(unittest.TestCase):
         combined=" ".join(s["narration"].lower() for s in m.SCENES)
         for term in ("tokenisasi","context-free grammar","cfg","parse tree","prioritas","tanda kurung","semantik","subtotal","diskon","abstract syntax tree","ast","evaluator","struk"):
             self.assertIn(term,combined)
-        self.assertIn("14",m.SCENES[8]["narration"])
-        self.assertIn("20",m.SCENES[9]["narration"])
+        self.assertIn("empat belas",m.SCENES[8]["narration"])
+        self.assertIn("dua puluh",m.SCENES[9]["narration"])
 
     def test_scene_ids_durations_and_runtime(self):
         self.assertEqual([s["id"] for s in m.SCENES],list(range(1,19)))
