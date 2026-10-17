@@ -34,6 +34,9 @@ class V2Tests(unittest.TestCase):
   self.assertTrue({"scan_beep","receipt_printer","door_chime","footsteps","nfc_tap","bag_rustle"}.issubset(m.SFX_INFO))
   self.assertTrue(all(k in m.SFX_DURATION for s in m.SCENES for b in m.BEAT_GUIDE[str(s["id"])] for k in [b["sfx"]] if k))
   self.assertEqual(sum(1 for s in m.SCENES for b in m.BEAT_GUIDE[str(s["id"])] if b["sfx"]),105)
+ def test_receipt_audit_voiceover_is_short(self):
+  self.assertLessEqual(len(m.SCENES[34]["narration"].split()),8)
+  self.assertIn("diaudit",m.SCENES[34]["narration"])
  def test_receipt_math(self):
   self.assertEqual(54000-5400,48600); self.assertIn("48.600",m.SCENES[22]["narration"])
  def test_caption_phrase_split(self):
