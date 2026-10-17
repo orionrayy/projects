@@ -1,0 +1,41 @@
+name: FFmpeg Motion Studio - Windows runtime validation
+on:
+  push:
+    branches:
+      - feature/ffmpeg-motion-studio-9.0.2-upgrade
+    paths:
+      - ".github/workflows/ffmpeg-motion-studio-windows-validate.yml"
+      - "ffmpeg-motion-studio/**"
+  pull_request:
+    paths:
+      - ".github/workflows/ffmpeg-motion-studio-windows-validate.yml"
+      - "ffmpeg-motion-studio/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ffmpeg-motion-studio-windows-validation
+  cancel-in-progress: true
+jobs:
+  validate-windows-release:
+    name: Verify FFmpeg 9.0.2 Windows package and media paths
+    runs-on: windows-2022
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Install pinned upstream Windows build and run regression checks
+        shell: pwsh
+        run: |
+          $installRoot = Join-Path $env:RUNNER_TEMP 'ffmpeg-motion-studio\9.0.2'
+          & .\ffmpeg-motion-studio\scripts\install_ffmpeg_9_0_2_windows.ps1 -InstallRoot $installRoot -Force
+          if (-not (Test-Path (Join-Path $installRoot 'ffmpeg-upgrade-report.json'))) {
+            throw 'Installer did not produce its validation report.'
+          }
+      - name: Publish machine-readable validation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-motion-studio-9.0.2-windows-validation
+          path: ${{ runner.temp }}/ffmpeg-motion-studio/9.0.2/ffmpeg-upgrade-report.json
+          if-no-files-found: error
+          retention-days: 14
