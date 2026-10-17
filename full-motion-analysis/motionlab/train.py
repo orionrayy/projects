@@ -112,10 +112,7 @@ def train_corpus(
                 "frames_decoded": report["sampling"].get("frames_decoded"),
                 "analysis_schema": report.get("schema_version"),
             })
-        except KeyboardInterrupt:
-        print(json.dumps({"status": "WATCH_STOPPED", "reason": "keyboard_interrupt"}), flush=True)
-        return 0
-    except (OSError, RuntimeError, ValueError, PermissionError) as exc:
+        except (OSError, RuntimeError, ValueError, PermissionError) as exc:
             failures.append({"filename": path.name, "error": str(exc)[:500]})
 
     if not rows:
@@ -411,7 +408,6 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         options = dict(
-            args.input, args.output_dir,
             max_videos=args.max_videos,
             max_fps=args.max_fps,
             width=args.width,
@@ -436,6 +432,9 @@ def main(argv: list[str] | None = None) -> int:
         report = train_corpus(args.input, args.output_dir, **options)
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["status"] != "CANDIDATE_NEEDS_EVIDENCE" else 3
+    except KeyboardInterrupt:
+        print(json.dumps({"status": "WATCH_STOPPED", "reason": "keyboard_interrupt"}), flush=True)
+        return 0
     except (OSError, RuntimeError, ValueError, PermissionError) as exc:
         print(json.dumps({"status": "ERROR", "error": str(exc)}, ensure_ascii=False))
         return 2
