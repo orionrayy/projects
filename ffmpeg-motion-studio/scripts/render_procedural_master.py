@@ -335,15 +335,15 @@ def make_audio(ffmpeg,ffprobe,work,out):
     listing=work/"narration-concat.txt"; listing.write_text("".join(f"file '{p.as_posix()}'\n" for p in audio_segments),encoding="utf-8")
     narration=work/"narration.wav"
     run([ffmpeg,"-y","-hide_banner","-loglevel","error","-f","concat","-safe","0","-i",str(listing),"-ar","48000","-ac","2","-c:a","pcm_s16le",str(narration)])
-    if abs(duration(ffprobe,narration)-TOTAL)>.12: raise RuntimeError("Narration is not 390 seconds.")
+    if abs(duration(ffprobe,narration)-TOTAL)>.12: raise RuntimeError(f"Narration duration mismatch: expected {TOTAL}s.")
     bed=work/"procedural-ambient.wav"; ds=str(TOTAL)
     run([ffmpeg,"-y","-hide_banner","-loglevel","error","-f","lavfi","-i",f"sine=frequency=110:sample_rate=48000:duration={ds}",
          "-f","lavfi","-i",f"sine=frequency=164.81:sample_rate=48000:duration={ds}","-f","lavfi","-i",f"sine=frequency=220:sample_rate=48000:duration={ds}",
-         "-filter_complex","[0:a]tremolo=f=0.7:d=0.22,volume=0.12[a0];[1:a]tremolo=f=0.55:d=0.18,volume=0.055[a1];[2:a]tremolo=f=0.45:d=0.15,volume=0.025[a2];[a0][a1][a2]amix=inputs=3:duration=longest:normalize=0,afade=t=in:st=0:d=4,afade=t=out:st=386:d=4,aresample=48000[bed]",
+         "-filter_complex",f"[0:a]tremolo=f=0.7:d=0.22,volume=0.12[a0];[1:a]tremolo=f=0.55:d=0.18,volume=0.055[a1];[2:a]tremolo=f=0.45:d=0.15,volume=0.025[a2];[a0][a1][a2]amix=inputs=3:duration=longest:normalize=0,afade=t=in:st=0:d=4,afade=t=out:st={max(0,TOTAL-4)}:d=4,aresample=48000[bed]",
          "-map","[bed]","-ar","48000","-ac","2","-c:a","pcm_s16le",str(bed)])
     mixed=work/"master-audio.wav"
     run([ffmpeg,"-y","-hide_banner","-loglevel","error","-i",str(narration),"-i",str(bed),"-filter_complex",
-         "[0:a]loudnorm=I=-17:TP=-2:LRA=9[vo];[1:a]volume=0.65[bed];[bed][vo]sidechaincompress=threshold=0.025:ratio=7:attack=25:release=450[ducked];[ducked][vo]amix=inputs=2:duration=first:weights='0.55 1.0':normalize=0,alimiter=limit=0.92,aresample=48000,apad,atrim=duration=390,asetpts=PTS-STARTPTS[a]",
+         f"[0:a]loudnorm=I=-17:TP=-2:LRA=9[vo];[1:a]volume=0.65[bed];[bed][vo]sidechaincompress=threshold=0.025:ratio=7:attack=25:release=450[ducked];[ducked][vo]amix=inputs=2:duration=first:weights='0.55 1.0':normalize=0,alimiter=limit=0.92,aresample=48000,apad,atrim=duration={TOTAL},asetpts=PTS-STARTPTS[a]",
          "-map","[a]","-ar","48000","-ac","2","-c:a","pcm_s16le",str(mixed)])
     mixed_duration=duration(ffprobe,mixed)
     if abs(mixed_duration-TOTAL)>.12: raise RuntimeError(f"Mixed audio is {mixed_duration:.3f}s, expected {TOTAL}s.")
