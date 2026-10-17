@@ -57,13 +57,16 @@ def build_parser() -> argparse.ArgumentParser:
     train = sub.add_parser("train", help="Train an unlabeled relational model from a local video corpus.")
     train.add_argument("input", help="Video file or directory; media stays local.")
     train.add_argument("--output-dir", default="reports/openworld-training")
-    train.add_argument("--max-videos", type=int, default=500)
+    train.add_argument("--max-videos", type=int, default=100)
     train.add_argument("--max-fps", type=float, default=8.0)
     train.add_argument("--width", type=int, default=160)
     train.add_argument("--height", type=int, default=90)
     train.add_argument("--max-frames", type=int, default=20000)
     train.add_argument("--window-frames", type=int, default=16)
     train.add_argument("--window-stride", type=int, default=8)
+    train.add_argument("--max-components", type=int, default=24)
+    train.add_argument("--max-prototypes", type=int, default=12)
+    train.add_argument("--max-windows-per-video", type=int, default=64)
     train.add_argument("--auto-promote", action="store_true")
     train.add_argument("--attest-rights", action="store_true", help="Attest you can lawfully process all local corpus videos.")
     train.add_argument("--watch", action="store_true", help="Keep this process running; retrain when the local corpus inventory changes.")
@@ -79,12 +82,18 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "train":
             from .train import train_corpus, watch_corpus
             options = dict(
-                max_videos=args.max_videos,
-                max_fps=args.max_fps, width=args.width, height=args.height,
-                max_frames=args.max_frames, window_frames=args.window_frames,
-                window_stride=args.window_stride, auto_promote=args.auto_promote,
-                rights_attested=args.attest_rights,
+                max_videos=args.max_videos, max_fps=args.max_fps,
+                width=args.width, height=args.height, max_frames=args.max_frames,
+                window_frames=args.window_frames, window_stride=args.window_stride,
+                auto_promote=args.auto_promote, rights_attested=args.attest_rights,
+                max_components=args.max_components, max_prototypes=args.max_prototypes,
+                max_windows_per_video=args.max_windows_per_video,
             )
+            if args.watch:
+                watch_corpus(args.input, args.output_dir, poll_interval_s=args.poll_seconds,
+                             retry_interval_s=args.retry_seconds, **options)
+                return 0
+            result = train_corpus(args.input, args.output_dir, **options)
             _write_or_print(result, None)
             return 0 if result["status"] != "CANDIDATE_NEEDS_EVIDENCE" else 3
         if args.command == "probe":
