@@ -2,14 +2,14 @@
 
 ## What is trainable in v0.2
 
-The CPU-first model learns corpus-relative structure representations from unlabeled FMA signatures. It fits robust normalization, a compact PCA projection and deterministic prototypes. Each new analyzed window may then receive:
+The CPU-first model learns corpus-relative structure representations from unlabeled FMA signatures. It fits robust normalization, a small NumPy denoising autoencoder, and deterministic prototypes. Each new analyzed window may then receive:
 - an anonymous prototype assignment;
 - a distance to the selected prototype;
 - a novelty ratio relative to that prototype's training radius.
 
 These values can help explore recurring and unfamiliar structural patterns. They are not semantic labels, calibrated probabilities, or proof that a video contains an error.
 
-This model is a first trainable layer, not a neural foundation model. The fixed feature extractor is still hand-designed. A future self-supervised neural encoder can implement the same feature-schema / transform / evaluation contracts as an optional backend without making the baseline dependent on a large model or paid API.
+The trainable model is a small multilayer perceptron autoencoder optimized with denoising reconstruction, not a large foundation model. The block-level feature extractor remains hand-designed; the encoder learns a nonlinear representation from its signatures rather than from raw pixels. No semantic labels or paid API are needed.
 
 ## One-command workflow
 
