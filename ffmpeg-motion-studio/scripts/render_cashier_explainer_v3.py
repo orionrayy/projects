@@ -28,9 +28,9 @@ SCENES = [
  {"id":15,"motif":"evaluate","title":"Evaluasi menghasilkan total","short":"54.000 − 5.400 = 48.600","narration":"Evaluator menghitung anak sebelum induk. Subtotal Rp54.000 dikurangi diskon Rp5.400 menghasilkan total Rp48.600, yang bisa diuji ulang."},
  {"id":16,"motif":"payment","title":"Baru kemudian pembayaran","short":"Hasil yang sudah dihitung masuk ke terminal","narration":"Setelah total Rp48.600 tervalidasi, kartu ditempelkan ke terminal NFC. Ripple muncul saat kontak; terminal menunggu respons sebelum menyetujui."},
  {"id":17,"motif":"receipt","title":"Struk membuat hasil dapat diaudit","short":"Subtotal, diskon, total harus konsisten","narration":"Struk mencatat subtotal Rp54.000, diskon Rp5.400, dan total Rp48.600. Subtotal dikurangi diskon harus sama dengan total agar transaksi bisa diaudit."},
- {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Tokenisasi: unit. CFG: aturan. Parse tree: struktur. AST: operasi. Evaluator: total."}
+ {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Tokenisasi, CFG, parse tree, AST, evaluasi: satu alur dari teks menuju hasil yang teruji."}
 ]
-DURATIONS = [4,4,4,15,16,17,15,18,15,15,16,16,16,17,17,13,14,8]
+DURATIONS = [4,4,4,14,16,17,15,18,15,15,16,15,16,17,17,13,14,10]
 TOTAL = sum(DURATIONS)
 assert TOTAL == TOTAL_DURATION
 
