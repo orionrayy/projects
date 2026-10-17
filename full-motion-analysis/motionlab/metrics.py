@@ -77,6 +77,9 @@ def measure_frame_pair(
         "global_affine_residual_p90_px_frame": None,
         "global_affine_inlier_ratio": None,
         "global_affine_fit_status": "unavailable",
+        "affine_residual_magnitude_mean_px_frame": None,
+        "affine_residual_magnitude_p90_px_frame": None,
+        "affine_residual_moving_pixel_ratio": None,
         "flow_grid": None,
     }
 
@@ -141,7 +144,26 @@ def measure_frame_pair(
                     float(np.mean(np.asarray(inliers).reshape(-1) > 0))
                     if inliers is not None else None
                 )
+                grid_y_coords, grid_x_coords = np.mgrid[0:height, 0:width]
+                pred_dx = (
+                    (affine[0, 0] - 1.0) * grid_x_coords
+                    + affine[0, 1] * grid_y_coords
+                    + affine[0, 2]
+                )
+                pred_dy = (
+                    affine[1, 0] * grid_x_coords
+                    + (affine[1, 1] - 1.0) * grid_y_coords
+                    + affine[1, 2]
+                )
+                residual_dx = fx - pred_dx.astype(np.float32)
+                residual_dy = fy - pred_dy.astype(np.float32)
+                residual_magnitude = np.sqrt(residual_dx * residual_dx + residual_dy * residual_dy)
+                residual_mask = residual_magnitude >= 0.5
+
                 result.update({
+                    "affine_residual_magnitude_mean_px_frame": float(residual_magnitude.mean()),
+                    "affine_residual_magnitude_p90_px_frame": float(np.percentile(residual_magnitude, 90)),
+                    "affine_residual_moving_pixel_ratio": float(np.mean(residual_mask)),
                     "global_affine_translation_dx_px_frame": float(affine[0, 2]),
                     "global_affine_translation_dy_px_frame": float(affine[1, 2]),
                     "global_affine_rotation_deg_frame": math.degrees(math.atan2(c, a)),
@@ -171,6 +193,20 @@ def measure_frame_pair(
             cell_mean_dx = float(cell_fx.mean())
             cell_mean_dy = float(cell_fy.mean())
             cell_mean_mag = float(cell_mag.mean())
+            cell_residual_mag = None
+            cell_residual_dx = None
+            cell_residual_dy = None
+            cell_residual_p90 = None
+            cell_residual_moving = None
+            if "residual_magnitude" in locals():
+                residual_cell = residual_magnitude[y0:y1, x0:x1]
+                residual_x_cell = residual_dx[y0:y1, x0:x1]
+                residual_y_cell = residual_dy[y0:y1, x0:x1]
+                cell_residual_mag = float(residual_cell.mean())
+                cell_residual_p90 = float(np.percentile(residual_cell, 90))
+                cell_residual_dx = float(residual_x_cell.mean())
+                cell_residual_dy = float(residual_y_cell.mean())
+                cell_residual_moving = float(np.mean(residual_cell >= 0.5))
             grid.append({
                 "row": grid_y,
                 "column": grid_x,
@@ -187,6 +223,11 @@ def measure_frame_pair(
                     1.0,
                     math.hypot(cell_mean_dx, cell_mean_dy) / max(cell_mean_mag, 1e-8),
                 ),
+                "affine_residual_mean_magnitude_px_frame": cell_residual_mag,
+                "affine_residual_p90_magnitude_px_frame": cell_residual_p90,
+                "affine_residual_mean_dx_px_frame": cell_residual_dx,
+                "affine_residual_mean_dy_px_frame": cell_residual_dy,
+                "affine_residual_moving_pixel_ratio": cell_residual_moving,
             })
     result["flow_grid"] = grid
     return result
