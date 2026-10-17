@@ -1,0 +1,119 @@
+name: Render Cashier-First Explainer V3
+
+on:
+  push:
+    branches:
+      - feature/ffmpeg-motion-studio-9.0.2-upgrade
+    paths:
+      - "ffmpeg-motion-studio/scripts/render_cashier_explainer_v3.py"
+      - "ffmpeg-motion-studio/scripts/test_cashier_explainer_v3.py"
+      - "ffmpeg-motion-studio/production/CASHIER_FIRST_V3_MOTION_BRIEF.md"
+      - ".github/workflows/render-cashier-explainer-v3.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: cashier-first-motion-master-v3
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render and validate 126-second V3 master
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      VERIFIED_RUNTIME_RUN_ID: "39066898988"
+      ARTIFACT_NAME: ffmpeg-motion-studio-9.0.2-ubuntu-24.04-x86_64
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Install lightweight drawing and local audio dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            python3-pil python3-venv python3-pip espeak-ng fonts-dejavu-core unzip ca-certificates \
+            libass9 libfreetype6 libfontconfig1 libfribidi0 libharfbuzz0b libmp3lame0 \
+            libopus0 libvorbis0a libvpx9 libx264-164 libx265-199 libdav1d7 libaom3 libzimg2 zlib1g
+
+      - name: Compile and run storyboard, timing and motion tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            ffmpeg-motion-studio/scripts/render_procedural_master.py \
+            ffmpeg-motion-studio/scripts/test_procedural_master.py \
+            ffmpeg-motion-studio/scripts/render_procedural_master_v2.py \
+            ffmpeg-motion-studio/scripts/test_procedural_master_v2.py \
+            ffmpeg-motion-studio/scripts/render_cashier_explainer_v3.py \
+            ffmpeg-motion-studio/scripts/test_cashier_explainer_v3.py
+          python3 ffmpeg-motion-studio/scripts/test_procedural_master.py
+          python3 ffmpeg-motion-studio/scripts/test_procedural_master_v2.py
+          python3 ffmpeg-motion-studio/scripts/test_cashier_explainer_v3.py
+
+      - name: Download previously verified custom FFmpeg runtime
+        uses: actions/download-artifact@v4
+        with:
+          name: ffmpeg-motion-studio-9.0.2-ubuntu-24.04-x86_64
+          path: ${{ runner.temp }}/runtime-artifact
+          run-id: 39066898988
+          github-token: ${{ github.token }}
+
+      - name: Verify and unpack the runtime
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/runtime-artifact"
+          sha256sum --check ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz.sha256
+          mkdir -p "$RUNNER_TEMP/ffmpeg-runtime"
+          tar -xzf ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz -C "$RUNNER_TEMP/ffmpeg-runtime"
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" -version
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffprobe" -version
+
+      - name: Prepare free-first Indonesian TTS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv --system-site-packages "$RUNNER_TEMP/ffmpeg-tts-venv"
+          "$RUNNER_TEMP/ffmpeg-tts-venv/bin/pip" install --disable-pip-version-check edge-tts
+
+      - name: Render V3 with scene-specific motion
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v3-deliverables" "$RUNNER_TEMP/v3-work"
+          "$RUNNER_TEMP/ffmpeg-tts-venv/bin/python" \
+            ffmpeg-motion-studio/scripts/render_cashier_explainer_v3.py \
+            --ffmpeg "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" \
+            --ffprobe "$RUNNER_TEMP/ffmpeg-runtime/bin/ffprobe" \
+            --output-dir "$RUNNER_TEMP/v3-deliverables" \
+            --work-dir "$RUNNER_TEMP/v3-work"
+          python3 -m json.tool "$RUNNER_TEMP/v3-deliverables/production-manifest-v3.json"
+          test -s "$RUNNER_TEMP/v3-deliverables/Dari_Kasir_Cashier_First_Motion_Master_v3.mp4"
+          test -s "$RUNNER_TEMP/v3-deliverables/Dari_Kasir_Cashier_First_V3_Full_Package.zip"
+          test -s "$RUNNER_TEMP/v3-deliverables/narration-id.srt"
+          test -s "$RUNNER_TEMP/v3-deliverables/sound-effect-cue-sheet.json"
+          test -s "$RUNNER_TEMP/v3-deliverables/visual-effect-cue-sheet.md"
+          test -s "$RUNNER_TEMP/v3-deliverables/cashier-first-contact-sheet-v3.jpg"
+
+      - name: Upload V3 production package and review assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: dari-kasir-cashier-first-motion-master-v3
+          path: |
+            ${{ runner.temp }}/Dari_Kasir_Cashier_First_Motion_Master_v3.mp4
+            ${{ runner.temp }}/Dari_Kasir_Cashier_First_V3_Full_Package.zip
+            ${{ runner.temp }}/cashier-first-contact-sheet-v3.jpg
+            ${{ runner.temp }}/narration-id.srt
+            ${{ runner.temp }}/narration-transcript-id.txt
+            ${{ runner.temp }}/sound-effects-only.wav
+            ${{ runner.temp }}/sound-effect-cue-sheet.json
+            ${{ runner.temp }}/visual-effect-cue-sheet.md
+            ${{ runner.temp }}/motion-direction-v3.md
+            ${{ runner.temp }}/production-manifest-v3.json
+            ${{ runner.temp }}/concept-v3.md
+            ${{ runner.temp }}/README-V3.txt
+          if-no-files-found: error
+          retention-days: 14

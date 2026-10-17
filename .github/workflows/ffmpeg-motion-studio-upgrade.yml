@@ -1,0 +1,125 @@
+name: FFmpeg Motion Studio — custom FFmpeg 9.0.2
+
+on:
+  push:
+    branches:
+      - feature/ffmpeg-motion-studio-9.0.2-upgrade
+    paths:
+      - ".github/workflows/ffmpeg-motion-studio-upgrade.yml"
+      - "ffmpeg-motion-studio/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One expensive build at a time for this target. A newer push supersedes an older run.
+concurrency:
+  group: ffmpeg-motion-studio-custom-build
+  cancel-in-progress: true
+
+jobs:
+  build-regress-package:
+    name: Build and validate FFmpeg 9.0.2 (Ubuntu 24.04 x86_64)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      FFMPEG_VERSION: "9.0.2"
+      BUILD_JOBS: "2"
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Install pinned-profile build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential pkg-config nasm yasm curl gnupg ca-certificates \
+            fonts-dejavu-core libass-dev libfreetype6-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev \
+            libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx264-dev libx265-dev \
+            libdav1d-dev libaom-dev libzimg-dev zlib1g-dev \
+            python3-pil python3-venv python3-pip espeak-ng fonts-dejavu-core
+
+      - name: Preflight Python syntax and motion storyboard contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile ffmpeg-motion-studio/scripts/render_procedural_master.py ffmpeg-motion-studio/scripts/test_procedural_master.py
+          python3 ffmpeg-motion-studio/scripts/test_procedural_master.py
+
+      - name: Verify release signature, build custom FFmpeg, and run regressions
+        run: bash ffmpeg-motion-studio/scripts/build_custom_ffmpeg.sh
+
+      - name: Confirm package contents and checksum
+        run: |
+          set -euo pipefail
+          cd ffmpeg-motion-studio/dist
+          sha256sum --check ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz.sha256
+          tar -tzf ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz | sort
+          python3 -m json.tool ffmpeg-9.0.2-regression-summary.json
+          mkdir -p "$RUNNER_TEMP/ffmpeg-filter-smoke"
+          tar -xzf ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz -C "$RUNNER_TEMP/ffmpeg-filter-smoke"
+          "$RUNNER_TEMP/ffmpeg-filter-smoke/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=110:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.7:d=0.22,volume=0.12" -t 2 -f null -
+          "$RUNNER_TEMP/ffmpeg-filter-smoke/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=165:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.55:d=0.18,volume=0.055" -t 2 -f null -
+          "$RUNNER_TEMP/ffmpeg-filter-smoke/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=220:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.45:d=0.15,volume=0.025" -t 2 -f null -
+
+      - name: Upload custom runtime and regression evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-motion-studio-9.0.2-ubuntu-24.04-x86_64
+          path: |
+            ffmpeg-motion-studio/dist/ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz
+            ffmpeg-motion-studio/dist/ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz.sha256
+            ffmpeg-motion-studio/dist/ffmpeg-9.0.2-regression-summary.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Prepare free-first Indonesian TTS environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv --system-site-packages "$RUNNER_TEMP/ffmpeg-tts-venv"
+          if ! "$RUNNER_TEMP/ffmpeg-tts-venv/bin/pip" install --disable-pip-version-check edge-tts; then
+            echo "::warning::edge-tts install failed; the renderer will record and try local TTS fallback."
+          fi
+
+      - name: Run procedural video regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 ffmpeg-motion-studio/scripts/test_procedural_master.py
+
+      - name: Render complete no-reference motion master with audio
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ffmpeg-runtime" "$RUNNER_TEMP/video-deliverables" "$RUNNER_TEMP/video-work"
+          tar -xzf ffmpeg-motion-studio/dist/ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz -C "$RUNNER_TEMP/ffmpeg-runtime"
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" -version
+          "$RUNNER_TEMP/ffmpeg-tts-venv/bin/python" ffmpeg-motion-studio/scripts/render_procedural_master.py \
+            --ffmpeg "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" \
+            --ffprobe "$RUNNER_TEMP/ffmpeg-runtime/bin/ffprobe" \
+            --output-dir "$RUNNER_TEMP/video-deliverables" \
+            --work-dir "$RUNNER_TEMP/video-work"
+          python3 -m json.tool "$RUNNER_TEMP/video-deliverables/production-manifest.json"
+          test -s "$RUNNER_TEMP/video-deliverables/Dari_Kasir_Prosedural_Motion_Master_v1.mp4"
+          test -s "$RUNNER_TEMP/video-deliverables/narration-id.srt"
+
+      - name: Upload narrated procedural master and QC evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: dari-kasir-procedural-motion-master-v1
+          path: |
+            ${{ runner.temp }}/video-deliverables/Dari_Kasir_Prosedural_Motion_Master_v1.mp4
+            ${{ runner.temp }}/video-deliverables/narration-id.srt
+            ${{ runner.temp }}/video-deliverables/narration-transcript-id.txt
+            ${{ runner.temp }}/video-deliverables/procedural-contact-sheet.jpg
+            ${{ runner.temp }}/video-deliverables/production-manifest.json
+            ${{ runner.temp }}/video-deliverables/concept.md
+          if-no-files-found: error
+          retention-days: 14
