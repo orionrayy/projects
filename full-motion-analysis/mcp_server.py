@@ -25,9 +25,10 @@ from motionlab.security import resolve_allowed_video_path
 mcp = MCPServerClass(
     "motion-evidence-lab",
     instructions=(
-        "Analyze local video using timestamped frame-change and optional dense optical-flow evidence. "
-        "Report candidate events and limitations. Do not assert physical-world speed or causality. "
-        "Only read video files inside MOTION_ALLOWED_ROOTS."
+        "Analyze video as overlapping multiscale space-time volumes with color, spectral and regional-relation signatures. "
+        "The core is open-world and does not make frame-pair optical flow its primary representation. "
+        "Report evidence, corpus-relative learned novelty where a model is supplied, and interpretation limits. "
+        "Only read local files inside MOTION_ALLOWED_ROOTS."
     ),
 )
 
@@ -58,11 +59,18 @@ def analyze_local_video(
     max_fps: float = 30.0,
     optical_flow: bool = True,
     max_frames: int = 100000,
+    model_path: str | None = None,
 ) -> dict[str, Any]:
-    """Measure temporal image motion, dense flow when available, and timestamped event candidates. Saves a complete JSON report."""
+    """Analyze multiscale space-time structure and cross-window relations; saves a complete JSON report.
+
+Optionally score signatures with a locally trained model. Prototype IDs are anonymous
+corpus-relative patterns, not semantic labels or calibrated probabilities.
+"""
     target = resolve_allowed_video_path(video_path)
+    resolved_model = resolve_allowed_video_path(model_path) if model_path else None
     report = analyze_video(
-        target, max_fps=max_fps, optical_flow=optical_flow, max_frames=max_frames
+        target, max_fps=max_fps, optical_flow=optical_flow, max_frames=max_frames,
+        model_path=resolved_model,
     )
     report_path = _save_report(report, "analysis")
     return {
@@ -72,8 +80,15 @@ def analyze_local_video(
         "media": report["media"],
         "sampling": report["sampling"],
         "measurements": report["measurements"],
+        "analysis_schema": report["schema_version"],
         "events": report["events"],
         "event_counts": report["event_counts"],
+        "relational_field": report["relational_field"],
+        "timeline_window_count": len(report["timeline"]),
+        "timeline_windows_returned": min(128, len(report["timeline"])),
+        "timeline_truncated_in_tool_response": len(report["timeline"]) > 128,
+        "timeline": report["timeline"][:128],
+        "learned_analysis": report.get("learned_analysis"),
         "provenance": report["provenance"],
         "interpretation_limits": report["interpretation_limits"],
     }
@@ -89,7 +104,7 @@ def audit_ffmpeg_render(
     require_audio: bool = False,
     max_fps: float = 30.0,
 ) -> dict[str, Any]:
-    """Audit a local FFmpeg render against media, sampling, duplicate/freeze, black-frame, and optional audio expectations."""
+    """Audit a local FFmpeg render and return the domain-neutral space-time QC evidence."""
     target = resolve_allowed_video_path(video_path)
     report = audit_video(
         target, expected_width=expected_width, expected_height=expected_height,
@@ -106,6 +121,7 @@ def audit_ffmpeg_render(
         "qc": report["qc"],
         "event_counts": report["analysis"]["event_counts"],
         "events": report["analysis"]["events"],
+        "relational_field": report["analysis"]["relational_field"],
         "limits": report["limits"],
     }
 
