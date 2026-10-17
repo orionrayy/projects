@@ -399,6 +399,45 @@ def _window_events(windows: list[dict[str, Any]], duplicate_flags: list[bool], f
     return events
 
 
+
+def _luma_pulse_candidates(luma_samples: list[float], fps: float) -> list[dict[str, Any]]:
+    """Detect isolated global-luminance pulses as a low-level QC candidate, not a motion model."""
+    if len(luma_samples) < 3 or fps <= 0:
+        return []
+    signal = np.asarray(luma_samples, dtype=np.float64)
+    if not np.isfinite(signal).all():
+        return []
+    changes = np.abs(np.diff(signal))
+    center = float(np.median(changes))
+    mad = float(np.median(np.abs(changes - center)))
+    threshold = max(0.08, center + 4.0 * 1.4826 * mad)
+    events: list[dict[str, Any]] = []
+    for index in range(1, len(signal) - 1):
+        previous, current, following = float(signal[index - 1]), float(signal[index]), float(signal[index + 1])
+        peak_or_dip = (current > previous and current > following) or (current < previous and current < following)
+        left_change, right_change = abs(current - previous), abs(current - following)
+        if not peak_or_dip or min(left_change, right_change) < threshold:
+            continue
+        events.append({
+            "event_type": "possible_flash_candidate",
+            "timestamp_s": round(index / fps, 6),
+            "end_timestamp_s": round((index + 1) / fps, 6),
+            "frame_index": index,
+            "severity": "medium",
+            "rule_id": "FMA-LUMA-PULSE-001",
+            "measurement": {
+                "previous_global_mean_luma": round(previous, 6),
+                "current_global_mean_luma": round(current, 6),
+                "next_global_mean_luma": round(following, 6),
+                "excursion_from_neighbor_mean": round(abs(current - (previous + following) / 2.0), 6),
+                "left_change": round(left_change, 6),
+                "right_change": round(right_change, 6),
+                "threshold": round(threshold, 6),
+            },
+            "interpretation_limit": "An isolated global-luminance pulse may be a flash, a rapid cut, exposure change or occlusion; this is a QC candidate, not a confirmed semantic event.",
+        })
+    return events
+
 def _cross_window_relations(windows: list[dict[str, Any]], cap: int = 256) -> list[dict[str, Any]]:
     if len(windows) < 2:
         return []
@@ -526,6 +565,8 @@ def analyze_video(
     duplicate_ratio = (sum(duplicate_flags) / len(duplicate_flags)) if duplicate_flags else 0.0
     black_ratio = near_black_count / max(1, len(luma_samples))
     event_list = _window_events(windows, duplicate_flags, analysis_fps)
+    event_list.extend(_luma_pulse_candidates(luma_samples, analysis_fps))
+    event_list.sort(key=lambda item: (item["timestamp_s"], item["event_type"], item.get("rule_id", "")))
     relation_pairs = _cross_window_relations(windows)
     vectors = np.asarray([window["signature_vector"] for window in windows], dtype=np.float64)
     adjacent_distances = [
