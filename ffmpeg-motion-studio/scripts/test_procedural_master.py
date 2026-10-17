@@ -17,7 +17,8 @@ class MotionMasterTests(unittest.TestCase):
         self.assertTrue({s["motif"] for s in m.SCENES}.issubset(m.MOTIFS))
     def test_canonical_math(self):
         self.assertEqual(54000-5400,48600)
-        self.assertIn("48.600",m.SCENES[1]["narration"])
+        self.assertIn("48.600",Path(m.__file__).read_text(encoding="utf-8"))
+        self.assertIn("empat puluh delapan ribu enam ratus",m.SCENES[1]["narration"])
         self.assertFalse(any("49.275" in str(s) for s in m.SCENES))
     def test_no_reference_images(self):
         self.assertEqual(m.REFERENCE_IMAGES_USED,0)
