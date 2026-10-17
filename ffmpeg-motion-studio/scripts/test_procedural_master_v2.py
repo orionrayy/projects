@@ -23,11 +23,17 @@ class V2Tests(unittest.TestCase):
    beats=m.BEAT_GUIDE[str(s["id"])]
    self.assertEqual(len(beats),3)
    self.assertTrue(all(0<=b["at"]<d and b["action"] and b["fx"] for b in beats))
+ def test_voiceover_word_budget_for_scene_pace(self):
+  for scene in m.SCENES:
+   n=len(scene["narration"].split())
+   self.assertGreaterEqual(n,9,scene["id"])
+   self.assertLessEqual(n,19,scene["id"])
  def test_no_reference_assets(self):
   self.assertEqual(m.REFERENCE_IMAGES_USED,0); self.assertEqual(m.EXTERNAL_VISUAL_ASSETS_USED,0)
  def test_procedural_audio_cues_exist(self):
   self.assertTrue({"scan_beep","receipt_printer","door_chime","footsteps","nfc_tap","bag_rustle"}.issubset(m.SFX_INFO))
   self.assertTrue(all(k in m.SFX_DURATION for s in m.SCENES for b in m.BEAT_GUIDE[str(s["id"])] for k in [b["sfx"]] if k))
+  self.assertEqual(sum(1 for s in m.SCENES for b in m.BEAT_GUIDE[str(s["id"])] if b["sfx"]),105)
  def test_receipt_math(self):
   self.assertEqual(54000-5400,48600); self.assertIn("48.600",m.SCENES[22]["narration"])
  def test_caption_phrase_split(self):

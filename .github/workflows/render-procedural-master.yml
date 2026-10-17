@@ -113,7 +113,7 @@ jobs:
       - name: Upload MP4, captions, concept, and technical QC
         uses: actions/upload-artifact@v4
         with:
-          name: dari-kasir-procedural-motion-master-v1
+          name: dari-kasir-cinematic-motion-master-v2
           path: |
             ${{ runner.temp }}/video-deliverables/Dari_Kasir_Interactive_Cinematic_Motion_Master_v2.mp4
             ${{ runner.temp }}/video-deliverables/narration-id.srt
