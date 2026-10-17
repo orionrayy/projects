@@ -15,7 +15,7 @@ class SyntheticSpaceTimeTests(unittest.TestCase):
     def test_open_world_reports_cover_multiple_synthetic_domains(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            scenarios = ("move_reverse", "freeze", "flash", "global_pan_reverse", "pan_plus_object")
+            scenarios = ("move_reverse", "freeze", "flash", "global_pan_reverse", "pan_plus_object", "abstract_nirmana", "fractal_zoom")
             reports = []
             for scenario in scenarios:
                 clip = generate_synthetic_clip(
@@ -47,8 +47,14 @@ class SyntheticSpaceTimeTests(unittest.TestCase):
             flash_report = reports[2]
             self.assertGreater(flash_report["measurements"]["signature_distance_p95"], 0.0)
             mixed_report = reports[4]
+            abstract_report = reports[5]
+            fractal_report = reports[6]
             self.assertEqual(mixed_report["relational_field"]["unit"], "space_time_window")
             self.assertTrue(mixed_report["timeline"])
+            self.assertGreater(abstract_report["measurements"]["signature_distance_p95"], 0.0)
+            self.assertGreater(fractal_report["measurements"]["signature_distance_p95"], 0.0)
+            self.assertEqual(abstract_report["sampling"]["pairwise_frame_analysis_is_primary"], False)
+            self.assertEqual(fractal_report["sampling"]["pairwise_frame_analysis_is_primary"], False)
 
 
 if __name__ == "__main__":
