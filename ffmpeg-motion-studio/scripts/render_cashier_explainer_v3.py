@@ -28,7 +28,7 @@ SCENES = [
  {"id":15,"motif":"evaluate","title":"Evaluasi menghasilkan total","short":"54.000 − 5.400 = 48.600","narration":"Evaluator menghitung 54.000 dikurangi 5.400: total 48.600."},
  {"id":16,"motif":"payment","title":"Baru kemudian pembayaran","short":"Hasil yang sudah dihitung masuk ke terminal","narration":"Total tervalidasi; kartu diketuk, lalu terminal menyetujui pembayaran."},
  {"id":17,"motif":"receipt","title":"Struk membuat hasil dapat diaudit","short":"Subtotal, diskon, total harus konsisten","narration":"Struk mencatat subtotal, diskon, dan total untuk audit transaksi."},
- {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Token, CFG, parse tree, AST—hasil teruji."}
+ {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Struktur dicek, total teruji."}
 ]
 DURATIONS = [4,4,4,8,8,9,7,9,9,7,7,8,8,8,8,6,7,5]
 TOTAL = sum(DURATIONS)
