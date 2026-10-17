@@ -66,6 +66,8 @@ def build_parser() -> argparse.ArgumentParser:
     train.add_argument("--window-stride", type=int, default=8)
     train.add_argument("--max-components", type=int, default=24)
     train.add_argument("--max-prototypes", type=int, default=12)
+    train.add_argument("--encoder-hidden-dim", type=int, default=48)
+    train.add_argument("--encoder-epochs", type=int, default=8)
     train.add_argument("--max-windows-per-video", type=int, default=64)
     train.add_argument("--auto-promote", action="store_true")
     train.add_argument("--attest-rights", action="store_true", help="Attest you can lawfully process all local corpus videos.")
@@ -87,6 +89,7 @@ def main(argv: list[str] | None = None) -> int:
                 window_frames=args.window_frames, window_stride=args.window_stride,
                 auto_promote=args.auto_promote, rights_attested=args.attest_rights,
                 max_components=args.max_components, max_prototypes=args.max_prototypes,
+                encoder_hidden_dim=args.encoder_hidden_dim, encoder_epochs=args.encoder_epochs,
                 max_windows_per_video=args.max_windows_per_video,
             )
             if args.watch:
