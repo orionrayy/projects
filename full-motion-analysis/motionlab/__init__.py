@@ -1,2 +1,2 @@
-"""Motion Evidence Lab: measurable, uncertainty-aware temporal video analysis."""
-__version__ = "0.1.0"
+"""Open-world relational video analysis with a CPU-first self-supervised learning path."""
+__version__ = "0.2.0"
