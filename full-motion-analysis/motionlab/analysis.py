@@ -232,10 +232,11 @@ def analyze_video(
                 "mean_abs_diff": 0.0, "changed_pixel_ratio": 0.0, "histogram_delta": 0.0,
                 "difference_centroid_x_norm": None, "difference_centroid_y_norm": None,
                 "flow_mean_dx_px_frame": None, "flow_mean_dy_px_frame": None,
-                "flow_mean_magnitude_px_frame": None, "flow_global_median_dx_px_frame": None,
+                "flow_mean_magnitude_px_frame": None, "flow_magnitude_p90_px_frame": None,
+                "flow_moving_pixel_ratio": None, "flow_global_median_dx_px_frame": None,
                 "flow_global_median_dy_px_frame": None, "flow_residual_mean_px_frame": None,
                 "flow_coherence": None, "direction_deg_image_coordinates": None,
-                "exact_duplicate_of_previous": False,
+                "flow_grid": None, "exact_duplicate_of_previous": False,
             }
         else:
             measured = measure_frame_pair(previous, frame, cv2_module=cv2_module)
@@ -284,6 +285,9 @@ def analyze_video(
                 "flow_mean_dx_px_frame": _round_value(row["flow_mean_dx_px_frame"]),
                 "flow_mean_dy_px_frame": _round_value(row["flow_mean_dy_px_frame"]),
                 "flow_mean_magnitude_px_frame": _round_value(row["flow_mean_magnitude_px_frame"]),
+                "flow_magnitude_p90_px_frame": _round_value(row["flow_magnitude_p90_px_frame"]),
+                "flow_moving_pixel_ratio": _round_value(row["flow_moving_pixel_ratio"]),
+                "flow_grid": row.get("flow_grid"),
                 "flow_global_median_dx_px_frame": _round_value(row["flow_global_median_dx_px_frame"]),
                 "flow_global_median_dy_px_frame": _round_value(row["flow_global_median_dy_px_frame"]),
                 "flow_residual_mean_px_frame": _round_value(row["flow_residual_mean_px_frame"]),
