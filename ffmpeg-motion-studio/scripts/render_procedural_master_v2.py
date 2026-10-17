@@ -426,14 +426,22 @@ def visual_v2(d,s,t,dur):
         base.panel(d,(105,245,1175,480),base.BLUE); base.center(d,640,330,s["title"].upper(),base.font(20,"mono"),base.WHITE)
     fx_flash(d,t,s["id"])
 
+SPEECH_DURATION_BY_ID={}
+
 def caption_frame(scene,local,duration):
-    edited=dict(scene); edited["narration"]=phrase_at(scene["narration"],local,duration)
+    display_duration=SPEECH_DURATION_BY_ID.get(scene["id"],duration-.7)
+    edited=dict(scene); edited["narration"]=phrase_at(scene["narration"],local,display_duration)
     return legacy_frame(edited,local,duration)
 
 legacy_make_audio=base.make_audio
 legacy_frame=base.frame
 def make_audio_v2(ffmpeg,ffprobe,work,out):
     result=legacy_make_audio(ffmpeg,ffprobe,work,out)
+    for item in result["scenes"]:
+        sid=item["scene_id"]
+        raw=float(item.get("source_audio_duration_sec",DURATIONS[sid-1]-.7))
+        tempo=max(1.0,float(item.get("tempo_factor",1.0)))
+        SPEECH_DURATION_BY_ID[sid]=min(DURATIONS[sid-1]-.1,max(1.0,raw/tempo))
     write_srt_v2(Path(out)/"narration-id.srt",result["scenes"])
     sfx,events=create_sfx_track(out)
     mixed=Path(work)/"master-audio-v2.wav"
