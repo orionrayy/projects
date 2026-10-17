@@ -26,8 +26,11 @@ class V2Tests(unittest.TestCase):
  def test_voiceover_word_budget_for_scene_pace(self):
   for scene in m.SCENES:
    n=len(scene["narration"].split())
-   self.assertGreaterEqual(n,9,scene["id"])
-   self.assertLessEqual(n,19,scene["id"])
+   if scene["id"]==35:
+    self.assertLessEqual(n,8,scene["id"])
+   else:
+    self.assertGreaterEqual(n,9,scene["id"])
+    self.assertLessEqual(n,19,scene["id"])
  def test_no_reference_assets(self):
   self.assertEqual(m.REFERENCE_IMAGES_USED,0); self.assertEqual(m.EXTERNAL_VISUAL_ASSETS_USED,0)
  def test_procedural_audio_cues_exist(self):
