@@ -11,7 +11,7 @@ Branch: feat/full-motion-analysis-v0-1
 **Production readiness:** NO  
 **Real-world benchmark claim:** NOT ESTABLISHED  
 **Semantic / causal action understanding:** NOT IMPLEMENTED  
-**Remote MCP upload endpoint:** NOT DEPLOYED; local stdio tools exist  
+**Remote MCP upload endpoint:** source + Render Blueprint implemented; deployment not yet authorized/created  
 **ChatGPT connector attached:** NO — a repository commit alone cannot register a custom MCP server in a ChatGPT workspace  
 **Paid services:** none required by the current architecture
 
@@ -61,3 +61,12 @@ Branch: feat/full-motion-analysis-v0-1
 ## Next checkpoint
 
 After source files land: run unit/integration tests, inspect the CI run on the PR branch, fix failures without weakening contracts, write measured results here, and only then advance to P1. Do not record test success before seeing the actual output.
+
+
+## Remote MCP endpoint checkpoint
+
+- Added \`remote_mcp_server.py\` with bearer authentication for MCP routes, Host/DNS-rebinding allowlist, short-lived single-use upload capabilities, streamed byte limits, FFprobe validation, bounded duration/resolution/FPS, one concurrent motion job, paginated report reads, and automatic temporary-file/report TTL cleanup.
+- Added Docker packaging and a free-plan Render Blueprint. No Render service has been created or deployed.
+- Official current ChatGPT documentation lists full custom MCP connections for Business and Enterprise/Edu web workspaces; Pro has limited read/fetch capability, while Go is not listed. See \`docs/REMOTE_DEPLOYMENT.md\`.
+- MCP does not automatically transfer binary bytes of an arbitrary uploaded video into an independent server; the remote workflow uses a short-lived upload page and then an opaque upload ID.
+- Remote service authentication and safety tests are included in CI, but this does not mean a remote deployment is live or real-world motion benchmarked.

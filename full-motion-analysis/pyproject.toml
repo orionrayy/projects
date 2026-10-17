@@ -16,6 +16,7 @@ dependencies = ["numpy>=1.26"]
 vision = ["opencv-python-headless>=4.10"]
 mcp = ["mcp[cli]>=1.9.0"]
 dev = ["pytest>=8.0"]
+remote = ["uvicorn[standard]>=0.30.0"]
 
 [project.scripts]
 motionlab = "motionlab.cli:main"

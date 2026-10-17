@@ -40,6 +40,12 @@ python -m unittest discover -s tests -v
 python benchmarks/run_synthetic_benchmark.py --output-dir reports/synthetic-benchmark
 ~~~
 
+Remote MCP service (secured upload + Streamable HTTP):
+
+```bash
+# Remote deploy is prepared, not launched. See docs/REMOTE_DEPLOYMENT.md.
+```
+
 MCP local server (stdio):
 
 ~~~bash
@@ -73,4 +79,4 @@ Each phase is gated on tests and evidence from the previous one. No phase is con
 
 The project aims to be highly competitive and distinct, but does not claim to be “the world's first,” “#1,” causally omniscient, or state of the art without an independently reproducible comparison. Synthetic tests validate instrumentation and code contracts; they do not establish real-world generalization. Benchmark dataset licenses and provenance must be checked before download or redistribution.
 
-See docs/ARCHITECTURE.md, docs/BENCHMARK_PROTOCOL.md, docs/MCP_INTEGRATION.md, docs/THREAT_MODEL.md, and PROJECT_STATUS.md.
+See docs/ARCHITECTURE.md, docs/BENCHMARK_PROTOCOL.md, docs/MCP_INTEGRATION.md, docs/REMOTE_DEPLOYMENT.md, docs/THREAT_MODEL.md, and PROJECT_STATUS.md.
