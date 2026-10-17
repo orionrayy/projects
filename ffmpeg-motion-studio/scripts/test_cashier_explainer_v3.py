@@ -11,14 +11,14 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual(m.DURATIONS[:3],[4,4,4])
         self.assertTrue(all(s["narration"].strip().endswith("?") for s in hooks))
         self.assertTrue(all(len(s["narration"].split())<=7 for s in hooks))
-        self.assertLessEqual(len(m.SCENES[17]["narration"].split()),8)
+        self.assertLessEqual(len(m.SCENES[17]["narration"].split()),20)
         self.assertEqual(sum(m.DURATIONS[:3]),12)
 
     def test_explanation_starts_at_cashier_on_scene_four(self):
         self.assertEqual(m.SCENES[3]["motif"],"counter_formula")
         self.assertIn("layar kasir",m.SCENES[3]["narration"].lower())
         self.assertEqual(len(m.SCENES),18)
-        self.assertEqual(m.TOTAL,126)
+        self.assertEqual(m.TOTAL,240)
 
     def test_math_and_material_are_preserved(self):
         self.assertEqual(54000-5400,48600)
@@ -34,8 +34,8 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual([s["id"] for s in m.SCENES],list(range(1,19)))
         self.assertEqual(len({s["title"] for s in m.SCENES}),18)
         self.assertEqual(len(m.DURATIONS),18)
-        self.assertEqual(sum(m.DURATIONS),126)
-        self.assertEqual(m.TOTAL* m.FPS,3024)
+        self.assertEqual(sum(m.DURATIONS),240)
+        self.assertEqual(m.TOTAL* m.FPS,5760)
 
     def test_three_effect_beats_in_every_scene(self):
         self.assertEqual(len(m.BEAT_GUIDE),18)

@@ -6,6 +6,7 @@ on:
       - feature/ffmpeg-motion-studio-9.0.2-upgrade
     paths:
       - "ffmpeg-motion-studio/scripts/render_cashier_explainer_v3.py"
+      - "ffmpeg-motion-studio/scripts/render_procedural_master_v2.py"
       - "ffmpeg-motion-studio/scripts/render_procedural_master.py"
       - "ffmpeg-motion-studio/scripts/test_cashier_explainer_v3.py"
       - "ffmpeg-motion-studio/production/CASHIER_FIRST_V3_MOTION_BRIEF.md"
@@ -22,7 +23,7 @@ concurrency:
 
 jobs:
   render:
-    name: Render and validate 126-second V3 master
+    name: Render and validate 240-second V3 master
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
@@ -104,17 +105,17 @@ jobs:
         with:
           name: dari-kasir-cashier-first-motion-master-v3
           path: |
-            ${{ runner.temp }}/Dari_Kasir_Cashier_First_Motion_Master_v3.mp4
-            ${{ runner.temp }}/Dari_Kasir_Cashier_First_V3_Full_Package.zip
-            ${{ runner.temp }}/cashier-first-contact-sheet-v3.jpg
-            ${{ runner.temp }}/narration-id.srt
-            ${{ runner.temp }}/narration-transcript-id.txt
-            ${{ runner.temp }}/sound-effects-only.wav
-            ${{ runner.temp }}/sound-effect-cue-sheet.json
-            ${{ runner.temp }}/visual-effect-cue-sheet.md
-            ${{ runner.temp }}/motion-direction-v3.md
-            ${{ runner.temp }}/production-manifest-v3.json
-            ${{ runner.temp }}/concept-v3.md
-            ${{ runner.temp }}/README-V3.txt
+            ${{ runner.temp }}/v3-deliverables/Dari_Kasir_Cashier_First_Motion_Master_v3.mp4
+            ${{ runner.temp }}/v3-deliverables/Dari_Kasir_Cashier_First_V3_Full_Package.zip
+            ${{ runner.temp }}/v3-deliverables/cashier-first-contact-sheet-v3.jpg
+            ${{ runner.temp }}/v3-deliverables/narration-id.srt
+            ${{ runner.temp }}/v3-deliverables/narration-transcript-id.txt
+            ${{ runner.temp }}/v3-deliverables/sound-effects-only.wav
+            ${{ runner.temp }}/v3-deliverables/sound-effect-cue-sheet.json
+            ${{ runner.temp }}/v3-deliverables/visual-effect-cue-sheet.md
+            ${{ runner.temp }}/v3-deliverables/motion-direction-v3.md
+            ${{ runner.temp }}/v3-deliverables/production-manifest-v3.json
+            ${{ runner.temp }}/v3-deliverables/concept-v3.md
+            ${{ runner.temp }}/v3-deliverables/README-V3.txt
           if-no-files-found: error
           retention-days: 14

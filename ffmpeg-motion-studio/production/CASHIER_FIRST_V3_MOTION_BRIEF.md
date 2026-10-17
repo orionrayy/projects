@@ -41,6 +41,6 @@ Scene 4 starts on the register and teaches the formula. There is no prolonged ba
 
 ## Acceptance gates
 
-**Automated/technical:** 18 scenes, exact 126-second duration, 3024 frames at 24 fps, 1920×1080 H.264, AAC stereo 48 kHz, subtitle and cue files, three beat events in each scene, correct formula arithmetic.
+**Automated/technical:** 18 scenes, exact 240-second duration, 5760 frames at 24 fps, 1920×1080 H.264, AAC stereo 48 kHz, subtitle and cue files, three beat events in each scene, correct formula arithmetic.
 
 **Human/artistic (still required):** look at the full contact sheet and motion in the actual MP4; check whether object actions read in sequence, whether limb pose is legible, whether captions overlap formulas, whether each transition motivates the next shot, and whether Indonesian TTS pronunciation, mix and SFX impact are acceptable. A green technical gate is not proof of a cinematic/artistic pass.
