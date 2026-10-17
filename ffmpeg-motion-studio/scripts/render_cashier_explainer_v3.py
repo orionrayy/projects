@@ -710,6 +710,19 @@ def main():
  if 54000-5400!=48600 or round(54000*.10)!=5400: raise RuntimeError("Canonical transaction arithmetic failed.")
  print("V3: 3 hook clips / 12 seconds; cashier lesson starts in scene 4; 18 scenes / 126 seconds.",flush=True)
  audio=v2.make_audio_v2(args.ffmpeg,args.ffprobe,work,out)
+ # V2's ambient bed had a 390-second fade point; for this 126-second cut apply a real end fade.
+ faded=work/"master-audio-v3-faded.wav"
+ base.run([args.ffmpeg,"-y","-hide_banner","-loglevel","error","-i",str(audio["mixed"]),
+  "-af",f"afade=t=out:st={TOTAL-1.5:.3f}:d=1.5,alimiter=limit=0.93,aresample=48000",
+  "-ar","48000","-ac","2","-c:a","pcm_s16le",str(faded)])
+ if abs(base.duration(args.ffprobe,faded)-TOTAL)>.12: raise RuntimeError("Faded V3 audio timeline mismatch.")
+ audio["mixed"]=faded
+ cue_path=out/"sound-effect-cue-sheet.json"
+ cue_data=json.loads(cue_path.read_text(encoding="utf-8"))
+ cue_data["version"]="v3"
+ cue_data["duration_sec"]=TOTAL
+ cue_data["opening_structure"]="three 4-second question hooks, then cashier explanation"
+ cue_path.write_text(json.dumps(cue_data,ensure_ascii=False,indent=2),encoding="utf-8")
  write_director_guide(out)
  if abs(base.duration(args.ffprobe,audio["mixed"])-TOTAL)>.12: raise RuntimeError("V3 audio timeline is not 126 seconds.")
  print("Render scene-specific movement and camera timing.",flush=True)
@@ -751,3 +764,6 @@ def main():
  return 0
 
 configure()
+
+if __name__ == "__main__":
+ raise SystemExit(main())
