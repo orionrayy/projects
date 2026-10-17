@@ -32,14 +32,14 @@ Pull request: https://github.com/orionrayy/projects/pull/3 (draft; not merged)
 
 ## Training and autonomy
 
-- Added a CPU-first unlabeled trainer with robust normalization, PCA projection and deterministic anonymous prototypes using NumPy.
+- Added a CPU-first unlabeled trainer with robust normalization, a trainable denoising autoencoder and deterministic anonymous prototypes using NumPy.
 - Training sources are deduplicated by SHA-256 and split by source-video hash, not by overlapping windows.
 - Model, manifest and training report are written separately. Model JSON has a SHA-256 integrity digest.
 - Candidate promotion is gated on source count, held-out source separation, coverage, a held-out quantization comparison against a frozen training-only baseline, prototype diversity, finite values and explicit rights attestation.
 - Added a foreground watch mode. It inventories a local corpus, retrains when metadata inventory changes, persists \`watch_state.json\`, avoids repeating a successful unchanged run and rate-limits same-inventory retries after a failure/gated outcome.
 - Training does not download or upload video. Watch mode is a foreground process, not a detached service.
 
-The learned model currently groups hand-designed relational signatures into corpus-relative anonymous prototypes. It is trainable, but it is not a neural foundation encoder and does not learn human semantics automatically.
+The learned model trains a small encoder on hand-designed relational signatures and groups the latent representations into corpus-relative anonymous prototypes. It is not an end-to-end raw-video foundation encoder and does not automatically learn human semantics.
 
 ## Verified CI evidence
 
