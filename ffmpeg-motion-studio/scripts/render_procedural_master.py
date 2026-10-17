@@ -339,7 +339,7 @@ def make_audio(ffmpeg,ffprobe,work,out):
     bed=work/"procedural-ambient.wav"; ds=str(TOTAL)
     run([ffmpeg,"-y","-hide_banner","-loglevel","error","-f","lavfi","-i",f"sine=frequency=110:sample_rate=48000:duration={ds}",
          "-f","lavfi","-i",f"sine=frequency=164.81:sample_rate=48000:duration={ds}","-f","lavfi","-i",f"sine=frequency=220:sample_rate=48000:duration={ds}",
-         "-filter_complex","[0:a]tremolo=f=0.07:d=0.22,volume=0.12[a0];[1:a]tremolo=f=0.055:d=0.18,volume=0.055[a1];[2:a]tremolo=f=0.045:d=0.15,volume=0.025[a2];[a0][a1][a2]amix=inputs=3:duration=longest:normalize=0,afade=t=in:st=0:d=4,afade=t=out:st=386:d=4,aresample=48000[bed]",
+         "-filter_complex","[0:a]tremolo=f=0.7:d=0.22,volume=0.12[a0];[1:a]tremolo=f=0.55:d=0.18,volume=0.055[a1];[2:a]tremolo=f=0.45:d=0.15,volume=0.025[a2];[a0][a1][a2]amix=inputs=3:duration=longest:normalize=0,afade=t=in:st=0:d=4,afade=t=out:st=386:d=4,aresample=48000[bed]",
          "-map","[bed]","-ar","48000","-ac","2","-c:a","pcm_s16le",str(bed)])
     mixed=work/"master-audio.wav"
     run([ffmpeg,"-y","-hide_banner","-loglevel","error","-i",str(narration),"-i",str(bed),"-filter_complex",
