@@ -53,6 +53,11 @@ class CashierFirstV3Tests(unittest.TestCase):
             self.assertEqual(b.size,(1280,720))
             self.assertNotEqual(a.tobytes(),b.tobytes(),f"scene {sid} appears static")
 
+    def test_renderer_has_executable_entrypoint(self):
+        source=Path(m.__file__).read_text(encoding="utf-8")
+        self.assertIn('if __name__ == "__main__":',source)
+        self.assertIn("raise SystemExit(main())",source)
+
     def test_no_external_assets_and_vfx_guide_has_hard_rules(self):
         self.assertEqual(m.base.REFERENCE_IMAGES_USED,0)
         self.assertEqual(m.base.EXTERNAL_VISUAL_ASSETS_USED,0)
