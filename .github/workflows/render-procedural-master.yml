@@ -44,8 +44,11 @@ jobs:
           set -euo pipefail
           python3 -m py_compile \
             ffmpeg-motion-studio/scripts/render_procedural_master.py \
-            ffmpeg-motion-studio/scripts/test_procedural_master.py
+            ffmpeg-motion-studio/scripts/test_procedural_master.py \
+            ffmpeg-motion-studio/scripts/render_procedural_master_v2.py \
+            ffmpeg-motion-studio/scripts/test_procedural_master_v2.py
           python3 ffmpeg-motion-studio/scripts/test_procedural_master.py
+          python3 ffmpeg-motion-studio/scripts/test_procedural_master_v2.py
 
       - name: Download previously verified custom FFmpeg runtime
         uses: actions/download-artifact@v4
@@ -94,26 +97,32 @@ jobs:
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/video-deliverables" "$RUNNER_TEMP/video-work"
           "$RUNNER_TEMP/ffmpeg-tts-venv/bin/python" \
-            ffmpeg-motion-studio/scripts/render_procedural_master.py \
+            ffmpeg-motion-studio/scripts/render_procedural_master_v2.py \
             --ffmpeg "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" \
             --ffprobe "$RUNNER_TEMP/ffmpeg-runtime/bin/ffprobe" \
             --output-dir "$RUNNER_TEMP/video-deliverables" \
             --work-dir "$RUNNER_TEMP/video-work"
-          python3 -m json.tool "$RUNNER_TEMP/video-deliverables/production-manifest.json"
-          test -s "$RUNNER_TEMP/video-deliverables/Dari_Kasir_Prosedural_Motion_Master_v1.mp4"
+          python3 -m json.tool "$RUNNER_TEMP/video-deliverables/production-manifest-v2.json"
+          test -s "$RUNNER_TEMP/video-deliverables/Dari_Kasir_Interactive_Cinematic_Motion_Master_v2.mp4"
           test -s "$RUNNER_TEMP/video-deliverables/narration-id.srt"
           test -s "$RUNNER_TEMP/video-deliverables/narration-transcript-id.txt"
+          test -s "$RUNNER_TEMP/video-deliverables/sound-effect-cue-sheet.json"
+          test -s "$RUNNER_TEMP/video-deliverables/visual-effect-cue-sheet.md"
+          test -s "$RUNNER_TEMP/video-deliverables/sound-effects-only.wav"
 
       - name: Upload MP4, captions, concept, and technical QC
         uses: actions/upload-artifact@v4
         with:
           name: dari-kasir-procedural-motion-master-v1
           path: |
-            ${{ runner.temp }}/video-deliverables/Dari_Kasir_Prosedural_Motion_Master_v1.mp4
+            ${{ runner.temp }}/video-deliverables/Dari_Kasir_Interactive_Cinematic_Motion_Master_v2.mp4
             ${{ runner.temp }}/video-deliverables/narration-id.srt
             ${{ runner.temp }}/video-deliverables/narration-transcript-id.txt
-            ${{ runner.temp }}/video-deliverables/procedural-contact-sheet.jpg
-            ${{ runner.temp }}/video-deliverables/production-manifest.json
-            ${{ runner.temp }}/video-deliverables/concept.md
+            ${{ runner.temp }}/video-deliverables/procedural-contact-sheet-v2.jpg
+            ${{ runner.temp }}/video-deliverables/production-manifest-v2.json
+            ${{ runner.temp }}/video-deliverables/concept-v2.md
+            ${{ runner.temp }}/video-deliverables/sound-effect-cue-sheet.json
+            ${{ runner.temp }}/video-deliverables/visual-effect-cue-sheet.md
+            ${{ runner.temp }}/video-deliverables/sound-effects-only.wav
           if-no-files-found: error
           retention-days: 14
