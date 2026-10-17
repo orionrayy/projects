@@ -3,14 +3,14 @@
 Updated: 2026-10-18  
 Repository: orionrayy/projects  
 Project root: full-motion-analysis/  
-Validated code checkpoint: \`49c2ea61b64bf8254d5a7a43f31c3ff49de6b946\`  
+Validated code checkpoint: \`3c906148d23df05eb80eb8b15b40157a2dfa3084\`  
 Pull request: https://github.com/orionrayy/projects/pull/4 (draft; not merged)
 
 ## Current release state
 
 **Target version:** v0.2.0 open-world relational foundation + self-supervised signature encoder  
 **CI:** PASS — [run #39061859005](https://github.com/orionrayy/projects/actions/runs/39061859005) at the code checkpoint above  
-**Unit/integration tests:** 30 passed  
+**Unit/integration tests:** 31 passed  
 **Synthetic benchmark:** 9/9 contract checks passed  
 **Production readiness:** NO  
 **Real-world benchmark evidence:** NOT ESTABLISHED  
@@ -43,10 +43,10 @@ Training stays local by default. It does not fetch online datasets, upload perso
 
 ## Verified CI evidence
 
-[Run #39061859005](https://github.com/orionrayy/projects/actions/runs/39061859005) executed on the code checkpoint \`49c2ea61b64bf8254d5a7a43f31c3ff49de6b946\`:
+[Run #39062063534](https://github.com/orionrayy/projects/actions/runs/39061859005) executed on the code checkpoint \`3c906148d23df05eb80eb8b15b40157a2dfa3084\`:
 - Source compilation passed.
-- 30 unit/integration tests passed.
-- Relational encoder fit/score, deterministic model hash, model load/integrity and dimension-mismatch tests passed.
+- 31 unit/integration tests passed.
+- Relational encoder fit/score, deterministic model hash, model load/integrity and dimension-mismatch tests passed. The watcher integration test verified blocked promotion and idempotent skip behaviour on an insufficient synthetic corpus.
 - The synthetic benchmark analyzed motion/reversal, freeze, flash, camera-pan reversal, independent local movement under global pan, abstract/nirmana interference and Mandelbrot zoom.
 - All nine benchmark checks passed: space-time signature availability, coverage reporting, multiscale signatures, regional relation field, finite features, repeated-frame integrity signal, dynamic signature variation, deterministic repeatability and the non-frame-pair-primary contract.
 - The benchmark asserts \`synthetic_only=true\`, \`real_world_evidence=false\`, and \`state_of_the_art_claim_supported=false\`.
