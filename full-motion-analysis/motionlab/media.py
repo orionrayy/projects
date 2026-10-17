@@ -144,3 +144,56 @@ def iter_gray_frames(path: str | Path, *, fps: float, width: int, height: int, m
             failure = failure or RuntimeError(f"ffmpeg_decode_failed:{message}")
         if failure:
             raise failure
+
+
+def iter_rgb_frames(path: str | Path, *, fps: float, width: int, height: int, max_frames: int) -> Iterator[tuple[int, np.ndarray]]:
+    """Yield bounded RGB24 frames for open-world analysis while preserving color structure."""
+    if fps <= 0 or width <= 0 or height <= 0 or max_frames <= 0:
+        raise ValueError("fps_dimensions_and_max_frames_must_be_positive")
+    if width % 2 or height % 2:
+        raise ValueError("analysis_dimensions_must_be_even")
+    source = Path(path).expanduser().resolve(strict=True)
+    vf = f"fps={fps:.8f},scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,format=rgb24"
+    command = [
+        require_tool("ffmpeg"), "-hide_banner", "-loglevel", "error", "-nostdin",
+        "-i", str(source), "-map", "0:v:0", "-vf", vf, "-an", "-sn", "-dn",
+        "-threads", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1",
+    ]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    frame_bytes = width * height * 3
+    index = 0
+    cap_reached = False
+    failure: Exception | None = None
+    stderr = b""
+    try:
+        assert process.stdout is not None
+        while index < max_frames:
+            chunk = process.stdout.read(frame_bytes)
+            if not chunk:
+                break
+            if len(chunk) != frame_bytes:
+                failure = RuntimeError(f"truncated_raw_rgb_frame:index={index}:bytes={len(chunk)}:expected={frame_bytes}")
+                break
+            yield index, np.frombuffer(chunk, dtype=np.uint8).reshape(height, width, 3).copy()
+            index += 1
+        if index >= max_frames:
+            cap_reached = True
+    finally:
+        if (cap_reached or failure is not None) and process.poll() is None:
+            process.terminate()
+        try:
+            _, stderr = process.communicate(timeout=15)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            _, stderr = process.communicate(timeout=5)
+            failure = failure or RuntimeError("ffmpeg_rgb_decode_timeout_after_termination")
+        finally:
+            if process.stdout is not None:
+                process.stdout.close()
+            if process.stderr is not None:
+                process.stderr.close()
+        if not cap_reached and process.returncode not in (0, None):
+            message = (stderr or b"").decode("utf-8", errors="replace").strip()[:1500]
+            failure = failure or RuntimeError(f"ffmpeg_rgb_decode_failed:{message}")
+        if failure:
+            raise failure
