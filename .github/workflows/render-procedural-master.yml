@@ -5,9 +5,9 @@ on:
     branches:
       - feature/ffmpeg-motion-studio-9.0.2-upgrade
     paths:
-      - ".github/workflows/render-procedural-master.yml"
-      - "ffmpeg-motion-studio/scripts/**"
-      - "ffmpeg-motion-studio/production/**"
+      - "ffmpeg-motion-studio/scripts/render_procedural_master_v2.py"
+      - "ffmpeg-motion-studio/scripts/test_procedural_master_v2.py"
+      - "ffmpeg-motion-studio/production/PROCEDURAL_CINEMATIC_MOTION_MASTER_V2.md"
   workflow_dispatch:
 
 permissions:

@@ -370,8 +370,10 @@ def render_video(ffmpeg,path,sheet):
             if proc.stdin and not proc.stdin.closed: proc.stdin.close()
         except Exception: pass
         proc.kill(); proc.wait(); raise
-    contact=Image.new("RGB",(960,540),(5,9,18))
-    for i,thumb in enumerate(thumbs): contact.paste(thumb,((i%3)*320,(i//3)*180))
+    columns=4
+    rows=max(1,(len(thumbs)+columns-1)//columns)
+    contact=Image.new("RGB",(columns*320,rows*180),(5,9,18))
+    for i,thumb in enumerate(thumbs): contact.paste(thumb,((i%columns)*320,(i//columns)*180))
     contact.save(sheet,quality=93,optimize=True)
     return {"frame_count":count,"render_seconds":round(time.time()-start,2),"source_canvas":f"{W}x{H}","output_canvas":f"{OW}x{OH}","fps":FPS,"contact_sheet":sheet.name}
 
