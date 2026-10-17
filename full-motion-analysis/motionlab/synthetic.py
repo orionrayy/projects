@@ -51,6 +51,44 @@ def _gray_frame(index: int, frames: int, width: int, height: int, fps: int, scen
         patch_y, patch_x = np.mgrid[0:object_box, 0:object_box]
         patch = np.where(((patch_x // 3 + patch_y // 3) % 2) == 0, 245, 185).astype(np.uint8)
         frame[object_y:object_y + object_box, object_x:object_x + object_box] = patch
+    elif scenario == "abstract_nirmana":
+        # Domain-free geometric composition: rotation, bands, rings and interference patterns.
+        yy, xx = np.mgrid[0:height, 0:width]
+        x = (xx.astype(np.float64) - width / 2.0) / max(1.0, width / 2.0)
+        y = (yy.astype(np.float64) - height / 2.0) / max(1.0, height / 2.0)
+        phase = 2.0 * np.pi * index / max(1, frames - 1)
+        angle = 0.7 * np.sin(phase * 0.5)
+        u = np.cos(angle) * x - np.sin(angle) * y
+        v = np.sin(angle) * x + np.cos(angle) * y
+        radius = np.sqrt(u * u + v * v)
+        rings = np.sin(24.0 * radius - phase * 1.4)
+        interference = np.sin(11.0 * u + 2.0 * np.sin(7.0 * v + phase))
+        cross_bands = np.sin(8.0 * (u + v) - phase) * np.cos(6.0 * (u - v) + phase * 0.7)
+        composition = 128.0 + 44.0 * rings + 43.0 * interference + 28.0 * cross_bands
+        frame = np.clip(composition, 0, 255).astype(np.uint8)
+    elif scenario == "fractal_zoom":
+        # Procedural Mandelbrot zoom; no object semantics or labels are used by FMA.
+        yy, xx = np.mgrid[0:height, 0:width]
+        progress = index / max(1, frames - 1)
+        zoom = 1.0 + 99.0 * (progress ** 1.2)
+        scale = 3.6 / (width * zoom)
+        cx, cy = -0.743643887037151, 0.131825904205330
+        real = cx + (xx.astype(np.float64) - width / 2.0) * scale
+        imag = cy + (yy.astype(np.float64) - height / 2.0) * scale
+        cvalue = real + 1j * imag
+        z = np.zeros_like(cvalue)
+        escaped_at = np.full((height, width), 40, dtype=np.float32)
+        active = np.ones((height, width), dtype=bool)
+        for iteration in range(40):
+            z[active] = z[active] * z[active] + cvalue[active]
+            escaped = active & ((z.real * z.real + z.imag * z.imag) > 4.0)
+            escaped_at[escaped] = iteration + 1
+            active[escaped] = False
+            if not np.any(active):
+                break
+        smooth = np.sqrt(np.clip(escaped_at / 40.0, 0.0, 1.0))
+        fine = np.sin(escaped_at * 0.75 + np.log1p(zoom) * 5.0) * 12.0
+        frame = np.clip(20.0 + 220.0 * smooth + fine, 0, 255).astype(np.uint8)
     elif scenario == "flash":
         frame[height // 2 - box // 2:height // 2 + box // 2, width // 3:width // 3 + box] = 220
         if index == max(1, fps // 2):
