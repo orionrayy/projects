@@ -34,7 +34,8 @@ The rights flag is an explicit operator attestation that the local corpus may be
 - at least five distinct, successfully analyzed video sources;
 - at least four training sources and a distinct held-out source;
 - at least 95% reported analysis-time coverage where source duration is available;
-- at least 5% improvement in held-out prototype quantization versus a single-centroid latent baseline;
+- at least 5% improvement in held-out prototype quantization versus a frozen single-centroid latent baseline;
+- clean reconstruction loss decreases during denoising-encoder training;
 - multiple occupied prototypes without extreme assignment collapse;
 - finite model parameters and the operator rights attestation.
 
