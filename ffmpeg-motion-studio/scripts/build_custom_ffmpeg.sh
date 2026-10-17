@@ -114,7 +114,7 @@ fi
 )
 ARCHIVE="$DIST/ffmpeg-${VERSION}-ubuntu-24.04-x86_64.tar.gz"
 tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 --numeric-owner -czf "$ARCHIVE" -C "$BUNDLE" .
-sha256sum "$ARCHIVE" | tee "$ARCHIVE.sha256"
+( cd "$DIST" && sha256sum "$(basename "$ARCHIVE")" | tee "$(basename "$ARCHIVE").sha256" )
 cp "$WORK/regression/summary.json" "$DIST/ffmpeg-${VERSION}-regression-summary.json"
 echo "Created: $ARCHIVE"
 echo "::endgroup::"
