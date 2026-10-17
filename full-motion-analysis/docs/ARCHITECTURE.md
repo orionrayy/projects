@@ -19,7 +19,7 @@
 5. A 4×6 fixed-region field generates 24 regional descriptors. Spatial-neighbor and non-local similarity edges describe relationships between regions over the same window; they do not imply object identity.
 6. Whole-window signatures are compared across intervals. Robust signature-distance candidates, recurrence relations and duplicate-frame integrity checks populate the report. Exact duplicate checks are a technical QC signal, not the primary motion model.
 7. The JSON report retains signatures, scales, nodes, edges, source provenance, window coverage and explicit interpretive limits.
-8. Optional local learned scoring applies a trained standardizer, PCA projection and anonymous prototypes. The analysis itself continues to work without any trained model.
+8. Optional local learned scoring applies the trained standardizer, denoising encoder and anonymous prototypes. The analysis itself continues to work without any trained model.
 
 ## Why this is not universal understanding yet
 
@@ -29,7 +29,7 @@ The design target is not a single “universal feature” that works perfectly. 
 
 ## Automatic training path
 
-The trainer uses local unlabeled videos, source hashes, video-level train/validation separation, robust median/MAD normalization, deterministic PCA whitening and farthest-first prototypes. It outputs a candidate model and validation report. It promotes the model locally only when explicit coverage, corpus-size, holdout-quality, diversity and rights-attestation gates all pass.
+The trainer uses local unlabeled videos, source hashes, video-level train/validation separation, robust median/MAD normalization, a small NumPy denoising autoencoder, and deterministic farthest-first prototypes. It outputs a candidate model and validation report. It promotes the model locally only when explicit coverage, corpus-size, holdout-quality, diversity and rights-attestation gates all pass.
 
 No online scraping occurs. This is both a privacy boundary and a licensing boundary. Any future online dataset connector must carry per-dataset terms, checksums, permitted-use status and reproducible source manifests.
 
