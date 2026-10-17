@@ -127,7 +127,7 @@ def main() -> int:
             "A passing test suite is not a real-world accuracy score and does not establish novelty or state of the art.",
         ],
     }
-    report_path = output_dir / "openworld-synthetic-benchmark.json"
+    report_path = output_dir / "synthetic-benchmark.json"
     report_path.write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
     print(json.dumps({"status": result["status"], "report_path": str(report_path), "checks": checks}, indent=2))
     return 0 if result["status"] == "PASS" else 2
