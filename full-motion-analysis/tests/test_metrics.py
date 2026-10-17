@@ -23,6 +23,23 @@ class MetricTests(unittest.TestCase):
         self.assertGreater(result["changed_pixel_ratio"], 0.0)
         self.assertAlmostEqual(histogram_distance(before, after), 0.0)
 
+    def test_dense_flow_returns_spatial_grid_when_backend_is_present(self):
+        class FakeCV2:
+            @staticmethod
+            def calcOpticalFlowFarneback(previous, current, _flow, *_args):
+                flow = np.zeros((*previous.shape, 2), dtype=np.float32)
+                flow[16:48, 16:48, 0] = 2.0
+                return flow
+
+        before = np.zeros((64, 64), dtype=np.uint8)
+        after = before.copy()
+        result = measure_frame_pair(before, after, cv2_module=FakeCV2)
+        self.assertEqual(len(result["flow_grid"]), 24)
+        self.assertGreater(result["flow_moving_pixel_ratio"], 0)
+        cell_ratios = [cell["moving_pixel_ratio"] for cell in result["flow_grid"]]
+        self.assertGreater(max(cell_ratios), min(cell_ratios))
+        self.assertGreaterEqual(result["flow_magnitude_p90_px_frame"], 0)
+
     def test_invalid_frames_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "frame_shapes_must_match"):
             measure_frame_pair(np.zeros((64, 64), dtype=np.uint8), np.zeros((65, 64), dtype=np.uint8))
