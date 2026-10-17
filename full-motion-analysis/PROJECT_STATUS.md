@@ -7,11 +7,11 @@ Branch: feat/full-motion-analysis-v0-1
 
 ## Current release state
 
-**Phase:** P0 bootstrap in implementation  
+**Phase:** P0 temporal measurement core; extended synthetic ground-truth checks pending CI  
 **Production readiness:** NO  
 **Real-world benchmark claim:** NOT ESTABLISHED  
 **Semantic / causal action understanding:** NOT IMPLEMENTED  
-**Remote MCP upload endpoint:** NOT IMPLEMENTED  
+**Remote MCP upload endpoint:** NOT DEPLOYED; local stdio tools exist  
 **ChatGPT connector attached:** NO — a repository commit alone cannot register a custom MCP server in a ChatGPT workspace  
 **Paid services:** none required by the current architecture
 
@@ -20,7 +20,7 @@ Branch: feat/full-motion-analysis-v0-1
 | Gate | Required evidence | State at bootstrap |
 |---|---|---|
 | Decode correctness | FFprobe metadata, complete/incomplete decode status, frame timestamp accounting | In implementation |
-| Motion measurement | Frame-difference series plus optional dense optical flow with explicit coordinate units | In implementation |
+| Motion measurement | Frame-difference series plus optional dense optical flow with spatial grid and affine fit | Implemented; current revision pending CI |
 | Camera-motion assumptions | Median-flow estimate and documented static-background limitation | In implementation |
 | Event localization | Timestamped event candidates linked to raw measurements and rule IDs | In implementation |
 | Temporal-order sensitivity | Forward/reverse/shuffled synthetic challenge; report metric changes | Planned for P1 |
@@ -39,6 +39,13 @@ Branch: feat/full-motion-analysis-v0-1
 5. MCP file access is constrained to allowed roots; no unauthenticated remote server or arbitrary URL fetch is exposed.
 6. FFmpeg audit has explicit warning/failure policy and can treat missing audio as a release blocker when requested.
 7. Every quality claim is tied to a command, test report, artifact hash, and exact source revision.
+
+## Recent validation checkpoint
+
+- GitHub Actions run 39054975347 passed the initial suite: compile, 11 unit/integration tests, and baseline synthetic checks for measured change, timeline order, freeze detection, and flash localization.
+- GitHub Actions run 39055383340 passed a later revision with 12 tests and no ResourceWarning entries in the retrieved log.
+- The working branch then added robust global-affine motion fields, a known global-pan reversal fixture, and stronger synthetic benchmark assertions. Those additions have not yet been recorded as validated; a new CI result must cover the latest branch head before the project advances beyond P0.
+- The tests and synthetic checks are not real-world benchmark evidence.
 
 ## Known limitations
 
