@@ -236,6 +236,10 @@ def analyze_video(
                 "flow_moving_pixel_ratio": None, "flow_global_median_dx_px_frame": None,
                 "flow_global_median_dy_px_frame": None, "flow_residual_mean_px_frame": None,
                 "flow_coherence": None, "direction_deg_image_coordinates": None,
+                "global_affine_translation_dx_px_frame": None, "global_affine_translation_dy_px_frame": None,
+                "global_affine_rotation_deg_frame": None, "global_affine_scale_factor": None,
+                "global_affine_residual_median_px_frame": None, "global_affine_residual_p90_px_frame": None,
+                "global_affine_inlier_ratio": None, "global_affine_fit_status": "first_frame_no_pair",
                 "flow_grid": None, "exact_duplicate_of_previous": False,
             }
         else:
@@ -292,6 +296,14 @@ def analyze_video(
                 "flow_global_median_dy_px_frame": _round_value(row["flow_global_median_dy_px_frame"]),
                 "flow_residual_mean_px_frame": _round_value(row["flow_residual_mean_px_frame"]),
                 "flow_coherence": _round_value(row["flow_coherence"]),
+                "global_affine_translation_dx_px_frame": _round_value(row["global_affine_translation_dx_px_frame"]),
+                "global_affine_translation_dy_px_frame": _round_value(row["global_affine_translation_dy_px_frame"]),
+                "global_affine_rotation_deg_frame": _round_value(row["global_affine_rotation_deg_frame"]),
+                "global_affine_scale_factor": _round_value(row["global_affine_scale_factor"]),
+                "global_affine_residual_median_px_frame": _round_value(row["global_affine_residual_median_px_frame"]),
+                "global_affine_residual_p90_px_frame": _round_value(row["global_affine_residual_p90_px_frame"]),
+                "global_affine_inlier_ratio": _round_value(row["global_affine_inlier_ratio"]),
+                "global_affine_fit_status": row["global_affine_fit_status"],
                 "exact_duplicate_of_previous": bool(row["exact_duplicate_of_previous"]),
             })
 
