@@ -23,6 +23,14 @@ class V2Tests(unittest.TestCase):
    beats=m.BEAT_GUIDE[str(s["id"])]
    self.assertEqual(len(beats),3)
    self.assertTrue(all(0<=b["at"]<d and b["action"] and b["fx"] for b in beats))
+ def test_beats_align_with_actual_speech_duration(self):
+  for scene,dur in zip(m.SCENES,m.DURATIONS):
+   speech=min(dur-.1,5.0)
+   offsets=m.align_beats_to_speech(scene["id"],speech)
+   self.assertEqual(len(offsets),3)
+   self.assertTrue(all(0<=v<dur for v in offsets))
+   self.assertTrue(offsets[0]<offsets[1]<offsets[2])
+   self.assertLessEqual(offsets[2],speech*.86+.01)
  def test_voiceover_word_budget_for_scene_pace(self):
   for scene in m.SCENES:
    n=len(scene["narration"].split())

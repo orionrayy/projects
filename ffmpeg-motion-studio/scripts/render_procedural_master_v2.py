@@ -430,11 +430,23 @@ SPEECH_DURATION_BY_ID={}
 
 def caption_frame(scene,local,duration):
     display_duration=SPEECH_DURATION_BY_ID.get(scene["id"],duration-.7)
-    edited=dict(scene); edited["narration"]=phrase_at(scene["narration"],local,display_duration)
+    edited=dict(scene)
+    edited["narration"]="" if local>display_duration+.12 else phrase_at(scene["narration"],local,display_duration)
     return legacy_frame(edited,local,duration)
 
 legacy_make_audio=base.make_audio
 legacy_frame=base.frame
+def align_beats_to_speech(scene_id,speech_duration):
+    beats=BEAT_GUIDE[str(scene_id)]
+    fractions=(0.14,0.52,0.86)
+    limit=DURATIONS[scene_id-1]-.25
+    previous=-.1
+    for i,beat in enumerate(beats):
+        at=min(limit,max(previous+.12,speech_duration*fractions[i]))
+        beat["at"]=round(at,3)
+        previous=at
+    return [b["at"] for b in beats]
+
 def make_audio_v2(ffmpeg,ffprobe,work,out):
     result=legacy_make_audio(ffmpeg,ffprobe,work,out)
     for item in result["scenes"]:
@@ -442,6 +454,7 @@ def make_audio_v2(ffmpeg,ffprobe,work,out):
         raw=float(item.get("source_audio_duration_sec",DURATIONS[sid-1]-.7))
         tempo=max(1.0,float(item.get("tempo_factor",1.0)))
         SPEECH_DURATION_BY_ID[sid]=min(DURATIONS[sid-1]-.1,max(1.0,raw/tempo))
+        align_beats_to_speech(sid,SPEECH_DURATION_BY_ID[sid])
     write_srt_v2(Path(out)/"narration-id.srt",result["scenes"])
     sfx,events=create_sfx_track(out)
     mixed=Path(work)/"master-audio-v2.wav"
