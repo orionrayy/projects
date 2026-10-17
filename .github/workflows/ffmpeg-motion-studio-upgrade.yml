@@ -7,17 +7,14 @@ on:
     paths:
       - ".github/workflows/ffmpeg-motion-studio-upgrade.yml"
       - "ffmpeg-motion-studio/**"
-  pull_request:
-    paths:
-      - ".github/workflows/ffmpeg-motion-studio-upgrade.yml"
-      - "ffmpeg-motion-studio/**"
   workflow_dispatch:
 
 permissions:
   contents: read
 
+# One expensive build at a time for this target. A newer push supersedes an older run.
 concurrency:
-  group: ffmpeg-motion-studio-custom-build-${{ github.ref }}
+  group: ffmpeg-motion-studio-custom-build
   cancel-in-progress: true
 
 jobs:
