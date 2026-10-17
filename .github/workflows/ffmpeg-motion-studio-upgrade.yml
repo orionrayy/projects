@@ -39,6 +39,13 @@ jobs:
             libdav1d-dev libaom-dev libzimg-dev zlib1g-dev \
             python3-pil python3-venv python3-pip espeak-ng fonts-dejavu-core
 
+      - name: Preflight Python syntax and motion storyboard contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile ffmpeg-motion-studio/scripts/render_procedural_master.py ffmpeg-motion-studio/scripts/test_procedural_master.py
+          python3 ffmpeg-motion-studio/scripts/test_procedural_master.py
+
       - name: Verify release signature, build custom FFmpeg, and run regressions
         run: bash ffmpeg-motion-studio/scripts/build_custom_ffmpeg.sh
 
