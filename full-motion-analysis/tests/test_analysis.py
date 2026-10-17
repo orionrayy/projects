@@ -40,6 +40,29 @@ class TemporalEventTests(unittest.TestCase):
         events = detect_event_candidates(rows, 10.0)
         self.assertIn("scene_transition_candidate", {e["event_type"] for e in events})
 
+    def test_local_residual_motion_regions_are_localized_without_identity_claim(self):
+        rows = [row(i, 0.0, 0.0, 0.0) for i in range(3)]
+        grid = []
+        for y in range(4):
+            for x in range(6):
+                active = (y == 1 and x in (2, 3))
+                grid.append({
+                    "row": y, "column": x,
+                    "x0_norm": x / 6.0, "y0_norm": y / 4.0,
+                    "x1_norm": (x + 1) / 6.0, "y1_norm": (y + 1) / 4.0,
+                    "affine_residual_moving_pixel_ratio": 0.25 if active else 0.0,
+                    "affine_residual_p90_magnitude_px_frame": 2.0 if active else 0.1,
+                    "affine_residual_mean_magnitude_px_frame": 1.0 if active else 0.0,
+                })
+        rows[1]["flow_grid"] = grid
+        events = detect_event_candidates(rows, 10.0)
+        regions = [e for e in events if e["event_type"] == "local_motion_region_candidate"]
+        self.assertEqual(len(regions), 1)
+        evidence = regions[0]["measurement"]
+        self.assertEqual(evidence["cell_count"], 2)
+        self.assertEqual(evidence["bbox_norm_xyxy"], [0.3333, 0.25, 0.6667, 0.5])
+        self.assertIn("not an object identity", regions[0]["interpretation_limit"])
+
     def test_exact_duplicate_run_is_flagged_with_caveat(self):
         rows = [row(i, 0.0, 0.0, 0.0) for i in range(12)]
         for i in range(1, 12):
