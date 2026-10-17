@@ -89,6 +89,7 @@ def measure_frame_pair(
     fx = flow[..., 0].astype(np.float32)
     fy = flow[..., 1].astype(np.float32)
     magnitude = np.sqrt(fx * fx + fy * fy)
+    height, width = magnitude.shape
     mean_dx = float(fx.mean())
     mean_dy = float(fy.mean())
     mean_mag = float(magnitude.mean())
