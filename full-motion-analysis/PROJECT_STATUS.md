@@ -70,3 +70,8 @@ After source files land: run unit/integration tests, inspect the CI run on the P
 - Official current ChatGPT documentation lists full custom MCP connections for Business and Enterprise/Edu web workspaces; Pro has limited read/fetch capability, while Go is not listed. See \`docs/REMOTE_DEPLOYMENT.md\`.
 - MCP does not automatically transfer binary bytes of an arbitrary uploaded video into an independent server; the remote workflow uses a short-lived upload page and then an opaque upload ID.
 - Remote service authentication and safety tests are included in CI, but this does not mean a remote deployment is live or real-world motion benchmarked.
+
+
+- Remote MCP compatibility: CI initially caught the MCP SDK v2 rename from \`FastMCP\` to \`MCPServer\`; both local and remote servers now support both import paths. Run [39056485897](https://github.com/orionrayy/projects/actions/runs/39056485897) passed after that fix.
+- The current branch extends residual-flow measurements into connected local-motion-region candidates and adds a synthetic scenario in which an independently moving object overlaps a globally panning textured background. The newest CI must validate this additional scenario and bearer-auth tests before it counts as verified.
+- Remote MCP's Host/DNS-rebinding policy now explicitly allowlists the same-origin upload page, so the browser upload route can work with the security middleware in place.

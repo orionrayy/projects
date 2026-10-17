@@ -36,6 +36,21 @@ def _gray_frame(index: int, frames: int, width: int, height: int, fps: int, scen
         midpoint = max(1, frames // 2)
         shift = round(index * 1.5) if index <= midpoint else round(midpoint * 1.5 - (index - midpoint) * 1.5)
         frame = np.roll(base, shift, axis=1)
+    elif scenario == "pan_plus_object":
+        # Textured background pans right; a high-contrast object independently moves right faster.
+        rng = np.random.default_rng(7411)
+        yy, xx = np.mgrid[0:height, 0:width]
+        noise = rng.normal(0.0, 8.0, size=(height, width))
+        base = np.clip(128 + 38 * np.sin(xx / 7.0) + 32 * np.cos(yy / 9.0) + noise, 0, 255).astype(np.uint8)
+        camera_shift = round(index * 1.0)
+        frame = np.roll(base, camera_shift, axis=1)
+        object_box = 30
+        object_x = 24 + int((width - object_box - 48) * index / max(1, frames - 1))
+        object_x = min(width - object_box - 4, max(4, object_x))
+        object_y = height // 2 - object_box // 2
+        patch_y, patch_x = np.mgrid[0:object_box, 0:object_box]
+        patch = np.where(((patch_x // 3 + patch_y // 3) % 2) == 0, 245, 185).astype(np.uint8)
+        frame[object_y:object_y + object_box, object_x:object_x + object_box] = patch
     elif scenario == "flash":
         frame[height // 2 - box // 2:height // 2 + box // 2, width // 3:width // 3 + box] = 220
         if index == max(1, fps // 2):

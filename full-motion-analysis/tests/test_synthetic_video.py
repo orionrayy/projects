@@ -19,11 +19,13 @@ class SyntheticVideoTests(unittest.TestCase):
             frozen = generate_synthetic_clip(root / "frozen.mkv", scenario="freeze", duration_s=2.0, fps=15)
             flash = generate_synthetic_clip(root / "flash.mkv", scenario="flash", duration_s=2.0, fps=15)
             pan = generate_synthetic_clip(root / "pan.mkv", scenario="global_pan_reverse", duration_s=2.0, fps=15)
+            mixed = generate_synthetic_clip(root / "mixed.mkv", scenario="pan_plus_object", duration_s=2.0, fps=15)
 
             moving_report = analyze_video(moving, max_fps=15, optical_flow=True)
             frozen_report = analyze_video(frozen, max_fps=15, optical_flow=False)
             flash_report = analyze_video(flash, max_fps=15, optical_flow=False)
             pan_report = analyze_video(pan, max_fps=15, optical_flow=True)
+            mixed_report = analyze_video(mixed, max_fps=15, optical_flow=True)
 
             self.assertEqual(moving_report["sampling"]["frames_decoded"], 30)
             self.assertGreater(moving_report["measurements"]["mean_abs_diff_p95"], 0.0005)
@@ -39,7 +41,10 @@ class SyntheticVideoTests(unittest.TestCase):
                 self.assertTrue(before and after)
                 self.assertGreater(__import__("statistics").median(before), 0.2)
                 self.assertLess(__import__("statistics").median(after), -0.2)
-            for report in (moving_report, frozen_report, flash_report, pan_report):
+            if mixed_report["provenance"]["optical_flow"].startswith("available:"):
+                local_events = [e for e in mixed_report["events"] if e["event_type"] == "local_motion_region_candidate"]
+                self.assertTrue(local_events, "independent object motion should remain after dominant camera-pan compensation")
+            for report in (moving_report, frozen_report, flash_report, pan_report, mixed_report):
                 ts = [item["timestamp_s"] for item in report["timeline"]]
                 self.assertEqual(ts, sorted(set(ts)))
                 self.assertEqual(len(report["input"]["sha256"]), 64)

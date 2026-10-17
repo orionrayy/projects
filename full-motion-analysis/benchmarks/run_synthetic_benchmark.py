@@ -30,7 +30,7 @@ def main() -> int:
     out = Path(args.output_dir).expanduser().resolve()
     out.mkdir(parents=True, exist_ok=True)
     results: dict[str, Any] = {}
-    for scenario in ("move_reverse", "freeze", "flash", "global_pan_reverse"):
+    for scenario in ("move_reverse", "freeze", "flash", "global_pan_reverse", "pan_plus_object"):
         clip = generate_synthetic_clip(
             out / f"{scenario}.mkv", scenario=scenario,
             duration_s=args.duration, fps=args.fps,
@@ -79,7 +79,9 @@ def main() -> int:
     freeze = results["freeze"]
     flash = results["flash"]
     pan = results["global_pan_reverse"]
+    mixed = results["pan_plus_object"]
     flow_available = pan["optical_flow_status"].startswith("available:")
+    mixed_flow_available = mixed["optical_flow_status"].startswith("available:")
     first_half_dx = pan["global_affine_dx_by_half"]["first_half_median"]
     second_half_dx = pan["global_affine_dx_by_half"]["second_half_median"]
     checks = {
@@ -97,6 +99,10 @@ def main() -> int:
         "known_global_pan_direction_reversal_detected": not flow_available or (
             first_half_dx is not None and second_half_dx is not None
             and first_half_dx > 0.2 and second_half_dx < -0.2
+        ),
+        "independent_object_motion_region_detected_during_camera_pan": not mixed_flow_available or (
+            "local_motion_region_candidate" in mixed["event_types"]
+            and mixed["flow_grid_cells_observed"] == 24
         ),
     }
     output = {

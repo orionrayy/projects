@@ -11,6 +11,7 @@ import secrets
 import threading
 import time
 import uuid
+from urllib.parse import urlparse
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
@@ -91,6 +92,22 @@ def _allowed_hosts() -> list[str]:
     if not values:
         values = ["localhost:*", "127.0.0.1:*", "[::1]:*"]
     return sorted(set(values))
+
+
+def _allowed_origins() -> list[str]:
+    explicit = os.environ.get("MOTION_ALLOWED_ORIGINS", "")
+    origins = [item.strip() for item in explicit.split(",") if item.strip()]
+    public_base = os.environ.get("MOTION_PUBLIC_BASE_URL", "").strip()
+    hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+    if public_base:
+        parsed = urlparse(public_base)
+        if parsed.scheme in {"https", "http"} and parsed.netloc:
+            origins.append(f"{parsed.scheme}://{parsed.netloc}")
+    if hostname and not any(char in hostname for char in "/?#@"):
+        origins.append(f"https://{hostname}")
+    if not origins:
+        origins = ["http://localhost:*", "http://127.0.0.1:*", "http://[::1]:*"]
+    return sorted(set(origins))
 
 
 def safe_extension(filename: str) -> str | None:
@@ -470,7 +487,7 @@ _http_app = mcp.streamable_http_app(
     json_response=True,
     stateless_http=True,
     max_request_body_size=1024 * 1024,
-    transport_security=TransportSecuritySettings(allowed_hosts=_allowed_hosts(), allowed_origins=[]),
+    transport_security=TransportSecuritySettings(allowed_hosts=_allowed_hosts(), allowed_origins=_allowed_origins()),
 )
 _http_app.router.routes.insert(0, Route("/health", health, methods=["GET"]))
 _http_app.router.routes.insert(1, Route("/upload/{ticket}", upload_page, methods=["GET", "POST"]))

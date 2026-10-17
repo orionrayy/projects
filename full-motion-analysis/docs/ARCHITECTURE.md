@@ -7,7 +7,7 @@
 3. **Observable measurements:** each adjacent pair produces normalized mean absolute difference, changed-pixel ratio, histogram distance, difference centroid, and (when available) dense optical flow.
 4. **Camera/scene-motion decomposition:** report the median-flow translation proxy, fit a robust global partial-affine transform with RANSAC when supported, and quantify residual dense flow. This separates a dominant image-plane transform from unexplained local motion without asserting object identity or physical causation.
 5. **Spatial flow field:** summarize dense flow in a fixed 4×6 image grid with direction, magnitude quantiles, moving-pixel occupancy and coherence. These regions preserve multi-zone motion evidence that a single global vector erases; they are not stable object instances.
-6. **Temporal event proposals:** transparent heuristics emit timestamped candidates with rule IDs and measurements. They do not emit causal ground truth.
+6. **Temporal event proposals:** transparent heuristics emit timestamped candidates with rule IDs and measurements, including potential reversals and connected residual-motion regions. They do not emit causal ground truth.
 7. **Render QC:** dimensions, rate, duration, decode coverage, exact duplicate frames, near-black ratio, and optional audio presence are compared with a configurable delivery contract.
 8. **Report:** a versioned JSON result stores a downsampled time series while preserving source hash, sampling parameters, events, and interpretive limitations.
 9. **Interfaces:** CLI and local MCP tools call the same Python functions, avoiding divergent analysis logic.
