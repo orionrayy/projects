@@ -21,6 +21,10 @@ class RelationalLearningTests(unittest.TestCase):
         training = self.examples[:20]
         validation = self.examples[20:]
         model = fit_relational_model(training, max_components=8, max_prototypes=4)
+        self.assertEqual(model["embedding_method"], "numpy_denoising_autoencoder")
+        self.assertEqual(model["schema_version"], "fma.openworld.relational-model.v2")
+        self.assertEqual(len(model["training_diagnostics"]["clean_reconstruction_mse_by_epoch"]), 9)
+        self.assertTrue(np.isfinite(np.asarray(model["encoder_weights"]["w1"])).all())
         scores = score_vectors(model, np.asarray([x["vector"] for x in validation]))
         self.assertEqual(len(scores), len(validation))
         self.assertTrue(all(0 <= score["prototype_id"] < len(model["prototypes"]) for score in scores))
@@ -32,6 +36,8 @@ class RelationalLearningTests(unittest.TestCase):
             path = write_json_atomic(Path(tempdir) / "model.json", model)
             loaded = load_model(path)
             self.assertEqual(loaded["model_sha256"], model["model_sha256"])
+        repeated = fit_relational_model(training, max_components=8, max_prototypes=4)
+        self.assertEqual(repeated["model_sha256"], model["model_sha256"])
 
     def test_rejects_nan_training_data(self):
         bad = [{"vector": [float("nan")] * 8}, {"vector": [0.0] * 8}]
