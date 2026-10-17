@@ -34,6 +34,16 @@ def discover_videos(root: str | Path, *, max_videos: int = 500) -> list[Path]:
     return candidates[:max(1, int(max_videos))]
 
 
+
+def _all_numeric_finite(value: Any) -> bool:
+    if isinstance(value, dict):
+        return all(_all_numeric_finite(item) for item in value.values())
+    if isinstance(value, (list, tuple)):
+        return all(_all_numeric_finite(item) for item in value)
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return math.isfinite(float(value))
+    return True
+
 def _split_hashes(hashes: list[str]) -> tuple[set[str], set[str]]:
     ordered = sorted(set(hashes))
     if len(ordered) < 2:
@@ -59,6 +69,8 @@ def train_corpus(
     rights_attested: bool = False,
     max_components: int = 24,
     max_prototypes: int = 12,
+    encoder_hidden_dim: int = 48,
+    encoder_epochs: int = 8,
     max_windows_per_video: int = 64,
 ) -> dict[str, Any]:
     started = time.perf_counter()
@@ -137,6 +149,8 @@ def train_corpus(
         train_examples,
         max_components=max_components,
         max_prototypes=max_prototypes,
+        encoder_hidden_dim=encoder_hidden_dim,
+        encoder_epochs=encoder_epochs,
     )
     model.pop("model_sha256", None)
     model["training_corpus_sha256"] = canonical_sha256(sorted(train_hashes))
@@ -174,12 +188,14 @@ def train_corpus(
         "validation_timeline_coverage": bool(validation_coverage_ok),
         "heldout_prototype_improvement_at_least_5_percent": bool(validation_gain_ok),
         "heldout_cluster_diversity": bool(model_diversity_ok),
-        "finite_model_parameters": all(
-            math.isfinite(float(value))
-            for key in ("normalizer_median", "normalizer_scale", "components", "component_scale", "prototypes", "prototype_radii_p95")
-            for group in (model[key] if isinstance(model[key], list) else [model[key]])
-            for value in (group if isinstance(group, list) else [group])
-        ),
+        "finite_model_parameters": _all_numeric_finite({
+            key: model.get(key)
+            for key in (
+                "normalizer_median", "normalizer_scale", "encoder_weights",
+                "prototypes", "prototype_radii_p95", "single_prototype_baseline_center",
+                "training_diagnostics",
+            )
+        }),
     }
     promotion_eligible = all(gates.values())
     candidate_path = write_json_atomic(output / "candidate_model.json", model)
@@ -399,6 +415,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--window-stride", type=int, default=8)
     parser.add_argument("--max-components", type=int, default=24)
     parser.add_argument("--max-prototypes", type=int, default=12)
+    parser.add_argument("--encoder-hidden-dim", type=int, default=48)
+    parser.add_argument("--encoder-epochs", type=int, default=8)
     parser.add_argument("--max-windows-per-video", type=int, default=64, help="Deterministically sample at most this many temporal windows from each source video.")
     parser.add_argument("--auto-promote", action="store_true", help="Promote candidate only if all held-out and rights gates pass")
     parser.add_argument("--attest-rights", action="store_true", help="Attest that you have permission to process every video in this local corpus")
@@ -419,6 +437,8 @@ def main(argv: list[str] | None = None) -> int:
             rights_attested=args.attest_rights,
             max_components=args.max_components,
             max_prototypes=args.max_prototypes,
+            encoder_hidden_dim=args.encoder_hidden_dim,
+            encoder_epochs=args.encoder_epochs,
             max_windows_per_video=args.max_windows_per_video,
         )
         if args.watch:
