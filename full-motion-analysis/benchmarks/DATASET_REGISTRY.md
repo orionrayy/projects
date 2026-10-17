@@ -40,3 +40,19 @@ Do not collapse every capability into one aggregate score. Keep the following tr
 7. **Robustness:** blur, illumination, compression, rolling shutter, occlusion, cuts, repeated frames and out-of-domain scene type.
 
 Use a distinct validation set for threshold calibration and untouched held-out source videos for final evaluation. Report per-domain results, confidence intervals and failure cases. P0 synthetic checks are not real-world evidence.
+
+
+## Open-world coverage matrix
+
+The existing benchmark candidates above do not cover the complete project target. Add explicitly licensed or generated evaluation sources across these strata. These are evaluation strata only; the runtime must not require routing a video into one of them.
+
+| Stratum | Required phenomenon | Source policy | Example measurements |
+|---|---|---|---|
+| Abstract / nirmana | shape, color, balance, repetition and kinetic patterns without named objects | Generate controlled patterns in code or use artist-authorized examples | multiscale consistency, motif recurrence, relation stability |
+| Fractal / mathematical zoom | zoom, self-similarity, scale transitions and extreme detail | Generate deterministic fractal clips directly; store formula/parameters and generator hash | scale-sensitive signature, recurrence stability, temporal aliasing sensitivity |
+| Cartoon / anime / 2D animation | stylized deformation, smear, held poses and discontinuous motion | Use authored or rights-cleared assets only | deformation sensitivity, temporal order, transition localization |
+| Film / natural camera | camera motion, lighting changes, occlusion and compression | Rights-cleared research data or user-authorized recordings | robustness, ambiguity, change intervals |
+| POV / third person / daily life | strong view-dependent movement and mixed global/local motion | Consent and privacy review are required for personal footage | relation consistency, viewpoint-induced change, failure / abstention rates |
+| Mixed / unfamiliar | previously unseen combinations and no convenient category label | Keep as a held-out challenge set | out-of-domain stability, novelty calibration, operator failure discovery |
+
+The project may generate abstract and fractal test videos procedurally without downloading external media. Generated fixtures still need multiple seeds and carefully declared ground truth; they cannot substitute for natural-video evaluation. Do not auto-ingest personal or online community media without a clear right-to-process record.
