@@ -11,9 +11,9 @@ W, H = base.W, base.H
 FPS = base.FPS
 TOTAL_DURATION = 126
 SCENES = [
- {"id":1,"motif":"hook_storefront","title":"Kok total belanja bisa dipercaya?","short":"Dari toko menuju satu pertanyaan","narration":"Pernah bertanya: dari barang di keranjang, bagaimana kasir tahu total yang benar?"},
- {"id":2,"motif":"hook_scan","title":"Dari barang, bagaimana jadi angka?","short":"Satu bunyi bip belum berarti paham","narration":"Bagaimana satu bunyi bip mengubah barang menjadi data, dan mengapa komputer belum otomatis memahaminya?"},
- {"id":3,"motif":"hook_total","title":"Siapa memastikan totalnya benar?","short":"Angka harus mengikuti struktur dan aturan","narration":"Bagaimana komputer memastikan total yang muncul bukan sekadar angka tebakan?"},
+ {"id":1,"motif":"hook_storefront","title":"Kok total belanja bisa dipercaya?","short":"Dari toko menuju satu pertanyaan","narration":"Dari keranjang, bagaimana kasir tahu total?"},
+ {"id":2,"motif":"hook_scan","title":"Dari barang, bagaimana jadi angka?","short":"Satu bunyi bip belum berarti paham","narration":"Apa arti satu bip bagi komputer?"},
+ {"id":3,"motif":"hook_total","title":"Siapa memastikan totalnya benar?","short":"Angka harus mengikuti struktur dan aturan","narration":"Siapa menjamin total ini benar?"},
  {"id":4,"motif":"counter_formula","title":"Mulai dari layar kasir","short":"Satu transaksi ditulis sebagai ekspresi","narration":"Di layar kasir, sederhanakan transaksi menjadi total sama dengan lima puluh empat ribu dikurangi lima ribu empat ratus."},
  {"id":5,"motif":"tokenization","title":"Tokenisasi: pecah teks menjadi unit","short":"Kenali identifier, angka, dan operator","narration":"Tokenisasi mengubah teks menjadi unit: identifier total, tanda sama dengan, angka, operator minus, dan angka diskon."},
  {"id":6,"motif":"cfg_rules","title":"CFG: aturan yang membentuk ekspresi","short":"Grammar menentukan susunan yang sah","narration":"Context-Free Grammar atau CFG menetapkan produksi. Assignment berisi identifier, tanda sama dengan, dan ekspresi yang dibentuk oleh aturan."},
@@ -28,7 +28,7 @@ SCENES = [
  {"id":15,"motif":"evaluate","title":"Evaluasi menghasilkan total","short":"54.000 − 5.400 = 48.600","narration":"Evaluator mengambil kedua operand lalu menjalankan pengurangan. Lima puluh empat ribu dikurangi lima ribu empat ratus sama dengan empat puluh delapan ribu enam ratus."},
  {"id":16,"motif":"payment","title":"Baru kemudian pembayaran","short":"Hasil yang sudah dihitung masuk ke terminal","narration":"Setelah total tervalidasi, pembeli mengetuk kartu. Terminal memeriksa pembayaran lalu menampilkan status persetujuan."},
  {"id":17,"motif":"receipt","title":"Struk membuat hasil dapat diaudit","short":"Subtotal, diskon, total harus konsisten","narration":"Struk menyimpan subtotal, diskon, dan total. Ketiga angka harus konsisten agar transaksi dapat diperiksa kembali."},
- {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Intinya: tokenisasi mengenali unit, CFG menetapkan aturan, parse tree mencatat pembentukan, dan AST merangkum operasi untuk evaluasi."}
+ {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Token, CFG, parse tree, AST—hasil teruji."}
 ]
 DURATIONS = [4,4,4,8,8,9,7,9,9,7,7,8,8,8,8,6,7,5]
 TOTAL = sum(DURATIONS)
