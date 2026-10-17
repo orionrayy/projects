@@ -7,7 +7,7 @@ Branch: feat/full-motion-analysis-v0-1
 
 ## Current release state
 
-**Phase:** P0 temporal measurement core; extended synthetic ground-truth checks pending CI  
+**Phase:** P0 temporal measurement core validated on synthetic ground-truth checks; P1 real-world evaluation not started  
 **Production readiness:** NO  
 **Real-world benchmark claim:** NOT ESTABLISHED  
 **Semantic / causal action understanding:** NOT IMPLEMENTED  
@@ -22,7 +22,7 @@ Branch: feat/full-motion-analysis-v0-1
 | Decode correctness | FFprobe metadata, complete/incomplete decode status, frame timestamp accounting | In implementation |
 | Motion measurement | Frame-difference series plus optional dense optical flow with spatial grid and affine fit | Implemented; current revision pending CI |
 | Camera-motion assumptions | Median-flow estimate and documented static-background limitation | In implementation |
-| Event localization | Timestamped event candidates linked to raw measurements and rule IDs | In implementation |
+| Event localization | Timestamped event candidates linked to raw measurements and rule IDs | Implemented; heuristic candidates only |
 | Temporal-order sensitivity | Forward/reverse/shuffled synthetic challenge; report metric changes | Planned for P1 |
 | FFmpeg render QC | Dimensions/FPS/duration/audio/duplicate/freeze/black/flash checks | In implementation |
 | Reproducibility | Input SHA-256, tool/dependency versions, deterministic synthetic fixtures | In implementation |
@@ -42,10 +42,11 @@ Branch: feat/full-motion-analysis-v0-1
 
 ## Recent validation checkpoint
 
-- GitHub Actions run 39054975347 passed the initial suite: compile, 11 unit/integration tests, and baseline synthetic checks for measured change, timeline order, freeze detection, and flash localization.
-- GitHub Actions run 39055383340 passed a later revision with 12 tests and no ResourceWarning entries in the retrieved log.
-- The working branch then added robust global-affine motion fields, a known global-pan reversal fixture, and stronger synthetic benchmark assertions. Those additions have not yet been recorded as validated; a new CI result must cover the latest branch head before the project advances beyond P0.
-- The tests and synthetic checks are not real-world benchmark evidence.
+- GitHub Actions run [39055664706](https://github.com/orionrayy/projects/actions/runs/39055664706) passed on the revision containing the spatial flow grid, robust partial-affine fit and known global-pan direction reversal fixture.
+- GitHub Actions run [39055754870](https://github.com/orionrayy/projects/actions/runs/39055754870) passed after the dataset registry and manifest template were added.
+- The passing logs report 12 unit/integration tests; all seven synthetic benchmark checks were true: measured motion, monotonic timeline, repeated-frame freeze, flash interval, spatial flow grid, affine fit, and known global-pan reversal. The retrieved log contains no ResourceWarning entries.
+- Dataset registry is a candidate list only. No real-world dataset has been downloaded, rights-reviewed, or benchmarked yet.
+- These tests establish synthetic software-contract correctness, not natural-video generalization, production readiness, or a state-of-the-art claim.
 
 ## Known limitations
 
