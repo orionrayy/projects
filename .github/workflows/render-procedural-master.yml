@@ -35,7 +35,9 @@ jobs:
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            python3-pil python3-venv python3-pip espeak-ng fonts-dejavu-core unzip ca-certificates
+            python3-pil python3-venv python3-pip espeak-ng fonts-dejavu-core unzip ca-certificates \
+            libass9 libfreetype6 libfontconfig1 libfribidi0 libharfbuzz0b libmp3lame0 \
+            libopus0 libvorbis0a libvpx9 libx264-164 libx265-199 libdav1d7 libaom3 libzimg2 zlib1g
 
       - name: Preflight source and storyboard tests
         run: |
