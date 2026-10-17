@@ -69,6 +69,14 @@ def measure_frame_pair(
         "flow_residual_mean_px_frame": None,
         "flow_coherence": None,
         "direction_deg_image_coordinates": None,
+        "global_affine_translation_dx_px_frame": None,
+        "global_affine_translation_dy_px_frame": None,
+        "global_affine_rotation_deg_frame": None,
+        "global_affine_scale_factor": None,
+        "global_affine_residual_median_px_frame": None,
+        "global_affine_residual_p90_px_frame": None,
+        "global_affine_inlier_ratio": None,
+        "global_affine_fit_status": "unavailable",
         "flow_grid": None,
     }
 
@@ -105,6 +113,47 @@ def measure_frame_pair(
             if mean_vector_mag > 1e-5 else None
         ),
     })
+
+    # Robust global affine fit estimates dominant image-plane camera/scene motion.
+    # Local residual is a proxy only; it is not physical causality or object segmentation.
+    if hasattr(cv2_module, "estimateAffinePartial2D"):
+        step = max(4, min(height, width) // 20)
+        ys, xs = np.mgrid[step // 2:height:step, step // 2:width:step]
+        source_points = np.stack([xs.ravel(), ys.ravel()], axis=1).astype(np.float32)
+        sampled_dx = fx[ys, xs].ravel().astype(np.float32)
+        sampled_dy = fy[ys, xs].ravel().astype(np.float32)
+        valid = np.isfinite(sampled_dx) & np.isfinite(sampled_dy)
+        source_points = source_points[valid]
+        sampled_flow = np.stack([sampled_dx[valid], sampled_dy[valid]], axis=1)
+        if len(source_points) >= 6:
+            destination_points = source_points + sampled_flow
+            matrix, inliers = cv2_module.estimateAffinePartial2D(
+                source_points, destination_points, method=getattr(cv2_module, "RANSAC", 8),
+                ransacReprojThreshold=2.0, maxIters=200, confidence=0.99, refineIters=10,
+            )
+            if matrix is not None and np.asarray(matrix).shape == (2, 3) and np.isfinite(matrix).all():
+                affine = np.asarray(matrix, dtype=np.float64)
+                predicted = source_points.astype(np.float64) @ affine[:, :2].T + affine[:, 2]
+                residuals = np.sqrt(np.sum((destination_points.astype(np.float64) - predicted) ** 2, axis=1))
+                a, c = float(affine[0, 0]), float(affine[1, 0])
+                inlier_ratio = (
+                    float(np.mean(np.asarray(inliers).reshape(-1) > 0))
+                    if inliers is not None else None
+                )
+                result.update({
+                    "global_affine_translation_dx_px_frame": float(affine[0, 2]),
+                    "global_affine_translation_dy_px_frame": float(affine[1, 2]),
+                    "global_affine_rotation_deg_frame": math.degrees(math.atan2(c, a)),
+                    "global_affine_scale_factor": math.hypot(a, c),
+                    "global_affine_residual_median_px_frame": float(np.median(residuals)),
+                    "global_affine_residual_p90_px_frame": float(np.percentile(residuals, 90)),
+                    "global_affine_inlier_ratio": inlier_ratio,
+                    "global_affine_fit_status": "fit",
+                })
+            else:
+                result["global_affine_fit_status"] = "fit_failed"
+        else:
+            result["global_affine_fit_status"] = "insufficient_valid_points"
 
     # A compact spatial field summary preserves multi-region variation lost by one global mean.
     # Grid cells are regions, not object identities or segmented object tracks.
