@@ -36,7 +36,7 @@ def main() -> int:
 
     output_dir = Path(args.output_dir).expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
-    scenarios = ("move_reverse", "freeze", "flash", "global_pan_reverse", "pan_plus_object")
+    scenarios = ("move_reverse", "freeze", "flash", "global_pan_reverse", "pan_plus_object", "abstract_nirmana", "fractal_zoom")
     results: dict[str, Any] = {}
     reports: dict[str, Any] = {}
     for scenario in scenarios:
@@ -68,6 +68,8 @@ def main() -> int:
     frozen = reports["freeze"]
     flash = reports["flash"]
     mixed = reports["pan_plus_object"]
+    nirmana = reports["abstract_nirmana"]
+    fractal = reports["fractal_zoom"]
     deterministic_again = _analyze(
         output_dir / "move_reverse.mkv", args.fps, args.width, args.height
     )
@@ -97,6 +99,8 @@ def main() -> int:
             moving["measurements"]["signature_distance_p95"] > 0.0
             and flash["measurements"]["signature_distance_p95"] > 0.0
             and mixed["measurements"]["signature_distance_p95"] > 0.0
+            and nirmana["measurements"]["signature_distance_p95"] > 0.0
+            and fractal["measurements"]["signature_distance_p95"] > 0.0
         ),
         "deterministic_repeatability": original_vectors == repeat_vectors,
         "frame_pair_analysis_not_primary": all(
