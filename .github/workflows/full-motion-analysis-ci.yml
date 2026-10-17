@@ -1,0 +1,64 @@
+name: Full Motion Analysis CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "full-motion-analysis/**"
+      - ".github/workflows/full-motion-analysis-ci.yml"
+  pull_request:
+    paths:
+      - "full-motion-analysis/**"
+      - ".github/workflows/full-motion-analysis-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full-motion-analysis-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-motion-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: full-motion-analysis/pyproject.toml
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+      - name: Install project and optional free-first dependencies
+        working-directory: full-motion-analysis
+        run: |
+          python -m pip install --disable-pip-version-check --no-warn-script-location -e ".[vision,mcp]"
+      - name: Compile sources
+        working-directory: full-motion-analysis
+        run: python -m compileall -q motionlab mcp_server.py benchmarks tests
+      - name: Unit and synthetic integration tests
+        working-directory: full-motion-analysis
+        run: python -m unittest discover -s tests -v
+      - name: Synthetic motion benchmark
+        working-directory: full-motion-analysis
+        run: python benchmarks/run_synthetic_benchmark.py --output-dir /tmp/fma-synthetic-benchmark
+      - name: Enforce honest benchmark contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/fma-synthetic-benchmark/synthetic-benchmark.json').read_text())
+          assert report['status'] == 'PASS', report
+          assert report['synthetic_only'] is True, report
+          assert report['real_world_evidence'] is False, report
+          assert report['state_of_the_art_claim_supported'] is False, report
+          assert all(report['checks'].values()), report['checks']
+          print(json.dumps({'status': report['status'], 'checks': report['checks'], 'real_world_evidence': False}, indent=2))
+          PY
