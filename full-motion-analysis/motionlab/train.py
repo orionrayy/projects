@@ -12,6 +12,8 @@ import json
 import math
 import time
 from pathlib import Path
+
+import numpy as np
 from typing import Any
 
 from .learning import canonical_sha256, fit_relational_model, validation_summary, write_json_atomic
@@ -46,7 +48,7 @@ def train_corpus(
     input_root: str | Path,
     output_dir: str | Path,
     *,
-    max_videos: int = 500,
+    max_videos: int = 100,
     max_fps: float = 8.0,
     width: int = 160,
     height: int = 90,
@@ -57,6 +59,7 @@ def train_corpus(
     rights_attested: bool = False,
     max_components: int = 24,
     max_prototypes: int = 12,
+    max_windows_per_video: int = 64,
 ) -> dict[str, Any]:
     started = time.perf_counter()
     videos = discover_videos(input_root, max_videos=max_videos)
@@ -64,11 +67,13 @@ def train_corpus(
     output.mkdir(parents=True, exist_ok=True)
     rows: list[dict[str, Any]] = []
     seen: set[str] = set()
+    duplicate_count = 0
     failures: list[dict[str, str]] = []
     for path in videos:
         try:
             digest = sha256_file(path)
             if digest in seen:
+                duplicate_count += 1
                 continue
             seen.add(digest)
             report = analyze_video(
@@ -81,11 +86,28 @@ def train_corpus(
                 window_stride=window_stride,
                 optical_flow=False,
             )
-            windows = report.get("timeline", [])
+            all_windows = report.get("timeline", [])
+            if len(all_windows) > max_windows_per_video:
+                selected_indices = np.linspace(
+                    0, len(all_windows) - 1, max_windows_per_video
+                ).round().astype(int).tolist()
+                selected_windows = [all_windows[index] for index in selected_indices]
+            else:
+                selected_windows = all_windows
+            # Retain only feature vectors for training; discard regional graphs from memory.
+            sampled_windows = [
+                {
+                    "window_index": int(window["window_index"]),
+                    "signature_vector": window["signature_vector"],
+                }
+                for window in selected_windows
+                if isinstance(window.get("signature_vector"), list)
+            ]
             rows.append({
                 "filename": path.name,
                 "sha256": digest,
-                "windows": windows,
+                "windows": sampled_windows,
+                "total_windows": len(all_windows),
                 "coverage_ratio": report["sampling"].get("timeline_coverage_ratio"),
                 "frames_decoded": report["sampling"].get("frames_decoded"),
                 "analysis_schema": report.get("schema_version"),
@@ -173,7 +195,8 @@ def train_corpus(
                 "sha256": row["sha256"],
                 "analysis_schema": row["analysis_schema"],
                 "frames_decoded": row["frames_decoded"],
-                "window_count": len(row["windows"]),
+                "window_count": row["total_windows"],
+                "sampled_window_count": len(row["windows"]),
                 "timeline_coverage_ratio": row["coverage_ratio"],
                 "split": "train" if row["sha256"] in train_hashes else "validation",
             }
@@ -200,7 +223,7 @@ def train_corpus(
         "active_model_path": str((output / "active_model.json").resolve()) if promoted else None,
         "video_count_discovered": len(videos),
         "video_count_analyzed": len(rows),
-        "duplicate_video_count_skipped": len(seen) - len(rows),
+        "duplicate_video_count_skipped": duplicate_count,
         "failed_videos": failures,
         "train_video_count": len(train_hashes),
         "validation_video_count": len(validation_hashes),
@@ -230,7 +253,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="motionlab-train", description="Train an unlabeled open-world relational model from local videos.")
     parser.add_argument("input", help="A video file or local directory of videos")
     parser.add_argument("--output-dir", default="reports/openworld-training")
-    parser.add_argument("--max-videos", type=int, default=500)
+    parser.add_argument("--max-videos", type=int, default=100)
     parser.add_argument("--max-fps", type=float, default=8.0)
     parser.add_argument("--width", type=int, default=160)
     parser.add_argument("--height", type=int, default=90)
@@ -239,6 +262,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--window-stride", type=int, default=8)
     parser.add_argument("--max-components", type=int, default=24)
     parser.add_argument("--max-prototypes", type=int, default=12)
+    parser.add_argument("--max-windows-per-video", type=int, default=64, help="Deterministically sample at most this many temporal windows from each source video.")
     parser.add_argument("--auto-promote", action="store_true", help="Promote candidate only if all held-out and rights gates pass")
     parser.add_argument("--attest-rights", action="store_true", help="Attest that you have permission to process every video in this local corpus")
     args = parser.parse_args(argv)
@@ -256,6 +280,7 @@ def main(argv: list[str] | None = None) -> int:
             rights_attested=args.attest_rights,
             max_components=args.max_components,
             max_prototypes=args.max_prototypes,
+            max_windows_per_video=args.max_windows_per_video,
         )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0 if report["status"] != "CANDIDATE_NEEDS_EVIDENCE" else 3
