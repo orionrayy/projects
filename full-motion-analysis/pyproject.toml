@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "motion-evidence-lab"
+version = "0.1.0"
+description = "Free-first, evidence-grounded temporal motion analysis and FFmpeg render audit"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "orionrayy"}]
+dependencies = ["numpy>=1.26"]
+
+[project.optional-dependencies]
+vision = ["opencv-python-headless>=4.10"]
+mcp = ["mcp[cli]>=1.9.0"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+motionlab = "motionlab.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["motionlab*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
