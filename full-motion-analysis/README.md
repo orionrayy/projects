@@ -1,82 +1,107 @@
-# Full Motion Analysis (FMA)
+# Full Motion Analysis (FMA) — Open-World Relational Core
 
-**Project code:** FMA / Motion Evidence Lab  
-**Status:** v0.1 bootstrap — research prototype, not yet a validated motion-understanding system  
-**Design target:** reproducible, evidence-grounded temporal analysis of video, including audits of FFmpeg-rendered animation  
-**Operating policy:** free-first, CPU-first baseline, optional acceleration, no paid API required
+**Version:** 0.2.0  
+**State:** foundation rewrite implemented on a draft PR; independent real-world validation is still pending.  
+**Policy:** free-first, CPU-first, no LLM or paid inference API required by the baseline.
 
-## Why this project exists
+FMA is designed to inspect temporal visual structure across nirmana and abstract graphics, fractal zooms, animation, cartoons, anime, film, POV, third-person footage and everyday recordings without requiring a domain label or object detector at intake.
 
-Many video interfaces answer from sparse visual samples. FMA is designed to make temporal evidence explicit: what changed between observations, how dense image motion behaves, which time-localized events are candidates, how much of the source timeline was processed, and which conclusions remain unobservable.
+This is an engineering target, not a claim that the current implementation semantically understands every possible domain. The v0.2 core supplies domain-neutral measurements and a local unsupervised learning path; cross-domain accuracy must be established by evaluation.
 
-FMA is **not** just an object tracker. Its planned evidence stack combines frame-difference measurements, dense optical flow, camera-motion indicators, temporal event candidates, integrity checks, uncertainty/limitation reporting, and adversarial tests that check whether a system actually depends on temporal order. Object identity, segmentation, causal interpretation, physical-world measurements, and learned action recognition are separate capabilities and are not claimed as solved by this bootstrap.
+## Foundation shift
 
-## Current v0.1 scope
+The public analyzer now analyzes overlapping RGB space-time volumes. It does **not** use frame-pair optical flow as the primary representation. A decoded frame is still a source sample, but the principal signature summarizes a temporal block across multiple spatial scales.
 
-- Probe source media with FFprobe and decode a timestamped grayscale stream using FFmpeg.
-- Measure per-interval pixel change and, when OpenCV is installed, dense Farnebäck flow, a 4×6 spatial field, robust RANSAC global affine motion, affine-compensated residual motion, and connected local-motion-region candidates (not identity tracking).
-- Emit evidence-backed candidates for scene transitions, motion onset/bursts, direction reversals, repeated-frame runs, and possible flashes.
-- Audit FFmpeg exports for decode coverage, dimensions/FPS/duration, exact duplicate frames, black frames, missing audio, and temporal discontinuities.
-- Generate deterministic synthetic clips for moving-object motion, global camera-pan reversal, independent object motion during a camera pan, freeze and flash; exercise the known motion in tests and CI.
-- Expose local file analysis via stdio MCP and a CLI; also include a bearer-authenticated remote Streamable HTTP MCP service with short-lived upload tickets, bounded temporary storage and paginated reports. A free-plan Render Blueprint is prepared but not deployed.
-- Persist a versioned JSON report with SHA-256, tool versions, sampling settings, time series, event evidence, limitations, and QC findings.
+The CPU-first signature combines:
+- per-channel color distribution and appearance statistics;
+- multi-scale spatial gradients, orientation distributions, and autocorrelation;
+- temporal envelopes and temporal-frequency bands over the entire block;
+- 3D spatiotemporal Fourier energy summarized into temporal × spatial-frequency bands;
+- a 4×6 fixed-region relational field whose nodes describe whole-window regional statistics, not object identities;
+- non-local regional similarity relations and recurrence candidates across different windows;
+- robustly detected changes between whole-window signatures, with measurements and explicit interpretation limits.
 
-The core intentionally has no Torch, cloud inference, or paid provider requirement. NumPy is the only baseline Python runtime dependency. The grid retains spatial variation that a single global flow vector would erase; grid cells are spatial regions, not persistent object identities or object segmentation. OpenCV is optional and provides dense optical flow; without it, the report marks the flow lane unavailable instead of pretending frame differencing is full motion estimation.
+Feature extraction does not require object identity, pose, a fixed class ontology, a neural network, OpenCV, or a model-provider API. Color is preserved during decode. Sampling remains bounded and declared. Sparse sampling, low resolution, aliasing, occlusion, and ambiguity can still hide important information.
 
-## Quick start
+## Install
 
-Requirements: Python 3.11+, FFmpeg and FFprobe on PATH.
+Requirements: Python 3.11+, FFmpeg, FFprobe, NumPy.
 
 ~~~bash
-python -m venv .venv
-# Linux/macOS
-. .venv/bin/activate
-# Windows PowerShell: .venv\Scripts\Activate.ps1
-
-python -m pip install -e ".[vision,mcp]"
-python -m motionlab.cli analyze path/to/video.mp4 --output reports/analysis.json
-python -m motionlab.cli audit path/to/render.mp4 --require-audio --output reports/render-audit.json
-python -m unittest discover -s tests -v
-python benchmarks/run_synthetic_benchmark.py --output-dir reports/synthetic-benchmark
+python -m pip install -e .
 ~~~
 
-Remote MCP service (secured upload + Streamable HTTP):
-
-```bash
-# Remote deploy is prepared, not launched. See docs/REMOTE_DEPLOYMENT.md.
-```
-
-MCP local server (stdio):
+Optional local MCP support:
 
 ~~~bash
+python -m pip install -e ".[mcp]"
+~~~
+
+## Analyze a video
+
+~~~bash
+motionlab analyze input.mp4 --output reports/input-analysis.json
+~~~
+
+A CPU-light corpus default is 160×90 at up to 30 sampled frames per second, with 16-frame windows and stride 8. Increase resolution when small structures matter:
+
+~~~bash
+motionlab analyze input.mp4 --width 320 --height 180 --max-fps 15 --window-frames 24 --window-stride 8 --output reports/detail.json
+~~~
+
+The report includes the source SHA-256, actual frame coverage, feature schema, space-time windows, region nodes/edges, cross-window recurrence candidates, events and interpretation limits.
+
+## Train automatically from an unlabeled local corpus
+
+No hand-labelled event data or LLM is required for the initial relational model. Provide local videos you are allowed to process:
+
+~~~bash
+motionlab train ./my-video-corpus --output-dir ./models/fma --max-fps 8
+~~~
+
+The trainer:
+1. discovers supported local videos and deduplicates exact files by SHA-256;
+2. analyzes each source with the same space-time signature engine;
+3. splits by **source video hash**, never by overlapping windows from the same video;
+4. fits robust normalization, a compact PCA projection and deterministic structure prototypes;
+5. evaluates held-out quantization and prototype occupancy;
+6. writes candidate_model.json, dataset_manifest.json, and training_report.json.
+
+Request gated local promotion only when you can attest that all inputs may be processed:
+
+~~~bash
+motionlab train ./my-video-corpus --output-dir ./models/fma --attest-rights --auto-promote
+~~~
+
+Promotion is conditional, not guaranteed. The default gates require at least five distinct videos, at least four training videos, a held-out video split, sufficient data coverage, a measurable held-out improvement, model diversity, and the rights attestation. Otherwise the candidate remains unpromoted and the report records the failed gate.
+
+Apply an accepted model:
+
+~~~bash
+motionlab analyze input.mp4 --model ./models/fma/active_model.json --output reports/scored.json
+~~~
+
+The learned prototype IDs are anonymous patterns relative to a local corpus. Novelty scores are distance ratios, **not** semantic labels, calibrated probabilities, anomaly truth, or proof of generalization.
+
+## MCP
+
+The local stdio MCP server exposes metadata inspection, relational analysis, and FFmpeg render audit. Configure narrow MOTION_ALLOWED_ROOTS; a supplied model path must also be within an allowed root. The tool response limits embedded timeline windows and writes the complete report locally.
+
+~~~bash
+export MOTION_ALLOWED_ROOTS="$HOME/Videos:$HOME/Downloads:$HOME/render-outputs"
+export MOTION_REPORT_DIR="$HOME/.motion-evidence-lab/reports"
 python mcp_server.py
 ~~~
 
-Read docs/MCP_INTEGRATION.md before registering the server in an MCP host. Local MCP tools can read only paths under configured allowed roots. Do not expose a local-path server to the public internet.
+Remote Streamable HTTP source and Render packaging remain separate from deployment. A source file or passing CI does not mean a remote service is live or connected to ChatGPT.
 
-## Example output categories
+## Current limitations
 
-Every result separates:
-- **Measurement:** sampled frames, pixel-difference signal, image-plane flow vectors, exact duplicate-frame spans, media metadata.
-- **Candidate event:** a thresholded temporal event with timestamp, source frame index, observed measurements, and rule identifier.
-- **Interpretation limit:** what the measurements cannot establish (for example, real-world velocity, intent, object identity, or physical causation).
-- **QC finding:** a configurable render acceptance warning/failure, not a semantic truth judgement.
+- The baseline uses fixed, interpretable, hand-designed descriptors. The trainable layer learns normalization, projection and anonymous prototypes; it does not yet train a neural spatiotemporal encoder.
+- No accuracy on arbitrary domains, novel phenomena, physical motion, semantic action, 3D reconstruction, or causal explanation is established.
+- A region node is a fixed image region summarized over a time block, not a persistent object or segmentation.
+- The training gate is a cautious unsupervised representation-quality gate. It does not substitute for labelled ground-truth benchmarks or human acceptance.
+- The local-corpus trainer does not download media automatically. Dataset acquisition requires provenance and licence review first.
+- The legacy pairwise implementation is preserved in motionlab/legacy_analysis.py for comparison; motionlab/metrics.py remains a baseline module but is not used by the v0.2 analysis core.
 
-Pixel motion is measured in the analyzed image plane. Without camera calibration, geometry, scale, and scene assumptions, it is not a physical-world speed measurement. Median flow is only a camera-translation proxy under a static-background / majority-background assumption.
-
-## Roadmap
-
-1. **P0 — evidence contract:** deterministic decode, explicit sampling, optical-flow lane, JSON evidence schema, synthetic regression tests, FFmpeg render audit, MCP stdio entry point.
-2. **P1 — benchmark discipline:** timestamp localization error, motion-event precision/recall, flow error against known synthetic ground truth, temporal-order permutation tests, repeatability and resource profiling.
-3. **P2 — richer scene motion:** optional segmentation-conditioned flow, camera-motion compensation diagnostics, articulated pose / deformation adapters, occlusion and uncertainty handling.
-4. **P3 — motion semantics:** optional video action models behind a model adapter contract; evaluated against temporal adversarial tests, not only image-caption accuracy.
-5. **P4 — FFmpeg feedback loop:** compare intended scene/keyframe manifest with rendered output, detect pacing/freeze/flash/duplicate frames, compare expected audio coverage and actual stream metadata, attach frame/time evidence.
-6. **P5 — MCP deployment:** secure upload/job API and remotely hosted Streamable HTTP MCP deployment after storage, authentication, isolation, and budget boundaries are specified.
-
-Each phase is gated on tests and evidence from the previous one. No phase is considered complete just because code exists.
-
-## Claims policy
-
-The project aims to be highly competitive and distinct, but does not claim to be “the world's first,” “#1,” causally omniscient, or state of the art without an independently reproducible comparison. Synthetic tests validate instrumentation and code contracts; they do not establish real-world generalization. Benchmark dataset licenses and provenance must be checked before download or redistribution.
-
-See docs/ARCHITECTURE.md, docs/BENCHMARK_PROTOCOL.md, docs/MCP_INTEGRATION.md, docs/REMOTE_DEPLOYMENT.md, docs/THREAT_MODEL.md, and PROJECT_STATUS.md.
+See docs/OPEN_WORLD_FOUNDATION.md, docs/AUTONOMOUS_TRAINING.md, docs/ARCHITECTURE.md, docs/BENCHMARK_PROTOCOL.md, docs/MCP_INTEGRATION.md, and PROJECT_STATUS.md.
