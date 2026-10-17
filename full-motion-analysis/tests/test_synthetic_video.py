@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from motionlab.analysis import analyze_video
+from motionlab.audit import audit_video
 from motionlab.synthetic import generate_synthetic_clip
 
 
@@ -46,6 +47,7 @@ class SyntheticSpaceTimeTests(unittest.TestCase):
             self.assertIn("repeated_frame_run_candidate", {event["event_type"] for event in freeze_report["events"]})
             flash_report = reports[2]
             self.assertGreater(flash_report["measurements"]["signature_distance_p95"], 0.0)
+            self.assertIn("possible_flash_candidate", {event["event_type"] for event in flash_report["events"]})
             mixed_report = reports[4]
             abstract_report = reports[5]
             fractal_report = reports[6]
@@ -55,6 +57,18 @@ class SyntheticSpaceTimeTests(unittest.TestCase):
             self.assertGreater(fractal_report["measurements"]["signature_distance_p95"], 0.0)
             self.assertEqual(abstract_report["sampling"]["pairwise_frame_analysis_is_primary"], False)
             self.assertEqual(fractal_report["sampling"]["pairwise_frame_analysis_is_primary"], False)
+
+
+    @unittest.skipUnless(TOOLS_AVAILABLE, "FFmpeg/FFprobe are required for integration tests")
+    def test_luma_pulse_reaches_ffmpeg_render_audit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            clip = generate_synthetic_clip(
+                Path(directory) / "flash-audit.mkv",
+                scenario="flash", duration_s=2.0, fps=12, width=96, height=54,
+            )
+            report = audit_video(clip, max_fps=12)
+            codes = {finding["code"] for finding in report["qc"]["findings"]}
+            self.assertIn("FMA-QC-FLASH-CANDIDATE", codes)
 
 
 if __name__ == "__main__":
