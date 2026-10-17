@@ -64,7 +64,7 @@ class SyntheticSpaceTimeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             clip = generate_synthetic_clip(
                 Path(directory) / "flash-audit.mkv",
-                scenario="flash", duration_s=2.0, fps=12, width=96, height=54,
+                scenario="flash", duration_s=2.0, fps=12, width=128, height=72,
             )
             report = audit_video(clip, max_fps=12)
             codes = {finding["code"] for finding in report["qc"]["findings"]}
