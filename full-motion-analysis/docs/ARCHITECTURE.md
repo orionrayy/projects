@@ -35,7 +35,7 @@ No online scraping occurs. This is both a privacy boundary and a licensing bound
 
 ## Data contracts
 
-Analysis report schema: fma.open-world.analysis.v0.2  
+Analysis report schema: fma.openworld.analysis.v0.2  
 Block feature schema: fma.openworld.relational-signature.v1  
 Trained model schema: fma.openworld.relational-model.v1
 
