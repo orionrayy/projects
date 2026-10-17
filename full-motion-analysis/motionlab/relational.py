@@ -156,6 +156,37 @@ def _temporal_signature(y: np.ndarray) -> list[float]:
     ]
 
 
+
+def _temporal_spatial_contrast(y: np.ndarray) -> list[float]:
+    """Capture signed structure displacement between two halves of one temporal volume."""
+    n, height, width = y.shape
+    split = max(1, n // 2)
+    if split >= n or height < 2 or width < 2:
+        return [0.0] * 8
+    early = y[:split].mean(axis=0).astype(np.float64)
+    late = y[split:].mean(axis=0).astype(np.float64)
+    delta = late - early
+    absolute = np.abs(delta)
+    total = float(absolute.sum()) + 1e-12
+    xcoords = np.linspace(-1.0, 1.0, width)[None, :]
+    ycoords = np.linspace(-1.0, 1.0, height)[:, None]
+    positive = float(np.clip(delta, 0.0, None).sum())
+    negative = float(np.clip(-delta, 0.0, None).sum())
+    a = early.ravel() - float(early.mean())
+    b = late.ravel() - float(late.mean())
+    denom = math.sqrt(float(a @ a) * float(b @ b))
+    correlation = float((a @ b) / denom) if denom > 1e-12 else 0.0
+    return [
+        _finite(absolute.mean()),
+        _finite(np.percentile(absolute, 90)),
+        _finite(positive / total),
+        _finite(negative / total),
+        _finite(float((delta * xcoords).sum()) / total),
+        _finite(float((delta * ycoords).sum()) / total),
+        _finite(correlation),
+        _finite(total / (float(np.abs(early).sum() + np.abs(late).sum()) + 1e-12)),
+    ]
+
 def _scale_features(volume: np.ndarray, factor: int) -> tuple[list[str], list[float], np.ndarray]:
     scaled_rgb = _box_reduce(volume, factor) / 255.0
     y = _luma(scaled_rgb)
@@ -177,6 +208,9 @@ def _scale_features(volume: np.ndarray, factor: int) -> tuple[list[str], list[fl
     temporal = _temporal_signature(y)
     names.extend(f"{prefix}_temporal_{i}" for i in range(len(temporal)))
     values.extend(temporal)
+    phase_contrast = _temporal_spatial_contrast(y)
+    names.extend(f"{prefix}_half_block_contrast_{i}" for i in range(len(phase_contrast)))
+    values.extend(phase_contrast)
     return names, values, y
 
 
