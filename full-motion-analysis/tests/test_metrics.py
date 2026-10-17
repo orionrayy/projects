@@ -35,6 +35,7 @@ class MetricTests(unittest.TestCase):
 
             @staticmethod
             def estimateAffinePartial2D(source, destination, **_kwargs):
+                # Test baseline: background pixels dominate, so expected global affine transform is identity.
                 matrix = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]], dtype=np.float32)
                 inliers = np.ones((len(source), 1), dtype=np.uint8)
                 return matrix, inliers
@@ -50,6 +51,10 @@ class MetricTests(unittest.TestCase):
         self.assertEqual(result["global_affine_fit_status"], "fit")
         self.assertAlmostEqual(result["global_affine_scale_factor"], 1.0)
         self.assertGreaterEqual(result["global_affine_inlier_ratio"], 0.99)
+        self.assertGreater(result["affine_residual_magnitude_p90_px_frame"], 0.0)
+        self.assertGreater(result["affine_residual_moving_pixel_ratio"], 0.0)
+        residual_ratios = [cell["affine_residual_moving_pixel_ratio"] for cell in result["flow_grid"]]
+        self.assertGreater(max(residual_ratios), min(residual_ratios))
 
     def test_invalid_frames_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "frame_shapes_must_match"):
