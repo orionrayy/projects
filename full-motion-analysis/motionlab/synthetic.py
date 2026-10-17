@@ -50,21 +50,26 @@ def generate_synthetic_clip(
     output = Path(output_path).expanduser().resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     command = [
-        require_tool("ffmpeg"), "-hide_banner", "-loglevel", "error", "-nostdin", "-y",
+        require_tool("ffmpeg"), "-hide_banner", "-loglevel", "error", "-y",
         "-f", "rawvideo", "-pixel_format", "gray", "-video_size", f"{width}x{height}",
         "-framerate", str(fps), "-i", "pipe:0", "-frames:v", str(frame_count),
         "-c:v", "ffv1", "-pix_fmt", "gray", str(output),
     ]
-    proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(
+        command, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE
+    )
     assert proc.stdin is not None
     try:
         for i in range(frame_count):
             proc.stdin.write(_gray_frame(i, frame_count, width, height, fps, scenario).tobytes())
         proc.stdin.close()
-        _, stderr = proc.communicate(timeout=60)
+        proc.wait(timeout=60)
+        stderr = proc.stderr.read() if proc.stderr is not None else b""
     except BaseException:
         proc.kill()
-        proc.communicate()
+        proc.wait()
+        if proc.stderr is not None:
+            proc.stderr.read()
         raise
     if proc.returncode != 0:
         message = (stderr or b"").decode("utf-8", errors="replace").strip()[:1000]
