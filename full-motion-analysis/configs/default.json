@@ -1,0 +1,33 @@
+{
+  "schema_version": "fma.config.v0.1",
+  "max_fps": 30.0,
+  "analysis_width": 320,
+  "analysis_height": 180,
+  "max_frames": 100000,
+  "optical_flow": true,
+  "event_rules": {
+    "scene_transition_histogram_distance": 0.5,
+    "scene_transition_mean_abs_diff": 0.15,
+    "repeated_frame_run_min_seconds": 0.5,
+    "motion_threshold_method": "median_plus_scaled_MAD"
+  },
+  "audit_defaults": {
+    "expected_width": 1920,
+    "expected_height": 1080,
+    "expected_fps_tolerance": 0.15,
+    "duration_tolerance_fraction": 0.01,
+    "require_audio": false
+  },
+  "resource_policy": {
+    "ffmpeg_threads": 1,
+    "max_fps_hard_limit": 120,
+    "max_frames_hard_limit": 1000000,
+    "mcp_public_deployment_allowed": false
+  },
+  "claims_policy": {
+    "state_of_the_art_claim_supported": false,
+    "real_world_evidence": false,
+    "causal_motion_understanding": false,
+    "physical_world_speed_available": false
+  }
+}
