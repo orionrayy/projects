@@ -126,6 +126,7 @@ def fit_relational_model(
         "prototypes": centers.tolist(),
         "prototype_radii_p95": radii,
         "training_cluster_counts": counts,
+        "single_prototype_baseline_center": latent.mean(axis=0).tolist(),
         "limitations": [
             "Prototype IDs are anonymous structure clusters, not semantic classes.",
             "Novelty indicates distance from this training corpus and is not a calibrated probability.",
@@ -224,8 +225,10 @@ def validation_summary(model: dict[str, Any], validation_examples: list[dict[str
     centers = np.asarray(model["prototypes"], dtype=np.float64)
     dists = np.sqrt(np.sum((latent[:, None, :] - centers[None, :, :]) ** 2, axis=2))
     quant = np.min(dists, axis=1)
-    baseline_center = latent.mean(axis=0, keepdims=True)
-    baseline = np.sqrt(np.sum((latent - baseline_center) ** 2, axis=1))
+    baseline_center = np.asarray(model.get("single_prototype_baseline_center", []), dtype=np.float64)
+    if baseline_center.shape != (latent.shape[1],):
+        raise ValueError("model_baseline_center_dimension_mismatch")
+    baseline = np.sqrt(np.sum((latent - baseline_center[None, :]) ** 2, axis=1))
     baseline_mean = float(np.mean(baseline))
     quant_mean = float(np.mean(quant))
     improvement = (baseline_mean - quant_mean) / max(baseline_mean, 1e-8)
