@@ -1,7 +1,7 @@
 {
   "schema_version": "fma.config.v0.2",
   "analysis": {
-    "max_fps": 30.0,
+    "max_fps": 30,
     "analysis_width": 160,
     "analysis_height": 90,
     "max_frames": 100000,
@@ -12,7 +12,11 @@
   },
   "relational_field": {
     "feature_schema": "fma.openworld.relational-signature.v1",
-    "spatial_scales": [1, 2, 4],
+    "spatial_scales": [
+      1,
+      2,
+      4
+    ],
     "regional_grid_rows": 4,
     "regional_grid_columns": 6,
     "max_windows_for_cross_relations": 256,
@@ -29,7 +33,17 @@
     "minimum_timeline_coverage": 0.95,
     "minimum_heldout_quantization_improvement": 0.05,
     "require_operator_rights_attestation": true,
-    "promotion_is_semantic_validation": false
+    "promotion_is_semantic_validation": false,
+    "encoder": {
+      "method": "numpy_denoising_autoencoder",
+      "hidden_dim": 48,
+      "latent_dim": 24,
+      "epochs": 8,
+      "batch_size": 64,
+      "mask_probability": 0.12,
+      "no_external_ml_dependency": true,
+      "promote_only_if_clean_reconstruction_loss_decreases": true
+    }
   },
   "resource_policy": {
     "ffmpeg_threads": 1,
