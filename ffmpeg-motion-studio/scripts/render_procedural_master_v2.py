@@ -182,8 +182,8 @@ def storefront(d,t,walk_x=0):
                 c=(base.CYAN,base.AMBER,base.CORAL,base.VIOLET)[(j+int(t*2))%4]
                 base.rounded(d,(x+12+j*26,yy-7,x+29+j*26,yy+17),(*c,235),None,3,1)
     op=min(1,max(0,(t-1)/2.3)); gap=int(86*op)
-    base.rounded(d,(635-gap,260,635-gap//2-4,468),(8,19,32,255),(84,129,163,255),4,2)
-    base.rounded(d,(645+gap//2,260,645+gap,468),(8,19,32,255),(84,129,163,255),4,2)
+    base.rounded(d,(549-gap,260,635-gap,468),(8,19,32,255),(84,129,163,255),4,2)
+    base.rounded(d,(645+gap,260,731+gap,468),(8,19,32,255),(84,129,163,255),4,2)
     person(d,int(700+walk_x),460,.72,base.AMBER,t)
 
 def fx_flash(d,t,sid):

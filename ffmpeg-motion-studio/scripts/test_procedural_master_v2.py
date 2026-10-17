@@ -57,4 +57,8 @@ class V2Tests(unittest.TestCase):
  def test_deterministic_render(self):
   sc=m.SCENES[13]; a=m.caption_frame(sc,2.0,m.DURATIONS[12]); b=m.caption_frame(sc,2.0,m.DURATIONS[12])
   self.assertEqual(a.size,(1280,720)); self.assertEqual(a.tobytes(),b.tobytes())
+ def test_storefront_first_frame_and_closed_door(self):
+  a=m.caption_frame(m.SCENES[0],0.0,m.DURATIONS[0])
+  self.assertEqual(a.size,(1280,720))
+  self.assertTrue(a.getbbox())
 if __name__=="__main__": unittest.main(verbosity=2)
