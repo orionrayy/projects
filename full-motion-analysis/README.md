@@ -56,14 +56,14 @@ The report includes the source SHA-256, actual frame coverage, feature schema, s
 No hand-labelled event data or LLM is required for the initial relational model. Provide local videos you are allowed to process:
 
 ~~~bash
-motionlab train ./my-video-corpus --output-dir ./models/fma --max-fps 8
+motionlab train ./my-video-corpus --output-dir ./models/fma --max-fps 8 --encoder-epochs 8 --encoder-hidden-dim 48
 ~~~
 
 The trainer:
 1. discovers supported local videos and deduplicates exact files by SHA-256;
 2. analyzes each source with the same space-time signature engine;
 3. splits by **source video hash**, never by overlapping windows from the same video;
-4. fits robust normalization, a compact PCA projection and deterministic structure prototypes;
+4. fits robust normalization, a small denoising autoencoder trained with NumPy and deterministic anonymous structure prototypes;
 5. evaluates held-out quantization and prototype occupancy;
 6. writes candidate_model.json, dataset_manifest.json, and training_report.json.
 
@@ -105,7 +105,7 @@ Remote Streamable HTTP source and Render packaging remain separate from deployme
 
 ## Current limitations
 
-- The baseline uses fixed, interpretable, hand-designed descriptors. The trainable layer learns normalization, projection and anonymous prototypes; it does not yet train a neural spatiotemporal encoder.
+- The observation descriptors remain hand-designed; the trainable layer optimizes a small denoising encoder over those descriptors. It is not an end-to-end raw-video foundation encoder and it does not automatically learn human semantics.
 - No accuracy on arbitrary domains, novel phenomena, physical motion, semantic action, 3D reconstruction, or causal explanation is established.
 - A region node is a fixed image region summarized over a time block, not a persistent object or segmentation.
 - The training gate is a cautious unsupervised representation-quality gate. It does not substitute for labelled ground-truth benchmarks or human acceptance.
