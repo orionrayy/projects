@@ -19,7 +19,7 @@ class SyntheticVideoTests(unittest.TestCase):
             frozen = generate_synthetic_clip(root / "frozen.mkv", scenario="freeze", duration_s=2.0, fps=15)
             flash = generate_synthetic_clip(root / "flash.mkv", scenario="flash", duration_s=2.0, fps=15)
 
-            moving_report = analyze_video(moving, max_fps=15, optical_flow=False)
+            moving_report = analyze_video(moving, max_fps=15, optical_flow=True)
             frozen_report = analyze_video(frozen, max_fps=15, optical_flow=False)
             flash_report = analyze_video(flash, max_fps=15, optical_flow=False)
 
