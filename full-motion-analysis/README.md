@@ -14,10 +14,10 @@ FMA is **not** just an object tracker. Its planned evidence stack combines frame
 ## Current v0.1 scope
 
 - Probe source media with FFprobe and decode a timestamped grayscale stream using FFmpeg.
-- Measure per-interval pixel change and, when OpenCV is installed, dense Farnebäck optical flow, a 4×6 spatial motion grid, moving-pixel ratio, magnitude quantiles, median global translation, residual local flow, direction, and flow coherence.
+- Measure per-interval pixel change and, when OpenCV is installed, dense Farnebäck optical flow, a 4×6 spatial motion grid, moving-pixel ratio, magnitude quantiles, median-flow proxy, and robust RANSAC partial-affine fit diagnostics (translation, rotation, scale, inlier ratio, and residual error).
 - Emit evidence-backed candidates for scene transitions, motion onset/bursts, direction reversals, repeated-frame runs, and possible flashes.
 - Audit FFmpeg exports for decode coverage, dimensions/FPS/duration, exact duplicate frames, black frames, missing audio, and temporal discontinuities.
-- Generate deterministic synthetic clips with known motion / freeze / flash conditions and exercise them in tests and CI.
+- Generate deterministic synthetic clips for motion, direction reversal, global camera-pan reversal, freeze, and flash, with known intervals exercised in tests and CI.
 - Expose local file analysis via an MCP server using the official Python SDK, plus a local CLI.
 - Persist a versioned JSON report with SHA-256, tool versions, sampling settings, time series, event evidence, limitations, and QC findings.
 
