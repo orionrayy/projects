@@ -66,6 +66,9 @@ def build_parser() -> argparse.ArgumentParser:
     train.add_argument("--window-stride", type=int, default=8)
     train.add_argument("--auto-promote", action="store_true")
     train.add_argument("--attest-rights", action="store_true", help="Attest you can lawfully process all local corpus videos.")
+    train.add_argument("--watch", action="store_true", help="Keep this process running; retrain when the local corpus inventory changes.")
+    train.add_argument("--poll-seconds", type=int, default=900)
+    train.add_argument("--retry-seconds", type=int, default=21600)
     return parser
 
 
@@ -74,9 +77,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.command == "train":
-            from .train import train_corpus
-            result = train_corpus(
-                args.input, args.output_dir, max_videos=args.max_videos,
+            from .train import train_corpus, watch_corpus
+            options = dict(
+                max_videos=args.max_videos,
                 max_fps=args.max_fps, width=args.width, height=args.height,
                 max_frames=args.max_frames, window_frames=args.window_frames,
                 window_stride=args.window_stride, auto_promote=args.auto_promote,
@@ -104,6 +107,9 @@ def main(argv: list[str] | None = None) -> int:
             _write_or_print(result, args.output)
             return 0 if result["status"] != "FAIL" else 2
         _write_or_print(result, None)
+        return 0
+    except KeyboardInterrupt:
+        print(json.dumps({"status": "WATCH_STOPPED", "reason": "keyboard_interrupt"}), flush=True)
         return 0
     except (OSError, RuntimeError, ValueError, PermissionError) as exc:
         print(json.dumps({"status": "ERROR", "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
