@@ -24,6 +24,18 @@ def _gray_frame(index: int, frames: int, width: int, height: int, fps: int, scen
         moving_frames = max(2, int(fps * 0.5))
         x = 8 + int((max_x - 8) * min(index, moving_frames) / moving_frames)
         frame[height // 2 - box // 2:height // 2 + box // 2, x:x + box] = 220
+    elif scenario == "global_pan_reverse":
+        # Deterministic, textured entire-scene translation with an exact direction reversal.
+        rng = np.random.default_rng(7411)
+        yy, xx = np.mgrid[0:height, 0:width]
+        noise = rng.normal(0.0, 8.0, size=(height, width))
+        base = np.clip(
+            128 + 38 * np.sin(xx / 7.0) + 32 * np.cos(yy / 9.0) + noise,
+            0, 255,
+        ).astype(np.uint8)
+        midpoint = max(1, frames // 2)
+        shift = round(index * 1.5) if index <= midpoint else round(midpoint * 1.5 - (index - midpoint) * 1.5)
+        frame = np.roll(base, shift, axis=1)
     elif scenario == "flash":
         frame[height // 2 - box // 2:height // 2 + box // 2, width // 3:width // 3 + box] = 220
         if index == max(1, fps // 2):
