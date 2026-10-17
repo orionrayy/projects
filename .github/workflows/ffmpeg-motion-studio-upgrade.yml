@@ -37,7 +37,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             build-essential pkg-config nasm yasm curl gnupg ca-certificates \
-            fonts-dejavu-core libass-dev libfreetype6-dev libfontconfig1-dev libfribidi-dev \
+            fonts-dejavu-core libass-dev libfreetype6-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev \
             libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx264-dev libx265-dev \
             libdav1d-dev libaom-dev libzimg-dev zlib1g-dev
 
