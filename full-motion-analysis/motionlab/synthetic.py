@@ -65,11 +65,14 @@ def generate_synthetic_clip(
         proc.stdin.close()
         proc.wait(timeout=60)
         stderr = proc.stderr.read() if proc.stderr is not None else b""
+        if proc.stderr is not None:
+            proc.stderr.close()
     except BaseException:
         proc.kill()
         proc.wait()
         if proc.stderr is not None:
             proc.stderr.read()
+            proc.stderr.close()
         raise
     if proc.returncode != 0:
         message = (stderr or b"").decode("utf-8", errors="replace").strip()[:1000]
