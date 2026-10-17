@@ -240,6 +240,9 @@ def analyze_video(
                 "global_affine_rotation_deg_frame": None, "global_affine_scale_factor": None,
                 "global_affine_residual_median_px_frame": None, "global_affine_residual_p90_px_frame": None,
                 "global_affine_inlier_ratio": None, "global_affine_fit_status": "first_frame_no_pair",
+                "affine_residual_magnitude_mean_px_frame": None,
+                "affine_residual_magnitude_p90_px_frame": None,
+                "affine_residual_moving_pixel_ratio": None,
                 "flow_grid": None, "exact_duplicate_of_previous": False,
             }
         else:
@@ -304,6 +307,9 @@ def analyze_video(
                 "global_affine_residual_p90_px_frame": _round_value(row["global_affine_residual_p90_px_frame"]),
                 "global_affine_inlier_ratio": _round_value(row["global_affine_inlier_ratio"]),
                 "global_affine_fit_status": row["global_affine_fit_status"],
+                "affine_residual_magnitude_mean_px_frame": _round_value(row["affine_residual_magnitude_mean_px_frame"]),
+                "affine_residual_magnitude_p90_px_frame": _round_value(row["affine_residual_magnitude_p90_px_frame"]),
+                "affine_residual_moving_pixel_ratio": _round_value(row["affine_residual_moving_pixel_ratio"]),
                 "exact_duplicate_of_previous": bool(row["exact_duplicate_of_previous"]),
             })
 
