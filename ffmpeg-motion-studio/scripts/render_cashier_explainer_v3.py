@@ -14,7 +14,7 @@ SCENES = [
  {"id":1,"motif":"hook_storefront","title":"Kok total belanja bisa dipercaya?","short":"Dari toko menuju satu pertanyaan","narration":"Dari keranjang, bagaimana kasir tahu total?"},
  {"id":2,"motif":"hook_scan","title":"Dari barang, bagaimana jadi angka?","short":"Satu bunyi bip belum berarti paham","narration":"Apa arti satu bip bagi komputer?"},
  {"id":3,"motif":"hook_total","title":"Siapa memastikan totalnya benar?","short":"Angka harus mengikuti struktur dan aturan","narration":"Siapa menjamin total ini benar?"},
- {"id":4,"motif":"counter_formula","title":"Mulai dari layar kasir","short":"Satu transaksi ditulis sebagai ekspresi","narration":"Di layar kasir: lima puluh empat ribu dikurangi lima ribu empat ratus. Bagaimana komputer mendapat totalnya?"},
+ {"id":4,"motif":"counter_formula","title":"Mulai dari layar kasir","short":"Satu transaksi ditulis sebagai ekspresi","narration":"Di layar kasir, total sama dengan lima puluh empat ribu dikurangi lima ribu empat ratus."},
  {"id":5,"motif":"tokenization","title":"Tokenisasi: pecah teks menjadi unit","short":"Kenali identifier, angka, dan operator","narration":"Tokenisasi mengenali identifier total, tanda sama dengan, angka, minus, dan angka diskon."},
  {"id":6,"motif":"cfg_rules","title":"CFG: aturan yang membentuk ekspresi","short":"Grammar menentukan susunan yang sah","narration":"Context-Free Grammar atau CFG menetapkan produksi. Assignment berisi identifier, tanda sama dengan, dan ekspresi yang dibentuk oleh aturan."},
  {"id":7,"motif":"syntax_check","title":"Urutan token harus valid","short":"Tokenisasi tidak sama dengan parsing","narration":"Tokenisasi memberi jenis token; parser memeriksa apakah urutannya mengikuti grammar."},
