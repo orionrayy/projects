@@ -35,10 +35,7 @@ def _parse_rate(value: object) -> float | None:
     if not isinstance(value, str) or not value or value == "0/0":
         return None
     try:
-        if "/" in value:
-            rate = float(Fraction(value))
-        else:
-            rate = float(value)
+        rate = float(Fraction(value)) if "/" in value else float(value)
         return rate if rate > 0 else None
     except (ValueError, ZeroDivisionError, OverflowError):
         return None
@@ -160,7 +157,7 @@ def iter_gray_frames(
         if index >= max_frames:
             cap_reached = True
     finally:
-        if process.poll() is None:
+        if (cap_reached or failure is not None) and process.poll() is None:
             process.terminate()
         try:
             _, stderr = process.communicate(timeout=15)
