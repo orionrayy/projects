@@ -25,11 +25,19 @@ class MetricTests(unittest.TestCase):
 
     def test_dense_flow_returns_spatial_grid_when_backend_is_present(self):
         class FakeCV2:
+            RANSAC = 8
+
             @staticmethod
             def calcOpticalFlowFarneback(previous, current, _flow, *_args):
                 flow = np.zeros((*previous.shape, 2), dtype=np.float32)
                 flow[16:48, 16:48, 0] = 2.0
                 return flow
+
+            @staticmethod
+            def estimateAffinePartial2D(source, destination, **_kwargs):
+                matrix = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]], dtype=np.float32)
+                inliers = np.ones((len(source), 1), dtype=np.uint8)
+                return matrix, inliers
 
         before = np.zeros((64, 64), dtype=np.uint8)
         after = before.copy()
@@ -39,6 +47,9 @@ class MetricTests(unittest.TestCase):
         cell_ratios = [cell["moving_pixel_ratio"] for cell in result["flow_grid"]]
         self.assertGreater(max(cell_ratios), min(cell_ratios))
         self.assertGreaterEqual(result["flow_magnitude_p90_px_frame"], 0)
+        self.assertEqual(result["global_affine_fit_status"], "fit")
+        self.assertAlmostEqual(result["global_affine_scale_factor"], 1.0)
+        self.assertGreaterEqual(result["global_affine_inlier_ratio"], 0.99)
 
     def test_invalid_frames_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "frame_shapes_must_match"):
