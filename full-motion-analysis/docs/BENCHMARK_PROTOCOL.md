@@ -1,76 +1,88 @@
-# Benchmark and Evidence Protocol
+# Benchmark and Evidence Protocol — Open-World FMA
 
-## P0: deterministic synthetic tests
+## Scope contract
 
-Use generated, lossless clips with known timing and movement: moving-object reversal, full-scene pan reversal, a moving object over a globally panning textured background, static hold/repeated frames, and a one-frame global flash. Keep expected global and local motion separate in the ground-truth contract. Record generator version, exact parameters, source hash, expected interval, actual output, and test result.
+The benchmark must evaluate whether the shared representation preserves useful structure across unfamiliar video kinds. Domain names are evaluation strata, not mandatory routing classes. Success on one category does not establish universal generalization.
 
-Minimum checks:
-- time-series timestamps are strictly increasing and within source duration;
-- a moving object yields non-zero adjacent-frame change;
-- a known held segment produces a measurable exact-duplicate transition ratio;
-- a one-frame flash generates a localized high-change candidate;
-- reversing full-scene camera motion flips the fitted affine translation direction;
-- an independently moving textured object generates a localized affine-residual region while the background undergoes global pan;
-- running the same fixture with the same dependencies yields the same non-model measurements;
-- missing optional OpenCV is reported explicitly;
-- max-frame limits cannot silently produce a complete-status report.
+Primary strata should include:
+- abstract/nirmana compositions and kinetic art;
+- fractal and mathematical zoom sequences;
+- 2D animation, cartoons and anime, including non-rigid stylization;
+- film and natural camera recordings;
+- POV and third-person scenes;
+- everyday recordings with occlusion, lighting changes, compression and camera motion;
+- mixed or unfamiliar visual sources that were not used to design feature rules.
 
-Synthetic scores establish software-contract correctness only. They do not establish performance on natural videos.
+Only use media with clear rights and provenance. Locally generated synthetic fixtures are appropriate for controlled invariants but cannot substitute for natural video.
 
-## P1: temporal reasoning and order sensitivity
+## P0: deterministic software-contract checks
 
-Build an adversarial suite with, at minimum:
-- original versus reversed frame order;
-- original versus deterministically shuffled frame order;
-- repeated/subsampled frames at several FPS values;
-- controlled frame drops, jitter, scene cuts, flashes and frozen intervals;
-- blur, resizing, compression, exposure shifts, camera pans and occlusion;
-- multiple independently moving regions and one dominant camera move.
+The current CI benchmark generates controlled motion/reversal, freeze, flash, global-pan and pan-plus-independent-content clips. It checks:
+- complete, finite multiscale space-time signatures;
+- stable feature dimensionality and feature-schema identity;
+- regional-node / relational-edge generation;
+- reported temporal coverage;
+- deterministic repeatability on the same input and environment;
+- a duplicate-frame integrity signal;
+- explicit non-use of pairwise optical flow as the primary v0.2 representation.
 
-Report a temporal-order sensitivity gap separately from image-semantic accuracy. When the claim depends on action order, reversing/shuffling frames should materially change the relevant result. Report false positives and abstentions; do not reward confident guesses on unobservable motion.
+A passing synthetic run verifies software behaviour only. It does not establish generalization, novelty, semantic understanding or state of the art.
 
-## P2: independently licensed real datasets
+## P1: open-world invariance and sensitivity matrix
 
-Candidate categories: optical-flow ground-truth sets, video-object segmentation sets, action-localization sets, and animation/render-specific clips. Before ingesting any dataset, record a manifest with source URL, maintainer, dataset/version, file hashes, license, permitted research/commercial use, attribution rules, personal-data considerations, download date, and whether redistribution is allowed. Do not commit raw datasets or weights to this repository until their rights are verified.
+Every operator should declare transformations that should preserve its output, transformations that should change it, and circumstances where the expected relation is not knowable. Evaluate paired/counterfactual clips such as:
 
-Use source-defined train/validation/test partitions when available. Where custom splits are needed, split by original video/scene/source, not adjacent frames, to avoid temporal leakage. Keep benchmark configuration and threshold calibration separate from an untouched final test set.
-
-## Metrics
-
-| Capability | Metric |
+| Controlled transformation | Expected analysis property |
 |---|---|
-| Optical flow | Endpoint error (EPE), angular error where applicable, valid-pixel coverage |
-| Motion event localization | Event precision/recall/F1, start/end timestamp MAE, tolerance-banded AP |
-| Temporal order | Contrast between original/reversed/shuffled outputs, direction-order accuracy on labeled cases |
-| Motion segmentation | Region IoU, boundary accuracy, identity switches where applicable |
-| Camera-motion estimate | Translation/rotation/affine error on synthetic or calibrated ground truth |
-| Render QC | Known-defect recall, false-alarm rate, exact duplicate/freeze span localization |
-| Calibration / uncertainty | Reliability diagrams, Brier/log loss where probabilities are defined, selective risk under abstention |
-| Operations | Runtime, peak RAM, effective FPS, frame coverage, deterministic repeatability |
+| Moderate exposure/gamma change | Structural descriptors should remain usable; appearance descriptors may change and must remain distinguishable from geometry evidence. |
+| Palette swap with same shapes | Geometry/temporal relationships should not be erased by the color change; appearance channels should explicitly register it. |
+| Spatial resizing / crop / translation | Cross-scale or regional relationships should preserve only the invariances declared by the operator. |
+| Fractal zoom | Scale-sensitive signatures should change measurably and preserve useful recurrence information where it exists; they need not infer the mathematical formula. |
+| Reverse or shuffle temporal order | Order-sensitive descriptors should change; order-invariant spectral-energy descriptors must not be presented as sufficient evidence of direction. |
+| Repeat or drop intervals | Reported coverage and temporal statistics must expose the alteration rather than pretending the clip was fully observed. |
+| Camera pan with independent local content | Global and regional evidence should remain separately available without assuming a semantic object identity. |
+| Non-rigid stylized deformation | Avoid rigid-body assumptions; measure structural change and disclose ambiguous correspondence. |
+| Compression, blur, occlusion and low texture | Measure degradation and abstention, not just the cases that remain easy. |
 
-Publish per-domain results and confidence intervals, plus the simple frame-difference and Farnebäck baselines. Report mean and tail performance; never use a single aggregate score to conceal catastrophic motion failures.
+Do not assert invariance simply because a particular signature happens to stay similar on one synthetic example. Each property requires multiple seeds, resolutions, motion amplitudes and background patterns.
 
-## Baselines and controls
+## P2: independent real-video evaluation
 
-- Frame-difference-only baseline.
-- OpenCV Farnebäck dense-flow baseline (if installed).
-- Optional independently licensed/reproducible methods selected in a later research phase.
-- Sampling-rate and resolution ablations.
-- Temporal reversal/shuffle controls.
-- Human-labeled audit subset with adjudication procedure and annotator agreement.
+Use rights-reviewed, documented datasets or personally collected/authorized clips. The existing DATASET_REGISTRY is a candidate list, not evidence that any media was acquired or approved.
 
-Do not compare only against screenshots, and do not claim state of the art unless the model/version, dataset version, split, commands, runtime environment, metric implementation, and independent baseline are all published.
+Required protocol:
+- archive dataset version, official URL, terms, licence, attribution, SHA-256 and allowed use;
+- keep train / calibration / validation / final test split at the original-video or scene level;
+- keep final test videos unseen during feature-rule design and model training;
+- include a human-labelled subset with clear annotation rules and adjudication;
+- publish per-stratum results, failures, abstentions and confidence intervals;
+- compare against the v0.1 frame-pair baseline, static appearance-only signatures, and simple multiscale baselines under the same sampling/resource budget.
 
-## Benchmark result contract
+## Evaluation measures
 
-Each run should emit machine-readable JSON containing:
-- schema version, source revision and config hash;
-- dataset manifest hash and dataset license reference;
-- model/dependency versions and hardware profile;
-- number of examples, exclusions and exclusion reasons;
-- metrics, uncertainty intervals and per-domain stratification;
-- baseline results and paired comparisons;
-- errors, failure cases and known limitations;
-- explicit booleans for **real_world_evidence**, **independent_test_set**, and **state_of_the_art_claim_supported**.
+- Signature repeatability under declared invariances.
+- Sensitivity to declared temporal interventions and temporal-order reversal.
+- Recurrence retrieval precision/recall against human-curated or constructed ground truth.
+- Change-interval temporal IoU and timestamp error where event boundaries are annotated.
+- Region-relation robustness; do not call it object segmentation accuracy.
+- Training-model quantization error, cluster occupancy and novelty calibration against independently labelled known/novel structure examples.
+- Cross-domain transfer and domain-specific error; never collapse the entire matrix to a single score.
+- Runtime, peak RSS memory, frames/seconds decoded, analysis coverage, feature count and output size.
+- Ablation of scales, Fourier bands, region relations, and learned projection/prototypes.
 
-These flags default to false. A successful CI run does not flip them.
+## Training validation and promotion
+
+The local trainer splits by source video hash to avoid overlap leakage. Its current promotion gates measure unsupervised codebook utility only. They are operational safeguards, not accuracy certification. For a production acceptance gate, require independent annotations or a trusted external benchmark and compare the candidate to a frozen baseline before promotion.
+
+## Report contract
+
+Every benchmark report must state:
+- source revision and feature-schema version;
+- configuration, dimensions, sample rate and window policy;
+- source hashes, source rights manifest and exclusions;
+- exact split logic and number of independent source videos;
+- per-stratum and aggregate measurements, baselines, uncertainty and failure cases;
+- whether the data is synthetic or natural;
+- explicit booleans for real-world evidence and state-of-the-art claim support.
+
+Do not claim state of the art unless comparison data, split, implementation, command, environment and independent baseline are reproducible.
