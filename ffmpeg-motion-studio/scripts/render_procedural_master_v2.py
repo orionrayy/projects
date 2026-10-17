@@ -190,7 +190,7 @@ def fx_flash(d,t,sid):
     for b in BEAT_GUIDE.get(str(sid),[]):
         delta=t-b["at"]
         if -.02<=delta<=.22:
-            fx=b["fx"]; alpha=int(185*(1-max(0,delta)/.25)
+            fx=b["fx"]; alpha=int(185*(1-max(0,delta)/.25))
             if any(w in fx for w in ("glow","flash","pulse","scan","sweep","ripple","flare","pop","snap","lock","total","reveal")):
                 x=640+int(145*math.sin(t*2+sid)); y=350; r=12+int(max(0,delta)*165)
                 c=base.AMBER if any(w in fx for w in ("price","total","coupon","discount","receipt")) else base.CYAN
