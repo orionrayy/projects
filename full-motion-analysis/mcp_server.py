@@ -85,9 +85,22 @@ corpus-relative patterns, not semantic labels or calibrated probabilities.
         "event_counts": report["event_counts"],
         "relational_field": report["relational_field"],
         "timeline_window_count": len(report["timeline"]),
-        "timeline_windows_returned": min(128, len(report["timeline"])),
-        "timeline_truncated_in_tool_response": len(report["timeline"]) > 128,
-        "timeline": report["timeline"][:128],
+        "timeline_windows_returned": min(64, len(report["timeline"])),
+        "timeline_truncated_in_tool_response": len(report["timeline"]) > 64,
+        "timeline": [
+            {
+                "window_index": window["window_index"],
+                "start_timestamp_s": window["start_timestamp_s"],
+                "end_timestamp_s": window["end_timestamp_s"],
+                "center_timestamp_s": window["center_timestamp_s"],
+                "feature_schema": window["feature_schema"],
+                "feature_count": window["feature_count"],
+                "scale_signatures": window["scale_signatures"],
+                "regional_node_count": len(window["regional_nodes"]),
+                "regional_edge_count": len(window["regional_edges"]),
+            }
+            for window in report["timeline"][:64]
+        ],
         "learned_analysis": report.get("learned_analysis"),
         "provenance": report["provenance"],
         "interpretation_limits": report["interpretation_limits"],
