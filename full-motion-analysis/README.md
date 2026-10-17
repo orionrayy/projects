@@ -14,14 +14,14 @@ FMA is **not** just an object tracker. Its planned evidence stack combines frame
 ## Current v0.1 scope
 
 - Probe source media with FFprobe and decode a timestamped grayscale stream using FFmpeg.
-- Measure per-interval pixel change and, when OpenCV is installed, dense Farnebäck optical flow, median global translation, residual local flow, direction, and flow coherence.
+- Measure per-interval pixel change and, when OpenCV is installed, dense Farnebäck optical flow, a 4×6 spatial motion grid, moving-pixel ratio, magnitude quantiles, median global translation, residual local flow, direction, and flow coherence.
 - Emit evidence-backed candidates for scene transitions, motion onset/bursts, direction reversals, repeated-frame runs, and possible flashes.
 - Audit FFmpeg exports for decode coverage, dimensions/FPS/duration, exact duplicate frames, black frames, missing audio, and temporal discontinuities.
 - Generate deterministic synthetic clips with known motion / freeze / flash conditions and exercise them in tests and CI.
 - Expose local file analysis via an MCP server using the official Python SDK, plus a local CLI.
 - Persist a versioned JSON report with SHA-256, tool versions, sampling settings, time series, event evidence, limitations, and QC findings.
 
-The core intentionally has no Torch, cloud inference, or paid provider requirement. NumPy is the only baseline Python runtime dependency. OpenCV is optional and provides dense optical flow; without it, the report marks the flow lane unavailable instead of pretending frame differencing is full motion estimation.
+The core intentionally has no Torch, cloud inference, or paid provider requirement. NumPy is the only baseline Python runtime dependency. The grid retains spatial variation that a single global flow vector would erase; grid cells are spatial regions, not persistent object identities or object segmentation. OpenCV is optional and provides dense optical flow; without it, the report marks the flow lane unavailable instead of pretending frame differencing is full motion estimation.
 
 ## Quick start
 
