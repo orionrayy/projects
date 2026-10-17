@@ -221,7 +221,7 @@ def draw_pos_hook(d,t):
  # Screen reflection moves gently across glass.
  d.text((205,285),"TOTAL BELANJA",font=base.font(16,"mono"),fill=MUTED)
  d.text((205,318),"54.000  −  5.400",font=base.font(25,"mono"),fill=WHITE)
- value=int(48600*ease(t/2.45))
+ value = 48600  # Never display an incorrect intermediate as if it were a verified total.
  d.text((205,390),"Rp",font=base.font(22,"mono"),fill=GREEN)
  d.text((260,368),fmt_num(value),font=base.font(54,"mono"),fill=GREEN)
  d.text((205,457),"HASIL HARUS BISA DITELUSURI",font=base.font(15,"mono"),fill=CYAN)

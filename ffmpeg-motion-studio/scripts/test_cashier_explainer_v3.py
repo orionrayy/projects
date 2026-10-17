@@ -20,6 +20,11 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual(len(m.SCENES),18)
         self.assertEqual(m.TOTAL,240)
 
+    def test_hook_total_never_shows_a_false_intermediate_value(self):
+        source=Path(m.__file__).read_text(encoding="utf-8")
+        self.assertIn("value = 48600",source)
+        self.assertNotIn("value=int(48600*ease(t/2.45))",source)
+
     def test_math_and_material_are_preserved(self):
         self.assertEqual(54000-5400,48600)
         self.assertEqual(round(54000*.10),5400)
