@@ -12,7 +12,7 @@ FPS = base.FPS
 TOTAL_DURATION = 126
 SCENES = [
  {"id":1,"motif":"hook_storefront","title":"Kok total belanja bisa dipercaya?","short":"Dari toko menuju satu pertanyaan","narration":"Pernah bertanya: dari barang di keranjang, bagaimana kasir tahu total yang benar?"},
- {"id":2,"motif":"hook_scan","title":"Dari barang, bagaimana jadi angka?","short":"Satu bunyi bip belum berarti paham","narration":"Satu bunyi bip mengubah barang menjadi data. Tapi komputer belum otomatis memahami artinya."},
+ {"id":2,"motif":"hook_scan","title":"Dari barang, bagaimana jadi angka?","short":"Satu bunyi bip belum berarti paham","narration":"Bagaimana satu bunyi bip mengubah barang menjadi data, dan mengapa komputer belum otomatis memahaminya?"},
  {"id":3,"motif":"hook_total","title":"Siapa memastikan totalnya benar?","short":"Angka harus mengikuti struktur dan aturan","narration":"Bagaimana komputer memastikan total yang muncul bukan sekadar angka tebakan?"},
  {"id":4,"motif":"counter_formula","title":"Mulai dari layar kasir","short":"Satu transaksi ditulis sebagai ekspresi","narration":"Di layar kasir, sederhanakan transaksi menjadi total sama dengan lima puluh empat ribu dikurangi lima ribu empat ratus."},
  {"id":5,"motif":"tokenization","title":"Tokenisasi: pecah teks menjadi unit","short":"Kenali identifier, angka, dan operator","narration":"Tokenisasi mengubah teks menjadi unit: identifier total, tanda sama dengan, angka, operator minus, dan angka diskon."},
