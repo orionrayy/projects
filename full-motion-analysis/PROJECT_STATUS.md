@@ -3,75 +3,87 @@
 Updated: 2026-10-18  
 Repository: orionrayy/projects  
 Project root: full-motion-analysis/  
-Branch: feat/full-motion-analysis-v0-1
+Branch: feat/full-motion-analysis-v0-1  
+Pull request: https://github.com/orionrayy/projects/pull/1 (draft; not merged)
 
 ## Current release state
 
-**Phase:** P0 temporal measurement core validated on synthetic ground-truth checks; P1 real-world evaluation not started  
+**Phase:** P0 motion-evidence core validated on synthetic ground truth; P1 real-world evaluation not started  
 **Production readiness:** NO  
-**Real-world benchmark claim:** NOT ESTABLISHED  
-**Semantic / causal action understanding:** NOT IMPLEMENTED  
-**Remote MCP upload endpoint:** source + Render Blueprint implemented; deployment not yet authorized/created  
-**ChatGPT connector attached:** NO — a repository commit alone cannot register a custom MCP server in a ChatGPT workspace  
-**Paid services:** none required by the current architecture
+**State-of-the-art / world's-first claim supported:** NO  
+**Real-world benchmark evidence:** NOT ESTABLISHED  
+**Semantic action understanding, persistent object identity, 3D motion, physical-world velocity and causal inference:** NOT CLAIMED AS SOLVED  
+**Local MCP:** implemented (stdio)  
+**Remote MCP:** source, Dockerfile and Render Blueprint implemented; deployment not created  
+**ChatGPT connector attached:** NO  
+**Paid inference API required by baseline:** NO
+
+## Implemented capabilities
+
+- FFprobe stream metadata, SHA-256 provenance, bounded FFmpeg streaming decode and explicit sampling-rate/coverage reporting.
+- Adjacent-frame pixel-change measurements plus optional dense Farnebäck optical flow.
+- Spatial 4×6 flow evidence field and robust RANSAC partial-affine transform estimates: image-plane translation, rotation, scale, inlier ratio, residual median/p90.
+- Affine-compensated local residual motion and connected local-motion-region candidates. These indicate localized motion not explained by the dominant fitted image-plane transform, not persistent object identities or semantic actions.
+- Timestamped heuristic candidates for scene transitions, motion onset/bursts, direction reversal, repeated-frame runs and possible flashes. Candidates retain measurements and limitations.
+- FFmpeg render QC for dimensions, FPS, duration, decode coverage, repeated frames, near-black frames, possible freeze/flash and a configurable required-audio stream.
+- Local CLI, local stdio MCP tools with allowed-root path policy, and a remote Streamable HTTP MCP server with bearer auth, one-use upload tickets, streamed upload size cap, media validation, concurrency limit and paginated reports.
+- Docker packaging, free-plan Render Blueprint, dataset licence registry, synthetic benchmark runner and GitHub Actions CI.
+
+## Validation checkpoint
+
+GitHub Actions run [39056780459](https://github.com/orionrayy/projects/actions/runs/39056780459) passed after adding the mixed camera/object motion scenario and remote bearer-auth contract tests.
+
+Measured result from the hosted logs:
+- 20 unit/integration tests passed.
+- 8 synthetic benchmark checks passed: observed movement, monotonic timestamps, repeated-frame freeze, flash candidate, spatial flow grid, affine-fit availability, known global-pan direction reversal, and detection of an independent object-motion region during a global camera pan.
+- No \`ResourceWarning\` entries were present in the retrieved run log.
+
+This validates software contracts on synthetic inputs. It does **not** measure performance on natural videos or prove novelty, production readiness, or state of the art.
+
+Earlier passing runs:
+- [39055664706](https://github.com/orionrayy/projects/actions/runs/39055664706): affine/global-pan revision.
+- [39055754870](https://github.com/orionrayy/projects/actions/runs/39055754870): benchmark registry and manifest.
+- [39056485897](https://github.com/orionrayy/projects/actions/runs/39056485897): MCP SDK v1/v2 compatibility.
 
 ## Acceptance gates
 
-| Gate | Required evidence | State at bootstrap |
+| Gate | Evidence required | State |
 |---|---|---|
-| Decode correctness | FFprobe metadata, complete/incomplete decode status, frame timestamp accounting | In implementation |
-| Motion measurement | Frame-difference series plus optional dense optical flow with spatial grid and affine fit | Implemented; current revision pending CI |
-| Camera-motion assumptions | Median-flow estimate and documented static-background limitation | In implementation |
-| Event localization | Timestamped event candidates linked to raw measurements and rule IDs | Implemented; heuristic candidates only |
-| Temporal-order sensitivity | Forward/reverse/shuffled synthetic challenge; report metric changes | Planned for P1 |
-| FFmpeg render QC | Dimensions/FPS/duration/audio/duplicate/freeze/black/flash checks | In implementation |
-| Reproducibility | Input SHA-256, tool/dependency versions, deterministic synthetic fixtures | In implementation |
-| MCP contract | Safe local-root validation, probe/analyze/audit tools, stdio transport | In implementation |
-| Real-world benchmark | Licensed datasets, baselines, split protocol, error intervals, independent run | Not started |
-| Remote MCP | Authenticated upload or object storage, quotas, retention, SSRF isolation, remote endpoint | Not started |
+| Media intake/decode | FFprobe metadata, decoded frame counts, frame cap and sampling coverage | Implemented; synthetic/integration tested |
+| Motion field | Dense flow, spatial grid, global transform and affine-compensated residual evidence | Implemented; synthetic tested |
+| Local motion regions | Known object motion localized after global camera-pan compensation | Synthetic scenario passes; natural-video validity untested |
+| Event localization | Timestamped candidates with rule IDs, measurement links and error/false-positive estimates | Heuristic candidates implemented; real-world calibration pending |
+| Temporal-order sensitivity | Original/reversed/shuffled comparisons on labeled temporal tasks | Planned for P1 |
+| FFmpeg release gate | Technical output expectations plus defect precision/recall on an annotated render set | Basic technical checks implemented; real-world calibration pending |
+| Real-world benchmark | Licensed dataset manifests, untouched splits, baselines, confidence intervals and failure cases | Not started; dataset candidates registered only |
+| Remote security | Deployment smoke tests, auth verification, upload TTL/quota/cleanup, isolated decoder behaviour | Unit contract tests pass; not deployed or end-to-end tested |
+| ChatGPT integration | Supported workspace, deployed HTTPS endpoint, credential configuration, real video handoff | Not connected; requires user approval for Render workspace/deployment |
 
-## Success criteria for P0
+## Real-world dataset policy
 
-1. Tests can run locally and in GitHub Actions using free hosted CI minutes within normal repository limits.
-2. Synthetic ground-truth clips establish that motion, frozen spans, and abrupt global changes are measurable and timestamped.
-3. Reports never present image-plane pixel velocity as real-world speed or a threshold event as confirmed causality.
-4. Optional OpenCV failure is visible in report provenance and does not silently mislabel a fallback result as optical flow.
-5. MCP file access is constrained to allowed roots; no unauthenticated remote server or arbitrary URL fetch is exposed.
-6. FFmpeg audit has explicit warning/failure policy and can treat missing audio as a release blocker when requested.
-7. Every quality claim is tied to a command, test report, artifact hash, and exact source revision.
-
-## Recent validation checkpoint
-
-- GitHub Actions run [39055664706](https://github.com/orionrayy/projects/actions/runs/39055664706) passed on the revision containing the spatial flow grid, robust partial-affine fit and known global-pan direction reversal fixture.
-- GitHub Actions run [39055754870](https://github.com/orionrayy/projects/actions/runs/39055754870) passed after the dataset registry and manifest template were added.
-- The passing logs report 12 unit/integration tests; all seven synthetic benchmark checks were true: measured motion, monotonic timeline, repeated-frame freeze, flash interval, spatial flow grid, affine fit, and known global-pan reversal. The retrieved log contains no ResourceWarning entries.
-- Dataset registry is a candidate list only. No real-world dataset has been downloaded, rights-reviewed, or benchmarked yet.
-- These tests establish synthetic software-contract correctness, not natural-video generalization, production readiness, or a state-of-the-art claim.
+Candidate sources are listed in \`benchmarks/DATASET_REGISTRY.md\` (MPI Sintel, KITTI Flow, DAVIS and a temporal-order benchmark). No dataset media has been downloaded, rights-reviewed, or benchmarked yet. Public accessibility is not treated as permission for commercial use or redistribution. Every ingest is gated by \`benchmarks/dataset_manifest.template.json\`.
 
 ## Known limitations
 
-- Sparse or reduced-resolution sampling can miss events shorter than the effective frame interval.
-- Dense optical flow can fail under blur, low texture, occlusion, lighting changes, rolling shutter, and large displacements.
-- Median-flow camera-motion estimates assume that background/static pixels dominate.
-- A static scene and a frozen render can look alike; exact duplicate spans are evidence, not proof of a bug.
-- Frame-level motion is not equivalent to identifying an object, inferring intent, recovering 3D motion, or explaining physical cause.
-- Thresholds are starting heuristics. They must be calibrated and stress-tested before being used as acceptance gates.
-- CI synthetic clips are instrumentation tests, not a substitute for real-world datasets, human review, or independent benchmark results.
+- The baseline is classical image-plane motion estimation plus transparent heuristics; it does not yet perform persistent object segmentation, articulated pose/deformation reconstruction, learned temporal action recognition, 3D scene recovery, or causal reasoning.
+- Optical flow can fail under blur, low texture, occlusion, exposure changes, large displacement, rolling shutter and compression.
+- The global affine model can fail with parallax, strong non-rigid scenes, large independent objects or dominant foreground motion. Residual regions can be false positives and can fragment as objects cross grid cells.
+- Downsampling to 320×180 and capped frame sampling can miss small/fast motion. Reported pixel/frame units are not physical-world velocity.
+- A technical render pass does not certify aesthetics, anatomy, narrative continuity, text readability, educational correctness, audio intelligibility or lip sync.
+- Synthetic CI is a regression gate, not a substitute for independent natural-video benchmarks, labeled test sets, and human review.
 
-## Next checkpoint
+## Remote MCP deployment and privacy
 
-After source files land: run unit/integration tests, inspect the CI run on the PR branch, fix failures without weakening contracts, write measured results here, and only then advance to P1. Do not record test success before seeing the actual output.
+Remote source exposes an authenticated MCP endpoint and separate upload-ticket page. The endpoint is **not live**. A free-plan Render Blueprint is prepared but has not been deployed. Free instances can sleep and use ephemeral storage; temporary videos may disappear before their nominal retention window after a restart or redeploy.
 
+The upload flow is intentional: the MCP tool returns a one-use, expiring URL; the user selects the video in the browser and then passes the resulting opaque upload ID to the analysis tool. MCP does not automatically forward arbitrary video attachment bytes to a different server.
 
-## Remote MCP endpoint checkpoint
+Current ChatGPT documentation does not list Go for full custom MCP server connections. A deployed endpoint therefore cannot be presumed usable from this ChatGPT Go session; check current plan/workspace support before relying on it. The endpoint can be used by a compatible MCP client with Streamable HTTP and bearer auth.
 
-- Added \`remote_mcp_server.py\` with bearer authentication for MCP routes, Host/DNS-rebinding allowlist, short-lived single-use upload capabilities, streamed byte limits, FFprobe validation, bounded duration/resolution/FPS, one concurrent motion job, paginated report reads, and automatic temporary-file/report TTL cleanup.
-- Added Docker packaging and a free-plan Render Blueprint. No Render service has been created or deployed.
-- Official current ChatGPT documentation lists full custom MCP connections for Business and Enterprise/Edu web workspaces; Pro has limited read/fetch capability, while Go is not listed. See \`docs/REMOTE_DEPLOYMENT.md\`.
-- MCP does not automatically transfer binary bytes of an arbitrary uploaded video into an independent server; the remote workflow uses a short-lived upload page and then an opaque upload ID.
-- Remote service authentication and safety tests are included in CI, but this does not mean a remote deployment is live or real-world motion benchmarked.
+## Next gates
 
-
-- Remote MCP compatibility: CI initially caught the MCP SDK v2 rename from \`FastMCP\` to \`MCPServer\`; both local and remote servers now support both import paths. Run [39056485897](https://github.com/orionrayy/projects/actions/runs/39056485897) passed after that fix.
-- The current branch extends residual-flow measurements into connected local-motion-region candidates and adds a synthetic scenario in which an independently moving object overlaps a globally panning textured background. The newest CI must validate this additional scenario and bearer-auth tests before it counts as verified.
-- Remote MCP's Host/DNS-rebinding policy now explicitly allowlists the same-origin upload page, so the browser upload route can work with the security middleware in place.
+1. Confirm the latest source revision's CI, then keep this draft PR open until remote deployment settings are approved.
+2. Build temporal-order reversal/shuffle metrics, sampled-frame ablations, and motion-timestamp localization tests.
+3. Acquire only rights-cleared data, starting with a small reproducible subset, and report Farnebäck/frame-difference baselines.
+4. Test remote MCP through an actual deployed endpoint only after workspace approval; verify auth, upload limits, expiry, cleanup and end-to-end video handoff.
+5. Advance claims only when independently reproducible evidence supports them.

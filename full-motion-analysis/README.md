@@ -14,11 +14,11 @@ FMA is **not** just an object tracker. Its planned evidence stack combines frame
 ## Current v0.1 scope
 
 - Probe source media with FFprobe and decode a timestamped grayscale stream using FFmpeg.
-- Measure per-interval pixel change and, when OpenCV is installed, dense Farnebäck optical flow, a 4×6 spatial motion grid, moving-pixel ratio, magnitude quantiles, median-flow proxy, and robust RANSAC partial-affine fit diagnostics (translation, rotation, scale, inlier ratio, and residual error).
+- Measure per-interval pixel change and, when OpenCV is installed, dense Farnebäck flow, a 4×6 spatial field, robust RANSAC global affine motion, affine-compensated residual motion, and connected local-motion-region candidates (not identity tracking).
 - Emit evidence-backed candidates for scene transitions, motion onset/bursts, direction reversals, repeated-frame runs, and possible flashes.
 - Audit FFmpeg exports for decode coverage, dimensions/FPS/duration, exact duplicate frames, black frames, missing audio, and temporal discontinuities.
-- Generate deterministic synthetic clips for motion, direction reversal, global camera-pan reversal, freeze, and flash, with known intervals exercised in tests and CI.
-- Expose local file analysis via an MCP server using the official Python SDK, plus a local CLI.
+- Generate deterministic synthetic clips for moving-object motion, global camera-pan reversal, independent object motion during a camera pan, freeze and flash; exercise the known motion in tests and CI.
+- Expose local file analysis via stdio MCP and a CLI; also include a bearer-authenticated remote Streamable HTTP MCP service with short-lived upload tickets, bounded temporary storage and paginated reports. A free-plan Render Blueprint is prepared but not deployed.
 - Persist a versioned JSON report with SHA-256, tool versions, sampling settings, time series, event evidence, limitations, and QC findings.
 
 The core intentionally has no Torch, cloud inference, or paid provider requirement. NumPy is the only baseline Python runtime dependency. The grid retains spatial variation that a single global flow vector would erase; grid cells are spatial regions, not persistent object identities or object segmentation. OpenCV is optional and provides dense optical flow; without it, the report marks the flow lane unavailable instead of pretending frame differencing is full motion estimation.

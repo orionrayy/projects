@@ -2,13 +2,15 @@
 
 ## P0: deterministic synthetic tests
 
-Use generated, lossless grayscale clips with known timing and movement: monotonic translation, reversal, static hold/repeated frames, and a one-frame global flash. Record generator version, exact parameters, source hash, expected interval, actual output, and test result.
+Use generated, lossless clips with known timing and movement: moving-object reversal, full-scene pan reversal, a moving object over a globally panning textured background, static hold/repeated frames, and a one-frame global flash. Keep expected global and local motion separate in the ground-truth contract. Record generator version, exact parameters, source hash, expected interval, actual output, and test result.
 
 Minimum checks:
 - time-series timestamps are strictly increasing and within source duration;
 - a moving object yields non-zero adjacent-frame change;
 - a known held segment produces a measurable exact-duplicate transition ratio;
 - a one-frame flash generates a localized high-change candidate;
+- reversing full-scene camera motion flips the fitted affine translation direction;
+- an independently moving textured object generates a localized affine-residual region while the background undergoes global pan;
 - running the same fixture with the same dependencies yields the same non-model measurements;
 - missing optional OpenCV is reported explicitly;
 - max-frame limits cannot silently produce a complete-status report.
