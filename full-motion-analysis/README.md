@@ -81,7 +81,7 @@ motionlab train ./my-video-corpus --output-dir ./models/fma --watch --poll-secon
 
 The watcher writes a durable watch checkpoint, skips an unchanged corpus after a successful candidate/promote run, and retries a failed or gated run no more often than the configured retry interval unless the inventory changes. Stop it with Ctrl+C. It does not detach itself as a background service or fetch new media.
 
-Promotion is conditional, not guaranteed. The default gates require at least five distinct videos, at least four training videos, a held-out video split, sufficient data coverage, a measurable held-out improvement, model diversity, and the rights attestation. Otherwise the candidate remains unpromoted and the report records the failed gate.
+Promotion is conditional, not guaranteed. The default gates require at least five distinct videos, at least four training videos, a held-out video split, sufficient data coverage, a measurable held-out improvement, prototype diversity, decreasing clean reconstruction loss, and the rights attestation. Otherwise the candidate remains unpromoted and the report records the failed gate.
 
 Apply an accepted model:
 
