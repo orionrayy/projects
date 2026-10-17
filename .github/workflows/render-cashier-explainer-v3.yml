@@ -6,6 +6,7 @@ on:
       - feature/ffmpeg-motion-studio-9.0.2-upgrade
     paths:
       - "ffmpeg-motion-studio/scripts/render_cashier_explainer_v3.py"
+      - "ffmpeg-motion-studio/scripts/render_procedural_master.py"
       - "ffmpeg-motion-studio/scripts/test_cashier_explainer_v3.py"
       - "ffmpeg-motion-studio/production/CASHIER_FIRST_V3_MOTION_BRIEF.md"
       - ".github/workflows/render-cashier-explainer-v3.yml"
