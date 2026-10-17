@@ -1,7 +1,7 @@
-"""CPU-first self-supervised relational-model fitting and novelty scoring.
+"""CPU-first self-supervised relational encoder and corpus-relative novelty model.
 
-This learns corpus-specific structure prototypes from unlabeled space-time signatures.
-It does not learn human semantics, physical laws, or guaranteed cross-domain invariance.
+A small NumPy denoising autoencoder is trained without semantic labels; deterministic
+prototypes summarize its latent space. No LLM, GPU, Torch, scikit-learn or paid API is required.
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from typing import Any, Iterable
 
 import numpy as np
 
-MODEL_SCHEMA = "fma.openworld.relational-model.v1"
+MODEL_SCHEMA = "fma.openworld.relational-model.v2"
 
 
 def canonical_sha256(value: Any) -> str:
@@ -33,22 +33,123 @@ def _matrix(examples: Iterable[dict[str, Any]]) -> np.ndarray:
     return matrix
 
 
-def _canonicalize_component_signs(components: np.ndarray) -> np.ndarray:
-    result = components.copy()
-    for i in range(result.shape[0]):
-        pivot = int(np.argmax(np.abs(result[i])))
-        if result[i, pivot] < 0:
-            result[i] *= -1.0
-    return result
+def _init_weights(input_dim: int, hidden_dim: int, latent_dim: int, rng: np.random.Generator) -> dict[str, np.ndarray]:
+    def glorot(fan_in: int, fan_out: int) -> np.ndarray:
+        limit = math.sqrt(6.0 / max(1, fan_in + fan_out))
+        return rng.uniform(-limit, limit, size=(fan_in, fan_out)).astype(np.float64)
+    return {
+        "w1": glorot(input_dim, hidden_dim),
+        "b1": np.zeros(hidden_dim, dtype=np.float64),
+        "w2": glorot(hidden_dim, latent_dim),
+        "b2": np.zeros(latent_dim, dtype=np.float64),
+        "w3": glorot(latent_dim, hidden_dim),
+        "b3": np.zeros(hidden_dim, dtype=np.float64),
+        "w4": glorot(hidden_dim, input_dim),
+        "b4": np.zeros(input_dim, dtype=np.float64),
+    }
 
 
-def _kmeans(data: np.ndarray, max_clusters: int, iterations: int = 30) -> tuple[np.ndarray, np.ndarray]:
+def _forward(x: np.ndarray, weights: dict[str, np.ndarray]) -> tuple[np.ndarray, tuple[np.ndarray, np.ndarray, np.ndarray]]:
+    h1 = np.tanh(x @ weights["w1"] + weights["b1"])
+    z = np.tanh(h1 @ weights["w2"] + weights["b2"])
+    h3 = np.tanh(z @ weights["w3"] + weights["b3"])
+    reconstruction = h3 @ weights["w4"] + weights["b4"]
+    return reconstruction, (h1, z, h3)
+
+
+def _encode(x: np.ndarray, weights: dict[str, np.ndarray]) -> np.ndarray:
+    h1 = np.tanh(x @ weights["w1"] + weights["b1"])
+    return np.tanh(h1 @ weights["w2"] + weights["b2"])
+
+
+def _clean_mse(x: np.ndarray, weights: dict[str, np.ndarray]) -> float:
+    reconstruction, _ = _forward(x, weights)
+    return float(np.mean((reconstruction - x) ** 2))
+
+
+def _train_encoder(
+    x: np.ndarray,
+    *,
+    hidden_dim: int,
+    latent_dim: int,
+    epochs: int,
+    batch_size: int,
+    learning_rate: float,
+    mask_probability: float,
+    seed: int,
+) -> tuple[dict[str, np.ndarray], list[float]]:
+    if epochs < 1 or epochs > 200:
+        raise ValueError("encoder_epochs_must_be_between_1_and_200")
+    if batch_size < 2 or batch_size > 4096:
+        raise ValueError("encoder_batch_size_must_be_between_2_and_4096")
+    if hidden_dim < 4 or hidden_dim > 256 or latent_dim < 2 or latent_dim > hidden_dim:
+        raise ValueError("invalid_encoder_dimensions")
+    if not 0.0 < learning_rate <= 0.05:
+        raise ValueError("learning_rate_must_be_in_0_to_0_05")
+    if not 0.0 <= mask_probability <= 0.5:
+        raise ValueError("mask_probability_must_be_between_0_and_0_5")
+
+    rng = np.random.default_rng(seed)
+    weights = _init_weights(x.shape[1], hidden_dim, latent_dim, rng)
+    m = {key: np.zeros_like(value) for key, value in weights.items()}
+    v = {key: np.zeros_like(value) for key, value in weights.items()}
+    beta1, beta2, eps = 0.9, 0.999, 1e-8
+    step = 0
+    trace = [_clean_mse(x, weights)]
+    sample_count, feature_count = x.shape
+
+    for _epoch in range(epochs):
+        order = rng.permutation(sample_count)
+        for start in range(0, sample_count, batch_size):
+            target = x[order[start:start + batch_size]]
+            corrupted = target.copy()
+            corrupted *= (rng.random(corrupted.shape) >= mask_probability)
+            corrupted += rng.normal(0.0, 0.015, size=corrupted.shape)
+            reconstruction, (h1, z, h3) = _forward(corrupted, weights)
+
+            # Denoising reconstruction: damaged signature -> intact signature.
+            delta = (2.0 / max(1, target.shape[0] * feature_count)) * (reconstruction - target)
+            grads: dict[str, np.ndarray] = {
+                "w4": h3.T @ delta,
+                "b4": delta.sum(axis=0),
+            }
+            dh3 = (delta @ weights["w4"].T) * (1.0 - h3 * h3)
+            grads["w3"] = z.T @ dh3
+            grads["b3"] = dh3.sum(axis=0)
+            dz = (dh3 @ weights["w3"].T) * (1.0 - z * z)
+            grads["w2"] = h1.T @ dz
+            grads["b2"] = dz.sum(axis=0)
+            dh1 = (dz @ weights["w2"].T) * (1.0 - h1 * h1)
+            grads["w1"] = corrupted.T @ dh1
+            grads["b1"] = dh1.sum(axis=0)
+
+            # Gradient norm clipping bounds damage from corrupted/outlier examples.
+            norm = math.sqrt(sum(float(np.sum(grad * grad)) for grad in grads.values()))
+            if not math.isfinite(norm):
+                raise ValueError("non_finite_encoder_gradient")
+            if norm > 5.0:
+                grads = {key: grad * (5.0 / norm) for key, grad in grads.items()}
+
+            step += 1
+            for key, grad in grads.items():
+                m[key] = beta1 * m[key] + (1.0 - beta1) * grad
+                v[key] = beta2 * v[key] + (1.0 - beta2) * grad * grad
+                m_hat = m[key] / (1.0 - beta1 ** step)
+                v_hat = v[key] / (1.0 - beta2 ** step)
+                weights[key] -= learning_rate * m_hat / (np.sqrt(v_hat) + eps)
+                if not np.isfinite(weights[key]).all():
+                    raise ValueError("non_finite_encoder_parameter")
+        trace.append(_clean_mse(x, weights))
+    return weights, trace
+
+
+def _kmeans(data: np.ndarray, max_clusters: int, iterations: int = 30) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     unique = np.unique(np.round(data, decimals=8), axis=0)
     k = max(1, min(int(max_clusters), len(unique), len(data)))
     if k == 1:
-        centers = np.mean(data, axis=0, keepdims=True)
+        centers = data.mean(axis=0, keepdims=True)
     else:
-        # Deterministic farthest-first initialization; no RNG or external ML dependency.
+        # Deterministic farthest-first initialization, without external ML libraries.
         first = int(np.argmax(np.sum((data - data.mean(axis=0)) ** 2, axis=1)))
         chosen = [first]
         min_distance = np.sum((data - data[first]) ** 2, axis=1)
@@ -69,16 +170,15 @@ def _kmeans(data: np.ndarray, max_clusters: int, iterations: int = 30) -> tuple[
         nearest_error = np.min(squared, axis=1)
         for cluster in range(len(centers)):
             members = data[labels == cluster]
-            if len(members):
-                updated[cluster] = members.mean(axis=0)
-            else:
-                updated[cluster] = data[int(np.argmax(nearest_error))]
+            updated[cluster] = members.mean(axis=0) if len(members) else data[int(np.argmax(nearest_error))]
         if np.allclose(updated, centers, rtol=1e-5, atol=1e-7):
             centers = updated
             break
         centers = updated
-    distances = np.sqrt(np.sum((data - centers[labels]) ** 2, axis=1))
-    return centers, distances
+    squared = np.sum((data[:, None, :] - centers[None, :, :]) ** 2, axis=2)
+    labels = np.argmin(squared, axis=1)
+    distances = np.sqrt(squared[np.arange(len(data)), labels])
+    return centers, labels, distances
 
 
 def fit_relational_model(
@@ -86,49 +186,66 @@ def fit_relational_model(
     *,
     max_components: int = 24,
     max_prototypes: int = 12,
+    encoder_hidden_dim: int = 48,
+    encoder_epochs: int = 8,
+    encoder_batch_size: int = 64,
+    learning_rate: float = 0.002,
+    mask_probability: float = 0.12,
+    seed: int = 20261018,
 ) -> dict[str, Any]:
     matrix = _matrix(train_examples)
     median = np.median(matrix, axis=0)
     mad = np.median(np.abs(matrix - median), axis=0) * 1.4826
     std = np.std(matrix, axis=0)
     scale = np.where(mad > 1e-6, mad, np.where(std > 1e-6, std, 1.0))
-    standardized = np.clip((matrix - median) / scale, -12.0, 12.0)
-    covariance = (standardized.T @ standardized) / max(1, len(standardized) - 1)
-    eigenvalues, eigenvectors = np.linalg.eigh(covariance)
-    order = np.argsort(eigenvalues)[::-1]
-    component_count = max(1, min(int(max_components), matrix.shape[1], len(matrix) - 1))
-    eigenvalues = np.maximum(eigenvalues[order[:component_count]], 1e-8)
-    components = _canonicalize_component_signs(eigenvectors[:, order[:component_count]].T)
-    projected = standardized @ components.T
-    projection_scale = np.sqrt(eigenvalues)
-    latent = np.clip(projected / projection_scale, -15.0, 15.0)
-    centers, distances = _kmeans(latent, max_prototypes)
-    squared = np.sum((latent[:, None, :] - centers[None, :, :]) ** 2, axis=2)
-    labels = np.argmin(squared, axis=1)
-    radii: list[float] = []
+    standardized = np.clip((matrix - median) / scale, -8.0, 8.0)
+    latent_dim = max(2, min(int(max_components), int(encoder_hidden_dim)))
+    weights, loss_trace = _train_encoder(
+        standardized,
+        hidden_dim=int(encoder_hidden_dim),
+        latent_dim=latent_dim,
+        epochs=int(encoder_epochs),
+        batch_size=int(encoder_batch_size),
+        learning_rate=float(learning_rate),
+        mask_probability=float(mask_probability),
+        seed=int(seed),
+    )
+    latent = _encode(standardized, weights)
+    centers, labels, distances = _kmeans(latent, max_prototypes)
+    radii = []
     for cluster in range(len(centers)):
-        cluster_distances = np.sqrt(squared[labels == cluster, cluster])
-        radius = float(np.percentile(cluster_distances, 95)) if len(cluster_distances) else 0.0
-        radii.append(max(radius, 1e-3))
-    counts = np.bincount(labels, minlength=len(centers)).tolist()
+        values = distances[labels == cluster]
+        radii.append(max(float(np.percentile(values, 95)) if len(values) else 0.0, 1e-3))
     model = {
         "schema_version": MODEL_SCHEMA,
         "feature_schema": "fma.openworld.relational-signature.v1",
-        "training_mode": "unlabeled_robust_whitening_pca_and_farthest_first_prototypes",
+        "training_mode": "unlabeled_denoising_autoencoder_plus_deterministic_prototypes",
+        "embedding_method": "numpy_denoising_autoencoder",
         "input_dimensions": int(matrix.shape[1]),
+        "embedding_dimensions": int(latent_dim),
         "sample_count": int(matrix.shape[0]),
-        "max_components_requested": int(max_components),
-        "max_prototypes_requested": int(max_prototypes),
+        "encoder_hidden_dim": int(encoder_hidden_dim),
+        "encoder_epochs": int(encoder_epochs),
+        "encoder_batch_size": int(encoder_batch_size),
+        "encoder_learning_rate": float(learning_rate),
+        "encoder_mask_probability": float(mask_probability),
+        "encoder_seed": int(seed),
         "normalizer_median": median.tolist(),
         "normalizer_scale": scale.tolist(),
-        "components": components.tolist(),
-        "component_scale": projection_scale.tolist(),
+        "encoder_weights": {key: value.tolist() for key, value in weights.items()},
         "prototypes": centers.tolist(),
         "prototype_radii_p95": radii,
-        "training_cluster_counts": counts,
+        "training_cluster_counts": np.bincount(labels, minlength=len(centers)).tolist(),
         "single_prototype_baseline_center": latent.mean(axis=0).tolist(),
+        "training_diagnostics": {
+            "initial_clean_reconstruction_mse": round(float(loss_trace[0]), 8),
+            "final_clean_reconstruction_mse": round(float(loss_trace[-1]), 8),
+            "clean_reconstruction_mse_by_epoch": [round(float(value), 8) for value in loss_trace],
+            "training_loss_decreased": bool(loss_trace[-1] < loss_trace[0]),
+        },
         "limitations": [
-            "Prototype IDs are anonymous structure clusters, not semantic classes.",
+            "The encoder learns from hand-designed space-time signatures; it is not an end-to-end pixel foundation model.",
+            "Prototype IDs are anonymous corpus-relative structure clusters, not semantic classes.",
             "Novelty indicates distance from this training corpus and is not a calibrated probability.",
             "Unsupervised fit quality does not establish domain generalization or motion-understanding accuracy.",
         ],
@@ -143,9 +260,13 @@ def _transform(model: dict[str, Any], vectors: np.ndarray) -> np.ndarray:
         raise ValueError("model_feature_dimension_mismatch")
     median = np.asarray(model["normalizer_median"], dtype=np.float64)
     scale = np.asarray(model["normalizer_scale"], dtype=np.float64)
+    standardized = np.clip((vectors - median) / np.maximum(scale, 1e-8), -8.0, 8.0)
+    if "encoder_weights" in model:
+        weights = {key: np.asarray(value, dtype=np.float64) for key, value in model["encoder_weights"].items()}
+        return _encode(standardized, weights)
+    # Read-only compatibility path for earlier PCA/prototype snapshots.
     components = np.asarray(model["components"], dtype=np.float64)
     component_scale = np.asarray(model["component_scale"], dtype=np.float64)
-    standardized = np.clip((vectors - median) / np.maximum(scale, 1e-8), -12.0, 12.0)
     return np.clip((standardized @ components.T) / np.maximum(component_scale, 1e-8), -15.0, 15.0)
 
 
@@ -155,7 +276,7 @@ def score_vectors(model: dict[str, Any], vectors: np.ndarray) -> list[dict[str, 
     radii = np.asarray(model["prototype_radii_p95"], dtype=np.float64)
     dists = np.sqrt(np.sum((latent[:, None, :] - centers[None, :, :]) ** 2, axis=2))
     labels = np.argmin(dists, axis=1)
-    results: list[dict[str, Any]] = []
+    results = []
     for i, label in enumerate(labels.tolist()):
         distance = float(dists[i, label])
         radius = float(radii[label])
@@ -177,6 +298,7 @@ def score_windows(report: dict[str, Any], model: dict[str, Any]) -> dict[str, An
     return {
         "status": "SCORED",
         "model_sha256": model.get("model_sha256"),
+        "embedding_method": model.get("embedding_method", "legacy_pca"),
         "interpretation": "Corpus-relative anonymous prototype assignment and novelty ratio; not semantic recognition or calibrated probability.",
         "windows": [
             {"window_index": int(window["window_index"]), **score}
@@ -187,7 +309,7 @@ def score_windows(report: dict[str, Any], model: dict[str, Any]) -> dict[str, An
 
 def load_model(path: str | Path) -> dict[str, Any]:
     data = json.loads(Path(path).expanduser().resolve(strict=True).read_text(encoding="utf-8"))
-    if data.get("schema_version") != MODEL_SCHEMA:
+    if data.get("schema_version") not in {MODEL_SCHEMA, "fma.openworld.relational-model.v1"}:
         raise ValueError("unsupported_relational_model_schema")
     claimed = data.get("model_sha256")
     payload = dict(data)
@@ -203,8 +325,7 @@ def write_json_atomic(path: str | Path, data: dict[str, Any]) -> Path:
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix(destination.suffix + ".tmp")
-    rendered = json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
-    temporary.write_text(rendered, encoding="utf-8")
+    temporary.write_text(json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     temporary.replace(destination)
     return destination
 
