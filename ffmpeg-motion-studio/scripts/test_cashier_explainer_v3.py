@@ -10,6 +10,8 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual([s["motif"] for s in hooks],["hook_storefront","hook_scan","hook_total"])
         self.assertEqual(m.DURATIONS[:3],[4,4,4])
         self.assertTrue(all(s["narration"].strip().endswith("?") for s in hooks))
+        self.assertTrue(all(len(s["narration"].split())<=7 for s in hooks))
+        self.assertLessEqual(len(m.SCENES[17]["narration"].split()),8)
         self.assertEqual(sum(m.DURATIONS[:3]),12)
 
     def test_explanation_starts_at_cashier_on_scene_four(self):
