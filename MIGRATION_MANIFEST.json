@@ -1,0 +1,404 @@
+{
+  "schema_version": "1.0.0",
+  "migration_date": "2026-10-17",
+  "source": {
+    "repository": "orionrayy/ai-determinism-engine",
+    "ref": "refactor/serevex-quant-rebrand",
+    "commit": "74020ce9b5f66cbe6e23815e2fc21db17013f10f",
+    "pull_request": "https://github.com/orionrayy/ai-determinism-engine/pull/166",
+    "ci_run": "https://github.com/orionrayy/ai-determinism-engine/actions/runs/39048892113"
+  },
+  "destination": {
+    "repository": "orionrayy/projects",
+    "branch": "main",
+    "project_root": "serevex-quant/"
+  },
+  "transferred_file_count": 62,
+  "total_source_bytes": 714385,
+  "transformations": [
+    "Moved projects/serevex-quant/* to serevex-quant/* because the destination is a projects monorepo.",
+    "Adjusted workflow path filters and command/working-directory paths; added push-path triggers.",
+    "Adjusted repository-root calculations and workflow contract tests for the new directory layout.",
+    "Updated the design specification repository/branch metadata and corrected the project README checkpoint heading to v1.4.1.",
+    "Preserved source blob SHAs for unchanged files; files modified for path or metadata portability have new Git blob SHAs."
+  ],
+  "caveats": [
+    "The source repository was retained unchanged.",
+    "Historical CI artifact downloads remain in the source repository and were not re-uploaded as repository files.",
+    "The readiness gate remains BLOCKED/NO_TRADE; copying files is not a market-model validation or deployment approval."
+  ],
+  "files": [
+    {
+      "source_path": ".github/workflows/serevex-research-benchmark.yml",
+      "destination_path": ".github/workflows/serevex-research-benchmark.yml",
+      "source_blob_sha": "fc8c06de42776e0d34f01dac6346396e84afdaab",
+      "source_bytes": 25016
+    },
+    {
+      "source_path": "LICENSE",
+      "destination_path": "LICENSE",
+      "source_blob_sha": "c2a09a851d969355fad71b1ed1a87e0dcaab2034",
+      "source_bytes": 1052
+    },
+    {
+      "source_path": "docs/superpowers/plans/2026-10-17-serevex-point-in-time-external-context.md",
+      "destination_path": "docs/superpowers/plans/2026-10-17-serevex-point-in-time-external-context.md",
+      "source_blob_sha": "85e344f1db04bce644341d32be5b087080bad9b0",
+      "source_bytes": 23511
+    },
+    {
+      "source_path": "docs/superpowers/specs/2026-10-17-serevex-point-in-time-external-context-design.md",
+      "destination_path": "docs/superpowers/specs/2026-10-17-serevex-point-in-time-external-context-design.md",
+      "source_blob_sha": "e4636416b47564057c5e682548f8c08cf49511d9",
+      "source_bytes": 20816
+    },
+    {
+      "source_path": "projects/serevex-quant/ARTIFACT_INDEX.md",
+      "destination_path": "serevex-quant/ARTIFACT_INDEX.md",
+      "source_blob_sha": "10bf6545106639523fcbd5fce51b4440c440bec9",
+      "source_bytes": 7993
+    },
+    {
+      "source_path": "projects/serevex-quant/BENCHMARKS_AND_EVIDENCE.md",
+      "destination_path": "serevex-quant/BENCHMARKS_AND_EVIDENCE.md",
+      "source_blob_sha": "a709859aa742b734e052a2e7273498f12ec5b830",
+      "source_bytes": 19657
+    },
+    {
+      "source_path": "projects/serevex-quant/GAP_AUDIT_AND_COMPETITIVE_POSITION_2026-10-17.md",
+      "destination_path": "serevex-quant/GAP_AUDIT_AND_COMPETITIVE_POSITION_2026-10-17.md",
+      "source_blob_sha": "f66156737cf1b7f0f6d69e27a985f93e36400058",
+      "source_bytes": 19570
+    },
+    {
+      "source_path": "projects/serevex-quant/IMPLEMENTATION_STATUS.json",
+      "destination_path": "serevex-quant/IMPLEMENTATION_STATUS.json",
+      "source_blob_sha": "e4f2613ffe9bb065a5a8e3d200554550e68457a9",
+      "source_bytes": 30162
+    },
+    {
+      "source_path": "projects/serevex-quant/ONLINE_DATASET_BENCHMARK.md",
+      "destination_path": "serevex-quant/ONLINE_DATASET_BENCHMARK.md",
+      "source_blob_sha": "fc6ed51a50028b376e5e8ce2a324e698c7deafa9",
+      "source_bytes": 7288
+    },
+    {
+      "source_path": "projects/serevex-quant/PROGRESS_LOG.md",
+      "destination_path": "serevex-quant/PROGRESS_LOG.md",
+      "source_blob_sha": "cb3cad0156e9c06bb52b3d65afcbde15132764c8",
+      "source_bytes": 34472
+    },
+    {
+      "source_path": "projects/serevex-quant/PROJECT_MEMORY.md",
+      "destination_path": "serevex-quant/PROJECT_MEMORY.md",
+      "source_blob_sha": "ddb7c3af7226162daf01056768c7000258307654",
+      "source_bytes": 17558
+    },
+    {
+      "source_path": "projects/serevex-quant/README.md",
+      "destination_path": "serevex-quant/README.md",
+      "source_blob_sha": "ce8105dbc319c61aed1ac1c307da76ac402d1654",
+      "source_bytes": 6470
+    },
+    {
+      "source_path": "projects/serevex-quant/REBRAND_AND_EVIDENCE_POLICY.md",
+      "destination_path": "serevex-quant/REBRAND_AND_EVIDENCE_POLICY.md",
+      "source_blob_sha": "1c6bc41690b8eb54e5d9004e4db783b332284936",
+      "source_bytes": 1527
+    },
+    {
+      "source_path": "projects/serevex-quant/RESEARCH_SUMMARY.md",
+      "destination_path": "serevex-quant/RESEARCH_SUMMARY.md",
+      "source_blob_sha": "ac1df5f2d951c4384e9bb50c2e35d8315c70ff7a",
+      "source_bytes": 2979
+    },
+    {
+      "source_path": "projects/serevex-quant/ROADMAP.md",
+      "destination_path": "serevex-quant/ROADMAP.md",
+      "source_blob_sha": "15df952283a095c12c8cf4f9faf29bf4e880063c",
+      "source_bytes": 11565
+    },
+    {
+      "source_path": "projects/serevex-quant/SOURCE_SNAPSHOT.md",
+      "destination_path": "serevex-quant/SOURCE_SNAPSHOT.md",
+      "source_blob_sha": "9233a81c5d4386763b19f75000d663502d75f79e",
+      "source_bytes": 8269
+    },
+    {
+      "source_path": "projects/serevex-quant/SUGARNYMOUS_RUNTIME_RELIABILITY_CASE_STUDY_2026-10-17.md",
+      "destination_path": "serevex-quant/SUGARNYMOUS_RUNTIME_RELIABILITY_CASE_STUDY_2026-10-17.md",
+      "source_blob_sha": "dbfadfda5294a39a83b600bd8195b7ee5925024e",
+      "source_bytes": 4223
+    },
+    {
+      "source_path": "projects/serevex-quant/V1_2_0_IMPLEMENTATION_CHECKPOINT.md",
+      "destination_path": "serevex-quant/V1_2_0_IMPLEMENTATION_CHECKPOINT.md",
+      "source_blob_sha": "8cff8a751d875c89a767b63108cc9aeffe69553f",
+      "source_bytes": 5338
+    },
+    {
+      "source_path": "projects/serevex-quant/V1_3_0_IMPLEMENTATION_CHECKPOINT.md",
+      "destination_path": "serevex-quant/V1_3_0_IMPLEMENTATION_CHECKPOINT.md",
+      "source_blob_sha": "872d060692a0b43d8fe3dc9d1b760515a2dbeaef",
+      "source_bytes": 3118
+    },
+    {
+      "source_path": "projects/serevex-quant/V1_3_1_IMPLEMENTATION_CHECKPOINT.md",
+      "destination_path": "serevex-quant/V1_3_1_IMPLEMENTATION_CHECKPOINT.md",
+      "source_blob_sha": "a5641ea39c98718a0f44083c6f63730f2621bb35",
+      "source_bytes": 1382
+    },
+    {
+      "source_path": "projects/serevex-quant/V1_4_1_IMPLEMENTATION_CHECKPOINT.md",
+      "destination_path": "serevex-quant/V1_4_1_IMPLEMENTATION_CHECKPOINT.md",
+      "source_blob_sha": "6a4c4352459f2a06978b7d2e4184abab565d3345",
+      "source_bytes": 15674
+    },
+    {
+      "source_path": "projects/serevex-quant/benchmarks/full_history_replay_2026-10-16.json",
+      "destination_path": "serevex-quant/benchmarks/full_history_replay_2026-10-16.json",
+      "source_blob_sha": "8d7f501e3aadd601494fd8cf091f392cb52a341d",
+      "source_bytes": 6880
+    },
+    {
+      "source_path": "projects/serevex-quant/benchmarks/full_history_replay_2026-10-16.md",
+      "destination_path": "serevex-quant/benchmarks/full_history_replay_2026-10-16.md",
+      "source_blob_sha": "210099faad3cfe965690a21c7f0b5f77c2c724d4",
+      "source_bytes": 4190
+    },
+    {
+      "source_path": "projects/serevex-quant/benchmarks/live_dataset_benchmark_2026-10-16.json",
+      "destination_path": "serevex-quant/benchmarks/live_dataset_benchmark_2026-10-16.json",
+      "source_blob_sha": "2068f28a136b7a91f2595c72c3d11cd078429e94",
+      "source_bytes": 4102
+    },
+    {
+      "source_path": "projects/serevex-quant/benchmarks/live_dataset_benchmark_2026-10-16.md",
+      "destination_path": "serevex-quant/benchmarks/live_dataset_benchmark_2026-10-16.md",
+      "source_blob_sha": "eff51984b8790bd73c59c973abb7db6720d9efc3",
+      "source_bytes": 3275
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/bls_release_adapter_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/bls_release_adapter_v1.py",
+      "source_blob_sha": "ad71ce865ca58c6a740fc921d244a43201307b2e",
+      "source_bytes": 9237
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/cftc_cot_adapter_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/cftc_cot_adapter_v1.py",
+      "source_blob_sha": "75444a629082fc091608d7a9b222b613adfe7846",
+      "source_bytes": 11512
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/ci_benchmark.py",
+      "destination_path": "serevex-quant/online-benchmark/ci_benchmark.py",
+      "source_blob_sha": "c5e4ba56c5ff63bdaf49a9d9a54e3b2f0b4aa7d2",
+      "source_bytes": 44258
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/evaluation_protocol_v1_4.py",
+      "destination_path": "serevex-quant/online-benchmark/evaluation_protocol_v1_4.py",
+      "source_blob_sha": "cd9a8aa90bed3d0758e4d80e5efdd0037129c599",
+      "source_bytes": 24698
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/external_context_benchmark_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/external_context_benchmark_v1.py",
+      "source_blob_sha": "e24a96c08e178af6c2bb612066c45d04fbf662be",
+      "source_bytes": 29514
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/external_context_schema_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/external_context_schema_v1.py",
+      "source_blob_sha": "5dd0466bac0bc167ddf6f6a5e560b95401b79aaa",
+      "source_bytes": 6074
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/fred_alfred_adapter_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/fred_alfred_adapter_v1.py",
+      "source_blob_sha": "83a1ee080accd2f235bf3a8a3f551dad7d58e492",
+      "source_bytes": 9865
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/gdelt_gkg_adapter_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/gdelt_gkg_adapter_v1.py",
+      "source_blob_sha": "78f71c093b7dcb72b9e160870489a2783103c3cd",
+      "source_bytes": 22367
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/large_scale_bidask_benchmark_v1_0.py",
+      "destination_path": "serevex-quant/online-benchmark/large_scale_bidask_benchmark_v1_0.py",
+      "source_blob_sha": "7d9acd913979e8a9a0181d612588656475a45551",
+      "source_bytes": 51106
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/point_in_time_features_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/point_in_time_features_v1.py",
+      "source_blob_sha": "af11e7c21bad8d42d1aa016cb0d95d2f665698c8",
+      "source_bytes": 15773
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/research_readiness_gate_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/research_readiness_gate_v1.py",
+      "source_blob_sha": "c75e35484794bb3b7e808ff3302343f963314676",
+      "source_bytes": 5527
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/run_external_context_benchmark_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/run_external_context_benchmark_v1.py",
+      "source_blob_sha": "7f2a437cc894889dc614b0f18ee8d9c202a291a7",
+      "source_bytes": 16606
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/run_research_readiness_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/run_research_readiness_v1.py",
+      "source_blob_sha": "ce4dc9607d1b3193776a611f51f09b1ae1c84e03",
+      "source_bytes": 11573
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/source_concordance_v1_0.py",
+      "destination_path": "serevex-quant/online-benchmark/source_concordance_v1_0.py",
+      "source_blob_sha": "43c62f09a39b6234261f03850e2e259f09312184",
+      "source_bytes": 22604
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/source_qualification_gate_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/source_qualification_gate_v1.py",
+      "source_blob_sha": "e5db5a0194da848694cc6363ff8fac5fb6972739",
+      "source_bytes": 4786
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_bls_release_adapter_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_bls_release_adapter_v1.py",
+      "source_blob_sha": "65b3f55382508aab7a35c011ecdc011393d7c682",
+      "source_bytes": 2585
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_cftc_cot_adapter_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_cftc_cot_adapter_v1.py",
+      "source_blob_sha": "efa77bdc6895b0caaacebb1aefefd5404baa1971",
+      "source_bytes": 3331
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_ci_benchmark.py",
+      "destination_path": "serevex-quant/online-benchmark/test_ci_benchmark.py",
+      "source_blob_sha": "f83340afba187c599344f3bb109eac9016e7ca32",
+      "source_bytes": 8267
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_evaluation_protocol_v1_4.py",
+      "destination_path": "serevex-quant/online-benchmark/test_evaluation_protocol_v1_4.py",
+      "source_blob_sha": "a6d0cd2dd5e499f12198a1ea9b5d49909ae8a3b4",
+      "source_bytes": 8250
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_external_context_benchmark_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_external_context_benchmark_v1.py",
+      "source_blob_sha": "283e08e09c53de924e413aa24a5d807dffff8aa9",
+      "source_bytes": 7474
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_external_context_schema_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_external_context_schema_v1.py",
+      "source_blob_sha": "05b7545c4e2b382bd92775b0218b642a132e1c67",
+      "source_bytes": 2451
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_external_context_workflow_contract_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_external_context_workflow_contract_v1.py",
+      "source_blob_sha": "c5577fa2960833798d8b858733beac9febe0c108",
+      "source_bytes": 3648
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_fred_alfred_adapter_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_fred_alfred_adapter_v1.py",
+      "source_blob_sha": "f393c5148f0aa8dc3f891cdde469d0b5a2698cce",
+      "source_bytes": 3420
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_gdelt_gkg_adapter_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_gdelt_gkg_adapter_v1.py",
+      "source_blob_sha": "012aa1d228fe9c767c84b6cb199d2e2ea827ed8e",
+      "source_bytes": 12417
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_large_scale_bidask_benchmark_v1_0.py",
+      "destination_path": "serevex-quant/online-benchmark/test_large_scale_bidask_benchmark_v1_0.py",
+      "source_blob_sha": "90ec50db968c843867263c2056fd57edbe7a55b0",
+      "source_bytes": 8453
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_point_in_time_features_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_point_in_time_features_v1.py",
+      "source_blob_sha": "0bf4ac1f1897baac84dbdc05c489dbc393075cfb",
+      "source_bytes": 5994
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_project_identity_contract_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_project_identity_contract_v1.py",
+      "source_blob_sha": "03f9cdf4535c3071c990eee99fb71ae7ab5e96f9",
+      "source_bytes": 1697
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_research_readiness_gate_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_research_readiness_gate_v1.py",
+      "source_blob_sha": "833ecdcd1ed37a8cdbb0219302f7d28814a08f70",
+      "source_bytes": 5163
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_research_readiness_report_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_research_readiness_report_v1.py",
+      "source_blob_sha": "243107ae67362cf1ae27ae323c9cc46d6fab8323",
+      "source_bytes": 5957
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_source_concordance_v1_0.py",
+      "destination_path": "serevex-quant/online-benchmark/test_source_concordance_v1_0.py",
+      "source_blob_sha": "18ae39196edd661da7cf4e1d695749e1fa392861",
+      "source_bytes": 8824
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_source_qualification_gate_v1.py",
+      "destination_path": "serevex-quant/online-benchmark/test_source_qualification_gate_v1.py",
+      "source_blob_sha": "fc856b003467ff409d9788a38af9f54c0f482b71",
+      "source_bytes": 5343
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/test_tick_bidask_benchmark_v1_0.py",
+      "destination_path": "serevex-quant/online-benchmark/test_tick_bidask_benchmark_v1_0.py",
+      "source_blob_sha": "543ab9053b3006c35afb929e6f4ad7b6efd7a38e",
+      "source_bytes": 3759
+    },
+    {
+      "source_path": "projects/serevex-quant/online-benchmark/tick_bidask_benchmark_v1_0.py",
+      "destination_path": "serevex-quant/online-benchmark/tick_bidask_benchmark_v1_0.py",
+      "source_blob_sha": "bb40fe2f6536b62ceed78e14e61153a728c5ca61",
+      "source_bytes": 27063
+    },
+    {
+      "source_path": "projects/serevex-quant/temporal-calibration-v1.3/CALIBRATION_PROTOCOL.md",
+      "destination_path": "serevex-quant/temporal-calibration-v1.3/CALIBRATION_PROTOCOL.md",
+      "source_blob_sha": "e212a414cc3784dfd0acd92af06d36fc48f39d6a",
+      "source_bytes": 733
+    },
+    {
+      "source_path": "projects/serevex-quant/temporal-calibration-v1.3/calibration_diagnostics.py",
+      "destination_path": "serevex-quant/temporal-calibration-v1.3/calibration_diagnostics.py",
+      "source_blob_sha": "4cb7c755ad77b3097f8194038fd9888902471def",
+      "source_bytes": 11905
+    },
+    {
+      "source_path": "projects/serevex-quant/temporal-calibration-v1.3/run_calibration_contracts.py",
+      "destination_path": "serevex-quant/temporal-calibration-v1.3/run_calibration_contracts.py",
+      "source_blob_sha": "af2a84e9d792bc1caeb3e14b51aa4cb80e6af15d",
+      "source_bytes": 1675
+    },
+    {
+      "source_path": "projects/serevex-quant/temporal-calibration-v1.3/test_calibration_diagnostics.py",
+      "destination_path": "serevex-quant/temporal-calibration-v1.3/test_calibration_diagnostics.py",
+      "source_blob_sha": "7b0029c2ac9e68cf142fdd6634f93c4fb89fbcfd",
+      "source_bytes": 4389
+    }
+  ]
+}
