@@ -4,9 +4,12 @@ on:
   push:
     branches:
       - feature/ffmpeg-motion-studio-9.0.2-upgrade
+    # Do not rebuild FFmpeg or rerender the legacy V1 film for every V2/V3 storyboard edit.
+    # Keep this expensive build tied to its build recipe and the V1 renderer/tests; use workflow_dispatch for manual runs.
     paths:
-      - ".github/workflows/ffmpeg-motion-studio-upgrade.yml"
-      - "ffmpeg-motion-studio/**"
+      - "ffmpeg-motion-studio/scripts/build_custom_ffmpeg.sh"
+      - "ffmpeg-motion-studio/scripts/render_procedural_master.py"
+      - "ffmpeg-motion-studio/scripts/test_procedural_master.py"
   workflow_dispatch:
 
 permissions:
