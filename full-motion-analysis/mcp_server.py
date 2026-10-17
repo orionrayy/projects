@@ -8,17 +8,21 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from mcp.server.fastmcp import FastMCP
-except ImportError as exc:  # Fail with an actionable, stdio-safe message.
-    print('Install MCP support with: python -m pip install -e ".[mcp]"', file=sys.stderr)
-    raise SystemExit(2) from exc
+    from mcp.server.fastmcp import FastMCP as MCPServerClass
+except ImportError:
+    try:
+        # MCP SDK v2 renamed FastMCP to MCPServer; retain v1 compatibility.
+        from mcp.server.mcpserver import MCPServer as MCPServerClass
+    except ImportError as exc:
+        print('Install MCP support with: python -m pip install -e ".[mcp]"', file=sys.stderr)
+        raise SystemExit(2) from exc
 
 from motionlab.analysis import analyze_video
 from motionlab.audit import audit_video
 from motionlab.media import probe_media
 from motionlab.security import resolve_allowed_video_path
 
-mcp = FastMCP(
+mcp = MCPServerClass(
     "motion-evidence-lab",
     instructions=(
         "Analyze local video using timestamped frame-change and optional dense optical-flow evidence. "

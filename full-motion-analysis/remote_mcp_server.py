@@ -15,7 +15,11 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
 
-from mcp.server.fastmcp import FastMCP
+try:
+    from mcp.server.fastmcp import FastMCP as MCPServerClass
+except ImportError:
+    # MCP SDK v2 renamed FastMCP to MCPServer; retain v1 compatibility.
+    from mcp.server.mcpserver import MCPServer as MCPServerClass
 from mcp.server.transport_security import TransportSecuritySettings
 from starlette.datastructures import Headers
 from starlette.requests import Request
@@ -53,7 +57,7 @@ _UPLOADS: dict[str, dict[str, Any]] = {}
 _REPORTS: dict[str, dict[str, Any]] = {}
 _ACTIVE_UPLOADS: set[str] = set()
 
-mcp = FastMCP(
+mcp = MCPServerClass(
     SERVICE_NAME,
     instructions=(
         "Evidence-grounded temporal video analysis. Call create_video_upload_ticket, open its upload_page_url "
