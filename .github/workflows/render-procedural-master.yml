@@ -65,6 +65,20 @@ jobs:
           "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" -version
           "$RUNNER_TEMP/ffmpeg-runtime/bin/ffprobe" -version
 
+      - name: Smoke-test ambient audio filters
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=110:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.7:d=0.22,volume=0.12" -t 2 -f null -
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=165:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.55:d=0.18,volume=0.055" -t 2 -f null -
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=220:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.45:d=0.15,volume=0.025" -t 2 -f null -
+
       - name: Prepare free-first Indonesian TTS
         shell: bash
         run: |
