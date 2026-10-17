@@ -188,6 +188,9 @@ def train_corpus(
         "validation_timeline_coverage": bool(validation_coverage_ok),
         "heldout_prototype_improvement_at_least_5_percent": bool(validation_gain_ok),
         "heldout_cluster_diversity": bool(model_diversity_ok),
+        "encoder_reconstruction_loss_decreased": bool(
+            model.get("training_diagnostics", {}).get("training_loss_decreased", False)
+        ),
         "finite_model_parameters": _all_numeric_finite({
             key: model.get(key)
             for key in (
@@ -245,7 +248,10 @@ def train_corpus(
         "validation_video_count": len(validation_hashes),
         "train_window_count": len(train_examples),
         "validation_window_count": len(validation_examples),
-        "model_dimensions": model["input_dimensions"],
+        "input_feature_dimensions": model["input_dimensions"],
+        "embedding_dimensions": model.get("embedding_dimensions"),
+        "embedding_method": model.get("embedding_method"),
+        "encoder_training_diagnostics": model.get("training_diagnostics"),
         "prototype_count": len(model["prototypes"]),
         "validation": summary,
         "promotion_gates": gates,
