@@ -1,36 +1,53 @@
-# Architecture
+# Architecture — FMA Open-World Relational Core
+
+## Invariants
+
+1. **No required domain ontology.** A video is not required to be classified as live action, animation, fractal, art, POV, or any other category before analysis.
+2. **No object detector prerequisite.** Geometric entities, semantic categories, and persistent identities are optional interpretations, not intake requirements.
+3. **Space-time blocks are the primary analysis unit.** The public v0.2 analyzer computes signatures from overlapping RGB volumes; pairwise flow is not the main representation.
+4. **Relations are first-class.** Every window produces fixed spatial-region nodes and relations. Similarity across temporally separated windows is reported separately from semantic identity.
+5. **Learned outputs remain corpus-relative.** Anonymous prototypes and novelty ratios cannot be presented as ground-truth semantics or calibrated probabilities.
+6. **Bounded, reproducible work.** Decode rate, dimensions, window length/stride, frame cap, source hash and feature schema are recorded.
+7. **Claims follow evidence.** Synthetic regression passes do not prove generalization or state of the art.
 
 ## Data path
 
-1. **Intake / provenance:** resolve a local file, inspect streams with FFprobe, compute SHA-256, and record FFmpeg/FFprobe/Python/NumPy/OpenCV versions.
-2. **Bounded decode:** FFmpeg decodes a grayscale stream at a declared analysis rate and dimensions. Frames are streamed one at a time; a frame cap prevents unbounded memory/time.
-3. **Observable measurements:** each adjacent pair produces normalized mean absolute difference, changed-pixel ratio, histogram distance, difference centroid, and (when available) dense optical flow.
-4. **Camera/scene-motion decomposition:** report the median-flow translation proxy, fit a robust global partial-affine transform with RANSAC when supported, and quantify residual dense flow. This separates a dominant image-plane transform from unexplained local motion without asserting object identity or physical causation.
-5. **Spatial flow field:** summarize dense flow in a fixed 4×6 image grid with direction, magnitude quantiles, moving-pixel occupancy and coherence. These regions preserve multi-zone motion evidence that a single global vector erases; they are not stable object instances.
-6. **Temporal event proposals:** transparent heuristics emit timestamped candidates with rule IDs and measurements, including potential reversals and connected residual-motion regions. They do not emit causal ground truth.
-7. **Render QC:** dimensions, rate, duration, decode coverage, exact duplicate frames, near-black ratio, and optional audio presence are compared with a configurable delivery contract.
-8. **Report:** a versioned JSON result stores a downsampled time series while preserving source hash, sampling parameters, events, and interpretive limitations.
-9. **Interfaces:** CLI and local MCP tools call the same Python functions, avoiding divergent analysis logic.
+1. FFprobe establishes stream metadata and source-duration expectations. SHA-256 binds the report to the input bytes.
+2. FFmpeg decodes bounded RGB24 samples at a declared rate and resolution. The decoder streams samples into a fixed-size overlapping buffer.
+3. Each temporal block is analyzed at spatial scales 1×, 2× and 4×. Per-channel statistics preserve color, while gradients, orientation energy and spatial autocorrelation characterize structure without semantic labels.
+4. A block-level 3D Fourier transform summarizes joint temporal/spatial frequency energy. Temporal envelopes and regional temporal spectra retain order-related evidence that a single static histogram would discard.
+5. A 4×6 fixed-region field generates 24 regional descriptors. Spatial-neighbor and non-local similarity edges describe relationships between regions over the same window; they do not imply object identity.
+6. Whole-window signatures are compared across intervals. Robust signature-distance candidates, recurrence relations and duplicate-frame integrity checks populate the report. Exact duplicate checks are a technical QC signal, not the primary motion model.
+7. The JSON report retains signatures, scales, nodes, edges, source provenance, window coverage and explicit interpretive limits.
+8. Optional local learned scoring applies a trained standardizer, PCA projection and anonymous prototypes. The analysis itself continues to work without any trained model.
 
-## Design principles
+## Why this is not universal understanding yet
 
-- **Evidence before narrative:** every candidate event must cite frame index, timestamp, rule identifier, and measurements.
-- **Temporal coverage is a first-class output:** a result with capped or sparse sampling must say so.
-- **Fail visibly:** missing OpenCV means optical flow is unavailable, not that frame difference has become optical flow.
-- **Bounded resources:** FFmpeg uses streaming pipes, modest analysis dimensions, one decode thread, and a configurable frame ceiling.
-- **Objective proxies are not omniscience:** image-plane motion does not reveal physical distance, intent, object identity, or causality without additional evidence and assumptions.
-- **Adapters, not dependency sprawl:** heavy learned models stay optional and later must implement a narrow, testable adapter interface.
+Hand-designed signatures create an open intake path but have finite descriptive power. Different phenomena can share similar statistics, and semantic relationships may not be recoverable from low-resolution grayscale/color samples alone. The core does not claim physical 3D motion, intent, causal explanation, persistent object identity, or accurate interpretation of every possible visual domain.
 
-## Planned adapter contracts
+The design target is not a single “universal feature” that works perfectly. It is a substrate that can observe structure without a required ontology, expose uncertainty and allow future operators/encoders to contribute evidence without rewriting the entire control path.
 
-Later phases should add independent adapters rather than coupling the base pipeline to a single vendor/model:
+## Automatic training path
 
-- **Segmentation-conditioned motion:** mask/instance identity, per-mask flow, occlusion state, confidence and track continuity.
-- **Camera motion:** global affine/homography estimation with fit residuals and explicit failure states; compare against median-flow proxy.
-- **Pose/deformation:** articulated keypoints and local motion for humans/animals/rigs, with visibility and keypoint confidence.
-- **Action semantics:** temporal model produces labels over intervals, model/version provenance, calibration, supporting frames, alternative hypotheses, and abstention.
-- **Expected-versus-rendered FFmpeg audit:** consume an intended scene/keyframe manifest and compare object regions, timing windows, motion envelopes, caption bounds, and audio cue windows with decoded output.
+The trainer uses local unlabeled videos, source hashes, video-level train/validation separation, robust median/MAD normalization, deterministic PCA whitening and farthest-first prototypes. It outputs a candidate model and validation report. It promotes the model locally only when explicit coverage, corpus-size, holdout-quality, diversity and rights-attestation gates all pass.
 
-## Why one VLM is not the architecture
+No online scraping occurs. This is both a privacy boundary and a licensing boundary. Any future online dataset connector must carry per-dataset terms, checksums, permitted-use status and reproducible source manifests.
 
-An image/video-language model may provide useful semantics, but it can hallucinate transitions that were not observed. FMA's measurement and QC layers are model-independent and should be run even if an optional semantic model is later added. A semantic layer must not overwrite measured timestamps or evidence.
+## Data contracts
+
+Analysis report schema: fma.open-world.analysis.v0.2  
+Block feature schema: fma.openworld.relational-signature.v1  
+Trained model schema: fma.openworld.relational-model.v1
+
+A signature-vector dimensionality mismatch is an error; silently scoring a vector with a different schema is forbidden. Model JSON carries an integrity digest. Per-report model annotations state that prototypes are corpus-relative and non-semantic.
+
+## Extension rules
+
+New feature operators must declare:
+- the input domain and scale at which they operate;
+- the evidence they emit, feature-schema/version identity and computational cost;
+- invariances they are expected to preserve and transformations expected to change the output;
+- known ambiguities and failure conditions;
+- tests that can falsify their claimed utility.
+
+Domain-specific adapters may be added, but they must not become mandatory gates for the shared open-world core.
