@@ -48,4 +48,12 @@ Use source-level splits to prevent overlapping windows from the same video leaki
 
 ## Continued/automatic updates
 
-A scheduler or orchestrator can invoke this command after new locally authorized media arrives. It should not delete the previous active model or retry promotion blindly after a failure. Keep the previous model hash, candidate hash and training report as a durable checkpoint. If a process crashes during atomic file replacement, inspect the existing model hash and report before retrying.
+Run the built-in foreground watcher when a local folder is the authorized source of new examples:
+
+~~~bash
+motionlab train ./authorized-videos --output-dir ./models/fma --watch --poll-seconds 900 --retry-seconds 21600 --attest-rights --auto-promote
+~~~
+
+The watcher fingerprints a fast inventory of relative paths, byte sizes and modification times. Content SHA-256 is still calculated during the actual training job. On a changed inventory it trains a candidate; on an unchanged successfully processed inventory it skips work. If training fails or a gate blocks promotion, retrying the same inventory is delayed by the configured retry interval. `watch_state.json` stores inventory/model hashes, last status and the last 30 attempts. The process remains in the foreground and stops with Ctrl+C; it is not a detached background service.
+
+Do not delete the previous active model or retry promotion blindly after a failure. Keep the active model hash, candidate hash and training report as a durable checkpoint. If a process crashes during atomic file replacement, inspect the existing model hash and report before retrying. The watcher uses metadata for cheap change detection; explicitly rerun training if external tooling changes content while preserving both the size and the modification time.
