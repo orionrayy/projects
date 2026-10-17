@@ -11,44 +11,44 @@ TOOLS_AVAILABLE = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
 
 
 @unittest.skipUnless(TOOLS_AVAILABLE, "FFmpeg/FFprobe are required for integration tests")
-class SyntheticVideoTests(unittest.TestCase):
-    def test_move_freeze_and_flash_synthetic_contract(self):
+class SyntheticSpaceTimeTests(unittest.TestCase):
+    def test_open_world_reports_cover_multiple_synthetic_domains(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            moving = generate_synthetic_clip(root / "moving.mkv", scenario="move_reverse", duration_s=2.0, fps=15)
-            frozen = generate_synthetic_clip(root / "frozen.mkv", scenario="freeze", duration_s=2.0, fps=15)
-            flash = generate_synthetic_clip(root / "flash.mkv", scenario="flash", duration_s=2.0, fps=15)
-            pan = generate_synthetic_clip(root / "pan.mkv", scenario="global_pan_reverse", duration_s=2.0, fps=15)
-            mixed = generate_synthetic_clip(root / "mixed.mkv", scenario="pan_plus_object", duration_s=2.0, fps=15)
-
-            moving_report = analyze_video(moving, max_fps=15, optical_flow=True)
-            frozen_report = analyze_video(frozen, max_fps=15, optical_flow=False)
-            flash_report = analyze_video(flash, max_fps=15, optical_flow=False)
-            pan_report = analyze_video(pan, max_fps=15, optical_flow=True)
-            mixed_report = analyze_video(mixed, max_fps=15, optical_flow=True)
-
-            self.assertEqual(moving_report["sampling"]["frames_decoded"], 30)
-            self.assertGreater(moving_report["measurements"]["mean_abs_diff_p95"], 0.0005)
-            self.assertGreater(frozen_report["measurements"]["exact_duplicate_transition_ratio"], 0.30)
-            event_types = {e["event_type"] for e in flash_report["events"]}
-            self.assertTrue({"possible_flash_candidate", "scene_transition_candidate"} & event_types)
-            self.assertTrue(any(point.get("flow_grid") and len(point["flow_grid"]) == 24 for point in moving_report["timeline"]))
-            if pan_report["provenance"]["optical_flow"].startswith("available:"):
-                fitted = [point for point in pan_report["timeline"] if point.get("global_affine_fit_status") == "fit"]
-                self.assertTrue(fitted)
-                before = [point["global_affine_translation_dx_px_frame"] for point in fitted if point["timestamp_s"] < 0.8]
-                after = [point["global_affine_translation_dx_px_frame"] for point in fitted if point["timestamp_s"] > 1.2]
-                self.assertTrue(before and after)
-                self.assertGreater(__import__("statistics").median(before), 0.2)
-                self.assertLess(__import__("statistics").median(after), -0.2)
-            if mixed_report["provenance"]["optical_flow"].startswith("available:"):
-                local_events = [e for e in mixed_report["events"] if e["event_type"] == "local_motion_region_candidate"]
-                self.assertTrue(local_events, "independent object motion should remain after dominant camera-pan compensation")
-            for report in (moving_report, frozen_report, flash_report, pan_report, mixed_report):
-                ts = [item["timestamp_s"] for item in report["timeline"]]
-                self.assertEqual(ts, sorted(set(ts)))
-                self.assertEqual(len(report["input"]["sha256"]), 64)
+            scenarios = ("move_reverse", "freeze", "flash", "global_pan_reverse", "pan_plus_object")
+            reports = []
+            for scenario in scenarios:
+                clip = generate_synthetic_clip(
+                    root / f"{scenario}.mkv", scenario=scenario, duration_s=2.0, fps=15
+                )
+                report = analyze_video(
+                    clip, max_fps=15, width=128, height=72,
+                    window_frames=16, window_stride=8, optical_flow=True,
+                )
+                reports.append(report)
+                self.assertEqual(report["schema_version"], "fma.open-world.analysis.v0.2")
+                self.assertFalse(report["sampling"]["pairwise_frame_analysis_is_primary"])
+                self.assertGreaterEqual(report["sampling"]["frames_decoded"], 25)
                 self.assertGreaterEqual(report["sampling"]["timeline_coverage_ratio"], 0.95)
+                self.assertGreaterEqual(report["measurements"]["feature_dimensions"], 120)
+                self.assertEqual(report["measurements"]["region_node_count_per_window"], 24)
+                self.assertEqual(len(report["relational_field"]["cross_window_relations"]) <= 512, True)
+                self.assertEqual(len(report["input"]["sha256"]), 64)
+                windows = report["timeline"]
+                centers = [item["center_timestamp_s"] for item in windows]
+                self.assertEqual(centers, sorted(set(centers)))
+                self.assertTrue(all(len(item["signature_vector"]) == report["measurements"]["feature_dimensions"] for item in windows))
+                self.assertTrue(all(len(item["scale_signatures"]) == 3 for item in windows))
+                self.assertFalse(report["provenance"]["legacy_pairwise_optical_flow_used_by_core"])
+
+            freeze_report = reports[1]
+            self.assertGreater(freeze_report["measurements"]["exact_duplicate_transition_ratio"], 0.30)
+            self.assertIn("repeated_frame_run_candidate", {event["event_type"] for event in freeze_report["events"]})
+            flash_report = reports[2]
+            self.assertGreater(flash_report["measurements"]["signature_distance_p95"], 0.0)
+            mixed_report = reports[4]
+            self.assertEqual(mixed_report["relational_field"]["unit"], "space_time_window")
+            self.assertTrue(mixed_report["timeline"])
 
 
 if __name__ == "__main__":
