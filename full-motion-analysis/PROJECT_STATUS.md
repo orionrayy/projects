@@ -3,74 +3,77 @@
 Updated: 2026-10-18  
 Repository: orionrayy/projects  
 Project root: full-motion-analysis/  
-Working branch: feat/fma-open-world-relational-v0-2  
-Pull request: https://github.com/orionrayy/projects/pull/3 (draft; not merged)
+Validated code checkpoint: \`49c2ea61b64bf8254d5a7a43f31c3ff49de6b946\`  
+Pull request: https://github.com/orionrayy/projects/pull/4 (draft; not merged)
 
 ## Current release state
 
-**Target version:** v0.2.0 open-world relational foundation  
-**CI at validated code checkpoint:** PASS — run [39061424908](https://github.com/orionrayy/projects/actions/runs/39061424908) on source commit \`af5f7981c82615ef5cdb0b2179faec3c438af95b\`  
+**Target version:** v0.2.0 open-world relational foundation + self-supervised signature encoder  
+**CI:** PASS — [run #39061859005](https://github.com/orionrayy/projects/actions/runs/39061859005) at the code checkpoint above  
 **Unit/integration tests:** 30 passed  
 **Synthetic benchmark:** 9/9 contract checks passed  
 **Production readiness:** NO  
 **Real-world benchmark evidence:** NOT ESTABLISHED  
 **Universal domain generalization:** NOT ESTABLISHED  
 **Semantic action / persistent identity / 3D motion / physical speed / causal inference:** NOT CLAIMED AS SOLVED  
-**LLM or paid inference required by baseline:** NO  
-**Local stdio MCP:** source updated; MCP contract tests passed in CI  
-**Remote MCP:** source and Render Blueprint exist; deployment and live end-to-end smoke test are not confirmed
+**LLM, GPU or paid inference required by baseline:** NO  
+**Local MCP:** code updated; MCP security contract tests pass, but no separate local deployment test is claimed here  
+**Remote MCP:** source and Render Blueprint exist; live deployment and end-to-end smoke test are not confirmed
 
-## Foundation changed
+## Foundation rewrite
 
-- Public \`motionlab.analyze_video\` now delegates to the open-world relational core. The primary unit is an overlapping RGB space-time volume, not an adjacent frame pair.
-- Features combine per-channel appearance, multiscale spatial gradients/orientation/correlation, temporal envelopes, signed first-half/second-half spatial contrast, joint spatiotemporal spectral energy, 24 fixed-region descriptors and regional relations.
-- Cross-window structure-shift candidates and recurrence relations are computed from complete block signatures.
-- \`fma.openworld.relational-signature.v1\` and \`fma.openworld.analysis.v0.2\` define the current feature/report contracts.
-- The v0.1 pairwise analyzer is preserved in \`motionlab/legacy_analysis.py\` for controlled baseline comparisons.
-- Abstract/nirmana interference and procedural Mandelbrot zoom fixtures are added beside motion, freeze, flash, camera-pan reversal and mixed global/local movement.
-- CLI, FFmpeg QC and local/remote MCP sources now call the v0.2 analysis core. A test passing does not mean a remote service is live.
+- Public \`motionlab.analyze_video\` now uses overlapping RGB space-time volumes as the primary analysis unit. Frame-pair optical flow is not the core representation.
+- Each block yields color distributions, multiscale spatial gradients/orientation/autocorrelation, temporal envelopes, signed half-block spatial contrast, joint spatiotemporal spectral energy, 24 fixed-region descriptors and regional-relation edges.
+- Cross-window structure-shift candidates and recurrence relations use whole-block signatures.
+- Current contracts: \`fma.openworld.relational-signature.v1\` and \`fma.openworld.analysis.v0.2\`.
+- The previous frame-pair analyzer is preserved as \`motionlab/legacy_analysis.py\` for explicit baseline comparison.
+- Synthetic fixtures include object motion/reversal, freeze, flash, camera-pan reversal, mixed camera/local movement, abstract/nirmana interference and procedural Mandelbrot zoom.
 
-## Training and autonomy
+## Training and autonomous operation
 
-- Added a CPU-first unlabeled trainer with robust normalization, a trainable denoising autoencoder and deterministic anonymous prototypes using NumPy.
-- Training sources are deduplicated by SHA-256 and split by source-video hash, not by overlapping windows.
-- Model, manifest and training report are written separately. Model JSON has a SHA-256 integrity digest.
-- Candidate promotion is gated on source count, held-out source separation, coverage, a held-out quantization comparison against a frozen training-only baseline, prototype diversity, finite values and explicit rights attestation.
-- Added a foreground watch mode. It inventories a local corpus, retrains when metadata inventory changes, persists \`watch_state.json\`, avoids repeating a successful unchanged run and rate-limits same-inventory retries after a failure/gated outcome.
-- Training does not download or upload video. Watch mode is a foreground process, not a detached service.
+- Added an unlabeled NumPy denoising autoencoder trained against intact signatures from randomly masked/noisy versions of those signatures.
+- The learned embedding is followed by deterministic, farthest-first initialized prototypes; model outputs are anonymous corpus-relative clusters and novelty ratios, not semantic classes.
+- The block feature extractor is hand-designed. The autoencoder learns a nonlinear representation over these signatures; it is not an end-to-end raw-pixel video foundation model.
+- Corpus intake hashes and deduplicates source videos. Train/validation are split by source-video hash to avoid overlap-window leakage.
+- Candidate model, dataset manifest and training report are written separately. The model has an integrity SHA-256.
+- Promotion gates include distinct train/holdout sources, coverage, held-out prototype quantization improvement versus a frozen training-only centroid, cluster diversity, decreasing clean reconstruction loss, finite model parameters and operator rights attestation.
+- \`motionlab train --watch\` monitors local corpus inventory, retrains when inventory metadata changes and writes durable \`watch_state.json\`. It delays repeated attempts after a failed/gated run. It stays in the foreground; it is not a detached service.
 
-The learned model trains a small encoder on hand-designed relational signatures and groups the latent representations into corpus-relative anonymous prototypes. It is not an end-to-end raw-video foundation encoder and does not automatically learn human semantics.
+Training stays local by default. It does not fetch online datasets, upload personal videos, or commit video media to GitHub.
 
 ## Verified CI evidence
 
-Run [39061424908](https://github.com/orionrayy/projects/actions/runs/39061424908):
-- Python source compilation passed.
+[Run #39061859005](https://github.com/orionrayy/projects/actions/runs/39061859005) executed on the code checkpoint \`49c2ea61b64bf8254d5a7a43f31c3ff49de6b946\`:
+- Source compilation passed.
 - 30 unit/integration tests passed.
-- The synthetic benchmark generated and analyzed movement/reversal, freeze, flash, camera-pan reversal, independent local motion during a pan, abstract/nirmana interference and a procedural fractal zoom.
-- All nine benchmark contract checks passed: feature availability, coverage reporting, three scales, relational spatial field, finite features, duplicate-frame integrity signal, nonconstant signatures on dynamic cases, deterministic repeatability, and the v0.2 non-frame-pair primary representation contract.
-- The benchmark report explicitly records \`synthetic_only=true\`, \`real_world_evidence=false\`, and \`state_of_the_art_claim_supported=false\`.
+- Relational encoder fit/score, deterministic model hash, model load/integrity and dimension-mismatch tests passed.
+- The synthetic benchmark analyzed motion/reversal, freeze, flash, camera-pan reversal, independent local movement under global pan, abstract/nirmana interference and Mandelbrot zoom.
+- All nine benchmark checks passed: space-time signature availability, coverage reporting, multiscale signatures, regional relation field, finite features, repeated-frame integrity signal, dynamic signature variation, deterministic repeatability and the non-frame-pair-primary contract.
+- The benchmark asserts \`synthetic_only=true\`, \`real_world_evidence=false\`, and \`state_of_the_art_claim_supported=false\`.
 
-This evidence establishes deterministic code behavior on controlled synthetic sources only. It is not a real-world accuracy result.
+This verifies code contracts on synthetic clips. It is not a measurement of real-world accuracy or domain generalization. The automatic watcher has inventory/split unit coverage, but has not yet been validated as a continuously running production service against a real corpus.
 
-## Remaining validation gates
+## Remaining gates
 
-1. Acquire or generate a reproducible, rights-cleared evaluation corpus spanning abstract art, fractals, stylized animation, natural video, POV/third-person and mixed unfamiliar scenes.
-2. Measure retrieval/recurrence quality, temporal intervention sensitivity, structural shift localization, robustness and abstention on held-out source videos.
-3. Compare against the preserved v0.1 baseline and simple static/multiscale baselines using the same CPU/RAM/sampling budget.
-4. Profile long videos and low-resource devices, including worst-case memory, runtime, and output-size behaviour.
-5. Deploy remote MCP only after explicit workspace/owner approval; verify authenticated upload, analysis, pagination, retention and cleanup end-to-end on a supported client.
-6. Keep the PR draft until real-world evaluation begins and a reviewer verifies implementation contracts.
+1. Evaluate a rights-cleared corpus spanning abstract art, fractals, stylized animation, natural video, POV/third-person and mixed unfamiliar scenes.
+2. Publish cross-domain metrics, failure cases, recurrence retrieval quality, intervention sensitivity, robustness and abstention behaviour on held-out videos.
+3. Compare against the preserved v0.1 baseline and static/multiscale baselines under the same CPU/RAM/sampling budget.
+4. Profile long videos and low-resource devices, including peak RAM, run time and report size.
+5. Run a full local-corpus training job on authorized video data, inspect the manifest and validation gates, and verify model promotion/rollback behaviour.
+6. Deploy remote MCP only with explicit owner/workspace approval and verify auth, upload, analysis, report pagination, retention and cleanup end-to-end.
+7. Keep this PR draft until real-video validation begins and implementation contracts receive review.
 
 ## Known limitations
 
-- Open-world means no mandatory input-domain ontology; it does not mean semantic understanding of all possible videos.
-- The feature extractor is still hand-designed. The trained layer learns normalization, projection and anonymous prototypes; it is not a learned neural spatiotemporal encoder.
-- Fixed region nodes are not object segmentation or persistent identity.
-- Spectral energy is partly order-insensitive; signed temporal contrast provides one additional order-sensitive statistic, not full motion semantics.
-- A one-view video cannot uniquely determine all 3D motion or physical causes. Unsampled intervals cannot be recovered as fact.
-- Metadata-based watch detection can miss content altered while preserving both file size and modification time; run training manually after such a change.
-- Auto-promotion gates evaluate unsupervised codebook utility, not semantic accuracy or universal domain transfer.
+- “Open-world” means no mandatory input-domain ontology at intake; it does not guarantee accurate semantic understanding of every possible video.
+- Signature extraction remains hand-designed. The encoder learns from those features, not directly from raw pixels.
+- Fixed image regions are not persistent object identities or object segmentation.
+- Fourier energy loses some direction/order information; signed temporal contrast recovers only a limited portion of temporal asymmetry.
+- A single-view video cannot always determine 3D motion, physical causes or intent. Unsampled intervals remain unobserved.
+- Novelty ratios are not calibrated probabilities or anomaly truth.
+- The watcher uses size/mtime for inexpensive inventory change detection; manually rerun training if content changes while preserving both metadata values.
+- Auto-promotion evaluates unsupervised representation and reconstruction criteria, not semantic accuracy or universal transfer.
 
 ## Checkpoint policy
 
-Record exact source SHA, feature-schema version, CI run, dataset/source hashes, model digest, training options and promotion-gate results. Never merge or claim production readiness solely on synthetic CI.
+Track source SHA, model SHA, feature schema, training options, dataset hashes, CI run and each promotion gate. Do not merge or claim production readiness based only on synthetic CI.
