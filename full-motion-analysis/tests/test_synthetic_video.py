@@ -26,7 +26,7 @@ class SyntheticSpaceTimeTests(unittest.TestCase):
                     window_frames=16, window_stride=8, optical_flow=True,
                 )
                 reports.append(report)
-                self.assertEqual(report["schema_version"], "fma.open-world.analysis.v0.2")
+                self.assertEqual(report["schema_version"], "fma.openworld.analysis.v0.2")
                 self.assertFalse(report["sampling"]["pairwise_frame_analysis_is_primary"])
                 self.assertGreaterEqual(report["sampling"]["frames_decoded"], 25)
                 self.assertGreaterEqual(report["sampling"]["timeline_coverage_ratio"], 0.95)
