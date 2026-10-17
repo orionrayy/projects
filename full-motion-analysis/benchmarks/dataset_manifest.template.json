@@ -1,0 +1,46 @@
+{
+  "schema_version": "fma.dataset-manifest.v0.1",
+  "dataset_id": "REPLACE_WITH_CANONICAL_DATASET_ID",
+  "dataset_version": "REQUIRED_EXACT_VERSION",
+  "maintainer": "REQUIRED",
+  "official_url": "https://example.invalid/replace",
+  "download_date_utc": null,
+  "archive_sha256": null,
+  "file_inventory_sha256": null,
+  "license": {
+    "spdx_id": null,
+    "terms_url": null,
+    "terms_reviewed_at_utc": null,
+    "reviewed_by": null,
+    "commercial_use_allowed": false,
+    "redistribution_allowed": false,
+    "status": "UNREVIEWED_BLOCKED"
+  },
+  "citation_required": true,
+  "citation_text": null,
+  "privacy_review": {
+    "contains_people_or_identifiable_data": null,
+    "consent_or_data_use_terms_reviewed": false,
+    "notes": null
+  },
+  "subset": {
+    "sequence_ids": [],
+    "excluded_ids": [],
+    "exclusion_reasons": {}
+  },
+  "split_protocol": {
+    "source_defined_splits_used": true,
+    "custom_split_by_original_source": true,
+    "calibration_split_separate_from_final_test": true
+  },
+  "ground_truth": {
+    "motion_field": false,
+    "instance_masks": false,
+    "action_intervals": false,
+    "camera_pose": false,
+    "notes": null
+  },
+  "rights_gate_passed": false,
+  "downloaded": false,
+  "redistributed": false
+}
