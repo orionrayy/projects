@@ -28,7 +28,7 @@ SCENES = [
  {"id":15,"motif":"evaluate","title":"Evaluasi menghasilkan total","short":"54.000 − 5.400 = 48.600","narration":"Evaluator menghitung anak sebelum induk. Subtotal Rp54.000 dikurangi diskon Rp5.400 menghasilkan total Rp48.600. Angka ini berasal dari ekspresi dan aturan yang dapat diuji ulang, bukan tebakan."},
  {"id":16,"motif":"payment","title":"Baru kemudian pembayaran","short":"Hasil yang sudah dihitung masuk ke terminal","narration":"Setelah total Rp48.600 tervalidasi, kartu ditempelkan ke terminal NFC. Ripple muncul saat kontak; terminal menunggu respons sebelum menyetujui pembayaran."},
  {"id":17,"motif":"receipt","title":"Struk membuat hasil dapat diaudit","short":"Subtotal, diskon, total harus konsisten","narration":"Struk mencatat subtotal Rp54.000, diskon Rp5.400, dan total Rp48.600. Subtotal dikurangi diskon harus sama dengan total, sehingga transaksi dapat diaudit."},
- {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Tokenisasi mengenali unit; CFG mengatur susunan; parse tree menunjukkan struktur; AST merangkum operasi; evaluator menghitung hasil."}
+ {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Tokenisasi: unit. CFG: aturan. Parse tree: struktur. AST: operasi. Evaluator: total."}
 ]
 DURATIONS = [4,4,4,15,16,17,15,18,15,15,16,16,16,17,17,13,14,8]
 TOTAL = sum(DURATIONS)

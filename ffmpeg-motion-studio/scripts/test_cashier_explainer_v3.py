@@ -11,7 +11,7 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual(m.DURATIONS[:3],[4,4,4])
         self.assertTrue(all(s["narration"].strip().endswith("?") for s in hooks))
         self.assertTrue(all(len(s["narration"].split())<=7 for s in hooks))
-        self.assertLessEqual(len(m.SCENES[17]["narration"].split()),20)
+        self.assertLessEqual(len(m.SCENES[17]["narration"].split()),12)
         self.assertEqual(sum(m.DURATIONS[:3]),12)
 
     def test_explanation_starts_at_cashier_on_scene_four(self):
