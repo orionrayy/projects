@@ -70,7 +70,7 @@ make install
 echo "::endgroup::"
 
 echo "::group::Run media pipeline regression tests"
-"$PROJECT_ROOT/scripts/smoke_test_ffmpeg.sh" "$WORK/install/bin" "$WORK/regression"
+bash "$PROJECT_ROOT/scripts/smoke_test_ffmpeg.sh" "$WORK/install/bin" "$WORK/regression"
 echo "::endgroup::"
 
 echo "::group::Package binaries and build provenance"
