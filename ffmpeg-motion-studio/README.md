@@ -8,7 +8,7 @@ This folder defines a reproducible **Ubuntu 24.04 x86_64** custom FFmpeg build f
 - Source: `https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz`
 - Source SHA-256 pinned in `scripts/build_custom_ffmpeg.sh`.
 - The source archive is verified against FFmpeg's official OpenPGP release-signing key, whose fingerprint is pinned in the build script.
-- The custom feature profile includes H.264/HEVC encoding, VP9/AV1 codec support, ASS subtitles, drawtext, loudnorm, zscale, video xfade, and audio acrossfade. CI asserts the required encoders/filters and exercises the critical media paths.
+- The custom feature profile includes H.264/HEVC encoding, VP9/AV1 codec support, ASS subtitles, drawtext (with HarfBuzz shaping), loudnorm, zscale, video xfade, and audio acrossfade. CI asserts the required encoders/filters and exercises the critical media paths.
 
 The official FFmpeg release page identifies 9.0.2 as the latest patch on the 9.0 branch. FFmpeg 8.1.3 is a separate maintained branch; the project intentionally selects the newer 9.0 major line and pins it until tests authorize a change.
 
@@ -31,7 +31,7 @@ Install the prerequisites used by CI:
 ```bash
 sudo apt-get update
 sudo apt-get install -y build-essential pkg-config nasm yasm curl gnupg \
-  fonts-dejavu-core libass-dev libfreetype6-dev libfontconfig1-dev libfribidi-dev \
+  fonts-dejavu-core libass-dev libfreetype6-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev \
   libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx264-dev libx265-dev \
   libdav1d-dev libaom-dev libzimg-dev zlib1g-dev
 ```
