@@ -56,6 +56,17 @@ jobs:
           sha256sum --check ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz.sha256
           tar -tzf ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz | sort
           python3 -m json.tool ffmpeg-9.0.2-regression-summary.json
+          mkdir -p "$RUNNER_TEMP/ffmpeg-filter-smoke"
+          tar -xzf ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz -C "$RUNNER_TEMP/ffmpeg-filter-smoke"
+          "$RUNNER_TEMP/ffmpeg-filter-smoke/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=110:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.7:d=0.22,volume=0.12" -t 2 -f null -
+          "$RUNNER_TEMP/ffmpeg-filter-smoke/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=165:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.55:d=0.18,volume=0.055" -t 2 -f null -
+          "$RUNNER_TEMP/ffmpeg-filter-smoke/bin/ffmpeg" -y -hide_banner -loglevel error \
+            -f lavfi -i "sine=frequency=220:sample_rate=48000:duration=2" \
+            -af "tremolo=f=0.45:d=0.15,volume=0.025" -t 2 -f null -
 
       - name: Upload custom runtime and regression evidence
         uses: actions/upload-artifact@v4
