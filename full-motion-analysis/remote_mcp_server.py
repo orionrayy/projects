@@ -61,9 +61,11 @@ _ACTIVE_UPLOADS: set[str] = set()
 mcp = MCPServerClass(
     SERVICE_NAME,
     instructions=(
-        "Evidence-grounded temporal video analysis. Call create_video_upload_ticket, open its upload_page_url "
-        "and select a video, then pass the returned upload_id to analysis. Reports distinguish observations "
-        "from heuristic event candidates and explicitly describe limits; do not infer physical speed or causality."
+        "Open-world relational video analysis over bounded RGB space-time volumes. The v0.2 core uses "
+        "multiscale spatial-temporal signatures and regional relations rather than pairwise optical flow as "
+        "its primary representation. Call create_video_upload_ticket, open its upload_page_url and select a "
+        "video, then pass the returned upload_id to analysis. Learned prototypes, when present, are corpus-relative "
+        "and non-semantic; do not infer physical speed, object identity, universal domain accuracy or causality."
     ),
 )
 
