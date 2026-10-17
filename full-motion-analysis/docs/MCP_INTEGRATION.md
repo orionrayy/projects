@@ -1,23 +1,26 @@
 # MCP Integration
 
-## Current local integration
+## Local integration
 
-The MCP server uses the official Python SDK and stdio transport by default. It exposes:
+The local stdio MCP server calls the same public v0.2 relational analysis functions as the CLI:
 - inspect_video_metadata(video_path)
-- analyze_local_video(video_path, max_fps, optical_flow, max_frames)
+- analyze_local_video(video_path, max_fps, optical_flow, max_frames, model_path)
 - audit_ffmpeg_render(video_path, expected_width, expected_height, expected_fps, expected_duration_s, require_audio, max_fps)
 
-Install and configure the server locally:
+The legacy-compatible optical_flow argument is accepted but is not used as the primary v0.2 analysis path. Results summarize overlapping RGB space-time windows, region nodes/edges, cross-window relations and limits. The MCP response includes up to 128 windows; the full JSON report remains in MOTION_REPORT_DIR.
+
+Install and configure:
 
 ~~~bash
-python -m pip install -e ".[vision,mcp]"
-# POSIX example; use the path-list separator for the host OS.
-export MOTION_ALLOWED_ROOTS="$HOME/Videos:$HOME/Downloads:/absolute/path/to/render-outputs"
+python -m pip install -e ".[mcp]"
+export MOTION_ALLOWED_ROOTS="$HOME/Videos:$HOME/Downloads:/absolute/path/to/render-outputs:/absolute/path/to/models"
 export MOTION_REPORT_DIR="$HOME/.motion-evidence-lab/reports"
 python mcp_server.py
 ~~~
 
-The server is intended to be launched as an MCP stdio subprocess by an MCP host; it does not print analysis logs to stdout. The host's MCP configuration should invoke the Python entry point in the checked-out project directory, for example:
+The model file, like the video file, must resolve inside MOTION_ALLOWED_ROOTS. Configure roots narrowly; do not expose local-path MCP to the public internet.
+
+Example host config:
 
 ~~~json
 {
@@ -32,7 +35,7 @@ The server is intended to be launched as an MCP stdio subprocess by an MCP host;
         "mcp_server.py"
       ],
       "env": {
-        "MOTION_ALLOWED_ROOTS": "/ABSOLUTE/PATH/videos:/ABSOLUTE/PATH/render-outputs",
+        "MOTION_ALLOWED_ROOTS": "/ABSOLUTE/PATH/videos:/ABSOLUTE/PATH/render-outputs:/ABSOLUTE/PATH/models",
         "MOTION_REPORT_DIR": "/ABSOLUTE/PATH/motion-reports"
       }
     }
@@ -40,30 +43,30 @@ The server is intended to be launched as an MCP stdio subprocess by an MCP host;
 }
 ~~~
 
-Replace all example paths with real paths and install the project dependencies in that environment. Set MOTION_ALLOWED_ROOTS to the smallest directories needed. Symlinks are resolved before the boundary check. The report directory is separate from source media.
+Replace sample paths with actual local paths. Standard output is reserved for MCP protocol traffic.
 
-## Remote MCP and ChatGPT connector status
+## Training then scoring with MCP
 
-This bootstrap is **not yet a remotely hosted MCP server and is not automatically connected to ChatGPT**. A local stdio server can analyze a path visible to the machine running that server. It cannot automatically read a video uploaded into a separate ChatGPT conversation or access a path on another machine.
+The trainer is run locally over videos you have permission to process:
 
-To make the tool callable from a remote ChatGPT MCP connector, the project needs a secure deployed Streamable HTTP endpoint plus a deliberate video handoff mechanism (authenticated upload or short-lived object reference). Before public deployment, implement:
-1. authentication and per-user authorization;
-2. upload size/time limits and temporary storage;
-3. asynchronous job IDs, cancellation, concurrency limits and quota controls;
-4. strict retention/cleanup and explicit consent for media storage;
-5. isolated FFmpeg workers and patched decoders;
-6. egress restrictions / SSRF defenses if remote URLs are ever accepted;
-7. report ownership checks and non-guessable IDs;
-8. no secret or uploaded-video logging.
+~~~bash
+motionlab train /PATH/TO/authorized-videos --output-dir /PATH/TO/models/fma
+~~~
 
-Do not expose MOTION_MCP_TRANSPORT=streamable-http to the public internet on an untrusted network. Local path restrictions are not a substitute for remote authentication. The SDK supports Streamable HTTP, but that protocol support alone does not provide video upload, authorization, storage, or compute isolation.
+Only after reviewing the training report and promotion gates, provide a permitted model path to analyze_local_video. The model returns anonymous corpus-relative prototype and novelty information. It does not provide semantic labels or calibrated probabilities.
 
-## Using it to audit FFmpeg projects
+## FFmpeg render audit
 
-Run analysis against the final muxed artifact, not only the silent visual master:
+Run analysis against the final muxed artifact, not just a silent visual master:
 
 ~~~bash
 motionlab audit output/final.mp4 --expected-width 1920 --expected-height 1080 --expected-fps 24 --expected-duration 390 --require-audio --output reports/final-audit.json
 ~~~
 
-Adjust duration and technical expectations to the actual delivery contract. An absent audio stream is a release-blocking error only when --require-audio is set. A technical pass still requires human review for composition, readability, story continuity, audio intelligibility, and character anatomy.
+Technical release checks and space-time signatures help locate suspicious intervals. They do not certify aesthetics, anatomy, narrative continuity, text readability, educational correctness, voice intelligibility, or lip synchronization.
+
+## Remote MCP status
+
+The remote Streamable HTTP source and Docker/Render setup are separate from the local stdio workflow. They are not considered deployed until an actual endpoint passes health, authentication, one-use upload, analysis, report retrieval and cleanup smoke tests. MCP SDK protocol support does not automatically transfer a ChatGPT attachment to an independent server or connect that server to a ChatGPT workspace.
+
+The remote-service upload, auth, resource and retention limits described in REMOTE_DEPLOYMENT.md still apply. The endpoint must never accept arbitrary file-system paths or arbitrary URL fetches.
