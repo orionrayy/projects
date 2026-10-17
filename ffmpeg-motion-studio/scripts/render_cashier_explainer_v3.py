@@ -392,7 +392,7 @@ def draw_subtotal(d,t):
  for i,(name,price) in enumerate(items):
   y=260+i*58
   if t>.5+i*.8:
-   card(d,(145,y,835,y+43),(17,34,51,240),(*CYAN if i==0 else BLUE,125),9,1)
+   card(d,(145,y,835,y+43),(17,34,51,240),(*(CYAN if i==0 else BLUE),125),9,1)
    d.ellipse((162,y+13,177,y+28),fill=(*((CYAN,AMBER,VIOLET)[i]),255))
    text(d,194,y+11,name,18,WHITE)
    text(d,650,y+11,"Rp "+price,18,MUTED,"mono")
@@ -553,7 +553,7 @@ def draw_effects(d,s,t):
   elif any(k in fx for k in ("truck","dolly","approach","card_slide","paper_feed","line_item","operand","travel","rewire","bracket","error","warn","bag","settle","green")):
    for j in range(3):
     yy=cy-18+j*18
-    line(d,(cx-45-int(delta*48),yy,cx+20-int(delta*16),yy),(*AMBER if j==1 else CYAN,max(0,alpha-j*40)),2)
+    line(d,(cx-45-int(delta*48),yy,cx+20-int(delta*16),yy),(*(AMBER if j==1 else CYAN),max(0,alpha-j*40)),2)
 
 def draw_caption(im,s,t):
  speech=v2.SPEECH_DURATION_BY_ID.get(s["id"],DURATIONS[s["id"]-1]-.7)
