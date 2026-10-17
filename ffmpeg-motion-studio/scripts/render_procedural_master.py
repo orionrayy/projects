@@ -343,9 +343,10 @@ def make_audio(ffmpeg,ffprobe,work,out):
          "-map","[bed]","-ar","48000","-ac","2","-c:a","pcm_s16le",str(bed)])
     mixed=work/"master-audio.wav"
     run([ffmpeg,"-y","-hide_banner","-loglevel","error","-i",str(narration),"-i",str(bed),"-filter_complex",
-         "[0:a]loudnorm=I=-17:TP=-2:LRA=9[vo];[1:a]volume=0.65[bed];[bed][vo]sidechaincompress=threshold=0.025:ratio=7:attack=25:release=450[ducked];[ducked][vo]amix=inputs=2:duration=first:weights='0.55 1.0':normalize=0,alimiter=limit=0.92,aresample=48000[a]",
+         "[0:a]loudnorm=I=-17:TP=-2:LRA=9[vo];[1:a]volume=0.65[bed];[bed][vo]sidechaincompress=threshold=0.025:ratio=7:attack=25:release=450[ducked];[ducked][vo]amix=inputs=2:duration=first:weights='0.55 1.0':normalize=0,alimiter=limit=0.92,aresample=48000,apad,atrim=duration=390,asetpts=PTS-STARTPTS[a]",
          "-map","[a]","-ar","48000","-ac","2","-c:a","pcm_s16le",str(mixed)])
-    if abs(duration(ffprobe,mixed)-TOTAL)>.12: raise RuntimeError("Mixed audio is not 390 seconds.")
+    mixed_duration=duration(ffprobe,mixed)
+    if abs(mixed_duration-TOTAL)>.12: raise RuntimeError(f"Mixed audio is {mixed_duration:.3f}s, expected {TOTAL}s.")
     out.mkdir(parents=True,exist_ok=True); write_srt(out/"narration-id.srt")
     (out/"narration-transcript-id.txt").write_text("\n\n".join(f"SCENE {s['id']:02d} — {s['title']}\n{s['narration']}" for s in SCENES),encoding="utf-8")
     return {"mixed":mixed,"providers":providers,"scenes":details,"mix":"Indonesian narration + generated harmonic ambient bed, sidechain ducking and loudness normalization","voice_qc":"PENDING_HUMAN_LISTENING"}
