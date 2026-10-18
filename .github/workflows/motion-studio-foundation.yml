@@ -43,7 +43,23 @@ jobs:
           ffprobe -version | head -n 1
       - name: Validate scene manifest
         run: npm run validate:scene
-      - name: Motion and layout tests
+      - name: Preview syntax and HTTP smoke tests
+        run: |
+          node --check preview-server.mjs
+          node --check preview/app.mjs
+          PORT=4173 npm run preview > /tmp/motion-studio-preview.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:4173/preview/ -o /tmp/motion-studio-preview.html; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          grep -q "Deterministic gesture lab" /tmp/motion-studio-preview.html
+          curl -fsS http://127.0.0.1:4173/src/motion-core.mjs | grep -q "evaluateFrame"
+          curl -fsS http://127.0.0.1:4173/scenes/scene-001.json | python -c 'import json,sys; x=json.load(sys.stdin); assert x["duration_frames"] == 96 and x["fps"] == 24; print("PREVIEW_HTTP_PASS", x["scene_id"])'
+      - name: Motion and layout regression tests
         run: npm test
       - name: Schema regression tests
         run: python -m unittest discover -s tests -p '*test.py' -v
