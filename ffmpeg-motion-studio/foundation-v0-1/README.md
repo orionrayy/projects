@@ -1,4 +1,4 @@
-# Motion Studio Foundation v0.2.2
+# Motion Studio Foundation v0.2.3
 
 Isolated implementation pilot; the previous renderer is preserved and untouched.
 
@@ -33,3 +33,9 @@ The raster parity diagnostic compares six selected SVG frames rendered by headle
 - Invalid scene fields, rig lengths, frame indices and reserved-zone collisions are rejected.
 - The export is a four-second 1280x720/24fps silent visual pilot, not a production master or artistic-quality certification.
 - Pixel parity has been sampled, not tested on all frames. The pilot does not prove natural acting, audio quality, arbitrary-character anatomy, or commercial video-generator parity.
+
+
+## v0.2.3 visual/pose correction
+The hand now follows the forearm during anticipation and eases into a straight pointing pose during reach. The SVG composition draws the upper arm over the torso edge to preserve a visible shoulder connection, adds a neck bridge, and reports TARGET AHEAD until measured contact tolerance is reached. A full-timeline visual contract test checks pose finiteness, arm/hand geometry and phase-accurate contact labeling.
+
+These are structural/rendering fixes, not a claim that the character is anatomically or artistically production-ready. Human-motion evaluation and broader character-shape validation remain outstanding.
