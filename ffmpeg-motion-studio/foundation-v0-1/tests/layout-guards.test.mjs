@@ -1,0 +1,5 @@
+import test from "node:test";import assert from "node:assert/strict";import fs from "node:fs";import {inspectSceneLayout,assertSceneLayout} from "../src/layout-guards.mjs";
+const scene=JSON.parse(fs.readFileSync(new URL("../scenes/scene-001.json",import.meta.url),"utf8"));
+test("sample target respects reserved layout zones",()=>{assert.deepEqual(inspectSceneLayout(scene),[]);assert.deepEqual(assertSceneLayout(scene),{ok:true,issue_count:0});});
+test("fault injection catches target-divider overlap",()=>{const bad=structuredClone(scene);bad.board.target_y=bad.board.y+163;assert.ok(inspectSceneLayout(bad).some(x=>x.code==="TARGET_OVERLAPS_SEPARATOR"));assert.throws(()=>assertSceneLayout(bad),/TARGET_OVERLAPS_SEPARATOR/);});
+test("fault injection catches target-copy overlap",()=>{const bad=structuredClone(scene);bad.board.target_x=bad.board.x+200;bad.board.target_y=bad.board.y+240;assert.ok(inspectSceneLayout(bad).some(x=>x.code==="TARGET_OVERLAPS_CARD_COPY"));});

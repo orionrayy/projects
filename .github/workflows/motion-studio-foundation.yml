@@ -1,0 +1,58 @@
+name: Motion Studio Foundation v0.1
+on:
+  push:
+    branches: ["feature/motion-studio-foundation-v0-1", "main"]
+    paths:
+      - "ffmpeg-motion-studio/foundation-v0-1/**"
+      - ".github/workflows/motion-studio-foundation.yml"
+  pull_request:
+    paths:
+      - "ffmpeg-motion-studio/foundation-v0-1/**"
+      - ".github/workflows/motion-studio-foundation.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: motion-studio-foundation
+  cancel-in-progress: true
+jobs:
+  test-and-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ffmpeg-motion-studio/foundation-v0-1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install schema validator
+        run: python -m pip install -r requirements-test.txt
+      - name: Verify FFmpeg SVG/H.264 support
+        run: |
+          node --version
+          ffmpeg -version | head -n 2
+          ffmpeg -hide_banner -decoders 2>/dev/null | grep -q librsvg
+          ffmpeg -hide_banner -encoders 2>/dev/null | grep -q libx264
+          ffprobe -version | head -n 1
+      - name: Validate scene manifest
+        run: npm run validate:scene
+      - name: Motion and layout tests
+        run: npm test
+      - name: Schema regression tests
+        run: python -m unittest discover -s tests -p '*test.py' -v
+      - name: Render and verify pilot
+        run: npm run render
+      - name: Upload silent pilot
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-foundation-v0-1-visual-only
+          path: |
+            ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4
+            ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4.report.json
+          if-no-files-found: error
+          retention-days: 14

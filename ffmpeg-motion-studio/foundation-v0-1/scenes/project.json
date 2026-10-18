@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0.0",
+  "project_id":"motion-studio-foundation-v0-1",
+  "title":"Motion Studio Foundation — Deterministic Preview/Export Fixture",
+  "locale":"id-ID",
+  "art_domain":"educational_motion_graphics",
+  "timeline":{"fps_num":24,"fps_den":1,"total_frames":96},
+  "canvas":{"width":1280,"height":720,"pixel_aspect_num":1,"pixel_aspect_den":1},
+  "audio_policy":{"required":false,"sample_rate":48000,"channels":2,"listening_qc_required":false},
+  "render_policy":{"renderer":"shared-svg-motion-core","codec":"h264","pixel_format":"yuv420p"},
+  "quality_policy_id":"foundation-pilot-v0-1",
+  "source_lock":{"git_commit":null,"runtime_lock_digest":null},
+  "scene_manifest":"scene-001.json",
+  "status":"PROTOTYPE_VISUAL_ONLY"
+}

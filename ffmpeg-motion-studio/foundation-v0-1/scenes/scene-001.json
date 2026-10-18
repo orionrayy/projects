@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0.0","scene_id":"scene-001","scene_version":"0.1.0",
+  "title":"A gesture with a deterministic target",
+  "purpose":"Validate frame-index motion, two-link IK, SVG preview and FFmpeg export parity.",
+  "fps":24,"duration_frames":96,"canvas":{"width":1280,"height":720},
+  "palette":{"background":"#F4F2ED","ink":"#253247","muted":"#64748B","panel":"#FFFFFF","panel_border":"#D9DEE6","accent":"#E66B47","accent_soft":"#FCE7DF","skin":"#E6B08A","shirt":"#477A91","pants":"#35465F","hair":"#253247","green":"#2F806B"},
+  "character":{"origin":{"x":330,"y":270},"head":{"offset_x":-8,"offset_y":-68,"radius":42},"shoulder":{"offset_x":45,"offset_y":8},"upper_arm_length":116,"forearm_length":108,"hand_length":25,"pelvis_y":170,"leg_length":152},
+  "board":{"x":520,"y":165,"width":650,"height":390,"target_x":590,"target_y":380},
+  "motion":{"anticipation_seconds":0.5,"reach_seconds":0.85,"anticipation_px":5,"settle_amplitude_px":4,"settle_decay":5,"settle_frequency":11,"elbow_bend":1},
+  "quality_contract":{"must_be_silent_prototype":true,"must_be_deterministic_by_frame":true,"max_ik_segment_error_px":0.02,"max_target_error_px":8,"target_must_be_reachable":true}
+}
