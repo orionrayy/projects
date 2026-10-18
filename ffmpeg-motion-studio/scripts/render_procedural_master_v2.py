@@ -459,9 +459,11 @@ def make_audio_v2(ffmpeg,ffprobe,work,out):
     sfx,events=create_sfx_track(out)
     mixed=Path(work)/"master-audio-v2.wav"
     base.run([ffmpeg,"-y","-hide_banner","-loglevel","error","-i",str(result["mixed"]),"-i",str(sfx),
-      "-filter_complex",f"[1:a]volume=0.92[sfx];[0:a][sfx]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.93,aresample=48000,apad,atrim=duration={TOTAL},asetpts=PTS-STARTPTS[a]",
-      "-map","[a]","-ar","48000","-ac","2","-c:a","pcm_s16le",str(mixed)])
-    if abs(base.duration(ffprobe,mixed)-TOTAL)>.12: raise RuntimeError("V2 narration/music/SFX duration mismatch.")
+      "-filter_complex",f"[0:a]aresample=48000,asetpts=PTS-STARTPTS[narration];[1:a]aresample=48000,volume=0.92,asetpts=PTS-STARTPTS[sfx];[narration][sfx]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.93,aresample=48000,apad,atrim=duration={TOTAL},asetpts=PTS-STARTPTS[a]",
+      "-map","[a]","-ar","48000","-ac","2","-t",str(TOTAL),"-c:a","pcm_s16le",str(mixed)])
+    actual_duration=base.duration(ffprobe,mixed)
+    if abs(actual_duration-TOTAL)>.12:
+        raise RuntimeError(f"V2 narration/music/SFX duration mismatch: {actual_duration:.3f}s, expected {TOTAL}s.")
     result["mixed"]=mixed; result["sfx_track"]=sfx; result["sfx_events"]=events
     write_cue_sheets(out,events)
     return result
