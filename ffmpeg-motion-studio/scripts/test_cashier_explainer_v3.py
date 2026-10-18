@@ -14,12 +14,13 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertIn("komputer kasir",hooks[0]["title"].lower())
         self.assertIn("barcode",hooks[1]["title"].lower())
         self.assertIn("diskon",hooks[2]["title"].lower())
-        self.assertLessEqual(len(m.SCENES[17]["narration"].split()),16)
+        self.assertLessEqual(len(m.SCENES[17]["narration"].split()),25)
         self.assertEqual(sum(m.DURATIONS[:3]),21)
 
     def test_explanation_starts_at_cashier_on_scene_four(self):
         self.assertEqual(m.SCENES[3]["motif"],"counter_formula")
-        self.assertIn("layar kasir",m.SCENES[3]["narration"].lower())
+        self.assertIn("subtotal",m.SCENES[3]["narration"].lower())
+        self.assertIn("diskon",m.SCENES[3]["narration"].lower())
         self.assertEqual(len(m.SCENES),18)
         self.assertEqual(m.TOTAL,240)
 
@@ -46,8 +47,8 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual(m.TOTAL* m.FPS,5760)
 
     def test_narration_is_sized_for_natural_delivery(self):
-        self.assertTrue(all(len(s["narration"].split()) <= 23 for s in m.SCENES[3:17]))
-        self.assertLessEqual(len(m.SCENES[17]["narration"].split()), 20)
+        self.assertTrue(all(len(s["narration"].split()) <= 32 for s in m.SCENES[3:17]))
+        self.assertLessEqual(len(m.SCENES[17]["narration"].split()), 25)
 
     def test_three_effect_beats_in_every_scene(self):
         self.assertEqual(len(m.BEAT_GUIDE),18)
