@@ -53,20 +53,30 @@
     },
     {
       "id": "redesign.bilateral-contract",
-      "status": "pending_ci",
+      "status": "passed_ci",
       "claim": "Scene schema and regression tests require both screen-left and screen-right arms/hands plus torso, head and legs render groups.",
-      "verification_method": "JSON schema, source assertions and frame-by-frame regression tests",
+      "verification_method": "GitHub Actions workflow 39170991263: scene schema validation, evidence ledger validation, browser HTTP smoke test, node regression tests, seven synthetic benchmarks, raster diagnostic, Python schema tests, FFmpeg render/FFprobe, source packaging and artifact upload.",
       "evidence": [
         {
+          "revision": "fef550f57b0aef9496462641260555301bc002d3",
           "path": "ffmpeg-motion-studio/foundation-v0-1/scenes/scene-001.json",
-          "symbol": "quality_contract.required_render_groups"
+          "symbol": "quality_contract.required_render_groups",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39170991263"
         },
         {
+          "revision": "fef550f57b0aef9496462641260555301bc002d3",
           "path": "ffmpeg-motion-studio/foundation-v0-1/tests/visual-contract.test.mjs",
-          "symbol": "bilateral rig tests"
+          "symbol": "bilateral rig exists in both data and rendered SVG",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39170991263"
+        },
+        {
+          "revision": "fef550f57b0aef9496462641260555301bc002d3",
+          "path": "ffmpeg-motion-studio/foundation-v0-1/src/svg-renderer.mjs",
+          "symbol": "renderScreenLeftArm and renderCharacter",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39170991263"
         }
       ],
-      "limitation": "Status must only be changed after the relevant CI run succeeds."
+      "limitation": "The CI proves that both arm chains exist in frame state and their required SVG groups render, and that both IK chains preserve segment lengths. It does not certify natural anatomy, artistic approval, collision-free silhouettes, or learned motion."
     },
     {
       "id": "data.external-datasets",
