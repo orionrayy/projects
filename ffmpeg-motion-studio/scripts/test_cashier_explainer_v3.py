@@ -50,6 +50,19 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertTrue(all(len(s["narration"].split()) <= 35 for s in m.SCENES[3:17]))
         self.assertLessEqual(len(m.SCENES[17]["narration"].split()), 25)
 
+    def test_academic_scaffold_and_staged_animation(self):
+        combined=" ".join(s["narration"].lower() for s in m.SCENES)
+        for term in ("analisis leksikal","context-free grammar","aturan produksi","parser","parse tree","prioritas operator","semantik","ast","evaluasi post-order","invariant"):
+            self.assertIn(term,combined)
+        source=Path(m.__file__).read_text(encoding="utf-8")
+        self.assertIn("STEP_CUES",source)
+        self.assertIn("def draw_stage_strip",source)
+        self.assertIn("G = (N, Σ, P, S)",source)
+        self.assertIn('"pedagogical_stage_strip":True',source)
+        self.assertEqual(len(m.STEP_CUES),15)
+        for sid in range(4,19):
+            self.assertEqual(len(m.STEP_CUES[sid]),3)
+
     def test_three_effect_beats_in_every_scene(self):
         self.assertEqual(len(m.BEAT_GUIDE),18)
         for s,dur in zip(m.SCENES,m.DURATIONS):
@@ -88,6 +101,7 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertIn("SFX",source)
         self.assertIn("camera",source.lower())
         self.assertIn("Stable subtitle shelf",source)
+        self.assertIn("One predictable title rail",source)
         self.assertIn('s["short"]',source)
         self.assertIn("progress=max(1,int(1146*s[",source)
         self.assertIn('"NARASI"',source)
