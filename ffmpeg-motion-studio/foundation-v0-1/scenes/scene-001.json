@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "scene_id": "scene-001",
-  "scene_version": "0.1.2",
+  "scene_version": "0.1.3",
   "title": "A gesture with a deterministic target",
   "purpose": "Validate frame-index motion, two-link IK, SVG preview and FFmpeg export parity.",
   "fps": 24,
@@ -40,7 +40,7 @@
     },
     "upper_arm_length": 116,
     "forearm_length": 108,
-    "hand_length": 32,
+    "hand_length": 36,
     "pelvis_y": 170,
     "leg_length": 152,
     "rest_pose": {

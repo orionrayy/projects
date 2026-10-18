@@ -1,4 +1,4 @@
-# Motion Studio Foundation v0.2.6
+# Motion Studio Foundation v0.2.7
 
 Isolated implementation pilot; the previous renderer is preserved and untouched.
 
@@ -51,3 +51,7 @@ The hand render is now articulated as palm, index finger, thumb, and folded fing
 
 ## v0.2.6 pointing-hand proportions
 The authored hand length is increased to 32 px (about 29.6% of the 108 px forearm) while the wrist-to-index-tip transform remains geometric and deterministic. A proportional guard now keeps the hand between 28% and 36% of the forearm length for this character design.
+
+
+## v0.2.7 hand scale adjustment
+The hand length is set to 36 px (one-third of the 108 px forearm), within the enforced 28–36% proportion guard. The unreachable-target scenario is moved farther from the shoulder so it remains genuinely unreachable after the wrist and hand geometry changes.
