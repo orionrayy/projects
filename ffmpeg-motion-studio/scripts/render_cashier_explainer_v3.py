@@ -27,10 +27,10 @@ SCENES = [
  {"id":14,"motif":"ast","title":"AST menyimpan operasi yang penting","short":"Satu operator pengurangan dengan dua nilai masukan","narration":"AST, atau Abstract Syntax Tree, adalah bentuk ringkas yang mempertahankan operasi penting. Node SUB berarti pengurangan; dua anaknya adalah SUBTOTAL Rp54.000 dan DISKON Rp5.400. Detail tanda baca tidak diperlukan untuk memahami operasi inti."},
  {"id":15,"motif":"evaluate","title":"Evaluator menghitung hasil akhir","short":"Rp54.000 − Rp5.400 = Rp48.600","narration":"Evaluator menghitung nilai bagian-bagian terlebih dahulu, lalu menjalankan operasi utamanya. Rp54.000 dikurangi Rp5.400 sama dengan Rp48.600. Sistem dapat memeriksa kembali perhitungan ini sebelum menampilkan total."},
  {"id":16,"motif":"payment","title":"Pembayaran dilakukan setelah total tervalidasi","short":"Sentuhan kartu bukan bukti persetujuan transaksi","narration":"Setelah hasil diperiksa, barulah pembayaran dilakukan. Kartu didekatkan ke terminal NFC. Sentuhan memulai pembacaan kartu; status disetujui hanya muncul setelah terminal menerima respons berhasil."},
- {"id":17,"motif":"receipt","title":"Struk membuat perhitungan bisa diaudit","short":"Subtotal − diskon = total","narration":"Struk mencatat subtotal Rp54.000, diskon Rp5.400, dan total Rp48.600. Hubungannya harus konsisten: subtotal dikurangi diskon sama dengan total. Karena itu, hasil dapat diperiksa dari catatan transaksi, bukan hanya dipercaya."},
- {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang bisa diperiksa","short":"Token → aturan → struktur → operasi → hasil","narration":"Intinya, tokenisasi mengenali unit, CFG memberi aturan, parse tree memperlihatkan susunan, dan AST merangkum operasi sebelum evaluator menghitung total yang bisa diperiksa."}
+ {"id":17,"motif":"receipt","title":"Struk membuat perhitungan bisa diaudit","short":"Subtotal − diskon = total","narration":"Struk mencatat subtotal Rp54.000, diskon Rp5.400, dan total Rp48.600. Pastikan subtotal dikurangi diskon sama dengan total agar hasilnya bisa diaudit."},
+ {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang bisa diperiksa","short":"Token → aturan → struktur → operasi → hasil","narration":"Tokenisasi mengenali unit; CFG memberi aturan; parse tree memperlihatkan susunan; AST merangkum operasi; evaluator menghitung hasil yang bisa diperiksa."}
 ]
-DURATIONS = [7,7,7,13,14,16,15,17,14,15,16,15,16,17,16,12,13,10]
+DURATIONS = [7,7,7,14,15,15,15,16,15,15,15,15,15,16,16,14,13,10]
 TOTAL = sum(DURATIONS)
 assert TOTAL == TOTAL_DURATION
 
