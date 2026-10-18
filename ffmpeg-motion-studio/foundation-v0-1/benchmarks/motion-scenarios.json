@@ -59,7 +59,7 @@
     },
     {
       "id": "short_arm_unreachable",
-      "target_x": 590,
+      "target_x": 600,
       "target_y": 380,
       "upper_arm_length": 100,
       "forearm_length": 100,
