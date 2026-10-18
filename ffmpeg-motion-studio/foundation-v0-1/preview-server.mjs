@@ -11,7 +11,7 @@ const mime={".html":"text/html; charset=utf-8",".mjs":"text/javascript; charset=
 http.createServer(async(req,res)=>{
   try {
     const pathname=decodeURIComponent(new URL(req.url,"http://"+req.headers.host).pathname);
-    const relative=pathname==="/"?"preview/index.html":pathname.replace(/^\\/+/, "");
+    const relative=pathname==="/"?"preview/index.html":pathname.slice(1);
     const target=path.resolve(root,relative);
     if(target!==root&&!target.startsWith(root+path.sep)){res.writeHead(403);res.end("Forbidden");return;}
     const stat=await fs.stat(target);
