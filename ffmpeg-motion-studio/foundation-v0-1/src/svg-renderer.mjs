@@ -29,24 +29,29 @@ function renderLegs(scene, state) {
   const character = scene.character;
   const root = state.root;
   const pelvis = state.pelvis;
-  const leftHip = { x: pelvis.x - 13, y: pelvis.y };
-  const rightHip = { x: pelvis.x + 16, y: pelvis.y };
-  const leftKnee = { x: root.x - 7, y: pelvis.y + 78 };
-  const rightKnee = { x: root.x + 36, y: pelvis.y + 78 };
-  const leftFoot = { x: root.x - 25, y: pelvis.y + character.leg_length };
-  const rightFoot = { x: root.x + 53, y: pelvis.y + character.leg_length };
+  const legLength = character.leg_length;
+  const leftHip = { x: root.x - 14, y: pelvis.y - 2 };
+  const rightHip = { x: root.x + 14, y: pelvis.y - 2 };
+  const leftKnee = { x: root.x - 21, y: pelvis.y + 72 };
+  const rightKnee = { x: root.x + 21, y: pelvis.y + 72 };
+  const leftAnkle = { x: root.x - 25, y: pelvis.y + legLength - 14 };
+  const rightAnkle = { x: root.x + 25, y: pelvis.y + legLength - 14 };
+  const leftFoot = { x: root.x - 25, y: pelvis.y + legLength };
+  const rightFoot = { x: root.x + 25, y: pelvis.y + legLength };
 
   return '<g id="legs">'
-    + line(leftHip, leftKnee, palette.ink, 32)
-    + line(leftHip, leftKnee, palette.pants, 24)
-    + line(leftKnee, leftFoot, palette.ink, 29)
-    + line(leftKnee, leftFoot, palette.pants, 21)
-    + line(rightHip, rightKnee, palette.ink, 32)
-    + line(rightHip, rightKnee, palette.pants, 24)
-    + line(rightKnee, rightFoot, palette.ink, 29)
-    + line(rightKnee, rightFoot, palette.pants, 21)
-    + line({ x: leftFoot.x - 10, y: leftFoot.y }, { x: leftFoot.x + 15, y: leftFoot.y }, palette.ink, 15)
-    + line({ x: rightFoot.x - 10, y: rightFoot.y }, { x: rightFoot.x + 15, y: rightFoot.y }, palette.ink, 15)
+    + line(leftHip, leftKnee, palette.ink, 29)
+    + line(leftHip, leftKnee, palette.pants, 21)
+    + line(leftKnee, leftAnkle, palette.ink, 25)
+    + line(leftKnee, leftAnkle, palette.pants, 17)
+    + line(rightHip, rightKnee, palette.ink, 29)
+    + line(rightHip, rightKnee, palette.pants, 21)
+    + line(rightKnee, rightAnkle, palette.ink, 25)
+    + line(rightKnee, rightAnkle, palette.pants, 17)
+    + circle(leftKnee, 8, palette.pants)
+    + circle(rightKnee, 8, palette.pants)
+    + line({ x: leftFoot.x - 11, y: leftFoot.y }, { x: leftFoot.x + 13, y: leftFoot.y }, palette.ink, 15)
+    + line({ x: rightFoot.x - 11, y: rightFoot.y }, { x: rightFoot.x + 13, y: rightFoot.y }, palette.ink, 15)
     + "</g>";
 }
 
@@ -63,27 +68,37 @@ function renderTorso(scene, state) {
   const root = state.root;
   const pelvis = state.pelvis;
   const angle = state.torsoAngle * 180 / Math.PI;
+
   return '<g id="torso" transform="rotate(' + n(angle) + ' ' + n(pelvis.x) + ' ' + n(pelvis.y) + ')">'
-    + '<path d="M ' + n(root.x - 4) + " " + n(root.y + 11)
-    + " Q " + n(root.x + 9) + " " + n(root.y - 1) + " " + n(root.x + 23) + " " + n(root.y + 5)
-    + " L " + n(root.x + 48) + " " + n(root.y + 7)
-    + " Q " + n(root.x + 54) + " " + n(root.y + 34) + " " + n(root.x + 46) + " " + n(root.y + 72)
-    + " Q " + n(root.x + 39) + " " + n(root.y + 116) + " " + n(root.x + 31) + " " + n(pelvis.y - 3)
-    + " Q " + n(root.x + 19) + " " + n(pelvis.y + 7) + " " + n(root.x + 7) + " " + n(pelvis.y - 2)
-    + " Q " + n(root.x - 1) + " " + n(root.y + 119) + " " + n(root.x - 4) + " " + n(root.y + 78)
-    + " Q " + n(root.x - 9) + " " + n(root.y + 39) + " " + n(root.x - 4) + " " + n(root.y + 11)
+    + '<path d="M ' + n(root.x - 29) + " " + n(root.y + 8)
+    + " Q " + n(root.x - 35) + " " + n(root.y - 1) + " " + n(root.x - 18) + " " + n(root.y + 1)
+    + " L " + n(root.x + 18) + " " + n(root.y + 1)
+    + " Q " + n(root.x + 34) + " " + n(root.y + 1) + " " + n(root.x + 35) + " " + n(root.y + 14)
+    + " L " + n(root.x + 31) + " " + n(root.y + 67)
+    + " Q " + n(root.x + 28) + " " + n(root.y + 107) + " " + n(root.x + 24) + " " + n(pelvis.y - 5)
+    + " Q " + n(root.x + 15) + " " + n(pelvis.y + 5) + " " + n(root.x + 5) + " " + n(pelvis.y)
+    + " Q " + n(root.x) + " " + n(pelvis.y + 2) + " " + n(root.x - 5) + " " + n(pelvis.y)
+    + " Q " + n(root.x - 16) + " " + n(pelvis.y + 5) + " " + n(root.x - 24) + " " + n(pelvis.y - 5)
+    + " Q " + n(root.x - 29) + " " + n(root.y + 107) + " " + n(root.x - 31) + " " + n(root.y + 67)
+    + " L " + n(root.x - 35) + " " + n(root.y + 22)
+    + " Q " + n(root.x - 36) + " " + n(root.y + 12) + " " + n(root.x - 29) + " " + n(root.y + 8)
     + ' Z" fill="' + palette.ink + '"/>'
-    + '<path d="M ' + n(root.x + 1) + " " + n(root.y + 15)
-    + " Q " + n(root.x + 17) + " " + n(root.y + 8) + " " + n(root.x + 43) + " " + n(root.y + 14)
-    + " L " + n(root.x + 41) + " " + n(root.y + 70)
-    + " Q " + n(root.x + 35) + " " + n(root.y + 110) + " " + n(root.x + 28) + " " + n(pelvis.y - 10)
-    + " Q " + n(root.x + 19) + " " + n(pelvis.y - 2) + " " + n(root.x + 11) + " " + n(pelvis.y - 10)
-    + " Q " + n(root.x + 5) + " " + n(root.y + 111) + " " + n(root.x + 2) + " " + n(root.y + 76)
+    + '<path d="M ' + n(root.x - 25) + " " + n(root.y + 15)
+    + " Q " + n(root.x - 22) + " " + n(root.y + 9) + " " + n(root.x - 13) + " " + n(root.y + 10)
+    + " L " + n(root.x + 13) + " " + n(root.y + 10)
+    + " Q " + n(root.x + 24) + " " + n(root.y + 10) + " " + n(root.x + 26) + " " + n(root.y + 18)
+    + " L " + n(root.x + 23) + " " + n(root.y + 67)
+    + " Q " + n(root.x + 20) + " " + n(root.y + 110) + " " + n(root.x + 17) + " " + n(pelvis.y - 13)
+    + " Q " + n(root.x + 7) + " " + n(pelvis.y - 6) + " " + n(root.x) + " " + n(pelvis.y - 10)
+    + " Q " + n(root.x - 10) + " " + n(pelvis.y - 6) + " " + n(root.x - 17) + " " + n(pelvis.y - 13)
+    + " Q " + n(root.x - 22) + " " + n(root.y + 110) + " " + n(root.x - 23) + " " + n(root.y + 67)
     + ' Z" fill="' + palette.shirt + '"/>'
-    + '<path d="M ' + n(root.x + 7) + " " + n(root.y + 19)
-    + " L " + n(root.x + 23) + " " + n(root.y + 18)
-    + " L " + n(root.x + 19) + " " + n(root.y + 34)
-    + ' Z" fill="#FFFFFF"/>'
+    + '<path d="M ' + n(root.x - 8) + " " + n(root.y + 15)
+    + " L " + n(root.x) + " " + n(root.y + 25)
+    + " L " + n(root.x + 8) + " " + n(root.y + 15)
+    + ' Z" fill="#F7F4ED"/>'
+    + circle({ x: root.x + 2, y: root.y + 49 }, 1.8, palette.panel_border)
+    + circle({ x: root.x + 2, y: root.y + 66 }, 1.8, palette.panel_border)
     + "</g>";
 }
 
@@ -102,11 +117,18 @@ function renderHead(scene, state) {
     + " L " + n(head.x - 4) + " " + n(head.y - 1)
     + " L " + n(head.x - 20) + " " + n(head.y + 10)
     + ' Z" fill="' + palette.hair + '"/>';
+
   return '<g id="head" transform="rotate(' + n(angle) + ' ' + n(head.x) + ' ' + n(head.y) + ')">'
     + circle(head, radius, palette.skin, palette.ink, 3)
     + hairPath
-    + circle({ x: head.x + 3, y: head.y + 10 }, 3.1, palette.ink)
-    + circle({ x: head.x + 14, y: head.y + 11 }, 3.3, palette.ink)
+    + circle({ x: head.x - 8, y: head.y + 10 }, 3.2, palette.ink)
+    + circle({ x: head.x + 9, y: head.y + 11 }, 3.3, palette.ink)
+    + '<path d="M ' + n(head.x + 15) + " " + n(head.y + 15)
+    + " L " + n(head.x + 20) + " " + n(head.y + 17)
+    + '" stroke="' + palette.ink + '" stroke-width="1.8" stroke-linecap="round" fill="none"/>'
+    + '<path d="M ' + n(head.x + 1) + " " + n(head.y + 25)
+    + " Q " + n(head.x + 8) + " " + n(head.y + 29) + " " + n(head.x + 16) + " " + n(head.y + 25)
+    + '" stroke="' + palette.ink + '" stroke-width="1.8" stroke-linecap="round" fill="none"/>'
     + "</g>";
 }
 
@@ -125,7 +147,7 @@ function renderForearmAndHand(scene, state) {
   const angleDegrees = state.handAngle * 180 / Math.PI;
   const forearm = line(state.elbow, state.wrist, palette.ink, 24)
     + line(state.elbow, state.wrist, palette.skin, 17)
-    + circle(state.elbow, 9.5, palette.skin)
+    + circle(state.elbow, 8.5, palette.skin)
     + circle(state.wrist, 7.5, palette.skin);
   const indexFinger = '<g id="index-finger">'
     + '<path d="M 7 -1.8 L 25 0 L 24.7 2.1 L 7 1.8 Z" fill="' + palette.ink + '"/>'
@@ -148,14 +170,36 @@ function renderForearmAndHand(scene, state) {
   return '<g id="forearm-hand">' + forearm + hand + "</g>";
 }
 
+function renderScreenLeftArm(scene, state) {
+  const palette = scene.palette;
+  const arm = state.screenLeftArm;
+  const far = scene.character.far_arm;
+  const angleDegrees = arm.handAngle * 180 / Math.PI;
+  const scaleX = far.hand_length / 24;
+  const limb = line(arm.shoulder, arm.elbow, palette.ink, 22)
+    + line(arm.shoulder, arm.elbow, palette.skin, 15)
+    + line(arm.elbow, arm.wrist, palette.ink, 19)
+    + line(arm.elbow, arm.wrist, palette.skin, 13)
+    + circle(arm.elbow, 7.5, palette.skin);
+  const relaxedHand = '<g id="screen-left-hand" transform="translate(' + n(arm.wrist.x) + " " + n(arm.wrist.y) + ') rotate(' + n(angleDegrees) + ') scale(' + n(scaleX) + ' .88)">'
+    + '<path d="M 1 -4 C -1 -1 0 3 3 5 L 10 7 C 15 7 19 4 19 0 C 18 -3 15 -5 12 -5 L 8 -4 C 6 -7 3 -7 1 -4 Z"'
+    + ' fill="' + palette.skin + '" stroke="' + palette.ink + '" stroke-width="1.7" stroke-linejoin="round"/>'
+    + '<path d="M 5 -3 L 11 -1" stroke="' + palette.ink + '" stroke-width="1" stroke-linecap="round" opacity=".55"/>'
+    + "</g>";
+  return '<g id="screen-left-arm">' + limb + relaxedHand + "</g>";
+}
+
 function renderCharacter(scene, state) {
   return '<g id="character">'
     + renderLegs(scene, state)
+    + renderScreenLeftArm(scene, state)
     + renderNeck(scene, state)
     + renderTorso(scene, state)
+    + '<g id="screen-right-arm">'
     + renderUpperArm(scene, state)
-    + renderHead(scene, state)
     + renderForearmAndHand(scene, state)
+    + "</g>"
+    + renderHead(scene, state)
     + "</g>";
 }
 

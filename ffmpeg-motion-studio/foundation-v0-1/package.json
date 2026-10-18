@@ -1,11 +1,12 @@
 {
   "name": "motion-studio-foundation-v0-1",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "validate:scene": "python scripts/validate_scene.py scenes/scene-001.json schemas/scene.schema.json",
+    "validate:evidence": "python scripts/validate_evidence_ledger.py",
     "render": "node scripts/render-scene.mjs scenes/scene-001.json out/foundation-scene-001.mp4",
     "preview": "node preview-server.mjs",
     "benchmark:motion": "node scripts/benchmark-motion.mjs",

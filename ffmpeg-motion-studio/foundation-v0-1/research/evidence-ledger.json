@@ -1,0 +1,88 @@
+{
+  "ledger_schema_version": "1.0.0",
+  "project": "Motion Studio Foundation",
+  "policy": {
+    "statement": "A claim is not treated as learned, trained, or validated unless its evidence and verification method are recorded.",
+    "data_ingestion_claims_require": [
+      "source",
+      "license_review",
+      "download_manifest",
+      "normalization_report",
+      "benchmark_results"
+    ],
+    "training_claims_require": [
+      "dataset_version",
+      "training_configuration",
+      "model_artifact_digest",
+      "evaluation_report"
+    ]
+  },
+  "records": [
+    {
+      "id": "baseline.single-arm-renderer",
+      "status": "verified_by_source_inspection",
+      "claim": "The v0.3.0 baseline renders one articulated arm chain in renderCharacter and has no screen-left arm group.",
+      "verification_method": "Static source inspection",
+      "evidence": [
+        {
+          "revision": "65a898b53960641fc50e0e76c5713e0f5a067b0e",
+          "path": "ffmpeg-motion-studio/foundation-v0-1/src/svg-renderer.mjs",
+          "symbol": "renderCharacter"
+        }
+      ],
+      "limitation": "This is a source-architecture finding, not a measure of every possible rendered frame."
+    },
+    {
+      "id": "baseline.pose-quality-tautology",
+      "status": "verified_by_source_inspection",
+      "claim": "Baseline hand-aim validation compares angles derived from the same wrist-to-target vector used to construct handAngle, so it does not independently validate the rendered pointing gesture.",
+      "verification_method": "Static source inspection",
+      "evidence": [
+        {
+          "revision": "65a898b53960641fc50e0e76c5713e0f5a067b0e",
+          "path": "ffmpeg-motion-studio/foundation-v0-1/src/motion-core.mjs",
+          "symbol": "handAngle construction"
+        },
+        {
+          "revision": "65a898b53960641fc50e0e76c5713e0f5a067b0e",
+          "path": "ffmpeg-motion-studio/foundation-v0-1/src/pose-quality.mjs",
+          "symbol": "evaluatePoseQuality"
+        }
+      ],
+      "limitation": "This identifies a correlated metric design; visual review is still required."
+    },
+    {
+      "id": "redesign.bilateral-contract",
+      "status": "pending_ci",
+      "claim": "Scene schema and regression tests require both screen-left and screen-right arms/hands plus torso, head and legs render groups.",
+      "verification_method": "JSON schema, source assertions and frame-by-frame regression tests",
+      "evidence": [
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/scenes/scene-001.json",
+          "symbol": "quality_contract.required_render_groups"
+        },
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/tests/visual-contract.test.mjs",
+          "symbol": "bilateral rig tests"
+        }
+      ],
+      "limitation": "Status must only be changed after the relevant CI run succeeds."
+    },
+    {
+      "id": "data.external-datasets",
+      "status": "not_performed",
+      "claim": "No external motion/image dataset has been downloaded or ingested in this implementation stage.",
+      "verification_method": "Implementation scope declaration",
+      "evidence": [],
+      "limitation": "No data-learning, training, fine-tuning, or improved model capability is claimed."
+    },
+    {
+      "id": "data.model-training",
+      "status": "not_performed",
+      "claim": "No model training or fine-tuning has been performed as part of this code change.",
+      "verification_method": "Implementation scope declaration",
+      "evidence": [],
+      "limitation": "The code remains a deterministic procedural 2D rig and motion model."
+    }
+  ]
+}

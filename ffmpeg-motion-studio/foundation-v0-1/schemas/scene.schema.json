@@ -137,7 +137,8 @@
         "forearm_length",
         "hand_length",
         "pelvis_y",
-        "leg_length"
+        "leg_length",
+        "far_arm"
       ],
       "properties": {
         "origin": {
@@ -223,6 +224,64 @@
               "type": "number",
               "minimum": -250,
               "maximum": 500
+            }
+          }
+        },
+        "far_arm": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "shoulder_offset_x",
+            "shoulder_offset_y",
+            "upper_arm_length",
+            "forearm_length",
+            "hand_length",
+            "rest_wrist_offset_x",
+            "rest_wrist_offset_y",
+            "elbow_bend"
+          ],
+          "properties": {
+            "shoulder_offset_x": {
+              "type": "number",
+              "minimum": -250,
+              "maximum": 250
+            },
+            "shoulder_offset_y": {
+              "type": "number",
+              "minimum": -250,
+              "maximum": 250
+            },
+            "upper_arm_length": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 300
+            },
+            "forearm_length": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 300
+            },
+            "hand_length": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 100
+            },
+            "rest_wrist_offset_x": {
+              "type": "number",
+              "minimum": -500,
+              "maximum": 500
+            },
+            "rest_wrist_offset_y": {
+              "type": "number",
+              "minimum": -250,
+              "maximum": 500
+            },
+            "elbow_bend": {
+              "type": "integer",
+              "enum": [
+                -1,
+                1
+              ]
             }
           }
         }
@@ -324,7 +383,8 @@
         "max_target_error_px",
         "target_must_be_reachable",
         "max_hand_aim_error_degrees",
-        "max_hold_target_error_px"
+        "max_hold_target_error_px",
+        "required_render_groups"
       ],
       "properties": {
         "must_be_silent_prototype": {
@@ -353,6 +413,24 @@
           "type": "number",
           "minimum": 0,
           "maximum": 4
+        },
+        "required_render_groups": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "screen-left-arm",
+              "screen-left-hand",
+              "screen-right-arm",
+              "pointing-hand",
+              "torso",
+              "head",
+              "legs"
+            ]
+          }
         }
       }
     }

@@ -6,7 +6,7 @@ import {renderSceneSvg} from "../src/svg-renderer.mjs";
 const scene=JSON.parse(fs.readFileSync(new URL("../scenes/scene-001.json",import.meta.url),"utf8"));
 test("character SVG exposes rig and semantic hand groups",()=>{
  const svg=renderSceneSvg(scene,0);
- for(const id of ["neck","torso","upper-arm","pointing-hand","index-finger","palm","thumb"])assert.match(svg,new RegExp('id="'+id+'"'));
+ for(const id of ["neck","torso","upper-arm","pointing-hand","index-finger","palm","thumb","screen-left-arm","screen-left-hand","screen-right-arm","legs"])assert.match(svg,new RegExp('id="'+id+'"'));
  assert.match(svg,/transform="rotate\(/);
 });
 test("index axis aims at target and terminal contact is exact",()=>{
@@ -34,4 +34,24 @@ test("anticipation is visible and returns to rest before reach",()=>{
  const first=evaluateFrame(scene,0),prep=evaluateFrame(scene,6),startReach=evaluateFrame(scene,12);
  assert.ok(distance(first.wrist,prep.wrist)>3);
  assert.ok(distance(first.wrist,startReach.wrist)<1.5);
+});
+
+test("bilateral rig exists in both data and rendered SVG",()=>{
+ const svg=renderSceneSvg(scene,0);
+ for(const id of scene.quality_contract.required_render_groups){
+  assert.match(svg,new RegExp('id="'+id+'"'),"missing rendered group: "+id);
+ }
+ for(let frame=0;frame<scene.duration_frames;frame++){
+  const s=evaluateFrame(scene,frame);
+  assert.ok(s.screenLeftArm,"screen-left arm state at frame "+frame);
+  assert.ok(s.screenRightArm,"screen-right arm state at frame "+frame);
+  assert.ok(s.diagnostics.leftArmReachable,"screen-left arm reachability at frame "+frame);
+  assert.ok(s.diagnostics.leftUpperSegmentErrorPx<scene.quality_contract.max_ik_segment_error_px);
+  assert.ok(s.diagnostics.leftLowerSegmentErrorPx<scene.quality_contract.max_ik_segment_error_px);
+ }
+});
+test("head center is aligned over the pelvis/root axis at neutral frame",()=>{
+ const s=evaluateFrame(scene,0);
+ assert.ok(Math.abs(s.head.x-s.root.x)<=3,"head centerline drift: "+Math.abs(s.head.x-s.root.x));
+ assert.ok(Math.abs(s.pelvis.x-s.root.x)<=1);
 });
