@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Synthetic deterministic geometry cases authored for Motion Studio Foundation. Not captured human motion and not an aesthetic dataset.",
+  "frames_per_case": "all",
+  "thresholds": {
+    "max_segment_error_px": 0.02,
+    "max_step_px_per_frame": 18,
+    "max_acceleration_px_per_frame_squared": 12,
+    "reachable_target_error_px": 8
+  },
+  "cases": [
+    {
+      "id": "baseline",
+      "target_x": 590,
+      "target_y": 380,
+      "upper_arm_length": 116,
+      "forearm_length": 108,
+      "expected_endpoint_reachable": true
+    },
+    {
+      "id": "shorter_reach",
+      "target_x": 560,
+      "target_y": 380,
+      "upper_arm_length": 116,
+      "forearm_length": 108,
+      "expected_endpoint_reachable": true
+    },
+    {
+      "id": "elevated_target",
+      "target_x": 580,
+      "target_y": 355,
+      "upper_arm_length": 116,
+      "forearm_length": 108,
+      "expected_endpoint_reachable": true
+    },
+    {
+      "id": "lower_target_near_limit",
+      "target_x": 580,
+      "target_y": 410,
+      "upper_arm_length": 116,
+      "forearm_length": 108,
+      "expected_endpoint_reachable": true
+    },
+    {
+      "id": "near_max_reach",
+      "target_x": 598,
+      "target_y": 380,
+      "upper_arm_length": 116,
+      "forearm_length": 108,
+      "expected_endpoint_reachable": true
+    },
+    {
+      "id": "unreachable_target",
+      "target_x": 605,
+      "target_y": 380,
+      "upper_arm_length": 116,
+      "forearm_length": 108,
+      "expected_endpoint_reachable": false
+    },
+    {
+      "id": "short_arm_unreachable",
+      "target_x": 590,
+      "target_y": 380,
+      "upper_arm_length": 100,
+      "forearm_length": 100,
+      "expected_endpoint_reachable": false
+    }
+  ]
+}
