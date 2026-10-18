@@ -1,4 +1,4 @@
-name: Motion Studio Foundation v0.2
+name: Motion Studio Foundation v0.2.1
 on:
   push:
     branches: ["feature/motion-studio-foundation-v0-1", "main"]
@@ -33,7 +33,7 @@ jobs:
       - name: Install FFmpeg and schema validator
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          sudo apt-get install -y ffmpeg imagemagick
           python -m pip install -r requirements-test.txt
       - name: Verify toolchain
         run: |
@@ -66,6 +66,8 @@ jobs:
         run: npm test
       - name: Synthetic motion benchmark
         run: npm run benchmark:motion
+      - name: Rasterizer MAE diagnostic (uncalibrated)
+        run: npm run measure:raster-parity
       - name: Schema regression tests
         run: python -m unittest discover -s tests -p '*test.py' -v
       - name: Render SVG frames and verify real FFmpeg export
@@ -73,10 +75,11 @@ jobs:
       - name: Upload silent pilot
         uses: actions/upload-artifact@v4
         with:
-          name: motion-studio-foundation-v0-2-pilot-and-benchmark
+          name: motion-studio-foundation-v0-2-1-pilot-benchmarks-and-raster-diagnostics
           path: |
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4.report.json
             ffmpeg-motion-studio/foundation-v0-1/out/motion-benchmark-report.json
+            ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-report.json
           if-no-files-found: error
           retention-days: 14

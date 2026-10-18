@@ -1,6 +1,6 @@
 {
   "name": "motion-studio-foundation-v0-1",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,8 @@
     "render": "node scripts/render-scene.mjs scenes/scene-001.json out/foundation-scene-001.mp4",
     "preview": "node preview-server.mjs",
     "benchmark:motion": "node scripts/benchmark-motion.mjs",
-    "validate:benchmarks": "node scripts/benchmark-motion.mjs"
+    "validate:benchmarks": "node scripts/benchmark-motion.mjs",
+    "measure:raster-parity": "node scripts/measure-raster-parity.mjs"
   },
   "engines": {
     "node": ">=20"

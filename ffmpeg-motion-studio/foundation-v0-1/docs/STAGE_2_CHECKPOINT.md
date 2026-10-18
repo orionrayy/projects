@@ -23,6 +23,9 @@ The expanded benchmark initially found five temporary unreachable frames for a l
 - FFmpeg/FFprobe render contract: H.264, 1280×720, 24 fps, 96 frames, four seconds, intentionally silent.
 - Cloud CI run for commit \`4fd1fa228a230171088b75284b1cb686e2db2fa0\`: PASS before the final UI interaction test was added. The next run must validate this checkpoint's exact commit.
 
+## Rasterizer parity diagnostic
+The comparison is first measured as `MEASURED_UNCALIBRATED`. MAE is not an aesthetic score and no pass/fail tolerance is chosen until the output differences have been reviewed.
+
 ## Remaining limitations
 - Browser-versus-librsvg pixel parity remains UNVERIFIED. Logical motion and shared SVG serialization are deterministic; browser fonts/antialiasing may render differently.
 - Synthetic motion profiles are engineering regression cases, not captured human motion or an aesthetic gold standard.
