@@ -10,7 +10,7 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual([s["motif"] for s in hooks],["hook_storefront","hook_scan","hook_total"])
         self.assertEqual(m.DURATIONS[:3],[7,7,7])
         self.assertTrue(all(s["narration"].strip().endswith("?") for s in hooks))
-        self.assertTrue(all(12<=len(s["narration"].split())<=18 for s in hooks))
+        self.assertTrue(all(10<=len(s["narration"].split())<=13 for s in hooks))
         self.assertIn("komputer kasir",hooks[0]["title"].lower())
         self.assertIn("barcode",hooks[1]["title"].lower())
         self.assertIn("diskon",hooks[2]["title"].lower())
