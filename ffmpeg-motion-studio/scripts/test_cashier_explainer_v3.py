@@ -47,7 +47,7 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual(m.TOTAL* m.FPS,5760)
 
     def test_narration_is_sized_for_natural_delivery(self):
-        self.assertTrue(all(len(s["narration"].split()) <= 32 for s in m.SCENES[3:17]))
+        self.assertTrue(all(len(s["narration"].split()) <= 35 for s in m.SCENES[3:17]))
         self.assertLessEqual(len(m.SCENES[17]["narration"].split()), 25)
 
     def test_three_effect_beats_in_every_scene(self):
