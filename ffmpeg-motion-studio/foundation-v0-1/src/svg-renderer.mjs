@@ -52,12 +52,9 @@ function renderLegs(scene, state) {
 
 function renderNeck(scene, state) {
   const palette = scene.palette;
-  const start = { x: state.head.x + 10, y: state.head.y + 37 };
-  const end = { x: state.root.x + 14, y: state.root.y + 22 };
-
   return '<g id="neck">'
-    + line(start, end, palette.ink, 21)
-    + line(start, end, palette.skin, 14)
+    + line(state.neckTop, state.neckBase, palette.ink, 20)
+    + line(state.neckTop, state.neckBase, palette.skin, 13)
     + "</g>";
 }
 
@@ -65,24 +62,26 @@ function renderTorso(scene, state) {
   const palette = scene.palette;
   const root = state.root;
   const pelvis = state.pelvis;
-
-  return '<g id="torso">'
-    + '<path d="M ' + n(root.x - 3) + " " + n(root.y + 3)
-    + " Q " + n(root.x - 15) + " " + n(root.y + 71)
-    + " " + n(root.x + 3) + " " + n(pelvis.y)
-    + " Q " + n(root.x + 22) + " " + n(pelvis.y + 9)
-    + " " + n(root.x + 39) + " " + n(root.y + 65)
-    + " L " + n(root.x + 46) + " " + n(root.y + 8)
+  const angle = state.torsoAngle * 180 / Math.PI;
+  return '<g id="torso" transform="rotate(' + n(angle) + ' ' + n(pelvis.x) + ' ' + n(pelvis.y) + ')">'
+    + '<path d="M ' + n(root.x - 4) + " " + n(root.y + 11)
+    + " Q " + n(root.x + 9) + " " + n(root.y - 1) + " " + n(root.x + 23) + " " + n(root.y + 5)
+    + " L " + n(root.x + 48) + " " + n(root.y + 7)
+    + " Q " + n(root.x + 54) + " " + n(root.y + 34) + " " + n(root.x + 46) + " " + n(root.y + 72)
+    + " Q " + n(root.x + 39) + " " + n(root.y + 116) + " " + n(root.x + 31) + " " + n(pelvis.y - 3)
+    + " Q " + n(root.x + 19) + " " + n(pelvis.y + 7) + " " + n(root.x + 7) + " " + n(pelvis.y - 2)
+    + " Q " + n(root.x - 1) + " " + n(root.y + 119) + " " + n(root.x - 4) + " " + n(root.y + 78)
+    + " Q " + n(root.x - 9) + " " + n(root.y + 39) + " " + n(root.x - 4) + " " + n(root.y + 11)
     + ' Z" fill="' + palette.ink + '"/>'
-    + '<path d="M ' + n(root.x + 2) + " " + n(root.y + 10)
-    + " Q " + n(root.x - 5) + " " + n(root.y + 77)
-    + " " + n(root.x + 6) + " " + n(pelvis.y - 3)
-    + " Q " + n(root.x + 21) + " " + n(pelvis.y + 3)
-    + " " + n(root.x + 34) + " " + n(root.y + 67)
-    + " L " + n(root.x + 38) + " " + n(root.y + 13)
+    + '<path d="M ' + n(root.x + 1) + " " + n(root.y + 15)
+    + " Q " + n(root.x + 17) + " " + n(root.y + 8) + " " + n(root.x + 43) + " " + n(root.y + 14)
+    + " L " + n(root.x + 41) + " " + n(root.y + 70)
+    + " Q " + n(root.x + 35) + " " + n(root.y + 110) + " " + n(root.x + 28) + " " + n(pelvis.y - 10)
+    + " Q " + n(root.x + 19) + " " + n(pelvis.y - 2) + " " + n(root.x + 11) + " " + n(pelvis.y - 10)
+    + " Q " + n(root.x + 5) + " " + n(root.y + 111) + " " + n(root.x + 2) + " " + n(root.y + 76)
     + ' Z" fill="' + palette.shirt + '"/>'
     + '<path d="M ' + n(root.x + 7) + " " + n(root.y + 19)
-    + " L " + n(root.x + 25) + " " + n(root.y + 19)
+    + " L " + n(root.x + 23) + " " + n(root.y + 18)
     + " L " + n(root.x + 19) + " " + n(root.y + 34)
     + ' Z" fill="#FFFFFF"/>'
     + "</g>";
@@ -92,7 +91,7 @@ function renderHead(scene, state) {
   const palette = scene.palette;
   const head = state.head;
   const radius = scene.character.head.radius;
-
+  const angle = state.headAngle * 180 / Math.PI;
   const hairPath = '<path d="M ' + n(head.x - radius + 2) + " " + n(head.y + 2)
     + " Q " + n(head.x - radius - 5) + " " + n(head.y - radius + 4)
     + " " + n(head.x - 8) + " " + n(head.y - radius - 2)
@@ -103,8 +102,7 @@ function renderHead(scene, state) {
     + " L " + n(head.x - 4) + " " + n(head.y - 1)
     + " L " + n(head.x - 20) + " " + n(head.y + 10)
     + ' Z" fill="' + palette.hair + '"/>';
-
-  return '<g id="head">'
+  return '<g id="head" transform="rotate(' + n(angle) + ' ' + n(head.x) + ' ' + n(head.y) + ')">'
     + circle(head, radius, palette.skin, palette.ink, 3)
     + hairPath
     + circle({ x: head.x + 3, y: head.y + 10 }, 3.1, palette.ink)
@@ -114,51 +112,40 @@ function renderHead(scene, state) {
 
 function renderUpperArm(scene, state) {
   const palette = scene.palette;
-
-  // Draw the upper arm after the torso so its connection at the outer shoulder
-  // remains visible instead of disappearing behind the body silhouette.
   return '<g id="upper-arm">'
     + line(state.shoulder, state.elbow, palette.ink, 29)
     + line(state.shoulder, state.elbow, palette.skin, 21)
-    + circle(state.shoulder, 13.5, palette.skin, palette.ink, 2.5)
-    + circle(state.shoulder, 4.2, palette.skin)
+    + circle(state.shoulder, 11.5, palette.skin)
     + "</g>";
 }
 
 function renderForearmAndHand(scene, state) {
   const palette = scene.palette;
-  const handLength = scene.character.hand_length;
-  const scaleX = handLength / 25;
+  const scaleX = scene.character.hand_length / 25;
   const angleDegrees = state.handAngle * 180 / Math.PI;
   const forearm = line(state.elbow, state.wrist, palette.ink, 24)
     + line(state.elbow, state.wrist, palette.skin, 17)
-    + circle(state.elbow, 10.5, palette.skin, palette.ink, 2)
-    + circle(state.wrist, 9, palette.skin, palette.ink, 2);
-
-  // Build a compact pointing-hand silhouette in local wrist space. The index
-  // finger ends exactly at the computed endpoint; the palm and thumb are no
-  // longer implied by a featureless stick ending in a dot.
+    + circle(state.elbow, 9.5, palette.skin)
+    + circle(state.wrist, 7.5, palette.skin);
   const indexFinger = '<g id="index-finger">'
-    + '<path d="M 7 -1.6 L 25 0 L 24.6 2.1 L 7 1.6 Z" fill="' + palette.ink + '"/>'
-    + '<path d="M 7 -0.6 L 25 0 L 24.6 1.0 L 7 0.6 Z" fill="' + palette.skin + '"/>'
+    + '<path d="M 7 -1.8 L 25 0 L 24.7 2.1 L 7 1.8 Z" fill="' + palette.ink + '"/>'
+    + '<path d="M 7 -0.7 L 25 0 L 24.7 1.0 L 7 0.7 Z" fill="' + palette.skin + '"/>'
     + circle({x:25,y:0}, 1.5, palette.skin, palette.ink, 0.7)
-    + '</g>';
+    + "</g>";
   const palm = '<path id="palm" d="M 2 -2.8 C 1 -5.3 3 -6.6 5.8 -5.9 L 10 -4.8 C 12 -4.1 13 -2.3 13 -0.2 L 13 2.4 C 12.8 4.8 10.7 6 8.2 5.1 L 3.2 4.1 C 1.4 3.6 1 0 2 -2.8 Z" fill="' + palette.skin + '" stroke="' + palette.ink + '" stroke-width="1.8" stroke-linejoin="round"/>';
   const thumb = '<g id="thumb">'
     + line({x:4.6,y:-4.8},{x:10.2,y:-8},palette.ink,4.5)
     + line({x:4.6,y:-4.8},{x:10.2,y:-8},palette.skin,2.8)
-    + '</g>';
-  const foldedFingers = '<g id="folded-fingers">'
+    + "</g>";
+  const folded = '<g id="folded-fingers">'
     + line({x:6.2,y:0.6},{x:10.9,y:1.5},palette.ink,2.8)
     + line({x:6.2,y:0.6},{x:10.9,y:1.5},palette.skin,1.5)
     + line({x:5.6,y:2.8},{x:9.9,y:3.5},palette.ink,2.8)
     + line({x:5.6,y:2.8},{x:9.9,y:3.5},palette.skin,1.5)
-    + '</g>';
-  const hand = '<g id="pointing-hand" transform="translate(' + n(state.wrist.x) + ' ' + n(state.wrist.y) + ') rotate(' + n(angleDegrees) + ') scale(' + n(scaleX) + ' 1)">'
-    + indexFinger + thumb + palm + foldedFingers
-    + '</g>';
-
-  return '<g id="forearm-hand">' + forearm + hand + '</g>';
+    + "</g>";
+  const hand = '<g id="pointing-hand" transform="translate(' + n(state.wrist.x) + " " + n(state.wrist.y) + ') rotate(' + n(angleDegrees) + ') scale(' + n(scaleX) + ' 1)">'
+    + palm + folded + thumb + indexFinger + "</g>";
+  return '<g id="forearm-hand">' + forearm + hand + "</g>";
 }
 
 function renderCharacter(scene, state) {

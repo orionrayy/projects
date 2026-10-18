@@ -272,7 +272,8 @@
         "settle_amplitude_px",
         "settle_decay",
         "settle_frequency",
-        "elbow_bend"
+        "elbow_bend",
+        "settle_seconds"
       ],
       "properties": {
         "anticipation_seconds": {
@@ -305,6 +306,11 @@
             -1,
             1
           ]
+        },
+        "settle_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 2
         }
       }
     },
@@ -316,7 +322,9 @@
         "must_be_deterministic_by_frame",
         "max_ik_segment_error_px",
         "max_target_error_px",
-        "target_must_be_reachable"
+        "target_must_be_reachable",
+        "max_hand_aim_error_degrees",
+        "max_hold_target_error_px"
       ],
       "properties": {
         "must_be_silent_prototype": {
@@ -335,6 +343,16 @@
         },
         "target_must_be_reachable": {
           "type": "boolean"
+        },
+        "max_hand_aim_error_degrees": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 30
+        },
+        "max_hold_target_error_px": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 4
         }
       }
     }

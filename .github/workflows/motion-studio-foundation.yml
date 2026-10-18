@@ -1,4 +1,4 @@
-name: Motion Studio Foundation v0.2.7
+name: Motion Studio Foundation v0.3.0
 on:
   push:
     branches: ["feature/motion-studio-foundation-v0-1", "main"]
@@ -60,6 +60,9 @@ jobs:
           grep -q "Live parameters" /tmp/motion-studio-preview.html
           grep -q "Store A reference" /tmp/motion-studio-preview.html
           curl -fsS http://127.0.0.1:4173/src/motion-core.mjs | grep -q "evaluateFrame"
+          curl -fsS http://127.0.0.1:4173/src/action-model.mjs | grep -q "evaluateAction"
+          curl -fsS http://127.0.0.1:4173/src/character-rig.mjs | grep -q "createCharacterRig"
+          curl -fsS http://127.0.0.1:4173/src/pose-quality.mjs | grep -q "evaluatePoseQuality"
           curl -fsS http://127.0.0.1:4173/benchmarks/motion-scenarios.json | python -c 'import json,sys; x=json.load(sys.stdin); assert len(x["cases"]) == 7; print("BENCHMARK_SUITE_HTTP_PASS", len(x["cases"]))'
           curl -fsS http://127.0.0.1:4173/scenes/scene-001.json | python -c 'import json,sys; x=json.load(sys.stdin); assert x["duration_frames"] == 96 and x["fps"] == 24; print("PREVIEW_HTTP_PASS", x["scene_id"])'
       - name: Motion, anatomy and rendering regression tests
@@ -78,7 +81,7 @@ jobs:
           from pathlib import Path
           from zipfile import ZipFile, ZIP_DEFLATED
           root = Path(".")
-          target = root / "out" / "motion-studio-foundation-v0-2-7-source.zip"
+          target = root / "out" / "motion-studio-foundation-v0-3-0-source.zip"
           target.parent.mkdir(parents=True, exist_ok=True)
           skip_parts = {"out", ".git", "node_modules", "__pycache__"}
           with ZipFile(target, "w", ZIP_DEFLATED) as archive:
@@ -92,13 +95,13 @@ jobs:
       - name: Upload pilot, source and regression evidence
         uses: actions/upload-artifact@v4
         with:
-          name: motion-studio-foundation-v0-2-7-hand-scale-benchmarks-raster-evidence
+          name: motion-studio-foundation-v0-3-0-character-rig-action-quality-evidence
           path: |
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4.report.json
             ffmpeg-motion-studio/foundation-v0-1/out/motion-benchmark-report.json
             ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-report.json
             ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-evidence/**
-            ffmpeg-motion-studio/foundation-v0-1/out/motion-studio-foundation-v0-2-7-source.zip
+            ffmpeg-motion-studio/foundation-v0-1/out/motion-studio-foundation-v0-3-0-source.zip
           if-no-files-found: error
           retention-days: 14

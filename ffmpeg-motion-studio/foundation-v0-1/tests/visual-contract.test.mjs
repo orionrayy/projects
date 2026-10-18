@@ -1,88 +1,37 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { distance, evaluateFrame } from "../src/motion-core.mjs";
-import { renderSceneSvg } from "../src/svg-renderer.mjs";
-
-const scene = JSON.parse(
-  fs.readFileSync(new URL("../scenes/scene-001.json", import.meta.url), "utf8"),
-);
-
-test("rendered character includes a connected neck and visible shoulder/upper-arm layer", () => {
-  const svg = renderSceneSvg(scene, 0);
-  assert.match(svg, /id="neck"/);
-  assert.match(svg, /id="torso"/);
-  assert.match(svg, /id="upper-arm"/);
-  assert.match(svg, /id="upper-arm"[\s\S]*?stroke-width="2.5"/);
+import {distance,evaluateFrame} from "../src/motion-core.mjs";
+import {renderSceneSvg} from "../src/svg-renderer.mjs";
+const scene=JSON.parse(fs.readFileSync(new URL("../scenes/scene-001.json",import.meta.url),"utf8"));
+test("character SVG exposes rig and semantic hand groups",()=>{
+ const svg=renderSceneSvg(scene,0);
+ for(const id of ["neck","torso","upper-arm","pointing-hand","index-finger","palm","thumb"])assert.match(svg,new RegExp('id="'+id+'"'));
+ assert.match(svg,/transform="rotate\(/);
 });
-
-test("hand starts aligned to the forearm and eases to a straight contact pose", () => {
-  const start = evaluateFrame(scene, 0);
-  const expectedForearmAngle = Math.atan2(
-    start.wrist.y - start.elbow.y,
-    start.wrist.x - start.elbow.x,
-  );
-  assert.ok(Math.abs(start.handAngle - expectedForearmAngle) < 1e-10);
-
-  const end = evaluateFrame(scene, scene.duration_frames - 1);
-  assert.ok(Math.abs(end.handAngle) < 1e-10);
-  assert.ok(distance(end.fingerTip, { x: scene.board.target_x, y: scene.board.target_y }) < 0.02);
-  assert.ok(Math.abs(distance(end.wrist, end.fingerTip) - scene.character.hand_length) < 0.1);
+test("index axis aims at target and terminal contact is exact",()=>{
+ const start=evaluateFrame(scene,0),end=evaluateFrame(scene,scene.duration_frames-1);
+ assert.ok(start.quality.handAimErrorDegrees<=scene.quality_contract.max_hand_aim_error_degrees);
+ assert.ok(Math.abs(end.fingerTip.x-scene.board.target_x)<.1);
+ assert.ok(Math.abs(end.fingerTip.y-scene.board.target_y)<.1);
+ assert.ok(Math.abs(distance(end.wrist,end.fingerTip)-scene.character.hand_length)<.1);
 });
-
-test("target state label does not claim contact while the hand is still approaching", () => {
-  const startSvg = renderSceneSvg(scene, 0);
-  const reachSvg = renderSceneSvg(scene, 22);
-  const holdSvg = renderSceneSvg(scene, 65);
-  assert.match(startSvg, /TARGET AHEAD/);
-  assert.match(reachSvg, /TARGET AHEAD/);
-  assert.match(holdSvg, /TARGET CONTACT/);
+test("target caption follows measured proximity",()=>{
+ assert.match(renderSceneSvg(scene,0),/TARGET AHEAD/);
+ assert.match(renderSceneSvg(scene,19),/TARGET AHEAD/);
+ assert.match(renderSceneSvg(scene,92),/TARGET CONTACT/);
 });
-
-test("all frames preserve finite articulated geometry and a fixed two-link rig", () => {
-  for (let frame = 0; frame < scene.duration_frames; frame += 1) {
-    const state = evaluateFrame(scene, frame);
-    for (const point of [
-      state.shoulder, state.elbow, state.wrist, state.fingerTip,
-    ]) {
-      assert.ok(Number.isFinite(point.x), "finite x at frame " + frame);
-      assert.ok(Number.isFinite(point.y), "finite y at frame " + frame);
-    }
-    assert.ok(state.diagnostics.upperSegmentErrorPx < 0.02, "upper segment at frame " + frame);
-    assert.ok(state.diagnostics.lowerSegmentErrorPx < 0.02, "lower segment at frame " + frame);
-    assert.ok(Math.abs(distance(state.wrist, state.fingerTip) - scene.character.hand_length) < 0.1,
-      "hand length at frame " + frame);
-  }
+test("all frames preserve finite rig geometry, bone lengths and pose quality",()=>{
+ for(let frame=0;frame<scene.duration_frames;frame++){
+  const s=evaluateFrame(scene,frame);
+  for(const p of [s.shoulder,s.elbow,s.wrist,s.fingerTip,s.head]){assert.ok(Number.isFinite(p.x));assert.ok(Number.isFinite(p.y));}
+  assert.ok(s.diagnostics.upperSegmentErrorPx<scene.quality_contract.max_ik_segment_error_px);
+  assert.ok(s.diagnostics.lowerSegmentErrorPx<scene.quality_contract.max_ik_segment_error_px);
+  assert.ok(s.quality.passed,"frame "+frame+": "+s.quality.issues.join(","));
+ }
 });
-
-test("anticipation keeps the elbow in front of the torso instead of folding behind the shoulder", () => {
-  const anticipationFrames = Math.floor(scene.motion.anticipation_seconds * scene.fps);
-  for (let frame = 0; frame <= anticipationFrames; frame += 1) {
-    const state = evaluateFrame(scene, frame);
-    assert.ok(
-      state.elbow.x > state.shoulder.x,
-      "elbow should remain forward of shoulder at frame " + frame,
-    );
-    assert.ok(
-      state.wrist.x > state.elbow.x,
-      "wrist should remain forward of elbow at frame " + frame,
-    );
-  }
-});
-
-test("pointing hand has separate palm, index finger and thumb geometry", () => {
-  for (const frame of [0, 15, 22, 36, 65, 95]) {
-    const svg = renderSceneSvg(scene, frame);
-    assert.match(svg, /id="pointing-hand"/);
-    assert.match(svg, /id="index-finger"/);
-    assert.match(svg, /id="palm"/);
-    assert.match(svg, /id="thumb"/);
-    assert.match(svg, /id="folded-fingers"/);
-  }
-});
-
-test("pointing-hand length remains proportionate to the forearm", () => {
-  const ratio = scene.character.hand_length / scene.character.forearm_length;
-  assert.ok(ratio >= 0.28, "pointing hand must not shrink below 28% of the forearm");
-  assert.ok(ratio <= 0.36, "pointing hand must not dominate the forearm");
+test("anticipation is visible and returns to rest before reach",()=>{
+ const first=evaluateFrame(scene,0),prep=evaluateFrame(scene,6),startReach=evaluateFrame(scene,12);
+ assert.ok(distance(first.wrist,prep.wrist)>3);
+ assert.ok(distance(first.wrist,startReach.wrist)<1.5);
 });

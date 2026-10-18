@@ -1,17 +1,15 @@
-# Motion Studio Foundation v0.2.7
+# Motion Studio Foundation v0.3.0
 
-Isolated implementation pilot; the previous renderer is preserved and untouched.
+Isolated character-rig/action-model upgrade. The older production renderer remains untouched.
 
-## Goal
-Prove a deterministic scene -> shared motion core -> interactive SVG preview -> FFmpeg H.264 export path before migrating the existing film.
+## Architecture
+- `character-rig.mjs`: local-to-world landmarks, torso pivot transforms, neck/head anchors, elbow pole construction.
+- `action-model.mjs`: anticipation, curved reach, contact, settle and hold timing. The index axis aims toward the target throughout the action.
+- `motion-core.mjs`: deterministic frame-index evaluation and two-bone IK with an elbow pole target.
+- `pose-quality.mjs`: measurable checks for segment lengths, hand-target angle, and contact during hold.
+- `svg-renderer.mjs`: presentation layer reused by browser preview and FFmpeg export.
 
-## Requirements
-Node.js 20+, FFmpeg with SVG/librsvg decoding, libx264 and ffprobe, Python 3 with jsonschema. The parity diagnostic also uses Chromium and ImageMagick (installed on the GitHub Actions runner).
-
-## Interactive preview
-Run `npm run preview` and open http://127.0.0.1:4173/preview/. The browser UI supports timeline play/pause, scrubbing, frame stepping, phase shortcuts, rig diagnostics, editable target X/Y, arm segment lengths, anticipation, settle amplitude, and elbow bend. Store an A reference and compare B side by side at the same frame. Edits are in-memory and do not alter the canonical scene manifest.
-
-## Validation commands
+## Validation
 ```sh
 python -m pip install -r requirements-test.txt
 npm run validate:scene
@@ -22,36 +20,7 @@ npm run measure:raster-parity
 npm run render
 ```
 
-The synthetic motion suite evaluates seven authored engineering scenarios across 96 frames each. It tests reachability, IK segment lengths, endpoint error, frame-to-frame movement and layout reservations. These thresholds are regression guards, not universal standards of natural movement or aesthetics.
+The seven-case synthetic suite is an engineering regression set, not an aesthetic dataset or human-motion ground truth. Raster comparisons measure browser/FFmpeg consistency only. Silhouette, anatomy, gesture and timing still require human visual review.
 
-The raster parity diagnostic compares six selected SVG frames rendered by headless Chromium and FFmpeg/librsvg. It records normalized MAE plus the paired PNGs and difference/contact sheets. Current status is `MEASURED_UNCALIBRATED`: MAE is not an aesthetic score, and no pass/fail threshold has been chosen.
-
-## Invariants and limits
-- Motion is evaluated from an integer frame index, never accumulated playback deltas.
-- Preview and export share the same JS motion core and SVG renderer.
-- Unreachable IK targets are clamped and flagged; limbs are not stretched to force a target.
-- Invalid scene fields, rig lengths, frame indices and reserved-zone collisions are rejected.
-- The export is a four-second 1280x720/24fps silent visual pilot, not a production master or artistic-quality certification.
-- Pixel parity has been sampled, not tested on all frames. The pilot does not prove natural acting, audio quality, arbitrary-character anatomy, or commercial video-generator parity.
-
-
-## v0.2.3 visual/pose correction
-The hand now follows the forearm during anticipation and eases into a straight pointing pose during reach. The SVG composition draws the upper arm over the torso edge to preserve a visible shoulder connection, adds a neck bridge, and reports TARGET AHEAD until measured contact tolerance is reached. A full-timeline visual contract test checks pose finiteness, arm/hand geometry and phase-accurate contact labeling.
-
-These are structural/rendering fixes, not a claim that the character is anatomically or artistically production-ready. Human-motion evaluation and broader character-shape validation remain outstanding.
-
-
-## v0.2.4 rest-pose correction
-The initial wrist pose is now scene-configured through `character.rest_pose` rather than hard-coded near the torso. This moves the idle wrist forward and higher, preventing the elbow from folding behind the shoulder during anticipation. Schema validation makes these offsets explicit and rejects invalid ranges. A new test checks the elbow/wrist side relationship across all anticipation frames.
-
-
-## v0.2.5 hand silhouette and leg-joint correction
-The hand render is now articulated as palm, index finger, thumb, and folded fingers, transformed by the same solved wrist angle. The index-finger endpoint remains tied to the mathematical endpoint used for target contact. Explicit knee disks were removed because they read as mechanical joint markers rather than part of the chosen cartoon style. Visual regression checks require each hand component in representative frames.
-
-
-## v0.2.6 pointing-hand proportions
-The authored hand length is increased to 32 px (about 29.6% of the 108 px forearm) while the wrist-to-index-tip transform remains geometric and deterministic. A proportional guard now keeps the hand between 28% and 36% of the forearm length for this character design.
-
-
-## v0.2.7 hand scale adjustment
-The hand length is set to 36 px (one-third of the 108 px forearm), within the enforced 28–36% proportion guard. The unreachable-target scenario is moved farther from the shoulder so it remains genuinely unreachable after the wrist and hand geometry changes.
+## Scope
+This is a compact 2D character-action rig, not a general-purpose human animation system. Its purpose is to explicitly separate character structure, action intent, IK geometry, pose quality contracts and rendering.

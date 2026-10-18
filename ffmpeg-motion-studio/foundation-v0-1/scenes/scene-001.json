@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "scene_id": "scene-001",
-  "scene_version": "0.1.3",
+  "scene_version": "0.2.0",
   "title": "A gesture with a deterministic target",
   "purpose": "Validate frame-index motion, two-link IK, SVG preview and FFmpeg export parity.",
   "fps": 24,
@@ -45,7 +45,7 @@
     "leg_length": 152,
     "rest_pose": {
       "wrist_offset_x": 155,
-      "wrist_offset_y": 60
+      "wrist_offset_y": 105
     }
   },
   "board": {
@@ -63,13 +63,16 @@
     "settle_amplitude_px": 4,
     "settle_decay": 5,
     "settle_frequency": 11,
-    "elbow_bend": 1
+    "elbow_bend": 1,
+    "settle_seconds": 0.7
   },
   "quality_contract": {
     "must_be_silent_prototype": true,
     "must_be_deterministic_by_frame": true,
     "max_ik_segment_error_px": 0.02,
     "max_target_error_px": 8,
-    "target_must_be_reachable": true
+    "target_must_be_reachable": true,
+    "max_hand_aim_error_degrees": 5,
+    "max_hold_target_error_px": 1
   }
 }
