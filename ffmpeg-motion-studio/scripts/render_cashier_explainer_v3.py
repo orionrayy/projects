@@ -11,26 +11,26 @@ W, H = base.W, base.H
 FPS = base.FPS
 TOTAL_DURATION = 240
 SCENES = [
- {"id":1,"motif":"hook_storefront","title":"Kok total belanja bisa dipercaya?","short":"Dari toko menuju satu pertanyaan","narration":"Dari keranjang, bagaimana kasir tahu total?"},
- {"id":2,"motif":"hook_scan","title":"Dari barang, bagaimana jadi angka?","short":"Satu bunyi bip belum berarti paham","narration":"Apa arti satu bip bagi komputer?"},
- {"id":3,"motif":"hook_total","title":"Siapa memastikan totalnya benar?","short":"Angka harus mengikuti struktur dan aturan","narration":"Siapa menjamin total ini benar?"},
- {"id":4,"motif":"counter_formula","title":"Mulai dari layar kasir","short":"Satu transaksi ditulis sebagai ekspresi","narration":"Di layar kasir, total sama dengan lima puluh empat ribu dikurangi lima ribu empat ratus. Ini ekspresi, belum hasil."},
- {"id":5,"motif":"tokenization","title":"Tokenisasi: pecah teks menjadi unit","short":"Kenali identifier, angka, dan operator","narration":"Tokenisasi memecah teks menjadi lima token: identifier total, sama dengan, angka subtotal, minus, dan angka diskon. Jenis token belum memastikan urutan valid."},
- {"id":6,"motif":"cfg_rules","title":"CFG: aturan yang membentuk ekspresi","short":"Grammar menentukan susunan yang sah","narration":"Context-Free Grammar atau CFG menjelaskan aturan susunan ekspresi. Assignment berisi identifier, tanda sama dengan, dan ekspresi; pengurangan dibentuk dari ekspresi dan term."},
- {"id":7,"motif":"syntax_check","title":"Urutan token harus valid","short":"Tokenisasi tidak sama dengan parsing","narration":"Parser mencocokkan urutan token dengan grammar. Total, sama dengan, angka, minus, angka diterima; dua angka berdempetan tanpa operator ditolak."},
- {"id":8,"motif":"parse_tree","title":"Parse tree menunjukkan pembentukan","short":"Akar, cabang, lalu nilai","narration":"Parse tree menunjukkan cara aturan membentuk input. Akar mewakili ekspresi, cabang menunjukkan hubungan, dan daun berisi token akhir."},
- {"id":9,"motif":"precedence","title":"Prioritas operator mengubah hasil","short":"Perkalian dikelompokkan lebih dahulu","narration":"Dua tambah tiga kali empat: perkalian berprioritas lebih tinggi. Tiga kali empat dulu, lalu tambah dua: hasil empat belas, bukan dua puluh."},
- {"id":10,"motif":"parentheses","title":"Tanda kurung mengubah kelompok","short":"Ekspresi yang berbeda, hasil yang berbeda","narration":"Tanda kurung mengubah kelompok: dua tambah tiga dihitung lebih dulu, lalu dikali empat. Hasilnya dua puluh; struktur tree pun berubah."},
- {"id":11,"motif":"semantic_check","title":"Sintaks valid belum tentu bermakna","short":"Semantik memeriksa definisi dan nilai","narration":"Sintaks valid belum menjamin makna. Semantik memastikan harga tersedia, item bernilai numerik, dan diskon berlaku pada subtotal yang tepat."},
- {"id":12,"motif":"subtotal","title":"Harga barang membentuk subtotal","short":"Rp18.500 + Rp21.500 + Rp14.000","narration":"Harga Rp18.500, Rp21.500, dan Rp14.000 dijumlahkan menjadi subtotal Rp54.000. Setiap item dihitung sekali, dengan harga valid."},
- {"id":13,"motif":"discount","title":"Diskon sepuluh persen","short":"10% × Rp54.000 = Rp5.400","narration":"Diskon sepuluh persen dari subtotal Rp54.000 adalah Rp5.400. Sistem menghitung diskon setelah subtotal diketahui, lalu menerapkannya sesuai aturan."},
- {"id":14,"motif":"ast","title":"AST merangkum operasi inti","short":"Operator pengurangan, dua operand","narration":"Abstract Syntax Tree atau AST merangkum operasi. Node SUB memiliki dua operand: SUBTOTAL Rp54.000 dan DISKON Rp5.400."},
- {"id":15,"motif":"evaluate","title":"Evaluasi menghasilkan total","short":"54.000 − 5.400 = 48.600","narration":"Evaluator menghitung anak sebelum induk. Subtotal Rp54.000 dikurangi diskon Rp5.400 menghasilkan total Rp48.600, yang bisa diuji ulang."},
- {"id":16,"motif":"payment","title":"Baru kemudian pembayaran","short":"Hasil yang sudah dihitung masuk ke terminal","narration":"Setelah total Rp48.600 tervalidasi, kartu ditempelkan ke terminal NFC. Ripple muncul saat kontak; terminal menunggu respons sebelum menyetujui."},
- {"id":17,"motif":"receipt","title":"Struk membuat hasil dapat diaudit","short":"Subtotal, diskon, total harus konsisten","narration":"Struk mencatat subtotal Rp54.000, diskon Rp5.400, dan total Rp48.600. Subtotal dikurangi diskon harus sama dengan total agar transaksi bisa diaudit."},
- {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang dapat diuji","short":"Token → CFG dan parser → tree → AST → evaluasi","narration":"Tokenisasi, CFG, parse tree, AST, evaluasi: satu alur dari teks menuju hasil yang teruji."}
+ {"id":1,"motif":"hook_storefront","title":"Bagaimana komputer kasir mengenali barang belanjaan kita?","short":"Sebelum menjumlahkan, sistem harus mengenali setiap barang","narration":"Komputer perlu mengenali barang dan menemukan harganya sebelum menghitung belanjaan. Bagaimana ia tahu barang yang kita beli?"},
+ {"id":2,"motif":"hook_scan","title":"Bagaimana barcode berubah menjadi nama barang dan harga?","short":"Pola garis dicocokkan dengan data produk","narration":"Pemindai membaca pola barcode, lalu mencocokkannya dengan data produk. Bagaimana garis itu berubah menjadi nama dan harga?"},
+ {"id":3,"motif":"hook_total","title":"Bagaimana diskon dihitung hingga total Rp48.600?","short":"Harga, aturan diskon, dan hasil harus cocok","narration":"Setelah harga terkumpul, komputer menerapkan diskon. Bagaimana sistem memastikan Rp54.000 dikurangi Rp5.400 menghasilkan Rp48.600?"},
+ {"id":4,"motif":"counter_formula","title":"Dari transaksi ke ekspresi komputer","short":"Kita tulis operasi sebelum menghitung hasilnya","narration":"Contohnya, subtotal belanja Rp54.000 dan diskonnya Rp5.400. Komputer menuliskan total = 54000 - 5400. Ini aturan hitung yang harus dievaluasi, bukan hasil yang boleh langsung dipercaya."},
+ {"id":5,"motif":"tokenization","title":"Tokenisasi: pecah ekspresi menjadi unit","short":"Setiap bagian memiliki jenis dan fungsi","narration":"Tokenisasi memecah ekspresi menjadi unit yang disebut token. Di sini ada nama total, tanda sama dengan, angka 54000, tanda minus, dan angka 5400. Setiap token memiliki peran, tetapi urutannya masih perlu diperiksa."},
+ {"id":6,"motif":"cfg_rules","title":"CFG: aturan susunan ekspresi","short":"Grammar menjelaskan susunan yang diizinkan","narration":"CFG adalah singkatan Context-Free Grammar, yaitu kumpulan aturan tentang susunan yang diizinkan. Aturan ini memberi tahu parser bagaimana nama, angka, dan operator dapat membentuk ekspresi yang sah."},
+ {"id":7,"motif":"syntax_check","title":"Parser memeriksa urutan token","short":"Token yang dikenal belum tentu tersusun dengan benar","narration":"Setelah token dikenali, parser memeriksa urutannya. Bentuk total = 54000 - 5400 diterima karena sesuai aturan. Dua angka yang menempel tanpa operator ditolak, walaupun masing-masing tokennya dikenal."},
+ {"id":8,"motif":"parse_tree","title":"Parse tree memperlihatkan susunan ekspresi","short":"Akar, cabang, dan daun punya fungsi berbeda","narration":"Parse tree atau pohon parsing memperlihatkan cara aturan membentuk ekspresi. Bagian atas menyatakan ekspresi utama; cabangnya mewakili bagian kiri, operator pengurangan, dan bagian kanan, hingga mencapai token angka."},
+ {"id":9,"motif":"precedence","title":"Prioritas operator menentukan urutan hitung","short":"Perkalian dikerjakan sebelum penjumlahan","narration":"Lihat 2 + 3 × 4. Komputer tidak menghitung dari kiri ke kanan begitu saja: perkalian didahulukan. Tiga kali empat menghasilkan dua belas, lalu ditambah dua, jadi empat belas—bukan dua puluh."},
+ {"id":10,"motif":"parentheses","title":"Tanda kurung mengubah pengelompokan","short":"Urutan baru menghasilkan nilai yang berbeda","narration":"Sekarang tanda kurung mengubah pengelompokan: (2 + 3) × 4. Penjumlahan dikerjakan lebih dulu dan menghasilkan lima; baru dikalikan empat. Hasilnya dua puluh, dengan struktur operasi yang berbeda."},
+ {"id":11,"motif":"semantic_check","title":"Sintaks benar belum menjamin makna","short":"Semantik memeriksa data dan aturan transaksi","narration":"Lolos aturan sintaks belum berarti nilainya masuk akal. Semantik memeriksa apakah nama barang tersedia, harganya berupa angka, dan diskon benar-benar berlaku pada transaksi ini. Ini berbeda dari kesalahan urutan simbol."},
+ {"id":12,"motif":"subtotal","title":"Tiga harga membentuk subtotal","short":"Rp18.500 + Rp21.500 + Rp14.000 = Rp54.000","narration":"Misalkan ada tiga barang: beras Rp18.500, susu Rp21.500, dan roti Rp14.000. Ketiganya dijumlahkan sekali saja. Hasilnya subtotal Rp54.000, sebelum diskon diterapkan."},
+ {"id":13,"motif":"discount","title":"Sepuluh persen berarti sepersepuluh","short":"10% × Rp54.000 = Rp5.400","narration":"Diskonnya sepuluh persen. Sepuluh persen berarti sepersepuluh dari subtotal: Rp54.000 dikali 0,10 menghasilkan Rp5.400. Angka ini adalah potongan, bukan jumlah akhir yang harus dibayar."},
+ {"id":14,"motif":"ast","title":"AST menyimpan operasi yang penting","short":"Satu operator pengurangan dengan dua nilai masukan","narration":"AST, atau Abstract Syntax Tree, adalah bentuk ringkas yang mempertahankan operasi penting. Node SUB berarti pengurangan; dua anaknya adalah SUBTOTAL Rp54.000 dan DISKON Rp5.400. Detail tanda baca tidak diperlukan untuk memahami operasi inti."},
+ {"id":15,"motif":"evaluate","title":"Evaluator menghitung hasil akhir","short":"Rp54.000 − Rp5.400 = Rp48.600","narration":"Evaluator menghitung nilai bagian-bagian terlebih dahulu, lalu menjalankan operasi utamanya. Rp54.000 dikurangi Rp5.400 sama dengan Rp48.600. Sistem dapat memeriksa kembali perhitungan ini sebelum menampilkan total."},
+ {"id":16,"motif":"payment","title":"Pembayaran dilakukan setelah total tervalidasi","short":"Sentuhan kartu bukan bukti persetujuan transaksi","narration":"Setelah hasil diperiksa, barulah pembayaran dilakukan. Kartu didekatkan ke terminal NFC. Sentuhan memulai pembacaan kartu; status disetujui hanya muncul setelah terminal menerima respons berhasil."},
+ {"id":17,"motif":"receipt","title":"Struk membuat perhitungan bisa diaudit","short":"Subtotal − diskon = total","narration":"Struk mencatat subtotal Rp54.000, diskon Rp5.400, dan total Rp48.600. Hubungannya harus konsisten: subtotal dikurangi diskon sama dengan total. Karena itu, hasil dapat diperiksa dari catatan transaksi, bukan hanya dipercaya."},
+ {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang bisa diperiksa","short":"Token → aturan → struktur → operasi → hasil","narration":"Intinya, tokenisasi mengenali unit, CFG memberi aturan, parse tree memperlihatkan susunan, dan AST merangkum operasi sebelum evaluator menghitung total yang bisa diperiksa."}
 ]
-DURATIONS = [4,4,4,14,16,17,15,18,15,15,16,15,16,17,17,13,14,10]
+DURATIONS = [7,7,7,13,14,16,15,17,14,15,16,15,16,17,16,12,13,10]
 TOTAL = sum(DURATIONS)
 assert TOTAL == TOTAL_DURATION
 
@@ -102,9 +102,9 @@ def bg(style):
  # restrained film grain/dust, deliberately no full-frame grid or random flashing
  dust=ImageDraw.Draw(im)
  rng=random.Random(20261018 + {"retail":1,"paper":2,"tech":3}[style])
- for _ in range(66):
+ for _ in range(22):
   x=rng.randrange(12,W-12); y=rng.randrange(12,H-12); r=rng.choice((1,1,2))
-  dust.ellipse((x-r,y-r,x+r,y+r),fill=(35,55,79))
+  dust.ellipse((x-r,y-r,x+r,y+r),fill=(24,37,55))
  BACKGROUND_CACHE[style]=im
  return im
 
@@ -137,19 +137,43 @@ def product_box(d,x,y,w=104,h=132,phase=0.0):
  d.line((x+10,y+8,x+w-10,y+8),fill=(*PAPER,140),width=2)
 
 def headline(d,s,question=False):
- f=base.font(35 if question else 27,"bold")
- maxw=1100
- lines=[]; cur=""
+ # One predictable title rail: stage label first, one dominant title second.
+ labels = {
+  1:"PEMBUKAAN  •  PERTANYAAN 01/03",
+  2:"PEMBUKAAN  •  PERTANYAAN 02/03",
+  3:"PEMBUKAAN  •  PERTANYAAN 03/03",
+  4:"CONTOH TRANSAKSI  •  EKSPRESI",
+  5:"LANGKAH 01/12  •  TOKENISASI",
+  6:"LANGKAH 02/12  •  ATURAN CFG",
+  7:"LANGKAH 03/12  •  VALIDASI SINTAKS",
+  8:"LANGKAH 04/12  •  POHON PARSING",
+  9:"LANGKAH 05/12  •  PRIORITAS OPERASI",
+  10:"LANGKAH 06/12  •  TANDA KURUNG",
+  11:"LANGKAH 07/12  •  VALIDASI MAKNA",
+  12:"LANGKAH 08/12  •  SUBTOTAL",
+  13:"LANGKAH 09/12  •  DISKON",
+  14:"LANGKAH 10/12  •  AST",
+  15:"LANGKAH 11/12  •  EVALUASI",
+  16:"LANGKAH 12/12  •  PEMBAYARAN",
+  17:"RANGKUMAN  •  AUDIT STRUK",
+  18:"RANGKUMAN  •  ALUR LENGKAP"
+ }
+ card(d,(42,20,1238,145),(5,11,22,241),(61,86,117,175),14,1)
+ text(d,66,35,labels.get(s["id"],"DARI KASIR KE DALAM PIKIRAN KOMPUTER"),
+      13,CYAN if question else MUTED,"mono")
+ f=base.font(30 if question else 26,"bold")
+ maxw=1130; lines=[]; cur=""
  for word in s["title"].split():
   nxt=word if not cur else cur+" "+word
-  if cur and base.tw(d,nxt,f)>maxw: lines.append(cur); cur=word
-  else: cur=nxt
+  if cur and base.tw(d,nxt,f)>maxw:
+   lines.append(cur); cur=word
+  else:
+   cur=nxt
  if cur: lines.append(cur)
- y=58 if question else 45
- c=AMBER if question else WHITE
- for j,l in enumerate(lines[:2]): d.text((66,y+j*43),l,font=f,fill=c)
- if not question:
-  d.text((68,y+47),"KASIR / STRUK / PEMROSESAN EKSPRESI",font=base.font(12,"mono"),fill=MUTED)
+ y=63
+ for j,l in enumerate(lines[:2]):
+  d.text((66,y+j*32),l,font=f,fill=AMBER if question else WHITE)
+ line(d,(66,135,1212,135),(58,82,112,145),1)
 
 def cashier_screen(d,box=(115,186,1165,533),label_text="POINT OF SALE"):
  x1,y1,x2,y2=box
@@ -524,53 +548,30 @@ def draw_exit(d,t):
     d.polygon(((x0+224,369),(x0+217,364),(x0+217,374)),fill=(*MUTED,230))
 
 def draw_effects(d,s,t):
- sid=s["id"]; motif=s["motif"]
- target={
-  1:(640,360),2:(565,365),3:(930,390),4:(650,373),5:(610,389),6:(650,365),
-  7:(900,380),8:(640,380),9:(850,420),10:(490,420),11:(920,392),
-  12:(820,470),13:(930,365),14:(640,370),15:(880,360),16:(895,356),17:(640,390),18:(640,370)
- }.get(sid,(640,360))
- for beat in BEAT_GUIDE[str(sid)]:
-  delta=t-beat["at"]
-  if delta < 0 or delta > .42: continue
-  q=delta/.42; alpha=int(190*(1-q)); fx=beat["fx"]; cx,cy=target
-  if any(k in fx for k in ("scan","sweep","rake","wipe","sheen")):
-   xx=int(120+((delta/.42)*1040))
-   col=CORAL if "scan" in fx else CYAN
-   d.polygon(((xx-10,190),(xx+5,190),(xx+120,525),(xx+105,525)),fill=(*col,max(0,alpha//5)))
-   line(d,(xx,190,xx+115,525),(*col,alpha),3)
-  elif any(k in fx for k in ("tree","branch","root","node","ast","lock","result","total","price","coupon","discount","status","confirm","snap","stamp","nfc","ripple","focus","formula","token","rule","syntax","semantic","valid","digit","sequence","production","leaf")):
-   r=int(10+delta*110)
-   col=AMBER if any(k in fx for k in ("result","total","price","coupon","discount","digit","stamp")) else CYAN
-   d.ellipse((cx-r,cy-r,cx+r,cy+r),outline=(*col,alpha),width=2)
-   if "token" in fx or "character" in fx:
-    for j in range(3):
-     ox=int(math.cos(j*2.1+delta*5)*r*1.5); oy=int(math.sin(j*2.1+delta*5)*r*.8)
-     d.rounded_rectangle((cx+ox-3,cy+oy-3,cx+ox+3,cy+oy+3),radius=1,fill=(*col,alpha))
-  elif "flash" in fx or "match_cut" in fx or "title" in fx:
-   line(d,(0,185,W,185),(*AMBER,alpha),3)
-   line(d,(0,190,W,190),(*WHITE,alpha//2),1)
-  elif any(k in fx for k in ("truck","dolly","approach","card_slide","paper_feed","line_item","operand","travel","rewire","bracket","error","warn","bag","settle","green")):
-   for j in range(3):
-    yy=cy-18+j*18
-    line(d,(cx-45-int(delta*48),yy,cx+20-int(delta*16),yy),(*(AMBER if j==1 else CYAN),max(0,alpha-j*40)),2)
+ # Intentional no-op: motion is authored inside each scene's own composition.
+ # Generic rings, sweeps and flashes crossed text and added visual noise in prior builds.
+ # Keep event timing metadata in BEAT_GUIDE for sound sync and the director cue sheet.
+ return
 
 def draw_caption(im,s,t):
  speech=v2.SPEECH_DURATION_BY_ID.get(s["id"],DURATIONS[s["id"]-1]-.7)
  caption="" if t>speech+.08 else v2.phrase_at(s["narration"],t,speech)
  if not caption: return im
  d=ImageDraw.Draw(im,"RGBA")
- # fixed lower-third stays outside the main information stage; two lines maximum.
- d.rounded_rectangle((52,625,1228,706),radius=13,fill=(4,10,20,222),outline=(80,111,145,100),width=1)
- f=base.font(17,"regular")
+ # Stable subtitle shelf: generous padding, two lines max, outside the information stage.
+ d.rounded_rectangle((42,608,1238,706),radius=13,fill=(3,9,18,241),outline=(70,101,135,150),width=1)
+ d.rounded_rectangle((59,628,64,687),radius=2,fill=(*CYAN,245))
+ f=base.font(19,"regular")
  lines=[]; cur=""
  for word in caption.split():
   nxt=word if not cur else cur+" "+word
-  if cur and base.tw(d,nxt,f)>1110: lines.append(cur); cur=word
-  else: cur=nxt
+  if cur and base.tw(d,nxt,f)>1125:
+   lines.append(cur); cur=word
+  else:
+   cur=nxt
  if cur: lines.append(cur)
  for j,l in enumerate(lines[:2]):
-  d.text((75,640+j*25),l,font=f,fill=WHITE)
+  d.text((83,622+j*30),l,font=f,fill=WHITE)
  return im
 
 def frame_v3(s,local,duration):
@@ -582,17 +583,14 @@ def frame_v3(s,local,duration):
  if s["motif"]=="hook_storefront":
   draw_shop(d,t)
   # question sits in clear sky-space, outside the store silhouette
-  d.rounded_rectangle((55,40,1225,149),radius=17,fill=(5,12,24,142),outline=(255,185,83,145),width=1)
   headline(d,s,True)
  elif s["motif"]=="hook_scan":
   draw_barcode(d,t)
-  d.rounded_rectangle((55,40,1225,149),radius=17,fill=(5,12,24,152),outline=(255,185,83,145),width=1)
   headline(d,s,True)
   # readable one-word consequence follows the scan beam
   center(d,640,560,"BIP  →  DATA  →  ?",19,CYAN,"mono")
  elif s["motif"]=="hook_total":
   draw_pos_hook(d,t)
-  d.rounded_rectangle((55,40,1225,149),radius=17,fill=(5,12,24,152),outline=(255,185,83,145),width=1)
   headline(d,s,True)
  else:
   headline(d,s,False)
@@ -614,9 +612,9 @@ def frame_v3(s,local,duration):
   elif motif=="exit_recap": draw_exit(d,motion_t)
  draw_effects(d,s,t)
  # Shot-specific camera movement: gentle push for details, slight pull for the exit.
- zoom=(1.0+0.032*ease(p)) if s["id"] not in (3,18) else (1.045-0.035*ease(p))
- pan_x=int(8*math.sin(p*math.pi)*(1 if s["id"]%2 else -1))
- pan_y=int(3*math.sin(p*math.pi*1.3))
+ zoom=(1.0+0.012*ease(p)) if s["id"] not in (3,18) else (1.012-0.012*ease(p))
+ pan_x=int(3*math.sin(p*math.pi)*(1 if s["id"]%2 else -1))
+ pan_y=int(1*math.sin(p*math.pi*1.3))
  if zoom>1.002:
   nw=int(W*zoom); nh=int(H*zoom)
   im=im.resize((nw,nh),Image.Resampling.BICUBIC)
@@ -627,9 +625,9 @@ def frame_v3(s,local,duration):
 def write_director_guide(out):
  out=Path(out); elapsed=0
  detail={
- 1:("4s exterior-to-door dolly; shopper walk cycle, sliding-door panels, warm spill light.","Question title enters once with a 6-frame ease-out; parallax pavement moves slower than foreground. SFX footfall at walk contact; door chime at light-rake cue.","Match cut on the door seam toward the scanner; do not linger on store geography."),
- 2:("4s close-up: package, barcode, scanner housing, moving scan beam.","Laser crosses barcode once, thin red core with short glow; only on crossing, trigger the scan chirp. Small data fragments move toward frame right after scan, not before.","Cut on the direction of the beam toward POS screen. No full-screen glitch or persistent laser."),
- 3:("4s POS screen close-up; digits count to Rp48.600 while equation stays readable.","Numeric count eases and settles; one green lock ring follows the total-chime. Match-cut the screen edge into the teaching screen.","This is the final hook. Start explaining the formula in the next shot; do not add an extra journey montage."),
+ 1:("7s exterior-to-door dolly; shopper walk cycle, sliding-door panels, warm spill light.","Question title enters once with a 6-frame ease-out; parallax pavement moves slower than foreground. SFX footfall at walk contact; door chime at light-rake cue.","Match cut on the door seam toward the scanner; do not linger on store geography."),
+ 2:("7s close-up: package, barcode, scanner housing, moving scan beam.","Laser crosses barcode once, thin red core with short glow; only on crossing, trigger the scan chirp. Small data fragments move toward frame right after scan, not before.","Cut on the direction of the beam toward POS screen. No full-screen glitch or persistent laser."),
+ 3:("7s POS screen close-up; hold the verified Rp48.600 total while equation stays readable.","Numeric count eases and settles; one green lock ring follows the total-chime. Match-cut the screen edge into the teaching screen.","This is the final hook. Start explaining the formula in the next shot; do not add an extra journey montage."),
  4:("8s front-on POS screen with formula and moving focus cursor.","A restrained glass reflection crosses once; formula is revealed by token-sized groups. Cursor underlines the active symbol, then holds long enough to read.","Keep narration caption below the display. Formula remains high contrast and never moves with the reflection."),
  5:("8s characters split into five token chips and settle in one horizontal reading order.","Letters separate, magnetize into token blocks with slight overshoot, then arrows connect left-to-right. Pulse only the token currently named by voiceover.","No floating token confetti. Preserve exact order: IDENTIFIER, EQUALS, NUMBER, MINUS, NUMBER."),
  6:("9s three CFG productions enter sequentially.","Each rule slides 120 px, eases, and settles; underline left-hand nonterminal then reveal right-hand production. The active rule gets a small cyan edge, not an all-card glow.","Keep each rule on a fixed row. Do not animate all rows at identical speed or obscure the grammar with captions."),
@@ -648,7 +646,7 @@ def write_director_guide(out):
  }
  guide=["# Director's VFX and Motion Guide — Cashier-first V3","",
  "## Creative correction","",
- "V2's principal failure was structural: almost every scene reused the same frame template and narration slab. This version uses a different composition for each visual task. The exterior-to-cashier opening is exactly three short hook clips (12 seconds total); scene 4 begins the explanation at the register.",
+ "V2's principal failure was structural: almost every scene reused the same frame template and narration slab. This version uses a different composition for each visual task. The exterior-to-cashier opening is exactly three clear question hooks (21 seconds total); scene 4 begins the explanation at the register.",
  "",
  "## Global animation rules","",
  "- Output canvas: 1920×1080 at 24 fps. Procedural drawing source: 1280×720, enlarged with Lanczos scaling.",
@@ -683,7 +681,7 @@ def write_director_guide(out):
  (out/"motion-direction-v3.md").write_text("\n".join(guide),encoding="utf-8")
  (out/"README-V3.txt").write_text(
   "DARI KASIR KE DALAM PIKIRAN KOMPUTER — V3\n\n"
-  "Hook: 3 shots / 12 seconds. Directly after the third question, the lesson starts at the POS register.\n"
+  "Hook: 3 question shots / 21 seconds. Directly after the third question, the lesson starts at the POS register.\n"
   "Duration: 240 seconds; 18 scenes; 1920x1080 at 24 fps; H.264 + AAC stereo 48 kHz.\n"
   "Included: MP4, SRT, transcript, generated SFX stem, SFX cue JSON, shot-by-shot VFX guide, contact sheet, manifest.\n"
   "Source visuals and SFX are generated procedurally. No external reference images are imported.\n"
@@ -709,7 +707,7 @@ def main():
  visual_only=work/"visual-v3-only.mp4"; contact=out/"cashier-first-contact-sheet-v3.jpg"
  if len(SCENES)!=18 or sum(DURATIONS)!=240: raise RuntimeError("V3 scene/runtime contract failed.")
  if 54000-5400!=48600 or round(54000*.10)!=5400: raise RuntimeError("Canonical transaction arithmetic failed.")
- print("V3: 3 hook clips / 12 seconds; cashier lesson starts in scene 4; 18 scenes / 240 seconds.",flush=True)
+ print("V3: 3 clear question hooks / 21 seconds; cashier lesson starts in scene 4; 18 scenes / 240 seconds.",flush=True)
  audio=v2.make_audio_v2(args.ffmpeg,args.ffprobe,work,out)
  # Apply a bounded fade on the actual 240-second V3 timeline after mixing.
  faded=work/"master-audio-v3-faded.wav"
@@ -722,7 +720,7 @@ def main():
  cue_data=json.loads(cue_path.read_text(encoding="utf-8"))
  cue_data["version"]="v3"
  cue_data["duration_sec"]=TOTAL
- cue_data["opening_structure"]="three 4-second question hooks, then cashier explanation"
+ cue_data["opening_structure"]="three 7-second question hooks, then cashier explanation"
  cue_path.write_text(json.dumps(cue_data,ensure_ascii=False,indent=2),encoding="utf-8")
  write_director_guide(out)
  if abs(base.duration(args.ffprobe,audio["mixed"])-TOTAL)>.12: raise RuntimeError("V3 audio timeline is not 240 seconds.")
@@ -735,8 +733,8 @@ def main():
  manifest={
   "project":"Dari Kasir ke Dalam Pikiran Komputer","version":"cashier-first-motion-v3.0.0",
   "created_utc":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),
-  "creative_revision":{"hook_scene_count":3,"hook_duration_sec":12,"lesson_starts_scene":4,
-    "opening":"Storefront question → barcode question → total-validity question → immediate POS lesson"},
+  "creative_revision":{"hook_scene_count":3,"hook_duration_sec":21,"lesson_starts_scene":4,
+    "opening":"Clear 7-second question hooks: item recognition → barcode lookup → discount calculation and verified total → immediate POS lesson"},
   "method":"Scene-specific Pillow vector illustration and animated diagrams streamed to FFmpeg; no external visual assets.",
   "reference_images_used":0,"external_visual_assets_used":0,"scene_count":len(SCENES),
   "scene_durations_sec":DURATIONS,"target_duration_sec":TOTAL,"target_frames":TOTAL*FPS,
@@ -751,7 +749,7 @@ def main():
     "duration_sec":DURATIONS[i],"beats":BEAT_GUIDE[str(s["id"])]} for i,s in enumerate(SCENES)]
  }
  (out/"production-manifest-v3.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")
- (out/"concept-v3.md").write_text("# Cashier-first V3\n\nThree short question hooks move from the store exterior to barcode scanning to the POS total, then the lesson begins immediately at the cashier. It explains tokenization, CFG, syntax validation, parse trees, operator precedence, semantic validation, subtotal/discount arithmetic, AST, evaluation, payment, and receipt audit.\n\nRuntime: 240 seconds, 18 scenes, 24 fps. Visual compositions and motions are authored per scene, and the shot-by-shot VFX sheet supplies blocking, movement, timing, sync, transitions, and legibility constraints.\n",encoding="utf-8")
+ (out/"concept-v3.md").write_text("# Cashier-first V3\n\nThree clear 7-second questions connect item recognition, barcode lookup, and discount calculation; then the lesson begins immediately at the cashier. It explains tokenization, CFG, syntax validation, parse trees, operator precedence, semantic validation, subtotal/discount arithmetic, AST, evaluation, payment, and receipt audit.\n\nRuntime: 240 seconds, 18 scenes, 24 fps. Visual compositions and motions are authored per scene, and the shot-by-shot VFX sheet supplies blocking, movement, timing, sync, transitions, and legibility constraints.\n",encoding="utf-8")
  # Full package contains render, subtitle, voice transcript, SFX stem/cues, and the shot-by-shot direction.
  package=out/"Dari_Kasir_Cashier_First_V3_Full_Package.zip"
  with zipfile.ZipFile(package,"w",zipfile.ZIP_DEFLATED,compresslevel=6) as z:
