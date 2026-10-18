@@ -1,4 +1,4 @@
-name: Motion Studio Foundation v0.2.3
+name: Motion Studio Foundation v0.2.4
 on:
   push:
     branches: ["feature/motion-studio-foundation-v0-1", "main"]
@@ -78,7 +78,7 @@ jobs:
           from pathlib import Path
           from zipfile import ZipFile, ZIP_DEFLATED
           root = Path(".")
-          target = root / "out" / "motion-studio-foundation-v0-2-3-source.zip"
+          target = root / "out" / "motion-studio-foundation-v0-2-4-source.zip"
           target.parent.mkdir(parents=True, exist_ok=True)
           skip_parts = {"out", ".git", "node_modules", "__pycache__"}
           with ZipFile(target, "w", ZIP_DEFLATED) as archive:
@@ -91,7 +91,7 @@ jobs:
       - name: Upload pilot, source and regression evidence
         uses: actions/upload-artifact@v4
         with:
-          name: motion-studio-foundation-v0-2-3-anatomy-contact-benchmarks-raster-evidence
+          name: motion-studio-foundation-v0-2-4-rest-pose-benchmarks-raster-evidence
           path: |
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4.report.json

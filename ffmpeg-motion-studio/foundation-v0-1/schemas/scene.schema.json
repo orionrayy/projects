@@ -1,17 +1,364 @@
 {
- "$schema":"https://json-schema.org/draft/2020-12/schema",
- "$id":"https://orionrayy.github.io/projects/ffmpeg-motion-studio/foundation-v0-1/schemas/scene.schema.json",
- "type":"object","additionalProperties":false,
- "required":["schema_version","scene_id","scene_version","title","purpose","fps","duration_frames","canvas","palette","character","board","motion","quality_contract"],
- "properties":{
-  "schema_version":{"const":"1.0.0"},"scene_id":{"type":"string","pattern":"^scene-[0-9]{3,}$"},"scene_version":{"type":"string","minLength":1},
-  "title":{"type":"string","minLength":1,"maxLength":120},"purpose":{"type":"string","minLength":1},"fps":{"type":"integer","minimum":1,"maximum":120},"duration_frames":{"type":"integer","minimum":1,"maximum":100000},
-  "canvas":{"type":"object","additionalProperties":false,"required":["width","height"],"properties":{"width":{"type":"integer","minimum":320,"maximum":7680},"height":{"type":"integer","minimum":180,"maximum":4320}}},
-  "palette":{"type":"object","additionalProperties":false,"required":["background","ink","muted","panel","panel_border","accent","accent_soft","skin","shirt","pants","hair","green"],"properties":{"background":{"$ref":"#/$defs/color"},"ink":{"$ref":"#/$defs/color"},"muted":{"$ref":"#/$defs/color"},"panel":{"$ref":"#/$defs/color"},"panel_border":{"$ref":"#/$defs/color"},"accent":{"$ref":"#/$defs/color"},"accent_soft":{"$ref":"#/$defs/color"},"skin":{"$ref":"#/$defs/color"},"shirt":{"$ref":"#/$defs/color"},"pants":{"$ref":"#/$defs/color"},"hair":{"$ref":"#/$defs/color"},"green":{"$ref":"#/$defs/color"}}},
-  "character":{"type":"object","additionalProperties":false,"required":["origin","head","shoulder","upper_arm_length","forearm_length","hand_length","pelvis_y","leg_length"],"properties":{"origin":{"$ref":"#/$defs/point"},"head":{"type":"object","additionalProperties":false,"required":["offset_x","offset_y","radius"],"properties":{"offset_x":{"type":"number"},"offset_y":{"type":"number"},"radius":{"type":"number","minimum":10,"maximum":120}}},"shoulder":{"type":"object","additionalProperties":false,"required":["offset_x","offset_y"],"properties":{"offset_x":{"type":"number"},"offset_y":{"type":"number"}}},"upper_arm_length":{"type":"number","exclusiveMinimum":0,"maximum":500},"forearm_length":{"type":"number","exclusiveMinimum":0,"maximum":500},"hand_length":{"type":"number","exclusiveMinimum":0,"maximum":100},"pelvis_y":{"type":"number","minimum":0,"maximum":500},"leg_length":{"type":"number","exclusiveMinimum":0,"maximum":500}}},
-  "board":{"type":"object","additionalProperties":false,"required":["x","y","width","height","target_x","target_y"],"properties":{"x":{"type":"number"},"y":{"type":"number"},"width":{"type":"number","exclusiveMinimum":0},"height":{"type":"number","exclusiveMinimum":0},"target_x":{"type":"number"},"target_y":{"type":"number"}}},
-  "motion":{"type":"object","additionalProperties":false,"required":["anticipation_seconds","reach_seconds","anticipation_px","settle_amplitude_px","settle_decay","settle_frequency","elbow_bend"],"properties":{"anticipation_seconds":{"type":"number","minimum":0},"reach_seconds":{"type":"number","exclusiveMinimum":0},"anticipation_px":{"type":"number","minimum":0},"settle_amplitude_px":{"type":"number","minimum":0},"settle_decay":{"type":"number","exclusiveMinimum":0},"settle_frequency":{"type":"number","exclusiveMinimum":0},"elbow_bend":{"type":"integer","enum":[-1,1]}}},
-  "quality_contract":{"type":"object","additionalProperties":false,"required":["must_be_silent_prototype","must_be_deterministic_by_frame","max_ik_segment_error_px","max_target_error_px","target_must_be_reachable"],"properties":{"must_be_silent_prototype":{"type":"boolean"},"must_be_deterministic_by_frame":{"type":"boolean"},"max_ik_segment_error_px":{"type":"number","minimum":0},"max_target_error_px":{"type":"number","minimum":0},"target_must_be_reachable":{"type":"boolean"}}}
- },
- "$defs":{"color":{"type":"string","pattern":"^#[0-9A-Fa-f]{6}$"},"point":{"type":"object","additionalProperties":false,"required":["x","y"],"properties":{"x":{"type":"number"},"y":{"type":"number"}}}}
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orionrayy.github.io/projects/ffmpeg-motion-studio/foundation-v0-1/schemas/scene.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scene_id",
+    "scene_version",
+    "title",
+    "purpose",
+    "fps",
+    "duration_frames",
+    "canvas",
+    "palette",
+    "character",
+    "board",
+    "motion",
+    "quality_contract"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "scene_id": {
+      "type": "string",
+      "pattern": "^scene-[0-9]{3,}$"
+    },
+    "scene_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fps": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 120
+    },
+    "duration_frames": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100000
+    },
+    "canvas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 320,
+          "maximum": 7680
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 180,
+          "maximum": 4320
+        }
+      }
+    },
+    "palette": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "background",
+        "ink",
+        "muted",
+        "panel",
+        "panel_border",
+        "accent",
+        "accent_soft",
+        "skin",
+        "shirt",
+        "pants",
+        "hair",
+        "green"
+      ],
+      "properties": {
+        "background": {
+          "$ref": "#/$defs/color"
+        },
+        "ink": {
+          "$ref": "#/$defs/color"
+        },
+        "muted": {
+          "$ref": "#/$defs/color"
+        },
+        "panel": {
+          "$ref": "#/$defs/color"
+        },
+        "panel_border": {
+          "$ref": "#/$defs/color"
+        },
+        "accent": {
+          "$ref": "#/$defs/color"
+        },
+        "accent_soft": {
+          "$ref": "#/$defs/color"
+        },
+        "skin": {
+          "$ref": "#/$defs/color"
+        },
+        "shirt": {
+          "$ref": "#/$defs/color"
+        },
+        "pants": {
+          "$ref": "#/$defs/color"
+        },
+        "hair": {
+          "$ref": "#/$defs/color"
+        },
+        "green": {
+          "$ref": "#/$defs/color"
+        }
+      }
+    },
+    "character": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "origin",
+        "head",
+        "shoulder",
+        "rest_pose",
+        "upper_arm_length",
+        "forearm_length",
+        "hand_length",
+        "pelvis_y",
+        "leg_length"
+      ],
+      "properties": {
+        "origin": {
+          "$ref": "#/$defs/point"
+        },
+        "head": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "offset_x",
+            "offset_y",
+            "radius"
+          ],
+          "properties": {
+            "offset_x": {
+              "type": "number"
+            },
+            "offset_y": {
+              "type": "number"
+            },
+            "radius": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 120
+            }
+          }
+        },
+        "shoulder": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "offset_x",
+            "offset_y"
+          ],
+          "properties": {
+            "offset_x": {
+              "type": "number"
+            },
+            "offset_y": {
+              "type": "number"
+            }
+          }
+        },
+        "upper_arm_length": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 500
+        },
+        "forearm_length": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 500
+        },
+        "hand_length": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        },
+        "pelvis_y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 500
+        },
+        "leg_length": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 500
+        },
+        "rest_pose": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "wrist_offset_x",
+            "wrist_offset_y"
+          ],
+          "properties": {
+            "wrist_offset_x": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 500
+            },
+            "wrist_offset_y": {
+              "type": "number",
+              "minimum": -250,
+              "maximum": 500
+            }
+          }
+        }
+      }
+    },
+    "board": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height",
+        "target_x",
+        "target_y"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "target_x": {
+          "type": "number"
+        },
+        "target_y": {
+          "type": "number"
+        }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anticipation_seconds",
+        "reach_seconds",
+        "anticipation_px",
+        "settle_amplitude_px",
+        "settle_decay",
+        "settle_frequency",
+        "elbow_bend"
+      ],
+      "properties": {
+        "anticipation_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "reach_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "anticipation_px": {
+          "type": "number",
+          "minimum": 0
+        },
+        "settle_amplitude_px": {
+          "type": "number",
+          "minimum": 0
+        },
+        "settle_decay": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "settle_frequency": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "elbow_bend": {
+          "type": "integer",
+          "enum": [
+            -1,
+            1
+          ]
+        }
+      }
+    },
+    "quality_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "must_be_silent_prototype",
+        "must_be_deterministic_by_frame",
+        "max_ik_segment_error_px",
+        "max_target_error_px",
+        "target_must_be_reachable"
+      ],
+      "properties": {
+        "must_be_silent_prototype": {
+          "type": "boolean"
+        },
+        "must_be_deterministic_by_frame": {
+          "type": "boolean"
+        },
+        "max_ik_segment_error_px": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_target_error_px": {
+          "type": "number",
+          "minimum": 0
+        },
+        "target_must_be_reachable": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$"
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      }
+    }
+  }
 }

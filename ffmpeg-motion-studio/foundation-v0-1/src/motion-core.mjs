@@ -79,9 +79,10 @@ export function evaluateFrame(scene, frameIndex) {
     x: rootX + character.shoulder.offset_x,
     y: origin.y + character.shoulder.offset_y,
   };
+  const restPose = character.rest_pose;
   const idleWrist = {
-    x: origin.x + 80 - anticipation * 0.2,
-    y: origin.y + 100,
+    x: origin.x + restPose.wrist_offset_x - anticipation * 0.2,
+    y: origin.y + restPose.wrist_offset_y,
   };
   const finalWrist = {
     x: board.target_x - character.hand_length,

@@ -1,4 +1,4 @@
-# Motion Studio Foundation v0.2.3
+# Motion Studio Foundation v0.2.4
 
 Isolated implementation pilot; the previous renderer is preserved and untouched.
 
@@ -39,3 +39,7 @@ The raster parity diagnostic compares six selected SVG frames rendered by headle
 The hand now follows the forearm during anticipation and eases into a straight pointing pose during reach. The SVG composition draws the upper arm over the torso edge to preserve a visible shoulder connection, adds a neck bridge, and reports TARGET AHEAD until measured contact tolerance is reached. A full-timeline visual contract test checks pose finiteness, arm/hand geometry and phase-accurate contact labeling.
 
 These are structural/rendering fixes, not a claim that the character is anatomically or artistically production-ready. Human-motion evaluation and broader character-shape validation remain outstanding.
+
+
+## v0.2.4 rest-pose correction
+The initial wrist pose is now scene-configured through `character.rest_pose` rather than hard-coded near the torso. This moves the idle wrist forward and higher, preventing the elbow from folding behind the shoulder during anticipation. Schema validation makes these offsets explicit and rejects invalid ranges. A new test checks the elbow/wrist side relationship across all anticipation frames.

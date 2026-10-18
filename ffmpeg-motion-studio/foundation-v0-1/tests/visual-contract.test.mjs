@@ -54,3 +54,18 @@ test("all frames preserve finite articulated geometry and a fixed two-link rig",
       "hand length at frame " + frame);
   }
 });
+
+test("anticipation keeps the elbow in front of the torso instead of folding behind the shoulder", () => {
+  const anticipationFrames = Math.floor(scene.motion.anticipation_seconds * scene.fps);
+  for (let frame = 0; frame <= anticipationFrames; frame += 1) {
+    const state = evaluateFrame(scene, frame);
+    assert.ok(
+      state.elbow.x > state.shoulder.x,
+      "elbow should remain forward of shoulder at frame " + frame,
+    );
+    assert.ok(
+      state.wrist.x > state.elbow.x,
+      "wrist should remain forward of elbow at frame " + frame,
+    );
+  }
+});
