@@ -80,3 +80,9 @@ test("pointing hand has separate palm, index finger and thumb geometry", () => {
     assert.match(svg, /id="folded-fingers"/);
   }
 });
+
+test("pointing-hand length remains proportionate to the forearm", () => {
+  const ratio = scene.character.hand_length / scene.character.forearm_length;
+  assert.ok(ratio >= 0.28, "pointing hand must not shrink below 28% of the forearm");
+  assert.ok(ratio <= 0.36, "pointing hand must not dominate the forearm");
+});

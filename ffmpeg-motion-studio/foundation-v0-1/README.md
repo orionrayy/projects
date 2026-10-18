@@ -1,4 +1,4 @@
-# Motion Studio Foundation v0.2.5
+# Motion Studio Foundation v0.2.6
 
 Isolated implementation pilot; the previous renderer is preserved and untouched.
 
@@ -47,3 +47,7 @@ The initial wrist pose is now scene-configured through `character.rest_pose` rat
 
 ## v0.2.5 hand silhouette and leg-joint correction
 The hand render is now articulated as palm, index finger, thumb, and folded fingers, transformed by the same solved wrist angle. The index-finger endpoint remains tied to the mathematical endpoint used for target contact. Explicit knee disks were removed because they read as mechanical joint markers rather than part of the chosen cartoon style. Visual regression checks require each hand component in representative frames.
+
+
+## v0.2.6 pointing-hand proportions
+The authored hand length is increased to 32 px (about 29.6% of the 108 px forearm) while the wrist-to-index-tip transform remains geometric and deterministic. A proportional guard now keeps the hand between 28% and 36% of the forearm length for this character design.
