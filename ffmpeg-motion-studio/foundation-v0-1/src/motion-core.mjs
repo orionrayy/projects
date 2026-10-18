@@ -19,7 +19,15 @@ export function evaluateFrame(scene,frameIndex){
  const anticipation=m.anticipation_px*Math.sin(Math.PI*clamp(t/Math.max(ae,1e-8),0,1)),rootX=o.x-anticipation,shoulder={x:rootX+c.shoulder.offset_x,y:o.y+c.shoulder.offset_y};
  const idle={x:o.x+80-anticipation*.2,y:o.y+100},finalWrist={x:b.target_x-c.hand_length,y:b.target_y},p=smoothstep((t-ae)/m.reach_seconds);
  let desired={x:lerp(idle.x,finalWrist.x,p),y:lerp(idle.y,finalWrist.y,p)};
- if(t>re){const st=t-re,d=Math.exp(-m.settle_decay*st);desired={x:desired.x+m.settle_amplitude_px*d*Math.sin(m.settle_frequency*st),y:desired.y+m.settle_amplitude_px*.25*d*Math.cos(m.settle_frequency*st)};}
+ let settleAmplitudeUsedPx=0;
+ if(t>re){
+  const st=t-re,d=Math.exp(-m.settle_decay*st);
+  // Decorative settling must respect the remaining IK reach envelope.
+  const maxSafeReach=c.upper_arm_length+c.forearm_length-0.05;
+  const targetHeadroom=maxSafeReach-distance(shoulder,finalWrist);
+  settleAmplitudeUsedPx=Math.min(m.settle_amplitude_px,Math.max(0,targetHeadroom/1.1));
+  desired={x:desired.x+settleAmplitudeUsedPx*d*Math.sin(m.settle_frequency*st),y:desired.y+settleAmplitudeUsedPx*.25*d*Math.cos(m.settle_frequency*st)};
+ }
  const ik=solveTwoBoneIK(shoulder,desired,c.upper_arm_length,c.forearm_length,m.elbow_bend),tip={x:ik.wrist.x+c.hand_length,y:ik.wrist.y-1.5};
- return {frameIndex,timeSeconds:t,phase:t<ae?"anticipate":t<re?"reach":t<re+.7?"settle":"hold",root:{x:rootX,y:o.y},head:{x:rootX+c.head.offset_x,y:o.y+c.head.offset_y},shoulder,elbow:ik.elbow,wrist:ik.wrist,requestedWrist:desired,fingerTip:tip,pelvis:{x:rootX+4,y:o.y+c.pelvis_y},target:{x:b.target_x,y:b.target_y},diagnostics:{reachable:ik.reachable,requestedReachPx:ik.requestedDistance,maxReachPx:c.upper_arm_length+c.forearm_length,upperSegmentErrorPx:ik.upperError,lowerSegmentErrorPx:ik.lowerError,requestedTargetErrorPx:distance(ik.wrist,desired),targetErrorPx:distance(tip,{x:b.target_x,y:b.target_y-1.5})}};
+ return {frameIndex,timeSeconds:t,phase:t<ae?"anticipate":t<re?"reach":t<re+.7?"settle":"hold",root:{x:rootX,y:o.y},head:{x:rootX+c.head.offset_x,y:o.y+c.head.offset_y},shoulder,elbow:ik.elbow,wrist:ik.wrist,requestedWrist:desired,fingerTip:tip,pelvis:{x:rootX+4,y:o.y+c.pelvis_y},target:{x:b.target_x,y:b.target_y},diagnostics:{reachable:ik.reachable,requestedReachPx:ik.requestedDistance,maxReachPx:c.upper_arm_length+c.forearm_length,upperSegmentErrorPx:ik.upperError,lowerSegmentErrorPx:ik.lowerError,requestedTargetErrorPx:distance(ik.wrist,desired),targetErrorPx:distance(tip,{x:b.target_x,y:b.target_y-1.5}),settleAmplitudeUsedPx}};
 }

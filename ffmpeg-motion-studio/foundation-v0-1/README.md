@@ -1,4 +1,4 @@
-# Motion Studio Foundation v0.1
+# Motion Studio Foundation v0.2
 
 Isolated implementation pilot; existing renderers remain untouched.
 
