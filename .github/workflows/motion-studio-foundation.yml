@@ -30,13 +30,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install schema validator
-        run: python -m pip install -r requirements-test.txt
-      - name: Verify FFmpeg SVG/H.264 support
+      - name: Install FFmpeg and schema validator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install -r requirements-test.txt
+      - name: Verify toolchain
         run: |
           node --version
           ffmpeg -version | head -n 2
-          ffmpeg -hide_banner -decoders 2>/dev/null | grep -q librsvg
           ffmpeg -hide_banner -encoders 2>/dev/null | grep -q libx264
           ffprobe -version | head -n 1
       - name: Validate scene manifest
@@ -45,7 +47,7 @@ jobs:
         run: npm test
       - name: Schema regression tests
         run: python -m unittest discover -s tests -p '*test.py' -v
-      - name: Render and verify pilot
+      - name: Render SVG frames and verify real FFmpeg export
         run: npm run render
       - name: Upload silent pilot
         uses: actions/upload-artifact@v4
