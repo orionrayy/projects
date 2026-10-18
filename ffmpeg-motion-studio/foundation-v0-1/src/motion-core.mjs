@@ -129,10 +129,10 @@ export function evaluateFrame(scene, frameIndex) {
   const handAngle = lerp(forearmAngle, 0, reachProgress);
   const fingerTip = {
     x: ik.wrist.x + Math.cos(handAngle) * character.hand_length,
-    y: ik.wrist.y + Math.sin(handAngle) * character.hand_length - 1.5,
+    y: ik.wrist.y + Math.sin(handAngle) * character.hand_length,
   };
 
-  const targetContactPoint = { x: board.target_x, y: board.target_y - 1.5 };
+  const targetContactPoint = { x: board.target_x, y: board.target_y };
   const pelvis = { x: rootX + 4, y: origin.y + character.pelvis_y };
 
   return {

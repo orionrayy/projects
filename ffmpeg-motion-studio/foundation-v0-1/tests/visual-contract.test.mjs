@@ -26,7 +26,7 @@ test("hand starts aligned to the forearm and eases to a straight contact pose", 
 
   const end = evaluateFrame(scene, scene.duration_frames - 1);
   assert.ok(Math.abs(end.handAngle) < 1e-10);
-  assert.ok(distance(end.fingerTip, { x: scene.board.target_x, y: scene.board.target_y - 1.5 }) < 0.02);
+  assert.ok(distance(end.fingerTip, { x: scene.board.target_x, y: scene.board.target_y }) < 0.02);
   assert.ok(Math.abs(distance(end.wrist, end.fingerTip) - scene.character.hand_length) < 0.1);
 });
 
