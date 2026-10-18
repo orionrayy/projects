@@ -68,6 +68,13 @@ class CashierFirstV3Tests(unittest.TestCase):
             self.assertEqual(b.size,(1280,720))
             self.assertNotEqual(a.tobytes(),b.tobytes(),f"scene {sid} appears static")
 
+    def test_code_uses_integer_rupiah_and_sentence_level_captions(self):
+        source=Path(m.__file__).read_text(encoding="utf-8")
+        self.assertIn('code="total = 54000 - 5400"',source)
+        self.assertNotIn('code="total = 54.000 - 5.400"',source)
+        self.assertIn("def narration_caption_at",source)
+        self.assertIn("re.split",source)
+
     def test_renderer_has_executable_entrypoint(self):
         source=Path(m.__file__).read_text(encoding="utf-8")
         self.assertIn('if __name__ == "__main__":',source)

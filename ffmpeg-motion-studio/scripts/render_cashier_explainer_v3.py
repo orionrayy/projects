@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cashier-first V3: three question hooks, direct concept teaching, and beat-specific motion design."""
 from __future__ import annotations
-import argparse, json, math, random, time, zipfile
+import argparse, json, math, random, re, time, zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter
 import render_procedural_master_v2 as v2
@@ -263,7 +263,7 @@ def draw_formula(d,t):
  cashier_screen(d,(95,190,1185,530),"CHECKOUT INPUT")
  card(d,(135,268,1145,452),(15,28,47,255),(61,91,125,200),14,1)
  text(d,175,291,"EXPRESSION",13,CYAN,"mono")
- code="total = 54.000 - 5.400"
+ code="total = 54000 - 5400"
  f=base.font(34,"mono")
  x=175; y=345
  d.text((x,y),code,font=f,fill=WHITE)
@@ -275,7 +275,7 @@ def draw_formula(d,t):
   tw=max(13,base.tw(d,token,f))
   d.rounded_rectangle((hi_x-2,y-3,hi_x+tw+3,y+42),radius=4,fill=(69,222,219,50),outline=(*CYAN,190),width=1)
  d.line((x,y+52,x+base.tw(d,code[:active],f),y+52),fill=(*AMBER,220),width=3)
- text(d,176,411,"BELUM DIEVALUASI • BARU TULISAN",13,MUTED,"mono")
+ text(d,176,411,"RUPIAH UTUH • BELUM DIEVALUASI",13,MUTED,"mono")
  card(d,(840,220,1105,254),(30,53,74,220),(*AMBER,130),9,1)
  center(d,972,226,"INPUT → STRUKTUR",13,AMBER,"mono")
 
@@ -556,9 +556,22 @@ def draw_effects(d,s,t):
  # Keep event timing metadata in BEAT_GUIDE for sound sync and the director cue sheet.
  return
 
+def narration_caption_at(text_value, local, duration):
+ # Advance captions by complete sentence boundaries, weighted by spoken word count.
+ phrases=[p.strip() for p in re.split(r"(?<=[.!?])\s+",text_value.strip()) if p.strip()]
+ if not phrases: return ""
+ weights=[max(1,len(p.split())) for p in phrases]
+ total=sum(weights)
+ target=max(0.0,min(.999,local/max(.1,duration-.7)))*total
+ upto=0
+ for phrase,weight in zip(phrases,weights):
+  upto+=weight
+  if target<upto: return phrase
+ return phrases[-1]
+
 def draw_caption(im,s,t):
  speech=v2.SPEECH_DURATION_BY_ID.get(s["id"],DURATIONS[s["id"]-1]-.7)
- caption="" if t>speech+.08 else v2.phrase_at(s["narration"],t,speech)
+ caption="" if t>speech+.08 else narration_caption_at(s["narration"],t,speech)
  if not caption: return im
  d=ImageDraw.Draw(im,"RGBA")
  # Stable subtitle shelf: explicit narration label, high contrast, no text lost under the fold.
@@ -575,6 +588,7 @@ def draw_caption(im,s,t):
   if cur: lines.append(cur)
   if len(lines)<=2: break
   fsize-=1
+ # Keep every word within the two-line subtitle safe zone.
  if len(lines)>2:
   words=caption.split(); split=max(1,len(words)//2)
   lines=[" ".join(words[:split])," ".join(words[split:])]
@@ -740,7 +754,7 @@ def main():
   "-movflags","+faststart",str(final)])
  media=base.validate(args.ffmpeg,args.ffprobe,final)
  manifest={
-  "project":"Dari Kasir ke Dalam Pikiran Komputer","version":"cashier-first-motion-v3.1.0",
+  "project":"Dari Kasir ke Dalam Pikiran Komputer","version":"cashier-first-motion-v3.1.1",
   "created_utc":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),
   "creative_revision":{"hook_scene_count":3,"hook_duration_sec":30,"lesson_starts_scene":4,
     "opening":"Clear 10-second contextual questions: item recognition → barcode lookup → discount and verified total → immediate POS lesson"},
