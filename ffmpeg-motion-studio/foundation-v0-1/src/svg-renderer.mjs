@@ -47,8 +47,6 @@ function renderLegs(scene, state) {
     + line(rightKnee, rightFoot, palette.pants, 21)
     + line({ x: leftFoot.x - 10, y: leftFoot.y }, { x: leftFoot.x + 15, y: leftFoot.y }, palette.ink, 15)
     + line({ x: rightFoot.x - 10, y: rightFoot.y }, { x: rightFoot.x + 15, y: rightFoot.y }, palette.ink, 15)
-    + circle(leftKnee, 10, palette.pants, palette.ink, 2)
-    + circle(rightKnee, 10, palette.pants, palette.ink, 2)
     + "</g>";
 }
 
@@ -129,15 +127,38 @@ function renderUpperArm(scene, state) {
 
 function renderForearmAndHand(scene, state) {
   const palette = scene.palette;
+  const handLength = scene.character.hand_length;
+  const scaleX = handLength / 25;
+  const angleDegrees = state.handAngle * 180 / Math.PI;
   const forearm = line(state.elbow, state.wrist, palette.ink, 24)
-    + line(state.elbow, state.wrist, palette.skin, 17);
-  const hand = line(state.wrist, state.fingerTip, palette.ink, 11)
-    + line(state.wrist, state.fingerTip, palette.skin, 6)
+    + line(state.elbow, state.wrist, palette.skin, 17)
     + circle(state.elbow, 10.5, palette.skin, palette.ink, 2)
-    + circle(state.wrist, 10, palette.skin, palette.ink, 2)
-    + circle(state.fingerTip, 3.1, palette.skin, palette.ink, 1.2);
+    + circle(state.wrist, 9, palette.skin, palette.ink, 2);
 
-  return '<g id="forearm-hand">' + forearm + hand + "</g>";
+  // Build a compact pointing-hand silhouette in local wrist space. The index
+  // finger ends exactly at the computed endpoint; the palm and thumb are no
+  // longer implied by a featureless stick ending in a dot.
+  const indexFinger = '<g id="index-finger">'
+    + '<path d="M 7 -1.6 L 25 0 L 24.6 2.1 L 7 1.6 Z" fill="' + palette.ink + '"/>'
+    + '<path d="M 7 -0.6 L 25 0 L 24.6 1.0 L 7 0.6 Z" fill="' + palette.skin + '"/>'
+    + circle({x:25,y:0}, 1.5, palette.skin, palette.ink, 0.7)
+    + '</g>';
+  const palm = '<path id="palm" d="M 2 -2.8 C 1 -5.3 3 -6.6 5.8 -5.9 L 10 -4.8 C 12 -4.1 13 -2.3 13 -0.2 L 13 2.4 C 12.8 4.8 10.7 6 8.2 5.1 L 3.2 4.1 C 1.4 3.6 1 0 2 -2.8 Z" fill="' + palette.skin + '" stroke="' + palette.ink + '" stroke-width="1.8" stroke-linejoin="round"/>';
+  const thumb = '<g id="thumb">'
+    + line({x:4.6,y:-4.8},{x:10.2,y:-8},palette.ink,4.5)
+    + line({x:4.6,y:-4.8},{x:10.2,y:-8},palette.skin,2.8)
+    + '</g>';
+  const foldedFingers = '<g id="folded-fingers">'
+    + line({x:6.2,y:0.6},{x:10.9,y:1.5},palette.ink,2.8)
+    + line({x:6.2,y:0.6},{x:10.9,y:1.5},palette.skin,1.5)
+    + line({x:5.6,y:2.8},{x:9.9,y:3.5},palette.ink,2.8)
+    + line({x:5.6,y:2.8},{x:9.9,y:3.5},palette.skin,1.5)
+    + '</g>';
+  const hand = '<g id="pointing-hand" transform="translate(' + n(state.wrist.x) + ' ' + n(state.wrist.y) + ') rotate(' + n(angleDegrees) + ') scale(' + n(scaleX) + ' 1)">'
+    + indexFinger + thumb + palm + foldedFingers
+    + '</g>';
+
+  return '<g id="forearm-hand">' + forearm + hand + '</g>';
 }
 
 function renderCharacter(scene, state) {

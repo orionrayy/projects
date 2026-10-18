@@ -1,4 +1,4 @@
-# Motion Studio Foundation v0.2.4
+# Motion Studio Foundation v0.2.5
 
 Isolated implementation pilot; the previous renderer is preserved and untouched.
 
@@ -43,3 +43,7 @@ These are structural/rendering fixes, not a claim that the character is anatomic
 
 ## v0.2.4 rest-pose correction
 The initial wrist pose is now scene-configured through `character.rest_pose` rather than hard-coded near the torso. This moves the idle wrist forward and higher, preventing the elbow from folding behind the shoulder during anticipation. Schema validation makes these offsets explicit and rejects invalid ranges. A new test checks the elbow/wrist side relationship across all anticipation frames.
+
+
+## v0.2.5 hand silhouette and leg-joint correction
+The hand render is now articulated as palm, index finger, thumb, and folded fingers, transformed by the same solved wrist angle. The index-finger endpoint remains tied to the mathematical endpoint used for target contact. Explicit knee disks were removed because they read as mechanical joint markers rather than part of the chosen cartoon style. Visual regression checks require each hand component in representative frames.

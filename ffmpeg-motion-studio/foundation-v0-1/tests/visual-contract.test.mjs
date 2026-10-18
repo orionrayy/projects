@@ -69,3 +69,14 @@ test("anticipation keeps the elbow in front of the torso instead of folding behi
     );
   }
 });
+
+test("pointing hand has separate palm, index finger and thumb geometry", () => {
+  for (const frame of [0, 15, 22, 36, 65, 95]) {
+    const svg = renderSceneSvg(scene, frame);
+    assert.match(svg, /id="pointing-hand"/);
+    assert.match(svg, /id="index-finger"/);
+    assert.match(svg, /id="palm"/);
+    assert.match(svg, /id="thumb"/);
+    assert.match(svg, /id="folded-fingers"/);
+  }
+});

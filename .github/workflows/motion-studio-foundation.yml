@@ -1,4 +1,4 @@
-name: Motion Studio Foundation v0.2.4
+name: Motion Studio Foundation v0.2.5
 on:
   push:
     branches: ["feature/motion-studio-foundation-v0-1", "main"]
@@ -78,7 +78,7 @@ jobs:
           from pathlib import Path
           from zipfile import ZipFile, ZIP_DEFLATED
           root = Path(".")
-          target = root / "out" / "motion-studio-foundation-v0-2-4-source.zip"
+          target = root / "out" / "motion-studio-foundation-v0-2-5-source.zip"
           target.parent.mkdir(parents=True, exist_ok=True)
           skip_parts = {"out", ".git", "node_modules", "__pycache__"}
           with ZipFile(target, "w", ZIP_DEFLATED) as archive:
@@ -87,17 +87,18 @@ jobs:
                       continue
                   archive.write(path, path.relative_to(root))
           print(f"SOURCE_SNAPSHOT_CREATED {target} bytes={target.stat().st_size}")
+          assert target.is_file() and target.stat().st_size > 0, "Source snapshot missing or empty"
           PY
       - name: Upload pilot, source and regression evidence
         uses: actions/upload-artifact@v4
         with:
-          name: motion-studio-foundation-v0-2-4-rest-pose-benchmarks-raster-evidence
+          name: motion-studio-foundation-v0-2-5-hand-shape-benchmarks-raster-evidence
           path: |
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4.report.json
             ffmpeg-motion-studio/foundation-v0-1/out/motion-benchmark-report.json
             ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-report.json
             ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-evidence/**
-            ffmpeg-motion-studio/foundation-v0-1/out/motion-studio-foundation-v0-2-3-source.zip
+            ffmpeg-motion-studio/foundation-v0-1/out/motion-studio-foundation-v0-2-5-source.zip
           if-no-files-found: error
           retention-days: 14
