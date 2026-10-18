@@ -81,5 +81,6 @@ jobs:
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4.report.json
             ffmpeg-motion-studio/foundation-v0-1/out/motion-benchmark-report.json
             ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-report.json
+            ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-evidence/**
           if-no-files-found: error
           retention-days: 14
