@@ -8,11 +8,14 @@ class CashierFirstV3Tests(unittest.TestCase):
     def test_exactly_three_short_question_hooks(self):
         hooks=m.SCENES[:3]
         self.assertEqual([s["motif"] for s in hooks],["hook_storefront","hook_scan","hook_total"])
-        self.assertEqual(m.DURATIONS[:3],[4,4,4])
+        self.assertEqual(m.DURATIONS[:3],[7,7,7])
         self.assertTrue(all(s["narration"].strip().endswith("?") for s in hooks))
-        self.assertTrue(all(len(s["narration"].split())<=7 for s in hooks))
+        self.assertTrue(all(12<=len(s["narration"].split())<=18 for s in hooks))
+        self.assertIn("komputer kasir",hooks[0]["title"].lower())
+        self.assertIn("barcode",hooks[1]["title"].lower())
+        self.assertIn("diskon",hooks[2]["title"].lower())
         self.assertLessEqual(len(m.SCENES[17]["narration"].split()),16)
-        self.assertEqual(sum(m.DURATIONS[:3]),12)
+        self.assertEqual(sum(m.DURATIONS[:3]),21)
 
     def test_explanation_starts_at_cashier_on_scene_four(self):
         self.assertEqual(m.SCENES[3]["motif"],"counter_formula")
@@ -76,6 +79,9 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertIn("write_director_guide",source)
         self.assertIn("SFX",source)
         self.assertIn("camera",source.lower())
+        self.assertIn("Stable subtitle shelf",source)
+        self.assertIn("One predictable title rail",source)
+        self.assertIn("Intentional no-op",source)
 
 if __name__=="__main__":
     unittest.main(verbosity=2)
