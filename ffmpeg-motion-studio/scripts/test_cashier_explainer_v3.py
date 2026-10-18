@@ -5,24 +5,24 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import render_cashier_explainer_v3 as m
 
 class CashierFirstV3Tests(unittest.TestCase):
-    def test_exactly_three_short_question_hooks(self):
+    def test_three_contextual_question_hooks(self):
         hooks=m.SCENES[:3]
         self.assertEqual([s["motif"] for s in hooks],["hook_storefront","hook_scan","hook_total"])
-        self.assertEqual(m.DURATIONS[:3],[7,7,7])
+        self.assertEqual(m.DURATIONS[:3],[10,10,10])
         self.assertTrue(all(s["narration"].strip().endswith("?") for s in hooks))
         self.assertTrue(all(10<=len(s["narration"].split())<=13 for s in hooks))
         self.assertIn("komputer kasir",hooks[0]["title"].lower())
         self.assertIn("barcode",hooks[1]["title"].lower())
         self.assertIn("diskon",hooks[2]["title"].lower())
         self.assertLessEqual(len(m.SCENES[17]["narration"].split()),25)
-        self.assertEqual(sum(m.DURATIONS[:3]),21)
+        self.assertEqual(sum(m.DURATIONS[:3]),30)
 
     def test_explanation_starts_at_cashier_on_scene_four(self):
         self.assertEqual(m.SCENES[3]["motif"],"counter_formula")
         self.assertIn("subtotal",m.SCENES[3]["narration"].lower())
         self.assertIn("diskon",m.SCENES[3]["narration"].lower())
         self.assertEqual(len(m.SCENES),18)
-        self.assertEqual(m.TOTAL,240)
+        self.assertEqual(m.TOTAL,250)
 
     def test_hook_total_never_shows_a_false_intermediate_value(self):
         source=Path(m.__file__).read_text(encoding="utf-8")
@@ -43,8 +43,8 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertEqual([s["id"] for s in m.SCENES],list(range(1,19)))
         self.assertEqual(len({s["title"] for s in m.SCENES}),18)
         self.assertEqual(len(m.DURATIONS),18)
-        self.assertEqual(sum(m.DURATIONS),240)
-        self.assertEqual(m.TOTAL* m.FPS,5760)
+        self.assertEqual(sum(m.DURATIONS),250)
+        self.assertEqual(m.TOTAL* m.FPS,6000)
 
     def test_narration_is_sized_for_natural_delivery(self):
         self.assertTrue(all(len(s["narration"].split()) <= 35 for s in m.SCENES[3:17]))
@@ -81,6 +81,9 @@ class CashierFirstV3Tests(unittest.TestCase):
         self.assertIn("SFX",source)
         self.assertIn("camera",source.lower())
         self.assertIn("Stable subtitle shelf",source)
+        self.assertIn('s["short"]',source)
+        self.assertIn("progress=max(1,int(1146*s[",source)
+        self.assertIn('"NARASI"',source)
         self.assertIn("One predictable title rail",source)
         self.assertIn("Intentional no-op",source)
 

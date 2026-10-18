@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   render:
-    name: Render and validate 240-second V3 master
+    name: Render and validate 250-second V3 master
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:

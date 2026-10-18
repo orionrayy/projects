@@ -9,11 +9,11 @@ import render_procedural_master_v2 as v2
 base = v2.base
 W, H = base.W, base.H
 FPS = base.FPS
-TOTAL_DURATION = 240
+TOTAL_DURATION = 250
 SCENES = [
- {"id":1,"motif":"hook_storefront","title":"Bagaimana komputer kasir mengenali barang belanjaan kita?","short":"Sebelum menjumlahkan, sistem harus mengenali setiap barang","narration":"Komputer harus mengenali barang dan harganya sebelum menghitung belanjaan. Bagaimana caranya?"},
- {"id":2,"motif":"hook_scan","title":"Bagaimana barcode berubah menjadi nama barang dan harga?","short":"Pola garis dicocokkan dengan data produk","narration":"Pemindai membaca barcode. Bagaimana sistem menemukan nama barang dan harganya?"},
- {"id":3,"motif":"hook_total","title":"Bagaimana diskon dihitung hingga total Rp48.600?","short":"Harga, aturan diskon, dan hasil harus cocok","narration":"Diskon harus dihitung dan diperiksa. Bagaimana komputer memastikan total akhirnya benar?"},
+ {"id":1,"motif":"hook_storefront","title":"Bagaimana komputer kasir mengenali barang belanjaan kita?","short":"Sebelum menghitung, sistem harus mengenali setiap barang dan harganya","narration":"Komputer harus mengenali barang dan harganya sebelum menghitung belanjaan. Bagaimana caranya?"},
+ {"id":2,"motif":"hook_scan","title":"Bagaimana barcode berubah menjadi nama barang dan harga?","short":"Pola barcode dicocokkan dengan catatan produk di kasir","narration":"Pemindai membaca barcode. Bagaimana sistem menemukan nama barang dan harganya?"},
+ {"id":3,"motif":"hook_total","title":"Bagaimana komputer memastikan diskon dan total akhirnya benar?","short":"Subtotal dikurangi potongan harus sama dengan total bayar","narration":"Diskon harus dihitung dan diperiksa. Bagaimana komputer memastikan total akhirnya benar?"},
  {"id":4,"motif":"counter_formula","title":"Dari transaksi ke ekspresi komputer","short":"Kita tulis operasi sebelum menghitung hasilnya","narration":"Subtotalnya lima puluh empat ribu rupiah, diskonnya lima ribu empat ratus rupiah. Total berarti subtotal dikurangi diskon; ekspresi ini harus dievaluasi dulu."},
  {"id":5,"motif":"tokenization","title":"Tokenisasi: pecah ekspresi menjadi unit","short":"Setiap bagian memiliki jenis dan fungsi","narration":"Tokenisasi memecah teks menjadi token: nama total, tanda sama dengan, angka subtotal, operator minus, dan angka diskon. Setiap token memiliki jenis; tahap berikutnya memeriksa urutannya."},
  {"id":6,"motif":"cfg_rules","title":"CFG: aturan susunan ekspresi","short":"Grammar menjelaskan susunan yang diizinkan","narration":"CFG adalah Context-Free Grammar: aturan yang menentukan susunan simbol yang sah. Aturan ini membantu parser memahami bagaimana nama, angka, dan operator membentuk ekspresi."},
@@ -30,7 +30,7 @@ SCENES = [
  {"id":17,"motif":"receipt","title":"Struk membuat perhitungan bisa diaudit","short":"Subtotal − diskon = total","narration":"Struk mencatat subtotal, diskon, dan total transaksi. Pastikan subtotal dikurangi diskon sama dengan total; angka pada struk harus cocok agar transaksi bisa diaudit."},
  {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang bisa diperiksa","short":"Token → aturan → struktur → operasi → hasil","narration":"Tokenisasi mengenali unit, grammar memberi aturan, parse tree menunjukkan susunan, dan AST merangkum operasi sebelum evaluator menghitung hasil."}
 ]
-DURATIONS = [7,7,7,14,15,15,15,16,15,15,15,15,15,16,16,14,13,10]
+DURATIONS = [10,10,10,15,15,15,15,16,15,15,15,15,15,16,16,14,13,10]
 TOTAL = sum(DURATIONS)
 assert TOTAL == TOTAL_DURATION
 
@@ -137,7 +137,7 @@ def product_box(d,x,y,w=104,h=132,phase=0.0):
  d.line((x+10,y+8,x+w-10,y+8),fill=(*PAPER,140),width=2)
 
 def headline(d,s,question=False):
- # One predictable title rail: stage label first, one dominant title second.
+ # One predictable title rail: stage label, dominant title, explanatory subhead, restrained progress.
  labels = {
   1:"PEMBUKAAN  •  PERTANYAAN 01/03",
   2:"PEMBUKAAN  •  PERTANYAAN 02/03",
@@ -158,22 +158,25 @@ def headline(d,s,question=False):
   17:"RANGKUMAN  •  AUDIT STRUK",
   18:"RANGKUMAN  •  ALUR LENGKAP"
  }
- card(d,(42,20,1238,145),(5,11,22,241),(61,86,117,175),14,1)
- text(d,66,35,labels.get(s["id"],"DARI KASIR KE DALAM PIKIRAN KOMPUTER"),
-      13,CYAN if question else MUTED,"mono")
- f=base.font(30 if question else 26,"bold")
- maxw=1130; lines=[]; cur=""
- for word in s["title"].split():
-  nxt=word if not cur else cur+" "+word
-  if cur and base.tw(d,nxt,f)>maxw:
-   lines.append(cur); cur=word
-  else:
-   cur=nxt
- if cur: lines.append(cur)
- y=63
- for j,l in enumerate(lines[:2]):
-  d.text((66,y+j*32),l,font=f,fill=AMBER if question else WHITE)
- line(d,(66,135,1212,135),(58,82,112,145),1)
+ card(d,(42,20,1238,151),(5,11,22,243),(61,86,117,185),14,1)
+ accent=AMBER if question else CYAN
+ text(d,66,34,labels.get(s["id"],"DARI KASIR KE DALAM PIKIRAN KOMPUTER"),
+      13,accent if question else MUTED,"mono")
+ # Titles are fitted to one line so they cannot collide with the scene subhead.
+ title_size=32 if question else 29
+ tf=base.font(title_size,"bold")
+ while base.tw(d,s["title"],tf)>1130 and title_size>22:
+  title_size-=1; tf=base.font(title_size,"bold")
+ d.text((66,59),s["title"],font=tf,fill=AMBER if question else WHITE)
+ sub_size=17
+ sf=base.font(sub_size,"regular")
+ while base.tw(d,s["short"],sf)>1130 and sub_size>13:
+  sub_size-=1; sf=base.font(sub_size,"regular")
+ d.text((68,99),s["short"],font=sf,fill=(204,216,231,255))
+ # Progress is separate from the title and remains visually subordinate.
+ d.rounded_rectangle((66,134,1212,140),radius=3,fill=(34,48,67,255))
+ progress=max(1,int(1146*s["id"]/len(SCENES)))
+ d.rounded_rectangle((66,134,66+progress,140),radius=3,fill=(*accent,230))
 
 def cashier_screen(d,box=(115,186,1165,533),label_text="POINT OF SALE"):
  x1,y1,x2,y2=box
@@ -204,7 +207,7 @@ def draw_shop(d,t):
  d.ellipse((628-gap,377,639-gap,388),fill=(*AMBER,255))
  for i in range(3):
   d.line((510+i*13,270,510+i*13,476),fill=(65,119,147,45),width=2)
- x=130+min(1,t/3.5)*420
+ x=130+min(1,t/8.8)*450
  figure(d,x,565,.85,t,bag=True)
  # warm shop light spill widens as the doors open
  for k in range(5):
@@ -260,7 +263,7 @@ def draw_formula(d,t):
  cashier_screen(d,(95,190,1185,530),"CHECKOUT INPUT")
  card(d,(135,268,1145,452),(15,28,47,255),(61,91,125,200),14,1)
  text(d,175,291,"EXPRESSION",13,CYAN,"mono")
- code="total = 54000 - 5400"
+ code="total = 54.000 - 5.400"
  f=base.font(34,"mono")
  x=175; y=345
  d.text((x,y),code,font=f,fill=WHITE)
@@ -498,7 +501,7 @@ def draw_payment(d,t):
 def draw_receipt(d,t):
  # A physical paper object feeds downward; details appear only as they become available.
  x=420; y=213; w=440
- feed=int(min(1,t/2.9)*118)
+ feed=int(min(1,t/2.9)*92)
  card(d,(x+8,y+9,x+w+8,y+292+feed),(0,0,0,70),None,4,1)
  d.rounded_rectangle((x,y,x+w,y+284+feed),radius=4,fill=(*PAPER,255))
  text(d,x+27,y+18,"MINIMARKET • STRUK",13,PAPER_INK,"mono")
@@ -558,20 +561,26 @@ def draw_caption(im,s,t):
  caption="" if t>speech+.08 else v2.phrase_at(s["narration"],t,speech)
  if not caption: return im
  d=ImageDraw.Draw(im,"RGBA")
- # Stable subtitle shelf: generous padding, two lines max, outside the information stage.
- d.rounded_rectangle((42,608,1238,706),radius=13,fill=(3,9,18,241),outline=(70,101,135,150),width=1)
- d.rounded_rectangle((59,628,64,687),radius=2,fill=(*CYAN,245))
- f=base.font(19,"regular")
- lines=[]; cur=""
- for word in caption.split():
-  nxt=word if not cur else cur+" "+word
-  if cur and base.tw(d,nxt,f)>1125:
-   lines.append(cur); cur=word
-  else:
-   cur=nxt
- if cur: lines.append(cur)
+ # Stable subtitle shelf: explicit narration label, high contrast, no text lost under the fold.
+ d.rounded_rectangle((42,600,1238,706),radius=14,fill=(3,9,18,244),outline=(70,101,135,165),width=1)
+ d.rounded_rectangle((59,628,64,690),radius=2,fill=(*CYAN,245))
+ d.text((83,608),"NARASI",font=base.font(10,"mono"),fill=CYAN)
+ fsize=18; lines=[]
+ while fsize>=13:
+  f=base.font(fsize,"regular"); lines=[]; cur=""
+  for word in caption.split():
+   nxt=word if not cur else cur+" "+word
+   if cur and base.tw(d,nxt,f)>1125: lines.append(cur); cur=word
+   else: cur=nxt
+  if cur: lines.append(cur)
+  if len(lines)<=2: break
+  fsize-=1
+ if len(lines)>2:
+  words=caption.split(); split=max(1,len(words)//2)
+  lines=[" ".join(words[:split])," ".join(words[split:])]
+  f=base.font(13,"regular")
  for j,l in enumerate(lines[:2]):
-  d.text((83,622+j*30),l,font=f,fill=WHITE)
+  d.text((83,632+j*28),l,font=f,fill=WHITE)
  return im
 
 def frame_v3(s,local,duration):
@@ -625,28 +634,28 @@ def frame_v3(s,local,duration):
 def write_director_guide(out):
  out=Path(out); elapsed=0
  detail={
- 1:("7s exterior-to-door dolly; shopper walk cycle, sliding-door panels, warm spill light.","Question title enters once with a 6-frame ease-out; parallax pavement moves slower than foreground. SFX footfall at walk contact; door chime at light-rake cue.","Match cut on the door seam toward the scanner; do not linger on store geography."),
- 2:("7s close-up: package, barcode, scanner housing, moving scan beam.","Laser crosses barcode once, thin red core with short glow; only on crossing, trigger the scan chirp. Small data fragments move toward frame right after scan, not before.","Cut on the direction of the beam toward POS screen. No full-screen glitch or persistent laser."),
- 3:("7s POS screen close-up; hold the verified Rp48.600 total while equation stays readable.","Numeric count eases and settles; one green lock ring follows the total-chime. Match-cut the screen edge into the teaching screen.","This is the final hook. Start explaining the formula in the next shot; do not add an extra journey montage."),
- 4:("8s front-on POS screen with formula and moving focus cursor.","A restrained glass reflection crosses once; formula is revealed by token-sized groups. Cursor underlines the active symbol, then holds long enough to read.","Keep narration caption below the display. Formula remains high contrast and never moves with the reflection."),
- 5:("8s characters split into five token chips and settle in one horizontal reading order.","Letters separate, magnetize into token blocks with slight overshoot, then arrows connect left-to-right. Pulse only the token currently named by voiceover.","No floating token confetti. Preserve exact order: IDENTIFIER, EQUALS, NUMBER, MINUS, NUMBER."),
- 6:("9s three CFG productions enter sequentially.","Each rule slides 120 px, eases, and settles; underline left-hand nonterminal then reveal right-hand production. The active rule gets a small cyan edge, not an all-card glow.","Keep each rule on a fixed row. Do not animate all rows at identical speed or obscure the grammar with captions."),
- 7:("7s split-screen valid versus invalid token order.","Valid line draws left-to-right with green ticks. Invalid line briefly misaligns at the first violating position and returns to a stable red state.","Use the distinction token kinds versus grammar acceptance; do not label tokenization itself as the parser."),
- 8:("9s parse tree grows root-first, edges before child nodes, leaves last.","Draw connectors progressively from parent to child; node chips arrive with a 3–5 px overshoot and damped settle. Highlight minus only while discussing the relation.","Keep parent/child alignment consistent; no branch should pass through a label. Hold the final tree at least one second."),
- 9:("9s precedence tree for 2 + 3 × 4 = 14.","Illuminate multiplication branch first, dim non-active sibling slightly, then stamp 14 at the end. Short amber arc follows the multiplication subtree.","The visual grouping must make multiplication subordinate to addition. Do not animate 2+3 first."),
- 10:("7s parentheses example (2 + 3) × 4 = 20; tree structure changes.","Amber bracket traces the left subtree, then root changes to multiplication. Result swaps from prior value to 20 only after branch settles.","Use the same node positions as scene 9 where possible so the structural change is comparable."),
- 11:("7s semantic validation, passing fields on left and undefined reference on right.","Checks appear one at a time beside their field. One red cross marks the missing value; stop movement during the verdict.","Do not conflate syntax errors with undefined names or incompatible values."),
- 12:("8s item rows reveal 18.500, 21.500, 14.000; subtotal rolls to 54.000.","Rows stagger by 6–8 frames; each register tick coincides with row arrival. Sum rolls once and then locks to Rp54.000.","The three prices must sum exactly to Rp54.000. Avoid continuous number wobble after the value resolves."),
- 13:("8s coupon drops beside 54.000; discount resolves to 5.400.","Coupon uses one downward move and a slight elastic settle. A horizontal wipe converts 10% × 54.000 to 5.400; total-chime only on final value.","Arithmetic callout is explicit: 54.000 × 0,10 = 5.400. No discount animation before the subtotal is visible."),
- 14:("8s parse tree simplifies to AST: SUB with SUBTOTAL and DISKON operands.","Parent node forms first, then operands travel inward and snap to fixed left/right anchors. Fade punctuation details without removing operator or values.","Keep AST semantic children distinct; do not turn nodes into decorative particles."),
- 15:("8s operands move toward subtraction operator, result settles at 48.600.","Inputs travel on curved, eased paths; operator activates only after both operands arrive. Result snaps once and remains still for reading.","Equation is invariant: 54.000 − 5.400 = 48.600. Do not show a wrong intermediate final answer."),
- 16:("6s close-up payment terminal; card approaches and touches the NFC zone.","Card accelerates into place, decelerates at contact; concentric NFC ripple starts at touch, then approved status and chime occur together.","No approval green before terminal response. Keep tap action and status as separate beats."),
- 17:("7s receipt paper feeds vertically; row details print in order.","Paper grows downward with a subtle shadow. Subtotal, discount, total reveal as three discrete lines; barcode draws last. End with a short held audit frame.","Receipt totals must match the lesson. Paper motion should feel continuous, not like a panel popping in."),
- 18:("5s brief exit shot; store recedes while shopper walks out with a bag; concept chain closes.","Camera eases back, shopper limbs continue a walk cycle, concept chips appear left-to-right. Final title locks only after the last connector arrives.","This is a short visual punctuation, not a second opening or a return to a long store journey.")
+ 1:("10s exterior-to-door dolly; shopper walk cycle, sliding-door panels, warm spill light.","Question title enters once with a 6-frame ease-out; parallax pavement moves slower than foreground. SFX footfall at walk contact; door chime at light-rake cue.","Match cut on the door seam toward the scanner; do not linger on store geography."),
+ 2:("10s close-up: package, barcode, scanner housing, moving scan beam.","Laser crosses barcode once, thin red core with short glow; only on crossing, trigger the scan chirp. Small data fragments move toward frame right after scan, not before.","Cut on the direction of the beam toward POS screen. No full-screen glitch or persistent laser."),
+ 3:("10s POS screen close-up; hold the verified Rp48.600 total while equation stays readable.","Numeric count eases and settles; one green lock ring follows the total-chime. Match-cut the screen edge into the teaching screen.","This is the final hook. Start explaining the formula in the next shot; do not add an extra journey montage."),
+ 4:("15s front-on POS screen with formula and moving focus cursor.","A restrained glass reflection crosses once; formula is revealed by token-sized groups. Cursor underlines the active symbol, then holds long enough to read.","Keep narration caption below the display. Formula remains high contrast and never moves with the reflection."),
+ 5:("15s characters split into five token chips and settle in one horizontal reading order.","Letters separate, magnetize into token blocks with slight overshoot, then arrows connect left-to-right. Pulse only the token currently named by voiceover.","No floating token confetti. Preserve exact order: IDENTIFIER, EQUALS, NUMBER, MINUS, NUMBER."),
+ 6:("15s three CFG productions enter sequentially.","Each rule slides 120 px, eases, and settles; underline left-hand nonterminal then reveal right-hand production. The active rule gets a small cyan edge, not an all-card glow.","Keep each rule on a fixed row. Do not animate all rows at identical speed or obscure the grammar with captions."),
+ 7:("15s split-screen valid versus invalid token order.","Valid line draws left-to-right with green ticks. Invalid line briefly misaligns at the first violating position and returns to a stable red state.","Use the distinction token kinds versus grammar acceptance; do not label tokenization itself as the parser."),
+ 8:("16s parse tree grows root-first, edges before child nodes, leaves last.","Draw connectors progressively from parent to child; node chips arrive with a 3–5 px overshoot and damped settle. Highlight minus only while discussing the relation.","Keep parent/child alignment consistent; no branch should pass through a label. Hold the final tree at least one second."),
+ 9:("15s precedence tree for 2 + 3 × 4 = 14.","Illuminate multiplication branch first, dim non-active sibling slightly, then stamp 14 at the end. Short amber arc follows the multiplication subtree.","The visual grouping must make multiplication subordinate to addition. Do not animate 2+3 first."),
+ 10:("15s parentheses example (2 + 3) × 4 = 20; tree structure changes.","Amber bracket traces the left subtree, then root changes to multiplication. Result swaps from prior value to 20 only after branch settles.","Use the same node positions as scene 9 where possible so the structural change is comparable."),
+ 11:("15s semantic validation, passing fields on left and undefined reference on right.","Checks appear one at a time beside their field. One red cross marks the missing value; stop movement during the verdict.","Do not conflate syntax errors with undefined names or incompatible values."),
+ 12:("15s item rows reveal 18.500, 21.500, 14.000; subtotal rolls to 54.000.","Rows stagger by 6–8 frames; each register tick coincides with row arrival. Sum rolls once and then locks to Rp54.000.","The three prices must sum exactly to Rp54.000. Avoid continuous number wobble after the value resolves."),
+ 13:("15s coupon drops beside 54.000; discount resolves to 5.400.","Coupon uses one downward move and a slight elastic settle. A horizontal wipe converts 10% × 54.000 to 5.400; total-chime only on final value.","Arithmetic callout is explicit: 54.000 × 0,10 = 5.400. No discount animation before the subtotal is visible."),
+ 14:("16s parse tree simplifies to AST: SUB with SUBTOTAL and DISKON operands.","Parent node forms first, then operands travel inward and snap to fixed left/right anchors. Fade punctuation details without removing operator or values.","Keep AST semantic children distinct; do not turn nodes into decorative particles."),
+ 15:("16s operands move toward subtraction operator, result settles at 48.600.","Inputs travel on curved, eased paths; operator activates only after both operands arrive. Result snaps once and remains still for reading.","Equation is invariant: 54.000 − 5.400 = 48.600. Do not show a wrong intermediate final answer."),
+ 16:("14s close-up payment terminal; card approaches and touches the NFC zone.","Card accelerates into place, decelerates at contact; concentric NFC ripple starts at touch, then approved status and chime occur together.","No approval green before terminal response. Keep tap action and status as separate beats."),
+ 17:("13s receipt paper feeds vertically; row details print in order.","Paper grows downward with a subtle shadow. Subtotal, discount, total reveal as three discrete lines; barcode draws last. End with a short held audit frame.","Receipt totals must match the lesson. Paper motion should feel continuous, not like a panel popping in."),
+ 18:("10s brief exit shot; store recedes while shopper walks out with a bag; concept chain closes.","Camera eases back, shopper limbs continue a walk cycle, concept chips appear left-to-right. Final title locks only after the last connector arrives.","This is a short visual punctuation, not a second opening or a return to a long store journey.")
  }
  guide=["# Director's VFX and Motion Guide — Cashier-first V3","",
  "## Creative correction","",
- "V2's principal failure was structural: almost every scene reused the same frame template and narration slab. This version uses a different composition for each visual task. The exterior-to-cashier opening is exactly three clear question hooks (21 seconds total); scene 4 begins the explanation at the register.",
+ "V2's principal failure was structural: almost every scene reused the same frame template and narration slab. This version uses a different composition for each visual task. The exterior-to-cashier opening is exactly three contextual question hooks (30 seconds total); scene 4 begins the explanation at the register.",
  "",
  "## Global animation rules","",
  "- Output canvas: 1920×1080 at 24 fps. Procedural drawing source: 1280×720, enlarged with Lanczos scaling.",
@@ -681,8 +690,8 @@ def write_director_guide(out):
  (out/"motion-direction-v3.md").write_text("\n".join(guide),encoding="utf-8")
  (out/"README-V3.txt").write_text(
   "DARI KASIR KE DALAM PIKIRAN KOMPUTER — V3\n\n"
-  "Hook: 3 question shots / 21 seconds. Directly after the third question, the lesson starts at the POS register.\n"
-  "Duration: 240 seconds; 18 scenes; 1920x1080 at 24 fps; H.264 + AAC stereo 48 kHz.\n"
+  "Hook: 3 contextual question shots / 30 seconds. Directly after the third question, the lesson starts at the POS register.\n"
+  "Duration: 250 seconds; 18 scenes; 1920x1080 at 24 fps; H.264 + AAC stereo 48 kHz.\n"
   "Included: MP4, SRT, transcript, generated SFX stem, SFX cue JSON, shot-by-shot VFX guide, contact sheet, manifest.\n"
   "Source visuals and SFX are generated procedurally. No external reference images are imported.\n"
   "Technical QA does not substitute for full human visual and listening QA.\n",encoding="utf-8")
@@ -705,9 +714,9 @@ def main():
  work=Path(args.work_dir).resolve() if args.work_dir else out/".work"; work.mkdir(parents=True,exist_ok=True)
  final=out/"Dari_Kasir_Cashier_First_Motion_Master_v3.mp4"
  visual_only=work/"visual-v3-only.mp4"; contact=out/"cashier-first-contact-sheet-v3.jpg"
- if len(SCENES)!=18 or sum(DURATIONS)!=240: raise RuntimeError("V3 scene/runtime contract failed.")
+ if len(SCENES)!=18 or sum(DURATIONS)!=250: raise RuntimeError("V3 scene/runtime contract failed.")
  if 54000-5400!=48600 or round(54000*.10)!=5400: raise RuntimeError("Canonical transaction arithmetic failed.")
- print("V3: 3 clear question hooks / 21 seconds; cashier lesson starts in scene 4; 18 scenes / 240 seconds.",flush=True)
+ print("V3.1: 3 contextual question hooks / 30 seconds; cashier lesson starts in scene 4; 18 scenes / 250 seconds.",flush=True)
  audio=v2.make_audio_v2(args.ffmpeg,args.ffprobe,work,out)
  # Apply a bounded fade on the actual 240-second V3 timeline after mixing.
  faded=work/"master-audio-v3-faded.wav"
@@ -720,10 +729,10 @@ def main():
  cue_data=json.loads(cue_path.read_text(encoding="utf-8"))
  cue_data["version"]="v3"
  cue_data["duration_sec"]=TOTAL
- cue_data["opening_structure"]="three 7-second question hooks, then cashier explanation"
+ cue_data["opening_structure"]="three contextual 10-second question hooks (30 seconds total), then cashier explanation"
  cue_path.write_text(json.dumps(cue_data,ensure_ascii=False,indent=2),encoding="utf-8")
  write_director_guide(out)
- if abs(base.duration(args.ffprobe,audio["mixed"])-TOTAL)>.12: raise RuntimeError("V3 audio timeline is not 240 seconds.")
+ if abs(base.duration(args.ffprobe,audio["mixed"])-TOTAL)>.12: raise RuntimeError("V3.1 audio timeline is not 250 seconds.")
  print("Render scene-specific movement and camera timing.",flush=True)
  render=base.render_video(args.ffmpeg,visual_only,contact)
  base.run([args.ffmpeg,"-y","-hide_banner","-loglevel","warning","-i",str(visual_only),"-i",str(audio["mixed"]),
@@ -731,10 +740,10 @@ def main():
   "-movflags","+faststart",str(final)])
  media=base.validate(args.ffmpeg,args.ffprobe,final)
  manifest={
-  "project":"Dari Kasir ke Dalam Pikiran Komputer","version":"cashier-first-motion-v3.0.0",
+  "project":"Dari Kasir ke Dalam Pikiran Komputer","version":"cashier-first-motion-v3.1.0",
   "created_utc":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),
-  "creative_revision":{"hook_scene_count":3,"hook_duration_sec":21,"lesson_starts_scene":4,
-    "opening":"Clear 7-second question hooks: item recognition → barcode lookup → discount calculation and verified total → immediate POS lesson"},
+  "creative_revision":{"hook_scene_count":3,"hook_duration_sec":30,"lesson_starts_scene":4,
+    "opening":"Clear 10-second contextual questions: item recognition → barcode lookup → discount and verified total → immediate POS lesson"},
   "method":"Scene-specific Pillow vector illustration and animated diagrams streamed to FFmpeg; no external visual assets.",
   "reference_images_used":0,"external_visual_assets_used":0,"scene_count":len(SCENES),
   "scene_durations_sec":DURATIONS,"target_duration_sec":TOTAL,"target_frames":TOTAL*FPS,
@@ -749,7 +758,7 @@ def main():
     "duration_sec":DURATIONS[i],"beats":BEAT_GUIDE[str(s["id"])]} for i,s in enumerate(SCENES)]
  }
  (out/"production-manifest-v3.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")
- (out/"concept-v3.md").write_text("# Cashier-first V3\n\nThree clear 7-second questions connect item recognition, barcode lookup, and discount calculation; then the lesson begins immediately at the cashier. It explains tokenization, CFG, syntax validation, parse trees, operator precedence, semantic validation, subtotal/discount arithmetic, AST, evaluation, payment, and receipt audit.\n\nRuntime: 240 seconds, 18 scenes, 24 fps. Visual compositions and motions are authored per scene, and the shot-by-shot VFX sheet supplies blocking, movement, timing, sync, transitions, and legibility constraints.\n",encoding="utf-8")
+ (out/"concept-v3.md").write_text("# Cashier-first V3\n\nThree contextual 10-second questions connect item recognition, barcode lookup, and discount/total verification; then the lesson begins immediately at the cashier. It explains tokenization, CFG, syntax validation, parse trees, operator precedence, semantic validation, subtotal/discount arithmetic, AST, evaluation, payment, and receipt audit.\n\nRuntime: 250 seconds, 18 scenes, 24 fps. Visual compositions and motions are authored per scene, and the shot-by-shot VFX sheet supplies blocking, movement, timing, sync, transitions, and legibility constraints.\n",encoding="utf-8")
  # Full package contains render, subtitle, voice transcript, SFX stem/cues, and the shot-by-shot direction.
  package=out/"Dari_Kasir_Cashier_First_V3_Full_Package.zip"
  with zipfile.ZipFile(package,"w",zipfile.ZIP_DEFLATED,compresslevel=6) as z:
@@ -758,7 +767,7 @@ def main():
     z.write(p,p.name)
  print(json.dumps({"status":"TECHNICAL_PASS","output":str(final),"package":str(package),
   "duration_sec":media["duration_sec"],"video":media["video"],"audio":media["audio"],
-  "sfx_events":len(audio["sfx_events"]),"scene_count":len(SCENES),"hook_duration_sec":12,
+  "sfx_events":len(audio["sfx_events"]),"scene_count":len(SCENES),"hook_duration_sec":30,
   "size_bytes":media["size_bytes"],"acceptance":manifest["acceptance"]},ensure_ascii=False,indent=2),flush=True)
  return 0
 
