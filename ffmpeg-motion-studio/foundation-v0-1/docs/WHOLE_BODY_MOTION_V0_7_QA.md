@@ -1,19 +1,28 @@
-# Whole-body motion V0.7 QA record
+# Whole-body motion V0.7.1 — QA record
 
-- Branch increment: `feature/motion-studio-whole-body-v0-7`
-- Python proof render: 8.000 s, 1280x720, 24 fps, 192 frames.
-- MP4 independently decoded to 192 frames for visual evidence.
-- Dense contact sheets: 8; context sheets: 4; detailed crops: 21.
-- Maximum arm segment-length error: < 2.1e-13 px.
-- Maximum leg segment-length error: < 1.3e-13 px.
-- Foot and arm target-clamp error: 0 px.
+## Scope
+A targeted update to improve synchronization among pelvis, torso, shoulders, arms, head and held props; walking cadence itself is not the sole motion source.
+
+## Architecture
+- One deterministic gait phase with intentional channel phase offsets.
+- Separate angle-valued head nod (radians) and displacement-valued head bob.
+- Bounded torso pitch and counter-shifted shoulder line.
+- Wrist anchors locked to prop grips; elbow response shares the gait phase.
+- Basket, handle, shell, and contents share one carry transform.
+- The Python proof renderer draws the head on a crop-local isolated layer and rotates the face/hair group together.
+
+## Local test evidence
+- Motion Studio Node tests: 48 passed / 0 failed.
+- Existing Python stability tests: 8 passed / 0 failed.
+- New whole-body rig tests: 3 passed / 0 failed.
+- Synthetic motion benchmark: 7/7 PASS.
+- Rendered-pose gate: 96/96 PASS.
+- Scene schema, evidence ledger and reference-clip checks: PASS.
+- Independent MP4 metadata: H.264, 1280×720, 24 fps, 8.000 seconds, 192 decoded frames.
+- Dense visual review: 8 contact sheets covering all frames; 4 context sheets; 21 detailed frames.
+- Maximum arm and leg segment-length error from the rig solver: < 2.3e-13 px.
 - Hand-to-basket anchor error: 0 px.
-- Head-relative-to-root horizontal range: 11.12 px; vertical range: 2.58 px.
-- Left/right elbow-relative-to-root horizontal range: 12.14 / 12.08 px.
-- Basket translation range: 9.60 px horizontal, 4.64 px vertical.
-- Torso pitch interval: -0.0300 to +0.0537 radians.
-- Steps/minute at test settings: 118.06.
-- Motion Studio JS tests: 47 passed, 0 failed.
-- Scene schema, evidence ledger, seven synthetic motion cases, rendered-pose gate (96/96), reference clip validation and 13 Python unit tests passed.
-- `measure:raster-parity` did not finish within the 120 s execution window; this specific check is not counted as passed.
-- Artistic/perceptual review is still required: passing geometry gates does not prove a perfect walk.
+- Compared with V6 metrics, root-relative head movement increased about 27%; left/right elbow horizontal range increased about 22%; basket translation range increased about 23%.
+
+## Limitations
+This is a stylized procedural 2D demonstration, not motion capture. Some side-view leg silhouettes can still cross; numerical consistency does not prove natural-looking motion. Raster parity is not counted among passing gates. The four-minute CFG film is not automatically rebuilt by this foundational change; the update must be integrated and reviewed scene-by-scene before that release.

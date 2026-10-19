@@ -37,10 +37,10 @@ test("carrying locks arm swing and activates prop response", () => {
 
 test("head and torso counter-motion remain bounded and phase-coupled", () => {
   const values = Array.from({ length: 240 }, (_, i) => evaluateWholeBodyMotion({ phase: 2 * Math.PI * i / 240, carryWeight: 1 }));
-  assert.ok(Math.max(...values.map(v => v.torso.pitch)) < 0.08);
-  assert.ok(Math.min(...values.map(v => v.torso.pitch)) > -0.05);
-  assert.ok(Math.max(...values.map(v => Math.abs(v.head.counterSwayX))) < 2);
-  assert.ok(Math.max(...values.map(v => Math.abs(v.carriedProp.rotation))) < 0.05);
+  assert.ok(Math.max(...values.map(v => v.torso.pitch)) < 0.10);
+  assert.ok(Math.min(...values.map(v => v.torso.pitch)) > -0.07);
+  assert.ok(Math.max(...values.map(v => Math.abs(v.head.counterSwayX))) < 2.5);
+  assert.ok(Math.max(...values.map(v => Math.abs(v.carriedProp.rotation))) < 0.06);
   assert.ok(values.some(v => Math.abs(v.torso.shoulderSwayX) > 1));
 });
 
@@ -53,4 +53,12 @@ test("motion-core exposes whole-body channels only when scene opts in", () => {
   assert.deepEqual(a.wholeBodyMotion, b.wholeBodyMotion);
   assert.notDeepEqual(a.wholeBodyMotion, c.wholeBodyMotion);
   assert.equal(a.wholeBodyMotion.carriedProp.weight, 1);
+});
+
+
+test("head nod angle and vertical bob are separate channels", () => {
+  const a = evaluateWholeBodyMotion({ phase: Math.PI / 2, scale: 1.6, carryWeight: 1 });
+  assert.ok(Math.abs(a.head.nod) < 0.03, "nod remains an angle in radians");
+  assert.ok(Math.abs(a.head.bobY) < 1.3, "bob remains a scene-space displacement");
+  assert.notEqual(a.head.nod, a.head.bobY);
 });

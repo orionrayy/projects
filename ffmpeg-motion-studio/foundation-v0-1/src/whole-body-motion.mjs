@@ -36,18 +36,20 @@ export function evaluateWholeBodyMotion({
   const free = 1 - c;
   const gaitPhase = ((p % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
 
-  const bodyBob = scale * 0.68 * (1 - Math.cos(2 * p));
-  const pelvisSway = f * scale * 0.90 * Math.sin(p - 0.22);
-  const shoulderSway = f * scale * 1.75 * Math.sin(p + 0.18);
-  const torsoPitch = 0.018 + 0.040 * Math.sin(p - 0.34) + 0.009 * Math.sin(2 * p + 0.25);
-  const headCounterSway = -f * scale * 1.45 * Math.sin(p - 0.48);
-  const headNod = 0.016 * Math.sin(2 * p - 0.55);
+  const bodyBob = scale * 1.05 * (1 - Math.cos(2 * p));
+  const pelvisSway = f * scale * 1.25 * Math.sin(p - 0.22);
+  const shoulderSway = f * scale * 2.40 * Math.sin(p + 0.18);
+  const torsoPitch = 0.022 + 0.065 * Math.sin(p - 0.34) + 0.014 * Math.sin(2 * p + 0.25);
+  const headCounterSway = -f * scale * 2.20 * Math.sin(p - 0.48);
+  const headNod = 0.026 * Math.sin(2 * p - 0.55);
+  // Linear head bob in scene units is distinct from angular nod (radians).
+  const headBobY = scale * 0.80 * Math.sin(2 * p - 0.55);
   const armSwingLeft = free * 0.19 * Math.sin(p + 0.25);
   const armSwingRight = -free * 0.19 * Math.sin(p + 0.25);
-  const carryOffsetX = c * scale * 3.0 * Math.sin(p - 0.66);
-  const carryOffsetY = c * scale * 1.45 * Math.sin(2 * p - 0.72);
-  const carryRotation = c * 0.038 * Math.sin(p - 0.62);
-  const elbowResponse = c * scale * 1.40 * Math.sin(p - 0.88);
+  const carryOffsetX = c * scale * 4.80 * Math.sin(p - 0.66);
+  const carryOffsetY = c * scale * 2.20 * Math.sin(2 * p - 0.72);
+  const carryRotation = c * 0.055 * Math.sin(p - 0.62);
+  const elbowResponse = c * scale * 3.80 * Math.sin(p - 0.88);
 
   return {
     phase: p,
@@ -57,7 +59,7 @@ export function evaluateWholeBodyMotion({
     },
     pelvis: { swayX: pelvisSway, bounceY: bodyBob },
     torso: { pitch: torsoPitch, shoulderSwayX: shoulderSway },
-    head: { counterSwayX: headCounterSway, nod: headNod },
+    head: { counterSwayX: headCounterSway, nod: headNod, bobY: headBobY },
     arms: { leftSwing: armSwingLeft, rightSwing: armSwingRight, elbowResponse },
     carriedProp: { offsetX: carryOffsetX, offsetY: carryOffsetY, rotation: carryRotation, weight: c },
   };
