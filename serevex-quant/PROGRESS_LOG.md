@@ -225,6 +225,6 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Implemented integrated research executor in PR #168: canonical point-in-time forecast-ledger validation, registered-category predictability atlas, same-cohort residual-complementarity audit, and causal delayed-feedback expert mixture with explicit baseline fallback.
 - Added temporal consistency checks between maturity/availability indices and timezone-aware timestamps, and ensured mixer scoring/final weight hashes stop strictly before the exclusive as-of cutoff.
 - Added CLI: `python serevex_stage123_integrated_v1.py --input forecast-ledger.json --output stage123-report.json --as-of-index N`. Input must be a pre-generated JSON forecast ledger with the documented schema.
-- Synthetic contract tests in run #267 passed at the main unit-test step (workflow step 6). At checkpoint time the workflow was running the next data-acquisition step; no final run success or upload had yet been confirmed.
-- Branch head: `8660f39223113cbc864bcdb79e7a5f192d35004c`; hosted run: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39270364938
+- Synthetic contract tests in run #268 passed at the main unit-test step (workflow step 6). At checkpoint time the workflow was running the next data-acquisition step; no final run success or upload had yet been confirmed.
+- Branch head: `8660f39223113cbc864bcdb79e7a5f192d35004c`; hosted run: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39270426351
 - Evidence boundary unchanged: this module does not train upstream forecast experts; no qualified real-data ledger producer is wired in; no positive skill, global originality, net profitability, or deployment readiness is established. Maintain `NO_TRADE`.
