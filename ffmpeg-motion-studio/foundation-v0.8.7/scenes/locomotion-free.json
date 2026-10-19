@@ -23,7 +23,7 @@
     "torso_sway_radians": 0.095,
     "basket_vertical_response_px": 1.8,
     "start_x": 175,
-    "root_y": 410,
+    "root_y": 411,
     "torso_length_px": 99,
     "head_center_offset_y_px": 145,
     "basket_offset_x_px": 68,
@@ -67,8 +67,8 @@
     "knee_up_bias_px": 17,
     "near_leg_projection_px": 0,
     "leg_depth_projection_px": 28,
-    "stance_knee_forward_ratio": 0.7,
-    "stance_knee_up_ratio": 0.65
+    "stance_knee_forward_ratio": 0.8,
+    "stance_knee_up_ratio": 0.7
   },
   "prop": {
     "basket_width_px": 68,
