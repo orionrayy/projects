@@ -59,5 +59,13 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 
 - Design, research sources, equations, limitations and acceptance gates: [FORECASTABILITY_DISCOVERY_V2.md](FORECASTABILITY_DISCOVERY_V2.md).
 - Implementation remains in isolated draft [PR #168](https://github.com/orionrayy/ai-determinism-engine/pull/168). v2 adds multi-window, regime-conditional paired skill checks and approximate max-|t| block-bootstrap bounds. These are research diagnostics, not a validated predictor.
-- Prior-art review confirms the broad ideas are established; mathematical originality is unproven. v2 must pass hosted CI, then a frozen selection must be evaluated on a later untouched OOS cohort. Benchmark evidence still does not show aggregate predictive superiority.
+- Prior-art review confirms the broad ideas are established; mathematical originality is unproven. v2 hosted CI run #259 passed, but it did not demonstrate market skill. A later untouched OOS cohort is still required.
 - Safety state unchanged: NO_TRADE; model/deployment unvalidated; live signals and orders disabled.
+
+
+## Research upgrade — delayed-feedback expert selector v3 (2026-10-19)
+
+- Design and prior-art review: [FORECASTABILITY_DISCOVERY_V3.md](FORECASTABILITY_DISCOVERY_V3.md).
+- Source code and 13 synthetic contract tests are in draft [PR #168](https://github.com/orionrayy/ai-determinism-engine/pull/168).
+- v3 combines model probabilities and an explicit causal baseline, updates global/regime fixed-share weights only after labels mature, and falls back to baseline if support is insufficient. It does not claim a regret theorem, novel-world mathematics, or market alpha.
+- Local tests and py_compile passed. A fresh hosted run is required after v3 code changes. The previously tested probability method remains worse than the matured-label baseline; NO_TRADE stays enforced.
