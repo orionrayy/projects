@@ -133,3 +133,10 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 ## Latest verification checkpoint (2026-10-19, post mixer optimization)
 
 Current PR head is `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`. Full run #286 is queued (https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523541) and isolated probability unit tests run 2 are queued (https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523446). Older full run #280 remains active in real-data alpha integration; new-head test and real-data checks are not yet verified. Do not claim a model improvement until the latest run and artifact report completes.
+
+
+## Latest run correction (2026-10-19)
+
+The older hosted run #280 has passed the initial real OHLCV → alpha producer → integrated stages 1–3 contract step; its following large replay is still running and final workflow success is not confirmed. This is the earlier alpha integration, not the new baseline-governor v2. Current head `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d` is queued in full run #286 and isolated probability-test run 2:
+- https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523541
+- https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523446
