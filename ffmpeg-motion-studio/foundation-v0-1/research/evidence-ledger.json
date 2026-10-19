@@ -80,7 +80,7 @@
     },
     {
       "id": "data.external-datasets",
-      "status": "not_performed",
+      "status": "verified_by_source_inspection",
       "claim": "No third-party public motion/image dataset was downloaded. v0.6.0 adds one user-supplied five-pose landmark reference clip only.",
       "verification_method": "Source and manifest scope review; the user-provided archive's SHA-256 is recorded in the reference clip JSON.",
       "evidence": [

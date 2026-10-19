@@ -63,7 +63,9 @@ jobs:
           grep -q "Deterministic gesture lab" /tmp/motion-studio-preview.html
           grep -q "Live parameters" /tmp/motion-studio-preview.html
           grep -q "Store A reference" /tmp/motion-studio-preview.html
-          curl -fsS http://127.0.0.1:4173/preview/stickman-step.html | grep -q "Manual stickman"
+          curl -fsS -D /tmp/stickman-headers http://127.0.0.1:4173/preview/stickman-step.html -o /tmp/stickman-page.html
+          grep -q "Manual stickman" /tmp/stickman-page.html
+          grep -qi "content-type: text/html" /tmp/stickman-headers
           curl -fsS http://127.0.0.1:4173/src/keyframe-clip.mjs | grep -q "sampleKeyframeClip"
           curl -fsS http://127.0.0.1:4173/reference-data/stickman-step/clip.json | python -c 'import json,sys; x=json.load(sys.stdin); assert len(x["keyframes"]) == 5 and len(x["rig"]["parent_by_landmark"]) == 11; print("KEYFRAME_REFERENCE_HTTP_PASS", x["clip_id"])'
           curl -fsS http://127.0.0.1:4173/src/motion-core.mjs | grep -q "evaluateFrame"
