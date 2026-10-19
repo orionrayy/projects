@@ -179,6 +179,7 @@ export function summarizeScene(scene, armMode) {
     maxFarWristStepPx: pointSteps.farWrist,
     maxKneeStepPx: Math.max(pointSteps.leftKnee, pointSteps.rightKnee),
     maxJointAccelerationPxPerFrame2,
+    jointAccelerationByPointPxPerFrame2: pointAccelerations,
     maxStanceFootDriftPerFramePx,
     stanceFootSamplePairs,
     stanceTransitions,
