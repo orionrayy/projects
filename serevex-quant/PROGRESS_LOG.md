@@ -308,3 +308,10 @@ The +00:00 offset is the representation seen in the file, not independent proof 
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282806410
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282806525
 - Hosted validation of the newest head and any real-data alpha gain remain unconfirmed. Maintain NO_TRADE.
+
+
+## 2026-10-19 — v3.1 temporal scope and test-contract correction
+
+- OOD diagnostics are now computed only for final holdout using the frozen final-training scaler; development, model-selection and calibration rows use null/not-applicable OOD fields to avoid future-model diagnostic leakage. Policy thresholds are bound into model artifact hash.
+- Updated producer tests to the v3 dual-score governor status strings. Searched the alpha, producer, test, workflow and spec files; no stale v2 status/version identifiers remain.
+- Current head `1ec3ed8fc894a8f6692a5d69245b478b23af7985`; full CI #289 and isolated probability tests #5 are queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282993148 and https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282993160. Latest-head validation has not completed.
