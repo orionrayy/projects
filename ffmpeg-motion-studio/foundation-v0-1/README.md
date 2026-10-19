@@ -56,3 +56,16 @@ No external dataset is downloaded and no model is trained or fine-tuned in this 
 ## Clean-room research and topology stress tests
 
 Aggregate-only static findings from the submitted Drawing Cartoons 2 sample are documented in `research/drawing-cartoons-2-clean-room-findings.md`, with eight controlled open questions in `research/format-semantics-experiment-plan.json`. The source archives, APK, DEX bytecode, character images and audio are not redistributed. Keyframe clip validation also checks that the ordered landmark list and numeric point-ID map match the clip's landmarks, that IDs are unique, and that the root has no parent. Synthetic stress tests cover 6, 27 (parent depth 26), 30, 64 and 128 landmarks. These tests are robustness checks, not claims about original-app limits or human-motion aesthetics.
+
+
+## Whole-body locomotion layer (v0.7.0 increment)
+`src/whole-body-motion.mjs` adds a deterministic phase-coupled motion evaluator for pelvis bounce/sway, torso pitch and shoulder shift, head counter-sway/nod, free-arm counter-swing, and carried-prop lag/rotation. `motion-core.mjs` exposes these channels as `state.wholeBodyMotion` only when a scene opts in through `motion.whole_body_motion`; the existing reach scene remains visually unchanged by default.
+
+The carry-walk proof of concept was rendered by the companion Python procedural rig. QA evaluated 192 frames extracted independently from an 8 s, 1280×720, 24 FPS MP4 across 8 dense contact sheets, 4 context sheets, and 21 high-resolution detail frames. Segment lengths and hand-to-prop contact were checked numerically. This is deterministic stylized 2D animation, not motion-capture data or a guarantee of artistic perfection.
+
+
+### Whole-body motion increment V0.7.1
+
+The walking proof was iterated after visual review: pelvis bounce/sway, shoulder counter-shift, torso pitch, delayed head counter-sway, separate head-bob and angular-nod channels, elbow response, and carry-object lag are all coupled to one deterministic gait phase. Head/hair/face rotation is applied in the accompanying Python rig renderer. The optional JS motion object remains opt-in, so the base reach scene keeps its established output when not configured.
+
+Local acceptance evidence: Node tests 48/48; existing Python stability tests 8/8; V7 rig tests 3/3; 7 synthetic motion benchmark cases passed; rendered-pose gate 96/96; scene, evidence-ledger, and reference-clip validation passed. The 8-second 1280×720/24 fps proof clip independently probes to 192 frames. Bone length and wrist-to-grip metrics are geometric solver measurements, not pixel segmentation or proof of artistic perfection. The full CFG explainer has not been rerendered by this change.

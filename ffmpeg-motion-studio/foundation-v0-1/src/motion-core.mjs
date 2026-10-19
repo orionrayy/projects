@@ -1,3 +1,4 @@
+import { evaluateWholeBodyMotion } from "./whole-body-motion.mjs";
 import { evaluateAction } from "./action-model.mjs";
 import { evaluatePoseQuality } from "./pose-quality.mjs";
 
@@ -73,6 +74,16 @@ export function evaluateFrame(scene, frameIndex) {
 
   const action = evaluateAction(scene, frameIndex);
   const character = scene.character;
+  // Optional locomotion channels remain inert unless a scene explicitly opts in.
+  const locomotionConfig = scene.motion.whole_body_motion;
+  const wholeBodyMotion = locomotionConfig?.enabled
+    ? evaluateWholeBodyMotion({
+      phase: 2 * Math.PI * action.timeSeconds * (locomotionConfig.cycles_per_second ?? 1),
+      scale: locomotionConfig.scale ?? 1,
+      facing: locomotionConfig.facing ?? 1,
+      carryWeight: locomotionConfig.carry_weight ?? 0,
+    })
+    : null;
   const rightIK = solveTwoBoneIK(
     action.rig.screenRightShoulder,
     action.requestedWrist,
@@ -126,6 +137,7 @@ export function evaluateFrame(scene, frameIndex) {
     frameIndex,
     timeSeconds: action.timeSeconds,
     phase: action.phase,
+    wholeBodyMotion,
     root: action.rig.root,
     head: action.rig.head,
     headAngle: action.rig.headAngle,

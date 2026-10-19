@@ -1,0 +1,32 @@
+name: Motion Studio validation
+on:
+  push:
+    paths:
+      - 'ffmpeg-motion-studio/foundation-v0-1/**'
+      - '.github/workflows/motion-studio-validation.yml'
+  pull_request:
+    paths:
+      - 'ffmpeg-motion-studio/foundation-v0-1/**'
+      - '.github/workflows/motion-studio-validation.yml'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ffmpeg-motion-studio/foundation-v0-1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip Pillow -r requirements-test.txt
+      - run: npm test
+      - run: npm run validate:scene
+      - run: npm run validate:evidence
+      - run: npm run benchmark:motion
+      - run: npm run validate:rendered-pose
+      - run: npm run validate:reference-clip
+      - run: python -m unittest discover -s tests -p '*test.py' -v
