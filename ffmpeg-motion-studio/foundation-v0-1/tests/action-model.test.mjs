@@ -2,9 +2,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {distance,evaluateFrame} from "../src/motion-core.mjs";
+import {renderSceneSvg} from "../src/svg-renderer.mjs";
+import {evaluateRenderedPoseQuality} from "../src/rendered-pose-quality.mjs";
 const scene=JSON.parse(fs.readFileSync(new URL("../scenes/scene-001.json",import.meta.url),"utf8"));
 test("hand orientation remains aimed at target across the full timeline",()=>{
- for(let f=0;f<scene.duration_frames;f++){const s=evaluateFrame(scene,f);assert.ok(s.quality.handAimErrorDegrees<=scene.quality_contract.max_hand_aim_error_degrees,"frame "+f);}
+ for(let f=0;f<scene.duration_frames;f++){const report=evaluateRenderedPoseQuality(scene,f,renderSceneSvg(scene,f));assert.ok(report.passed,"frame "+f+": "+report.issues.join(", "));}
 });
 test("contact remains within contract during hold",()=>{
  for(let f=0;f<scene.duration_frames;f++){const s=evaluateFrame(scene,f);if(s.phase==="hold")assert.ok(distance(s.fingerTip,s.target)<=scene.quality_contract.max_hold_target_error_px,"frame "+f);}
