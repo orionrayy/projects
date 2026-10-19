@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: motion-studio-v0.8.1-rendered-validation.
+Current engineering candidate: motion-studio-v0.8.2-natural-motion (CI validation pending as of this checkpoint).
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -65,12 +65,13 @@ Current status: FMA v0.2 is a research proposal/prototype with hand-designed sig
 7. A short rig preview is not the full 240-second film.
 
 ## Next stages
-- Stage 5 / v0.8.1: render carry/free-arm sequences, apply head counter-rotation visibly, publish MP4/contact-sheet/JSON evidence; wait for hosted CI and human review.
-- Stage 6: inspect actual artifacts; fix demonstrated defects (foot crossings/sliding, weight transfer, torso/shoulder/arm/head coupling and object contacts) with regressions.
-- Stage 7: editable skeleton hierarchy, joint constraints, pivots, mirroring and IK/FK authoring.
-- Stage 8: weight painting/deformation, walk/run profiles, transitions, overlapping and secondary action.
-- Stage 9: timeline, layered clips, camera/compositing, audio mixer, subtitles and rights-aware assets.
-- Stage 10: integrate reviewed character animation into the 240-second FFmpeg pipeline and the separate motion-analysis QA loop.
-- Stage 11: production hardening, renderer parity, performance/accessibility, import/export and cross-domain test corpus.
+- Stage 5 / v0.8.1: rendered carry/free-arm previews, contact sheets and JSON geometry reports; hosted render CI passed and both contact sheets were inspected. Human acceptance remains pending. The review found an overly acute free-arm pose, weak torso/head readability and narrow projected foot separation.
+- Stage 6 / v0.8.2: tune torso/head coupling, free-arm trajectory, basket response, projected leg separation and rendered silhouette; introduce quantitative regression gates. The branch exists and hosted CI is the next gate; do not mark the stage complete until the run and new artifacts are verified.
+- Stage 7: compare v0.8.2 MP4/contact sheets against v0.8.1 at full speed, then fix any remaining foot crossings/sliding, weight transfer, body synchronization and hand/prop contact with regression tests.
+- Stage 8: editable skeleton hierarchy, joint constraints, pivots, mirroring and IK/FK authoring.
+- Stage 9: weight painting/deformation, complete walk/run profiles, transitions, overlapping and secondary action.
+- Stage 10: timeline, layered clips, camera/compositing, audio mixer, subtitles and rights-aware assets.
+- Stage 11: integrate reviewed character animation into the 240-second FFmpeg pipeline and the separate motion-analysis QA loop.
+- Stage 12: production hardening, renderer parity, performance/accessibility, import/export and cross-domain test corpus.
 
 Version numbers are checkpoints, not evidence of quality. When a gate fails, fix the earliest failing layer before adding a new version.
