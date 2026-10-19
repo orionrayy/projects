@@ -205,7 +205,7 @@ export function summarizeScene(scene, armMode) {
       legToTorsoRatio: (c.upper_leg_px + c.lower_leg_px) / (m.torso_length_px || 70),
       statureInHeadUnits: (scene.background.horizon_y - (poses[0].head.y - c.head_radius_px * 1.03)) / (c.head_radius_px * 2.06),
       shoulderHalfWidthPx: c.shoulder_half_width_px || 15,
-      hipHalfWidthPx: c.hip_half_width_px ?? c.leg_depth_projection_px ?? 0
+      hipHalfWidthPx: c.pelvis_half_width_px || 22
     },
     minNearArmElbowAngleDegrees:Math.min(...vals((p)=>p.nearArm.elbowAngleDegrees)),
     maxNearArmElbowAngleDegrees:Math.max(...vals((p)=>p.nearArm.elbowAngleDegrees)),
