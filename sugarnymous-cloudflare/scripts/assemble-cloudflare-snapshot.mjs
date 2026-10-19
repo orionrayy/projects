@@ -9,8 +9,8 @@ const workerPath = path.join(root, "runtime-snapshot", "worker.mjs");
 const expected = {
   bundleLength: 287610,
   bundleSha256: "b30510a45d42ab7241510f6ece635b475a239e2a2b0b72310951a9785bd621b2",
-  workerLength: 25996,
-  workerSha256: "0bc841a59f8fbee8ff031434420abdc13bca278ab6bebb12847a377090e65333",
+  workerLength: 25464,
+  workerSha256: "d84c4e774ef9f119e25f74766d7eb81dcd5d2e05c9fbd3bf075523143ee05be4",
 };
 
 const names = fs.readdirSync(partsDir)
