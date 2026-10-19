@@ -22,7 +22,7 @@ function response(body,status=200,type="text/html; charset=utf-8",noStore=false)
     "Referrer-Policy":"strict-origin-when-cross-origin",
     "Permissions-Policy":"camera=(), microphone=(), geolocation=()",
     "Content-Security-Policy":"default-src 'none'; style-src 'unsafe-inline'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests",
-    "X-Sugarnymous-Site":"cloudflare-static-staging"
+    "X-Sugarnymous-Site":"cloudflare-static"
   }});
 }
 export default {

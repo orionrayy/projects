@@ -13,7 +13,12 @@ on:
   workflow_dispatch:
     inputs:
       deploy_production:
-        description: "Attempt production deployment (blocked until migration gate is true)"
+        description: "Deploy the native bot/API Worker to production"
+        required: true
+        type: boolean
+        default: false
+      deploy_static_site:
+        description: "Deploy the static landing/privacy site Worker"
         required: true
         type: boolean
         default: false
@@ -43,7 +48,7 @@ jobs:
           const site = fs.readFileSync("sugarnymous-cloudflare/static-site/worker.mjs", "utf8");
           const required = ["/privacy", "/community-principles", "t.me/sugarnymousbot", "Adults 18+", "consent", "originProxy:false"];
           for (const token of required) if (!site.includes(token)) throw new Error("Static site contract missing: " + token);
-          if (/floot\\.app/i.test(site)) throw new Error("Static site must not depend on the Floot origin");
+          if (/floot\.app/i.test(site)) throw new Error("Static site must not depend on the Floot origin");
           if (!site.includes('Content-Security-Policy') || !site.includes('X-Content-Type-Options')) throw new Error("Required security headers missing");
           console.log("Independent static site contract passed.");
           NODE
@@ -67,15 +72,33 @@ jobs:
           if (!entry.includes('website: "cloudflare-static-service"')) throw new Error("Health contract does not identify the native static site");
           if (!config.includes('binding = "HYPERDRIVE"')) throw new Error("Hyperdrive binding missing");
           if (!config.includes('binding = "STATIC_SITE"')) throw new Error("Static site service binding missing");
-          if (gate !== "false") throw new Error("First migration branch must remain deployment-gated");
+          if (gate !== "true") throw new Error("Production deployment gate is not enabled after migration verification");
           for (const re of forbidden) if (re.test(entry) || re.test(bundle)) throw new Error("Potential credential pattern detected");
-          console.log("Snapshot contract passed; production deployment remains intentionally gated.");
+          console.log("Snapshot contract passed; production deployment gate is enabled after health and smoke checks.");
           NODE
       - name: Verify expected tracked files
         run: |
           test -s sugarnymous-cloudflare/runtime-snapshot/worker.mjs
           test -s sugarnymous-cloudflare/wrangler.toml
-          test "$(cat sugarnymous-cloudflare/PRODUCTION_DEPLOY_ALLOWED)" = "false"
+          test "$(cat sugarnymous-cloudflare/PRODUCTION_DEPLOY_ALLOWED)" = "true"
+
+  deploy_static_site:
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_static_site == true
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: sugarnymous-production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate static site
+        run: node --check sugarnymous-cloudflare/static-site/worker.mjs
+      - name: Deploy static site Worker
+        run: npx --yes wrangler@4 deploy --config sugarnymous-cloudflare/static-site/wrangler-production.toml --keep-vars
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
   deploy:
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_production == true
