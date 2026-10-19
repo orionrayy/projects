@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: motion-studio-v0.8.2-natural-motion (hosted CI and render artifact verified; human visual acceptance remains pending).
+Current engineering candidate: Motion Studio v0.8.3 temporal-quality checkpoint on branch motion-studio-v0.8.2-natural-motion; v0.8.1, v0.8.2 and v0.8.3 hosted workflows passed, with human visual acceptance still pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -67,11 +67,12 @@ Current status: FMA v0.2 is a research proposal/prototype with hand-designed sig
 ## Next stages
 - Stage 5 / v0.8.1: rendered carry/free-arm previews, contact sheets and JSON geometry reports; hosted render CI passed and both contact sheets were inspected. Human acceptance remains pending. The review found an overly acute free-arm pose, weak torso/head readability and narrow projected foot separation.
 - Stage 6 / v0.8.2: tuned torso/head coupling, free-arm trajectory, basket response, projected leg separation and silhouette; added quantitative regression gates. Hosted CI passed on commit `e36fd96e8a30c1699216a02e585d57b0332afd5b`, and the 8-second carry/free artifacts were verified as H.264 1280x720/24fps/192 frames with geometry reports. Contact sheets show clearer leg separation and more readable torso/head response, but the animation remains schematic; naturalness, full-speed acceptance, browser/FFmpeg parity and 240-second film integration remain unaccepted.
-- Stage 7: compare v0.8.2 MP4/contact sheets against v0.8.1 at full speed, then fix any remaining foot crossings/sliding, weight transfer, body synchronization and hand/prop contact with regression tests.
-- Stage 8: editable skeleton hierarchy, joint constraints, pivots, mirroring and IK/FK authoring.
-- Stage 9: weight painting/deformation, complete walk/run profiles, transitions, overlapping and secondary action.
-- Stage 10: timeline, layered clips, camera/compositing, audio mixer, subtitles and rights-aware assets.
-- Stage 11: integrate reviewed character animation into the 240-second FFmpeg pipeline and the separate motion-analysis QA loop.
-- Stage 12: production hardening, renderer parity, performance/accessibility, import/export and cross-domain test corpus.
+- Stage 7 / v0.8.3: add per-frame displacement/acceleration diagnostics for pelvis, chest, head, elbows, wrists, knees and feet; stance-foot drift measurement; and contact-state transition counts. Hosted test/render/upload workflow passed on head 7a6eaa28659a148593bf6d46198cf95407de737e. Both carry/free output MP4s and 4-fps contact sheets were generated; temporal metrics include stance drift at approximately 1.14e-13 px/frame and maximum joint acceleration at 7.58 px/frame². Human naturalness remains pending.
+- Stage 8: compare v0.8.2/v0.8.3 MP4s and detailed contact sheets at full speed, then fix remaining foot-crossing/sliding, weight transfer, body synchronization, arm/shoulder coupling and hand/prop contact with regression tests.
+- Stage 9: editable skeleton hierarchy, joint constraints, pivots, mirroring and IK/FK authoring.
+- Stage 10: weight painting/deformation, complete walk/run profiles, transitions, overlapping and secondary action.
+- Stage 11: timeline, layered clips, camera/compositing, audio mixer, subtitles and rights-aware assets.
+- Stage 12: integrate reviewed character animation into the 240-second FFmpeg pipeline and the separate motion-analysis QA loop.
+- Stage 13: production hardening, renderer parity, performance/accessibility, import/export and cross-domain test corpus.
 
 Version numbers are checkpoints, not evidence of quality. When a gate fails, fix the earliest failing layer before adding a new version.
