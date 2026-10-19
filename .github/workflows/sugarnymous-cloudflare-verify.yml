@@ -29,6 +29,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Assemble and hash-verify runtime snapshot
+        run: node sugarnymous-cloudflare/scripts/assemble-cloudflare-snapshot.mjs
       - name: Validate snapshot syntax
         run: |
           node --check sugarnymous-cloudflare/runtime-snapshot/worker.mjs
@@ -42,8 +44,8 @@ jobs:
           const config = fs.readFileSync("sugarnymous-cloudflare/wrangler.toml", "utf8");
           const gate = fs.readFileSync("sugarnymous-cloudflare/PRODUCTION_DEPLOY_ALLOWED", "utf8").trim();
           const forbidden = [
-            /\d{8,10}:[A-Za-z0-9_-]{30,}/,
-            /postgres(?:ql)?:\/\/[^\s"'\x60]+/,
+            /\\d{8,10}:[A-Za-z0-9_-]{30,}/,
+            /postgres(?:ql)?:\\/\\/[^\\s"'\\x60]+/,
             /sk-proj-[A-Za-z0-9_-]{20,}/,
             /gh[pousr]_[A-Za-z0-9]{30,}/
           ];
@@ -57,7 +59,6 @@ jobs:
       - name: Verify expected tracked files
         run: |
           test -s sugarnymous-cloudflare/runtime-snapshot/worker.mjs
-          test -s sugarnymous-cloudflare/runtime-snapshot/telegramBundle.mjs
           test -s sugarnymous-cloudflare/wrangler.toml
           test "$(cat sugarnymous-cloudflare/PRODUCTION_DEPLOY_ALLOWED)" = "false"
 
@@ -71,6 +72,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Assemble and hash-verify runtime snapshot
+        run: node sugarnymous-cloudflare/scripts/assemble-cloudflare-snapshot.mjs
       - name: Enforce migration gate
         run: |
           if [ "$(cat sugarnymous-cloudflare/PRODUCTION_DEPLOY_ALLOWED)" != "true" ]; then
