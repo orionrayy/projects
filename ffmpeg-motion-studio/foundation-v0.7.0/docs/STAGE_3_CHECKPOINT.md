@@ -5,8 +5,9 @@ State: engineering checks pass; prototype only.
 ## Implementation
 This stage adds deterministic biped gait, half-cycle separation, planted stance-foot mapping, smooth swing lift, two-bone IK, stable signed bend branches, pelvis bob, torso sway, partial head compensation, and low-amplitude basket suspension.
 
-## Local validation evidence
-- Full JavaScript test suite: 52/52 passed.
+## Validation evidence
+Local clean-extraction validation:
+- Full JavaScript suite: 52/52 passed.
 - Python unit tests: 13/13 passed.
 - Synthetic motion benchmark: 7/7 passed.
 - Rendered-pose validation: 96/96 frames passed.
@@ -16,16 +17,15 @@ This stage adds deterministic biped gait, half-cycle separation, planted stance-
 - Maximum near/far knee step: 15.87 / 15.47 px (gate 18px).
 - Sampled stance foot world drift: approximately 2.27e-13 px.
 
-The full source archive was extracted into a clean directory and re-run: 52/52 JavaScript tests, 13/13 Python tests and a fresh FFmpeg render passed.
+Hosted review-branch CI also passed 6/6 focused Node smoke tests:
+https://github.com/orionrayy/projects/actions/runs/39303476254
+
+The hosted workflow tests only the committed review slice (pose solver, scene config and geometry regression tests). It does not build the complete local FFmpeg render pipeline. No full-production CI acceptance is claimed.
 
 ## Open issues
 - Contact sheet review only; full-speed human visual acceptance is not completed.
 - Both hands are fixed to basket handles, so free-arm swing is not implemented.
 - Stylized body is thin-limbed, and some leg silhouettes cross.
 - Browser-vs-FFmpeg raster parity timed out in headless Chromium and remains unverified.
-- No hosted CI result is claimed.
 - No model training or dataset acquisition is claimed.
 - This locomotion lab is not tied to the generator source for the separate Character Stability Rig V5 video and is not a full-film render.
-
-## Reproduction
-Run the full source package for the FFmpeg renderer and complete suite. This branch includes the locomotion evaluator, config and focused review tests; it does not contain the separate render script.
