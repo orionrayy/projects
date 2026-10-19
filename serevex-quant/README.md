@@ -121,3 +121,10 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 - Fixed the full CI workflow's model-version assertion for `serevex-alpha-logistic-v2-baseline-governed`.
 - Added an isolated test workflow to run `py_compile` and alpha/producer/ledger/atlas/mixer unit contracts separately from the slower real-data replay.
 - Current head: `cc24d69a1b75b2c5a63cecae438607c827727971`. Isolated tests #283 and full benchmark #284 are queued while the previous real-data alpha integration run is still active. No new governor test pass or holdout metric is confirmed yet.
+
+
+## Delayed-feedback mixer performance hardening (2026-10-19)
+
+- Replaced the quadratic repeated-history scan with pre-indexed maturity buckets. Labels at the same maturity index remain deterministic batches and are applied only before a decision with a strictly greater index. The mixer now performs linear preprocessing and one-pass maturity-bucket processing.
+- Added fail-closed checks for maturity-index chronology and label shape, plus a regression test for tied maturities.
+- New PR head: `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`; full and isolated tests are queued while an older real-data step still holds the hosted runner.
