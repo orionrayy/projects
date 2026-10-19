@@ -214,4 +214,292 @@ async function nativeSmoke(request, env) {
           message: {
             message_id: index + 1,
             chat: { id: flow.userId, type: "private" },
-            from: { id: flow.userId, language_co --- TRUNCATED --- 25,996 chars
+            from: { id: flow.userId, language_code: flow.language, first_name: "Synthetic smoke" },
+            text: flow.command
+          }
+        }, new URL(request.url).origin);
+        flowResults.push({ language: flow.language, command: flow.command, outcome: result?.outcome });
+      }
+
+      const deliveredTexts = mockTelegramPayloads
+        .filter((item) => item.method === "sendMessage")
+        .map((item) => ({
+          text: String(item.payload.text ?? ""),
+          buttons: (item.payload.reply_markup?.inline_keyboard ?? []).flat().map((button) => String(button.text ?? ""))
+        }));
+      const englishMenu = deliveredTexts.find((item) => item.text.includes("Choose a destination below."));
+      const indonesianMenu = deliveredTexts.find((item) => item.text.includes("Pilih menu di bawah."));
+      checks.bilingualMenuFlows = flowResults.filter((item) => item.command === "/menu").length === 2
+        && flowResults.filter((item) => item.command === "/menu").every((item) => item.outcome === "sent")
+        && !!englishMenu?.buttons.includes("💌 Early Access")
+        && !!indonesianMenu?.buttons.includes("💌 Akses Awal");
+
+      const englishPrivacy = deliveredTexts.find((item) => item.text.includes("PRIVACY & SAFETY"));
+      const indonesianPrivacy = deliveredTexts.find((item) => item.text.includes("PRIVASI & KEAMANAN"));
+      checks.bilingualPrivacyFlows = flowResults.filter((item) => item.command === "/privacy").length === 2
+        && flowResults.filter((item) => item.command === "/privacy").every((item) => item.outcome === "sent")
+        && !!englishPrivacy?.buttons.includes("Privacy Policy")
+        && !!indonesianPrivacy?.buttons.includes("Kebijakan Privasi");
+    } catch {
+      // Keep response diagnostics free of row contents, IDs, URLs, and secrets.
+    } finally {
+      if (fetchReplaced && originalFetch) {
+        try { globalThis.fetch = originalFetch; } catch {}
+      }
+      let cleaned = true;
+      try {
+        for (const updateId of cleanupIds) await app.db.deleteFrom("botOutbox").where("updateId", "=", updateId).execute();
+        for (const updateId of cleanupIds) await app.db.deleteFrom("telegramUpdates").where("updateId", "=", updateId).execute();
+        for (const userId of cleanupUserIds) await app.db.deleteFrom("userStates").where("telegramId", "=", userId).execute();
+        for (const userId of cleanupUserIds) await app.db.deleteFrom("users").where("telegramId", "=", userId).execute();
+        for (const updateId of cleanupIds) {
+          const update = await app.db.selectFrom("telegramUpdates").select("updateId").where("updateId", "=", updateId).executeTakeFirst();
+          const outbox = await app.db.selectFrom("botOutbox").select("updateId").where("updateId", "=", updateId).executeTakeFirst();
+          if (update || outbox) cleaned = false;
+        }
+        checks.syntheticUsersCleaned = true;
+        for (const userId of cleanupUserIds) {
+          const user = await app.db.selectFrom("users").select("telegramId").where("telegramId", "=", userId).executeTakeFirst();
+          if (user) checks.syntheticUsersCleaned = false;
+        }
+      } catch {
+        cleaned = false;
+      }
+      checks.syntheticRowsCleaned = cleaned;
+      if (sql) await sql.end({ timeout: 1 }).catch(() => {});
+      if (databaseConfigured) await closeRequestDatabase(app);
+    }
+  });
+
+  const ok = Object.values(checks).every(Boolean);
+  const mockedTelegramApiCalls = Object.values(mockCallCounts).reduce((total, count) => total + count, 0);
+  return json({
+    ok,
+    stage: "cloudflare-native-smoke",
+    checks,
+    mockedTelegramApiCalls,
+    realTelegramMessagesSent: 0,
+    syntheticRowsCleaned: checks.syntheticRowsCleaned,
+    productionWebhookChanged: false,
+    fullMigration: false
+  }, ok ? 200 : 503);
+}
+
+async function databaseHealth(env) {
+  return withDatabaseLock(async () => {
+    let stage = "runtime_init";
+    let app;
+    let requestDbConfigured = false;
+    let started = Date.now();
+    const timingsMs = {};
+    try {
+      // A cold dynamic import can take longer than a normal warm request.
+      started = Date.now();
+      app = await withTimeout(loadApp(env), 10000, "runtime_init_timeout");
+      timingsMs.runtimeInit = Date.now() - started;
+      stage = "direct_connection_probe";
+      // Distinguish transport connectivity from permissions/table access before
+      // invoking Kysely; do not perform an aggregate scan just to test readiness.
+      let sql;
+      let directStep = "select_one";
+      try {
+        sql = app.createPostgres(env.HYPERDRIVE.connectionString, {
+          prepare: true,
+          fetch_types: false,
+          max: 1,
+          idle_timeout: 10,
+          connect_timeout: 15
+        });
+        started = Date.now();
+        await withTimeout(
+          sql.unsafe("select 1 as health", [], { prepare: true, simple: false }),
+          16000,
+          "direct_probe_timeout"
+        );
+        timingsMs.directSelect1 = Date.now() - started;
+        directStep = "table_access";
+        started = Date.now();
+        await withTimeout(
+          sql.unsafe('select 1 as health from "users" limit 1', [], { prepare: true, simple: false }),
+          8000,
+          "direct_users_probe_timeout"
+        );
+        timingsMs.directUsersSelect = Date.now() - started;
+      } catch (error) {
+        const message = error && typeof error.message === "string" ? error.message : "";
+        if (directStep === "select_one") {
+          if (timingsMs.directSelect1 === undefined) timingsMs.directSelect1 = Date.now() - started;
+          if (message === "direct_probe_timeout") throw error;
+          throw new Error("direct_probe_failed");
+        }
+        if (timingsMs.directUsersSelect === undefined) timingsMs.directUsersSelect = Date.now() - started;
+        if (message === "direct_users_probe_timeout") throw error;
+        throw new Error("direct_users_probe_failed");
+      } finally {
+        if (sql) {
+          started = Date.now();
+          // Force-close any still-pending direct probe before creating Kysely's client.
+          await withTimeout(sql.end({ timeout: 1 }), 1500, "direct_client_close_timeout").catch(() => {});
+          timingsMs.directClientClose = Date.now() - started;
+        }
+      }
+
+      // postgres.js 3.4.9 on Cloudflare Workers can leave reserve() pending
+      // forever when Kysely is the first operation on a cold pool. Warm this
+      // request-scoped pool with SELECT 1 before Kysely acquires a reservation.
+      stage = "kysely_pool_prime";
+      const primeStarted = Date.now();
+      const primeDuration = await app.resetDatabase(env.HYPERDRIVE.connectionString);
+      requestDbConfigured = true;
+      timingsMs.kyselyPoolPrime = typeof primeDuration === "number" ? primeDuration : Date.now() - primeStarted;
+
+      // After priming, run a cheap mapped table read, then the aggregate check.
+      stage = "kysely_select";
+      started = Date.now();
+      await withTimeout(
+        app.db.selectFrom("users").select("telegramId").limit(1).executeTakeFirst(),
+        8000,
+        "kysely_select_timeout"
+      );
+      timingsMs.kyselySelect = Date.now() - started;
+      stage = "kysely_count";
+      started = Date.now();
+      await withTimeout(
+        app.db.selectFrom("users").select(app.db.fn.countAll().as("count")).executeTakeFirst(),
+        12000,
+        "kysely_query_timeout"
+      );
+      timingsMs.kyselyCount = Date.now() - started;
+      return { ok: true, reason: "ok", timingsMs };
+    } catch (error) {
+      const message = error && typeof error.message === "string" ? error.message : "";
+      if (message === "runtime_init_timeout") {
+        timingsMs.runtimeInit = Date.now() - started;
+        return { ok: false, reason: "runtime_init_timeout", timingsMs };
+      }
+      if (message === "direct_probe_timeout") return { ok: false, reason: "direct_probe_timeout", timingsMs };
+      if (message === "direct_users_probe_timeout") return { ok: false, reason: "direct_users_probe_timeout", timingsMs };
+      if (message === "direct_users_probe_failed") return { ok: false, reason: "direct_users_probe_failed", timingsMs };
+      if (message === "kysely_select_timeout") {
+        timingsMs.kyselySelect = Date.now() - started;
+        return { ok: false, reason: "kysely_select_timeout", timingsMs };
+      }
+      if (message === "kysely_query_timeout") {
+        timingsMs.kyselyCount = Date.now() - started;
+        return { ok: false, reason: "kysely_query_timeout", timingsMs };
+      }
+      if (stage === "kysely_pool_prime") return { ok: false, reason: "kysely_pool_prime_failed", timingsMs };
+      if (message === "direct_probe_failed") return { ok: false, reason: "direct_probe_failed", timingsMs };
+      if (stage === "kysely_select") return { ok: false, reason: "kysely_select_failed", timingsMs };
+      if (stage === "kysely_count") return { ok: false, reason: "kysely_count_failed", timingsMs };
+      return { ok: false, reason: stage === "runtime_init" ? "runtime_init_failed" : "database_query_failed", timingsMs };
+    } finally {
+      if (requestDbConfigured) {
+        const started = Date.now();
+        await closeRequestDatabase(app);
+        timingsMs.kyselyClientClose = Date.now() - started;
+      }
+    }
+  });
+}
+
+async function webhook(request, env) {
+  if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
+  // Use the already-allowlisted webhook URL for the setup-secret-only smoke
+  // path; normal Telegram deliveries never send this separate header.
+  if (request.headers.has("x-sugarnymous-smoke-secret")) return nativeSmoke(request, env);
+  if (!env.TELEGRAM_WEBHOOK_SECRET || !env.TELEGRAM_BOT_TOKEN) {
+    return new Response("Webhook is not configured", { status: 503 });
+  }
+  const received = request.headers.get("x-telegram-bot-api-secret-token") || "";
+  if (!constantTimeEqual(env.TELEGRAM_WEBHOOK_SECRET, received)) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+  const contentLength = Number(request.headers.get("content-length") || 0);
+  if (contentLength > MAX_BODY_BYTES) return new Response("Payload too large", { status: 413 });
+
+  let text;
+  try {
+    text = await request.text();
+  } catch {
+    return new Response("Could not read request", { status: 400 });
+  }
+  if (text.length > MAX_BODY_BYTES) return new Response("Payload too large", { status: 413 });
+
+  let update;
+  try {
+    update = JSON.parse(text);
+  } catch {
+    return new Response("Invalid JSON", { status: 400 });
+  }
+  if (!update || typeof update !== "object" || !Number.isSafeInteger(update.update_id) || update.update_id < 0) {
+    return new Response("Invalid Telegram update", { status: 400 });
+  }
+
+  try {
+    const app = await loadApp(env);
+    const delivery = await withDatabaseLock(async () => {
+      await app.resetDatabase(env.HYPERDRIVE.connectionString);
+      try {
+        return await app.telegramBot.processUpdate(update, request.url);
+      } finally {
+        await closeRequestDatabase(app);
+      }
+    });
+    if (delivery?.retryable) {
+      // Telegram retries non-2xx webhook responses. update_id dedupe is safe
+      // because processUpdate also checks any existing outbox row on duplicates.
+      return new Response("Temporary delivery error", { status: 503, headers: { "Cache-Control": "no-store" } });
+    }
+    return new Response("OK", { status: 200, headers: { "Cache-Control": "no-store" } });
+  } catch {
+    // No request payloads, database URLs, or tokens are logged. Telegram can retry 5xx responses.
+    return new Response("Temporary processing error", { status: 500, headers: { "Cache-Control": "no-store" } });
+  }
+}
+
+export default {
+  async fetch(request, env) {
+    const incoming = new URL(request.url);
+
+    if (incoming.pathname === "/_api/telegram-webhook") return webhook(request, env);
+
+    if ((incoming.pathname === "/_cloudflare-stage-health" || incoming.pathname === "/_api/health" || incoming.pathname === "/health") && request.method === "GET") {
+      try {
+        const health = await databaseHealth(env);
+        if (!health.ok) {
+          const body = incoming.pathname === "/_api/health" || incoming.pathname === "/health"
+            ? { status: "degraded", service: "sugarnymous-cloudflare", database: "error", backend: "cloudflare-worker", reason: health.reason }
+            : { ok: false, stage: "cloudflare-native", database: "error", backend: "cloudflare-worker", reason: health.reason, timingsMs: health.timingsMs ?? {}, website: "floot-origin-proxy", productionWebhookChanged: false, fullMigration: false };
+          return json(body, 503);
+        }
+        const body = incoming.pathname === "/_api/health" || incoming.pathname === "/health"
+          ? { status: "ok", service: "sugarnymous-cloudflare", database: "ok", backend: "cloudflare-worker" }
+          : { ok: true, stage: "cloudflare-native", database: "ok", backend: "cloudflare-worker", timingsMs: health.timingsMs ?? {}, website: "floot-origin-proxy", productionWebhookChanged: false, fullMigration: false };
+        return json(body, 200);
+      } catch {
+        const body = incoming.pathname === "/_api/health" || incoming.pathname === "/health"
+          ? { status: "degraded", service: "sugarnymous-cloudflare", database: "error", backend: "cloudflare-worker" }
+          : { ok: false, stage: "cloudflare-native", database: "error", backend: "cloudflare-worker", website: "floot-origin-proxy", productionWebhookChanged: false, fullMigration: false };
+        return json(body, 503);
+      }
+    }
+
+    // Public landing/privacy pages are temporarily proxied from Floot until the static bundle is migrated.
+    const upstream = new URL(incoming.pathname + incoming.search, ORIGIN);
+    const headers = new Headers(request.headers);
+    headers.delete("host");
+    headers.set("x-sugarnymous-cloudflare-stage", "cloudflare-native-backend");
+    const init = { method: request.method, headers, redirect: "manual" };
+    if (request.method !== "GET" && request.method !== "HEAD") init.body = request.body;
+    try {
+      const response = await fetch(new Request(upstream.toString(), init));
+      const responseHeaders = new Headers(response.headers);
+      responseHeaders.set("X-Sugarnymous-Backend", "cloudflare-native");
+      responseHeaders.set("Cache-Control", responseHeaders.get("Cache-Control") || "no-store");
+      return new Response(response.body, { status: response.status, statusText: response.statusText, headers: responseHeaders });
+    } catch {
+      return json({ error: "Origin temporarily unavailable", backend: "cloudflare-native" }, 502);
+    }
+  }
+};
