@@ -1,0 +1,140 @@
+name: CFG Explainer V4 — 240 seconds with audio
+
+on:
+  push:
+    branches:
+      - feature/ffmpeg-motion-studio-9.0.2-upgrade
+    paths:
+      - "ffmpeg-motion-studio/scripts/render_cashier_explainer_v4.py"
+      - "ffmpeg-motion-studio/scripts/test_cashier_explainer_v4.py"
+      - "ffmpeg-motion-studio/scripts/render_procedural_master_v2.py"
+      - "ffmpeg-motion-studio/scripts/render_procedural_master.py"
+      - "ffmpeg-motion-studio/production/CASHIER_FIRST_V4_MOTION_BRIEF.md"
+      - "ffmpeg-motion-studio/production/STICKMAN_REFERENCE_DATASET_POLICY.json"
+      - ".github/workflows/render-cfg-explainer-v4.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: cashier-first-cfg-master-v4
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render and validate 240-second V4 master
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      VERIFIED_RUNTIME_RUN_ID: "39066898988"
+      ARTIFACT_NAME: ffmpeg-motion-studio-9.0.2-ubuntu-24.04-x86_64
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Install lightweight drawing and local audio dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            python3-pil python3-venv python3-pip espeak-ng fonts-dejavu-core unzip ca-certificates \
+            libass9 libfreetype6 libfontconfig1 libfribidi0 libharfbuzz0b libmp3lame0 \
+            libopus0 libvorbis0a libvpx9 libx264-164 libx265-199 libdav1d7 libaom3 libzimg2 zlib1g
+
+      - name: Compile and run storyboard, timing and motion tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            ffmpeg-motion-studio/scripts/render_procedural_master.py \
+            ffmpeg-motion-studio/scripts/test_procedural_master.py \
+            ffmpeg-motion-studio/scripts/render_procedural_master_v2.py \
+            ffmpeg-motion-studio/scripts/test_procedural_master_v2.py \
+            ffmpeg-motion-studio/scripts/render_cashier_explainer_v4.py \
+            ffmpeg-motion-studio/scripts/test_cashier_explainer_v4.py
+          python3 ffmpeg-motion-studio/scripts/test_procedural_master.py
+          python3 ffmpeg-motion-studio/scripts/test_procedural_master_v2.py
+          python3 ffmpeg-motion-studio/scripts/test_cashier_explainer_v4.py
+
+      - name: Download previously verified custom FFmpeg runtime
+        uses: actions/download-artifact@v4
+        with:
+          name: ffmpeg-motion-studio-9.0.2-ubuntu-24.04-x86_64
+          path: ${{ runner.temp }}/runtime-artifact
+          run-id: 39066898988
+          github-token: ${{ github.token }}
+
+      - name: Verify and unpack the runtime
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/runtime-artifact"
+          sha256sum --check ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz.sha256
+          mkdir -p "$RUNNER_TEMP/ffmpeg-runtime"
+          tar -xzf ffmpeg-9.0.2-ubuntu-24.04-x86_64.tar.gz -C "$RUNNER_TEMP/ffmpeg-runtime"
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" -version
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffprobe" -version
+
+      - name: Prepare free-first Indonesian TTS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv --system-site-packages "$RUNNER_TEMP/ffmpeg-tts-venv"
+          "$RUNNER_TEMP/ffmpeg-tts-venv/bin/pip" install --disable-pip-version-check edge-tts
+
+      - name: Render V4 — exact 240-second CFG film with narration and synchronized SFX
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v4-deliverables" "$RUNNER_TEMP/v4-work"
+          "$RUNNER_TEMP/ffmpeg-tts-venv/bin/python" \
+            ffmpeg-motion-studio/scripts/render_cashier_explainer_v4.py \
+            --ffmpeg "$RUNNER_TEMP/ffmpeg-runtime/bin/ffmpeg" \
+            --ffprobe "$RUNNER_TEMP/ffmpeg-runtime/bin/ffprobe" \
+            --output-dir "$RUNNER_TEMP/v4-deliverables" \
+            --work-dir "$RUNNER_TEMP/v4-work"
+          "$RUNNER_TEMP/ffmpeg-runtime/bin/ffprobe" -v error -count_frames -show_entries stream=codec_name,codec_type,width,height,r_frame_rate,nb_read_frames,sample_rate,channels -show_entries format=duration -of json "$RUNNER_TEMP/v4-deliverables/Dari_Kasir_Cashier_First_Motion_Master_v4.mp4" > "$RUNNER_TEMP/v4-deliverables/ffprobe-validation-v4.json"
+          python3 - "$RUNNER_TEMP/v4-deliverables/ffprobe-validation-v4.json" <<'PY'
+          import json, sys
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          streams = report.get("streams", [])
+          video = next((x for x in streams if x.get("codec_type") == "video"), None)
+          audio = next((x for x in streams if x.get("codec_type") == "audio"), None)
+          duration = float(report.get("format", {}).get("duration", 0))
+          assert video and video.get("codec_name") == "h264", video
+          assert (video.get("width"), video.get("height")) == (1920, 1080), video
+          assert video.get("r_frame_rate") == "24/1", video
+          assert int(video.get("nb_read_frames", -1)) == 5760, video
+          assert audio and audio.get("codec_name") == "aac", audio
+          assert audio.get("sample_rate") == "48000" and int(audio.get("channels", 0)) == 2, audio
+          assert abs(duration - 240.0) <= 0.1, duration
+          print("V4_MEDIA_CONTRACT_PASS", json.dumps({"duration": duration, "video_frames": 5760, "size": "1920x1080", "fps": "24/1", "audio": "AAC stereo 48 kHz"}))
+          PY
+          python3 -m json.tool "$RUNNER_TEMP/v4-deliverables/production-manifest-v4.json"
+          test -s "$RUNNER_TEMP/v4-deliverables/Dari_Kasir_Cashier_First_Motion_Master_v4.mp4"
+          test -s "$RUNNER_TEMP/v4-deliverables/Dari_Kasir_Cashier_First_V4_Full_Package.zip"
+          test -s "$RUNNER_TEMP/v4-deliverables/narration-id.srt"
+          test -s "$RUNNER_TEMP/v4-deliverables/sound-effect-cue-sheet.json"
+          test -s "$RUNNER_TEMP/v4-deliverables/visual-effect-cue-sheet.md"
+          test -s "$RUNNER_TEMP/v4-deliverables/cashier-first-contact-sheet-v4.jpg"
+
+      - name: Upload V4 production package and review assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: dari-kasir-cashier-first-cfg-master-v4
+          path: |
+            ${{ runner.temp }}/v4-deliverables/Dari_Kasir_Cashier_First_Motion_Master_v4.mp4
+            ${{ runner.temp }}/v4-deliverables/Dari_Kasir_Cashier_First_V4_Full_Package.zip
+            ${{ runner.temp }}/v4-deliverables/cashier-first-contact-sheet-v4.jpg
+            ${{ runner.temp }}/v4-deliverables/narration-id.srt
+            ${{ runner.temp }}/v4-deliverables/narration-transcript-id.txt
+            ${{ runner.temp }}/v4-deliverables/sound-effects-only.wav
+            ${{ runner.temp }}/v4-deliverables/sound-effect-cue-sheet.json
+            ${{ runner.temp }}/v4-deliverables/visual-effect-cue-sheet.md
+            ${{ runner.temp }}/v4-deliverables/motion-direction-v4.md
+            ${{ runner.temp }}/v4-deliverables/production-manifest-v4.json
+            ${{ runner.temp }}/v4-deliverables/ffprobe-validation-v4.json
+            ${{ runner.temp }}/v4-deliverables/concept-v4.md
+            ${{ runner.temp }}/v4-deliverables/README-V4.txt
+          if-no-files-found: error
+          retention-days: 14

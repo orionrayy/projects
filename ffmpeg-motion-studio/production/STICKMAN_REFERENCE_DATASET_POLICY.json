@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_name": "user_supplied_stickman_step_reference",
+  "status": "REFERENCE_ONLY",
+  "use_for": [
+    "qualitative motion timing review",
+    "compact character proportions",
+    "continuity between authored poses",
+    "hypothesis-driven animation QA"
+  ],
+  "not_used_for": [
+    "character asset compositing in CFG film",
+    "pixel reproduction of Drawing Cartoons 2",
+    "assumed source-app frame rate",
+    "claim of model training or fine-tuning"
+  ],
+  "source_semantics": "Five authored poses and interframes=8 were observed; source playback FPS and exact interpolation semantics remain unverified.",
+  "production_constraint": "The CFG film uses original procedural illustrations. The stickman sample does not appear as a character or image in rendered scenes."
+}
