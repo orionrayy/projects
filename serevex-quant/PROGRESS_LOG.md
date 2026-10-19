@@ -289,3 +289,12 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - The older full run #280 passed its real OHLCV → alpha-ledger → stages 1–3 step, so the earlier alpha producer integration has now passed hosted software/contract assertions.
 - Run #280's downstream 700k-candle/20k-real-timestamp replay step remains in progress; full workflow and artifact upload are not yet confirmed.
 - Current head `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`, containing the baseline-governor probabilistic model and linear-time maturity queue, is pending in full run #286 and isolated probability-test run 2. Neither has yet validated the latest head.
+
+
+## 2026-10-19 — Probabilistic governor v3: dual-score stability + OOD fallback
+
+- Alpha blend selection now requires the conservative block screen to pass both Brier and log loss against the rowwise causal baseline, plus positive mean score improvement in >=70% of chronological non-overlapping calibration blocks for both metrics. This rejects the case where a brittle, overconfident alpha improves Brier but damages log loss.
+- Added training-only scaler-based OOD detection for each holdout row. If >=25% of features are beyond four training standard deviations or missing/invalid, use exact causal baseline for that row. No holdout label is consumed by the gate.
+- Added synthetic tests for dual-score rejection, OOD baseline fallback, deterministic artifact hashes, strict maturity cutoffs, and holdout mutation invariance.
+- New PR #168 head `8db76e0241f23f657cf600c4b17750769806a404`. Full CI #287 and isolated probability tests #3 are queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282535801 and https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282535854; latest-head tests and real-data metrics are not yet confirmed.
+- Continue NO_TRADE. No predictive edge, profitability, or deployment readiness is asserted.
