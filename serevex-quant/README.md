@@ -128,3 +128,8 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 - Replaced the quadratic repeated-history scan with pre-indexed maturity buckets. Labels at the same maturity index remain deterministic batches and are applied only before a decision with a strictly greater index. The mixer now performs linear preprocessing and one-pass maturity-bucket processing.
 - Added fail-closed checks for maturity-index chronology and label shape, plus a regression test for tied maturities.
 - New PR head: `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`; full and isolated tests are queued while an older real-data step still holds the hosted runner.
+
+
+## Latest verification checkpoint (2026-10-19, post mixer optimization)
+
+Current PR head is `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`. Full run #286 is queued (https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523541) and isolated probability unit tests run 2 are queued (https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523446). Older full run #280 remains active in real-data alpha integration; new-head test and real-data checks are not yet verified. Do not claim a model improvement until the latest run and artifact report completes.
