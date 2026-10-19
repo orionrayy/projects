@@ -62,8 +62,11 @@ jobs:
             /gh[pousr]_[A-Za-z0-9]{30,}/
           ];
           if (!entry.includes("/_api/telegram-webhook")) throw new Error("Webhook route missing from snapshot");
-          if (!entry.includes("https://sugarnymous-prerelease.floot.app")) throw new Error("Expected origin proxy marker absent; review snapshot before deployment");
+          if (entry.includes("sugarnymous-prerelease.floot.app") || entry.includes("floot-origin-proxy")) throw new Error("Floot origin proxy must be absent from the native Worker");
+          if (!entry.includes("env.STATIC_SITE.fetch")) throw new Error("Static site service binding route missing");
+          if (!entry.includes('website: "cloudflare-static-service"')) throw new Error("Health contract does not identify the native static site");
           if (!config.includes('binding = "HYPERDRIVE"')) throw new Error("Hyperdrive binding missing");
+          if (!config.includes('binding = "STATIC_SITE"')) throw new Error("Static site service binding missing");
           if (gate !== "false") throw new Error("First migration branch must remain deployment-gated");
           for (const re of forbidden) if (re.test(entry) || re.test(bundle)) throw new Error("Potential credential pattern detected");
           console.log("Snapshot contract passed; production deployment remains intentionally gated.");
