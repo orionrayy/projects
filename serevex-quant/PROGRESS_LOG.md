@@ -315,3 +315,14 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - OOD diagnostics are now computed only for final holdout using the frozen final-training scaler; development, model-selection and calibration rows use null/not-applicable OOD fields to avoid future-model diagnostic leakage. Policy thresholds are bound into model artifact hash.
 - Updated producer tests to the v3 dual-score governor status strings. Searched the alpha, producer, test, workflow and spec files; no stale v2 status/version identifiers remain.
 - Current head `1ec3ed8fc894a8f6692a5d69245b478b23af7985`; full CI #289 and isolated probability tests #5 are queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282993148 and https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282993160. Latest-head validation has not completed.
+
+
+## 2026-10-19 — Probability method v4: source-time embargoed blocks
+
+- Replaced event-row-rank block statistics with absolute source-index windows: 12 bars of scored decisions followed by a 12-bar embargo. This reduces reliance on adjacent decisions whose 12-bar TP/SL outcomes overlap.
+- Dual-score governance (Brier + log loss) and the >=70% positive-block rule now operate on equal-weight non-empty time-block means and require at least eight independent block windows. The exact causal baseline remains the fallback when support or skill evidence fails.
+- Final-holdout Brier uncertainty now resamples the same embargo-separated time-block means; interpretation remains diagnostic and does not guarantee independence under all market dependence structures.
+- Current head `517d4a27409fb5901317a8caada138ca765d40e1`; full run #291 and isolated tests #7 are queued:
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553856
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553998
+- No latest-head test pass or validated positive alpha is confirmed. Maintain NO_TRADE.
