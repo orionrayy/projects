@@ -267,3 +267,10 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Fixed the full CI workflow's alpha version assertion and prevented raw/calibrated prediction dictionaries from being copied into ledger metadata. Added a regression test for compact metadata.
 - Added isolated workflow for compile plus alpha/producer/stage-1–3 unit tests. Current head `cc24d69a1b75b2c5a63cecae438607c827727971`; isolated unit workflow #283 and full workflow #284 are queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280162321 and https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280162273. The prior full run remains inside the real-data alpha integration step, so neither new workflow has yet completed.
 - Preserve NO_TRADE; the new probabilistic method remains unverified against real final holdout.
+
+
+## 2026-10-19 — Delayed-feedback mixer made linear-time
+
+- The stage-3 mixer had rescanned all prior predictions on every decision, giving quadratic history-scan complexity. Replaced this with a sorted index of label-maturity buckets; maturity ties retain deterministic batching and are applied only when `label_available_index < current_decision_index`.
+- Added explicit fail-closed validation for maturity indices, boolean maturity flags and binary labels, and a regression test with tied label maturities to verify exact strict-cutoff behaviour.
+- New head `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`; hosted full run and isolated unit suite are queued behind the earlier long-running real-data integration job. Performance and probability governor changes are not yet confirmed by CI.
