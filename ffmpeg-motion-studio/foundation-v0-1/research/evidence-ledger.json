@@ -81,10 +81,15 @@
     {
       "id": "data.external-datasets",
       "status": "not_performed",
-      "claim": "No external motion/image dataset has been downloaded or ingested in this implementation stage.",
-      "verification_method": "Implementation scope declaration",
-      "evidence": [],
-      "limitation": "No data-learning, training, fine-tuning, or improved model capability is claimed."
+      "claim": "No third-party public motion/image dataset was downloaded. v0.6.0 adds one user-supplied five-pose landmark reference clip only.",
+      "verification_method": "Source and manifest scope review; the user-provided archive's SHA-256 is recorded in the reference clip JSON.",
+      "evidence": [
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/reference-data/stickman-step/clip.json",
+          "symbol": "single user-supplied reference fixture"
+        }
+      ],
+      "limitation": "One small reference clip is not a broad motion dataset, and no model training or fine-tuning is claimed."
     },
     {
       "id": "data.model-training",
@@ -114,6 +119,27 @@
         }
       ],
       "limitation": "This verifies serialized geometry consistency, not natural motion, collision-free silhouettes, semantic correctness of arbitrary animation or artistic acceptance."
+    },
+    {
+      "id": "reference.stickman-step-clip",
+      "status": "pending_ci",
+      "claim": "The user-supplied five-pose stickman step is represented as a hashed, schema-validated 11-landmark clip and rendered by deterministic keyframe interpolation to a verified silent H.264 preview.",
+      "verification_method": "CI validates source clip schema and topology, exact keyframe preservation, interpolation determinism, sample-specific segment/trajectory contracts, preview HTTP routes, and FFmpeg/FFprobe media contracts.",
+      "evidence": [
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/reference-data/stickman-step/clip.json",
+          "symbol": "five source keyframes; 11 named landmarks; source SHA-256"
+        },
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/src/keyframe-clip.mjs",
+          "symbol": "validateKeyframeClip, sampleKeyframeClip, measureKeyframeClip"
+        },
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/tests/keyframe-clip.test.mjs",
+          "symbol": "exact pose, topology, interpolation and trajectory regressions"
+        }
+      ],
+      "limitation": "The source playback rate and exact interframes semantics remain unknown. The new renderer uses an explicit linear baseline and does not claim source-app pixel parity, general human-motion quality, or training."
     }
   ]
 }

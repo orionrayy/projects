@@ -1,4 +1,4 @@
-name: Motion Studio Foundation v0.5.0
+name: Motion Studio Foundation v0.6.0
 on:
   push:
     branches: ["feature/motion-studio-foundation-v0-1", "main"]
@@ -43,6 +43,8 @@ jobs:
           ffprobe -version | head -n 1
       - name: Validate scene manifest
         run: npm run validate:scene
+      - name: Validate manual keyframe reference clip
+        run: npm run validate:reference-clip
       - name: Validate evidence ledger and source provenance
         run: npm run validate:evidence
       - name: Preview syntax and HTTP smoke tests
@@ -61,6 +63,9 @@ jobs:
           grep -q "Deterministic gesture lab" /tmp/motion-studio-preview.html
           grep -q "Live parameters" /tmp/motion-studio-preview.html
           grep -q "Store A reference" /tmp/motion-studio-preview.html
+          curl -fsS http://127.0.0.1:4173/preview/stickman-step.html | grep -q "Manual stickman"
+          curl -fsS http://127.0.0.1:4173/src/keyframe-clip.mjs | grep -q "sampleKeyframeClip"
+          curl -fsS http://127.0.0.1:4173/reference-data/stickman-step/clip.json | python -c 'import json,sys; x=json.load(sys.stdin); assert len(x["keyframes"]) == 5 and len(x["rig"]["parent_by_landmark"]) == 11; print("KEYFRAME_REFERENCE_HTTP_PASS", x["clip_id"])'
           curl -fsS http://127.0.0.1:4173/src/motion-core.mjs | grep -q "evaluateFrame"
           curl -fsS http://127.0.0.1:4173/src/action-model.mjs | grep -q "evaluateAction"
           curl -fsS http://127.0.0.1:4173/src/character-rig.mjs | grep -q "createCharacterRig"
@@ -79,13 +84,15 @@ jobs:
         run: python -m unittest discover -s tests -p '*test.py' -v
       - name: Render SVG frames and verify real FFmpeg export
         run: npm run render
+      - name: Render and probe the manual stickman-step reference
+        run: npm run render:reference-clip
       - name: Package source snapshot from tested commit
         run: |
           python - <<'PY'
           from pathlib import Path
           from zipfile import ZipFile, ZIP_DEFLATED
           root = Path(".")
-          target = root / "out" / "motion-studio-foundation-v0-5-0-source.zip"
+          target = root / "out" / "motion-studio-foundation-v0-6-0-source.zip"
           target.parent.mkdir(parents=True, exist_ok=True)
           skip_parts = {"out", ".git", "node_modules", "__pycache__"}
           with ZipFile(target, "w", ZIP_DEFLATED) as archive:
@@ -101,9 +108,12 @@ jobs:
       - name: Upload pilot, source and regression evidence
         uses: actions/upload-artifact@v4
         with:
-          name: motion-studio-foundation-v0-5-0-bilateral-rig-evidence-ledger
+          name: motion-studio-foundation-v0-6-0-reference-clip-evidence
           path: |
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4
+            ffmpeg-motion-studio/foundation-v0-1/out/stickman-step-reference.mp4
+            ffmpeg-motion-studio/foundation-v0-1/out/stickman-step-reference.mp4.report.json
+            ffmpeg-motion-studio/foundation-v0-1/out/stickman-step-reference-validation.json
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4.report.json
             ffmpeg-motion-studio/foundation-v0-1/out/motion-benchmark-report.json
             ffmpeg-motion-studio/foundation-v0-1/out/rendered-pose-report.json
@@ -112,6 +122,6 @@ jobs:
             ffmpeg-motion-studio/foundation-v0-1/research/evidence-ledger.json
             ffmpeg-motion-studio/foundation-v0-1/schemas/evidence-ledger.schema.json
             ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-evidence/**
-            ffmpeg-motion-studio/foundation-v0-1/out/motion-studio-foundation-v0-5-0-source.zip
+            ffmpeg-motion-studio/foundation-v0-1/out/motion-studio-foundation-v0-6-0-source.zip
           if-no-files-found: error
           retention-days: 14

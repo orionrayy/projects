@@ -1,0 +1,339 @@
+{
+  "schema_version": "1.0.0",
+  "clip_id": "reference-stickman-step-001",
+  "title": "Manual stickman — one small step",
+  "description": "Five authored stickman keyframes extracted from the user-provided animation project. This is a landmark-rig visualization, not a pixel-identical reproduction of the source app renderer.",
+  "canvas": {
+    "width": 640,
+    "height": 480,
+    "background": "#DBDBDB"
+  },
+  "render_settings": {
+    "fps": 24,
+    "subdivisions_per_interval": 8,
+    "interpolation": "linear",
+    "ink": "#C62000",
+    "stroke_width": 5.5,
+    "joint_radius": 2.4,
+    "head_radius": 11.5
+  },
+  "source": {
+    "uploaded_file": "DOC-20261019-WA0001.bin",
+    "sha256": "cd4b686eec0b312f4de181e10b0a633bc83f1c5b4a0371f84d7a41e1785ec88b",
+    "container_format": "ZIP",
+    "entry": "model.xml",
+    "source_application_project_name": "Cartoon_461",
+    "scene_version_code": 285,
+    "observed_interframes_attribute": 8,
+    "source_frame_rate": null,
+    "source_frame_rate_status": "not stored in inspected metadata; 24 fps is the Motion Studio render setting only",
+    "interpolation_status": "model.xml has no_interpolation=false and interframes=8; exact playback/interframe semantics are not assumed",
+    "coordinate_interpretation": "x/y coordinates copied from each source point; treated as 640x480 canvas-space landmark positions, supported by coordinate bounds and preview thumbnail correspondence",
+    "derived_thumbnail_colors": {
+      "background_estimate": "#DEDBDE",
+      "ink_estimate": "#C62000",
+      "note": "Ink is a sampled antialiased pixel estimate from the supplied thumbnail, not a recovered vector/style specification."
+    }
+  },
+  "rig": {
+    "unit_name": "newstickman:stickman1",
+    "landmark_order": [
+      "chest",
+      "head",
+      "pelvis",
+      "rarm",
+      "rfing",
+      "rknee",
+      "rt",
+      "larm",
+      "lfing",
+      "lknee",
+      "lt"
+    ],
+    "point_id_by_landmark": {
+      "chest": 1,
+      "head": 2,
+      "pelvis": 3,
+      "rarm": 4,
+      "rfing": 5,
+      "rknee": 6,
+      "rt": 7,
+      "larm": 8,
+      "lfing": 9,
+      "lknee": 10,
+      "lt": 11
+    },
+    "parent_by_landmark": {
+      "chest": "pelvis",
+      "head": "chest",
+      "pelvis": null,
+      "rarm": "chest",
+      "rfing": "rarm",
+      "rknee": "pelvis",
+      "rt": "rknee",
+      "larm": "chest",
+      "lfing": "larm",
+      "lknee": "pelvis",
+      "lt": "lknee"
+    },
+    "root_landmark": "pelvis",
+    "head_landmark": "head",
+    "planted_candidate_landmark": "lt",
+    "swing_candidate_landmark": "rt"
+  },
+  "quality_contract": {
+    "max_parent_segment_length_variation_px": 0.1,
+    "root_expected_horizontal_direction": "left",
+    "min_root_net_displacement_px": 20,
+    "max_planted_candidate_net_displacement_px": 3,
+    "min_swing_candidate_net_displacement_px": 40,
+    "note": "These are regression expectations for this one sample, not universal human-motion rules. 'lt' is named as a planted candidate because its start/end displacement is small; ground contact is not inferred beyond the coordinates."
+  },
+  "keyframes": [
+    {
+      "source_frame_id": 0,
+      "landmarks": {
+        "chest": {
+          "x": 534.74316,
+          "y": 310.55188
+        },
+        "head": {
+          "x": 534.74316,
+          "y": 271.55188
+        },
+        "pelvis": {
+          "x": 534.74316,
+          "y": 370.55188
+        },
+        "rarm": {
+          "x": 544.052,
+          "y": 348.25275
+        },
+        "rfing": {
+          "x": 538.4015,
+          "y": 382.9234
+        },
+        "rknee": {
+          "x": 533.3781,
+          "y": 419.92938
+        },
+        "rt": {
+          "x": 551.03235,
+          "y": 472.01895
+        },
+        "larm": {
+          "x": 531.2781,
+          "y": 349.23013
+        },
+        "lfing": {
+          "x": 526.01514,
+          "y": 383.88974
+        },
+        "lknee": {
+          "x": 523.1152,
+          "y": 418.19418
+        },
+        "lt": {
+          "x": 526.86664,
+          "y": 473.0661
+        }
+      }
+    },
+    {
+      "source_frame_id": 1,
+      "landmarks": {
+        "chest": {
+          "x": 529.0771,
+          "y": 311.55182
+        },
+        "head": {
+          "x": 529.0771,
+          "y": 272.55182
+        },
+        "pelvis": {
+          "x": 529.0771,
+          "y": 371.55182
+        },
+        "rarm": {
+          "x": 533.9008,
+          "y": 350.08432
+        },
+        "rfing": {
+          "x": 524.22345,
+          "y": 383.85312
+        },
+        "rknee": {
+          "x": 527.71204,
+          "y": 420.92932
+        },
+        "rt": {
+          "x": 545.3663,
+          "y": 473.0189
+        },
+        "larm": {
+          "x": 528.5959,
+          "y": 350.3821
+        },
+        "lfing": {
+          "x": 524.19147,
+          "y": 385.16116
+        },
+        "lknee": {
+          "x": 522.1899,
+          "y": 420.1066
+        },
+        "lt": {
+          "x": 524.9502,
+          "y": 475.03738
+        }
+      }
+    },
+    {
+      "source_frame_id": 2,
+      "landmarks": {
+        "chest": {
+          "x": 521.4111,
+          "y": 311.88513
+        },
+        "head": {
+          "x": 521.4111,
+          "y": 272.88513
+        },
+        "pelvis": {
+          "x": 521.4111,
+          "y": 371.88513
+        },
+        "rarm": {
+          "x": 519.54266,
+          "y": 350.6735
+        },
+        "rfing": {
+          "x": 510.3888,
+          "y": 384.58804
+        },
+        "rknee": {
+          "x": 513.7923,
+          "y": 420.69046
+        },
+        "rt": {
+          "x": 539.19,
+          "y": 469.47528
+        },
+        "larm": {
+          "x": 525.6115,
+          "y": 350.49063
+        },
+        "lfing": {
+          "x": 525.42914,
+          "y": 385.54684
+        },
+        "lknee": {
+          "x": 519.92395,
+          "y": 420.90344
+        },
+        "lt": {
+          "x": 524.4707,
+          "y": 475.71506
+        }
+      }
+    },
+    {
+      "source_frame_id": 3,
+      "landmarks": {
+        "chest": {
+          "x": 515.25,
+          "y": 311.55182
+        },
+        "head": {
+          "x": 515.25,
+          "y": 272.55182
+        },
+        "pelvis": {
+          "x": 515.25,
+          "y": 371.55182
+        },
+        "rarm": {
+          "x": 513.3816,
+          "y": 350.34018
+        },
+        "rfing": {
+          "x": 503.1274,
+          "y": 383.93845
+        },
+        "rknee": {
+          "x": 502.69916,
+          "y": 419.32715
+        },
+        "rt": {
+          "x": 512.77,
+          "y": 473.39746
+        },
+        "larm": {
+          "x": 522.9997,
+          "y": 349.60403
+        },
+        "lfing": {
+          "x": 524.04926,
+          "y": 384.64505
+        },
+        "lknee": {
+          "x": 513.7629,
+          "y": 420.57013
+        },
+        "lt": {
+          "x": 524.70337,
+          "y": 474.4709
+        }
+      }
+    },
+    {
+      "source_frame_id": 4,
+      "landmarks": {
+        "chest": {
+          "x": 510.25046,
+          "y": 311.55182
+        },
+        "head": {
+          "x": 510.25046,
+          "y": 272.55182
+        },
+        "pelvis": {
+          "x": 510.25046,
+          "y": 371.55182
+        },
+        "rarm": {
+          "x": 503.67346,
+          "y": 349.82416
+        },
+        "rfing": {
+          "x": 497.30908,
+          "y": 384.37076
+        },
+        "rknee": {
+          "x": 497.83838,
+          "y": 419.36328
+        },
+        "rt": {
+          "x": 498.78693,
+          "y": 474.3553
+        },
+        "larm": {
+          "x": 517.11414,
+          "y": 349.77386
+        },
+        "lfing": {
+          "x": 517.3495,
+          "y": 384.82962
+        },
+        "lknee": {
+          "x": 511.0466,
+          "y": 420.58615
+        },
+        "lt": {
+          "x": 524.48553,
+          "y": 473.91916
+        }
+      }
+    }
+  ]
+}
