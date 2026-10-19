@@ -4,7 +4,7 @@ This directory is the start of the migration away from Floot as the development/
 
 ## What this branch contains
 
-- `runtime-snapshot/worker.mjs` and `runtime-snapshot/telegramBundle.mjs` are an exact source-module snapshot exported from the currently active Cloudflare Worker on 2026-10-20.
+- `runtime-snapshot/worker.mjs` is an exact entry-module snapshot exported from the active Cloudflare Worker on 2026-10-20. The 287,610-character `telegramBundle.mjs` is preserved in 32 integrity-checked segments under `runtime-snapshot/parts/`; the GitHub Actions assembler reconstructs it and verifies both SHA-256 digests before tests/deployment.
 - `wrangler.toml` records the active Worker name, compatibility date, and Hyperdrive binding without embedding credentials.
 - `PRODUCTION_DEPLOY_ALLOWED` deliberately remains `false` until the public site no longer proxies to Floot and route/health/smoke tests pass.
 - The GitHub Actions workflow provides reproducible syntax/secret-scan validation and a guarded manual-deploy path.
