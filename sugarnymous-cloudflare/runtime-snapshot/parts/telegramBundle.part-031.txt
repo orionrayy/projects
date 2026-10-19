@@ -1,0 +1,66 @@
+listStatus==="joined"?"Terdaftar":"Belum bergabung"}
+Bahasa: ${e.language}
+Kelayakan usia: ${e.adultConfirmedAt?"Dikonfirmasi":e.ageDeclinedAt?"Ditolak":"Belum dicatat"}
+Persetujuan privasi: ${e.privacyConsentAt?"Tercatat":"Belum tercatat"}
+Notifikasi: ${e.notificationsEnabled?"Aktif":"Nonaktif"}
+Voting roadmap: ${g.length?g.join(", "):"Belum memilih"}
+
+Detail profil dating, referensi foto, lokasi kasar, like/match, blokir, dan laporan hanya disimpan jika kamu masuk closed beta undangan dan memilih menggunakan fitur tersebut.`),_([w(f(s,"Delete My Data","Hapus Data Saya"),"delete:start")],[w(f(s,"Back to Privacy","Kembali ke Privasi"),"nav:privacy")]))}return o==="delete:start"?q(r,i,f(s,`DELETE YOUR SUGARNYMOUS DATA?
+
+This removes your waitlist data and any closed-beta profile, photos references, preferences, likes/matches, active-chat state, blocks and reports linked to this account. It cannot remove messages or media already stored in Telegram chats. This action cannot be undone.`,`HAPUS DATA SUGARNYMOUS?
+
+Tindakan ini menghapus data waitlist serta profil closed beta, referensi foto, preferensi, like/match, status chat aktif, blokir, dan laporan yang terkait akun ini. Tindakan ini tidak dapat menghapus pesan atau media yang sudah tersimpan di chat Telegram. Tindakan ini tidak dapat dibatalkan.`),_([w(f(s,"Yes, Delete My Data","Ya, Hapus Data Saya"),"delete:confirm")],[w(f(s,"Cancel","Batal"),"nav:privacy")])):o==="delete:confirm"?(await Yu(t,e.telegramId),q(r,i,f(s,"Your Sugarnymous account data has been deleted from the app database. Telegram may still retain copies of messages or media in participant chats. If you return later, a new interaction may create a new minimal record.","Data akun Sugarnymous kamu telah dihapus dari database aplikasi. Telegram mungkin tetap menyimpan salinan pesan atau media di chat peserta. Jika kamu kembali nanti, interaksi baru dapat membuat catatan minimal baru."),_([w(f(s,"Start Again","Mulai Lagi"),"nav:start"),w(f(s,"Close","Tutup"),"nav:close")]))):o==="nav:start"?el(r,i,s,u,await Sr(t,e.telegramId)):o==="nav:close"?q(r,i,f(s,"This message can be left here. No further action is needed.","Pesan ini dapat dibiarkan di sini. Tidak perlu tindakan lain."),_([w(f(s,"Open Menu","Buka Menu"),"nav:menu")])):o==="privacy:policy"?Ja(r,i,s,u):q(r,i,f(s,"This button may be out of date. Please reopen the menu.","Tombol ini mungkin sudah kedaluwarsa. Silakan buka ulang menu."),_([w(f(s,"Open Menu","Buka Menu"),"nav:menu")]))}async function _d(t,e,r){let i=String(t.update_id),o=new URL(e);return await It.transaction().execute(async u=>{if(!await u.insertInto("telegramUpdates").values({updateId:i}).onConflict(ke=>ke.column("updateId").doNothing()).returning("updateId").executeTakeFirst())return{duplicate:!0,updateId:i,callbackQueryId:void 0};let s=t.callback_query,c=t.message??s?.message,p=s?.from??t.message?.from,g=c?.chat;if(!c||!p||!g||g.type!=="private"||String(g.id)!==String(p.id))return await u.updateTable("telegramUpdates").set({processedAt:new Date}).where("updateId","=",i).execute(),{duplicate:!1,updateId:i,callbackQueryId:void 0};let h=String(g.id),b=s?s.message?.message_id:void 0,T=t.message?.text?.trim()??"",O=/^\/([a-z0-9_]+)(?:@[a-z0-9_]+)?(?:\s+(.+))?$/i.exec(T),v,K=O?.[1]?.toLowerCase()==="start"?(O[2]??"").trim().split(/\s+/)[0]:"",$=await Ld(u,p,K),Fe=await Md(u,$),ae=await u.selectFrom("users").selectAll().where("telegramId","=",$.telegramId).executeTakeFirstOrThrow();if(!Fe)v=Qa(h,f(ae.language,"You're interacting too quickly. Please wait a minute and try again.","Interaksi terlalu cepat. Tunggu satu menit lalu coba lagi."));else if(s)v=await jd(u,ae,h,b,s.data??"",o.origin,r);else if(O){await Qu(u,ae.telegramId),await Va(u,ae.telegramId);let ke=(O[1]??"").toLowerCase();v=await _i(u,ae,h,void 0,ke,O[2]??"",o.origin,r)}else v=await zu(u,ae,t.message,h)??Qa(h,f(ae.language,"Use /start to begin or /menu to open your dashboard.","Gunakan /start untuk memulai atau /menu untuk membuka dashboard."),_([w(f(ae.language,"Start Sugarnymous","Mulai Sugarnymous"),"nav:start"),w(f(ae.language,"Open Menu","Buka Menu"),"nav:menu")]));return await u.insertInto("botOutbox").values({updateId:i,payload:{method:v.method,data:v.data,...v.followups?.length?{followups:v.followups}:{}},status:"pending"}).onConflict(ke=>ke.column("updateId").doNothing()).execute(),await u.updateTable("telegramUpdates").set({processedAt:new Date}).where("updateId","=",i).execute(),{duplicate:!1,updateId:i,callbackQueryId:s?.id}})}
+
+const SUGARNYMOUS_OUTBOX_RETRY_LEASE_MS=120000;
+async function rl(t){
+  let e=await It.selectFrom("botOutbox").selectAll().where("updateId","=",t).executeTakeFirst();
+  if(!e)return {retryable:false,outcome:"empty"};
+  if(e.status==="sent")return {retryable:false,outcome:"sent"};
+  if(e.status==="failed")return {retryable:false,outcome:"terminal_failure"};
+  if(e.status==="indeterminate")return {retryable:false,outcome:"indeterminate"};
+  if(e.status==="sending"){
+    let n=/^INFLIGHT:(\d+)$/.exec(e.lastErrorCode??""),c=n?Number(n[1]):NaN;
+    if(Number.isFinite(c)&&Date.now()-c<SUGARNYMOUS_OUTBOX_RETRY_LEASE_MS)return {retryable:true,outcome:"in_progress"};
+    let diagnostic=Number.isFinite(c)?"INDETERMINATE:STALE:"+c:"INDETERMINATE:INVALID_LEASE";
+    let d=await It.updateTable("botOutbox").set({status:"indeterminate",lastErrorCode:diagnostic})
+      .where("updateId","=",t).where("status","=","sending").where("lastErrorCode","=",e.lastErrorCode)
+      .returning("id").executeTakeFirst();
+    if(!d)return {retryable:true,outcome:"in_progress"};
+    return {retryable:false,outcome:"indeterminate"};
+  }
+  if(e.status!=="pending")return {retryable:false,outcome:"terminal_failure"};
+  let s="INFLIGHT:"+Date.now();
+  if(!await It.updateTable("botOutbox").set({status:"sending",attempts:e.attempts+1,lastErrorCode:s})
+    .where("updateId","=",t).where("status","=","pending").returning("id").executeTakeFirst())
+    return {retryable:true,outcome:"in_progress"};
+  let i=e.payload,o=await Vi(i.method,i.data);
+  const saveFailure=async(r,prefix="")=>{
+    let diagnostic=prefix+(r.kind==="rejected"?String(r.errorCode)+": "+(r.description??"Telegram rejected the request"):r.errorCode);
+    let retryable=false,targetStatus;
+    if(r.kind==="ambiguous"){targetStatus="indeterminate";}
+    else{let code=Number(r.errorCode);retryable=code===429||(Number.isInteger(code)&&code>=500&&code<=599);targetStatus=retryable?"pending":"failed";}
+    await It.updateTable("botOutbox").set({status:targetStatus,lastErrorCode:diagnostic.slice(0,80)})
+      .where("updateId","=",t).where("status","=","sending").execute();
+    return {retryable,outcome:targetStatus==="indeterminate"?"indeterminate":retryable?"retry_pending":"terminal_failure"};
+  };
+  if(o.kind==="success"){await To(t,i);return {retryable:false,outcome:"sent"};}
+  if(o.kind==="rejected"&&(i.method==="editMessageText"||i.method==="editMessageMedia")&&/message is not modified/i.test(o.description??"")){
+    await To(t,i);return {retryable:false,outcome:"sent"};
+  }
+  if(o.kind==="rejected"&&(i.method==="editMessageText"||i.method==="editMessageMedia")&&/message to edit not found|message can't be edited|there is no text in the message to edit/i.test(o.description??"")){
+    if(i.method==="editMessageMedia"){
+      let p=i.data.media,g={chat_id:i.data.chat_id,photo:p?.media,caption:p?.caption??"",disable_notification:true};
+      if(i.data.reply_markup)g.reply_markup=i.data.reply_markup;
+      let h=await Vi("sendPhoto",g);
+      if(h.kind==="success"){await To(t,{...i,method:"sendMessage",data:{}});return {retryable:false,outcome:"sent"};}
+      return await saveFailure(h,"FALLBACK PHOTO ");
+    }
+    let a={chat_id:i.data.chat_id,text:i.data.text??i.data.caption??"",disable_web_page_preview:true};
+    if(i.data.reply_markup)a.reply_markup=i.data.reply_markup;
+    let s=await Vi("sendMessage",a);
+    if(s.kind==="success"){await To(t,{...i,method:"sendMessage",data:a});return {retryable:false,outcome:"sent"};}
+    return await saveFailure(s,"FALLBACK MESSAGE ");
+  }
+  return await saveFailure(o);
+}
+async function qd(t,e){let r=null,i=t.message?.text?.trim()??"",o=/^\/(invite)(?:@[a-z0-9_]+)?$/i.test(i),u=t.callback_query?.data==="nav:invite"||t.callback_query?.data==="status:invite";(o||u)&&(r=await Ud());let a=await _d(t,e,r);!a.duplicate&&a.callbackQueryId&&await $d(a.callbackQueryId);return await rl(a.updateId)}var Vd={processUpdate:qd,flushOutbox:rl};export{It as db,Vd as telegramBot,Bu as createPostgres,configureRequestDatabase as resetDatabase,closeRequestDatabase as closeDatabase};
