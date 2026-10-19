@@ -117,24 +117,43 @@
     },
     {
       "id": "reference.stickman-step-clip",
-      "status": "pending_ci",
+      "status": "passed_ci",
       "claim": "The user-supplied five-pose stickman step is represented as a hashed, schema-validated 11-landmark clip and rendered by deterministic keyframe interpolation to a verified silent H.264 preview.",
-      "verification_method": "CI validates source clip schema and topology, exact keyframe preservation, interpolation determinism, sample-specific segment/trajectory contracts, preview HTTP routes, and FFmpeg/FFprobe media contracts.",
+      "verification_method": "GitHub Actions run 39228760059 on revision 0e5569ebb87a886649080a832659868afeb2e878 passed: reference schema and exact key poses, 7/7 new Node tests, 4/4 Python schema tests, existing regression suite, 96/96 rendered-pose checks, synthetic motion benchmarks, FFmpeg/ffprobe for the canonical scene and 33-frame reference clip, and artifact upload.",
       "evidence": [
         {
           "path": "ffmpeg-motion-studio/foundation-v0-1/reference-data/stickman-step/clip.json",
-          "symbol": "five source keyframes; 11 named landmarks; source SHA-256"
+          "symbol": "five source keyframes; 11 named landmarks; source SHA-256",
+          "revision": "0e5569ebb87a886649080a832659868afeb2e878",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39228760059"
         },
         {
           "path": "ffmpeg-motion-studio/foundation-v0-1/src/keyframe-clip.mjs",
-          "symbol": "validateKeyframeClip, sampleKeyframeClip, measureKeyframeClip"
+          "symbol": "validateKeyframeClip, sampleKeyframeClip, measureKeyframeClip",
+          "revision": "0e5569ebb87a886649080a832659868afeb2e878",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39228760059"
         },
         {
           "path": "ffmpeg-motion-studio/foundation-v0-1/tests/keyframe-clip.test.mjs",
-          "symbol": "exact pose, topology, interpolation and trajectory regressions"
+          "symbol": "exact pose, topology, interpolation and trajectory regressions",
+          "revision": "0e5569ebb87a886649080a832659868afeb2e878",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39228760059"
         }
       ],
       "limitation": "The source playback rate and exact interframes semantics remain unknown. The new renderer uses an explicit linear baseline and does not claim source-app pixel parity, general human-motion quality, or training."
+    },
+    {
+      "id": "robustness.synthetic-rig-topologies",
+      "status": "pending_ci",
+      "claim": "The generic keyframe clip validator and sampler handle synthetic landmark rigs at 6, 27-depth-26, 30, 64 and 128 landmarks, reject duplicated point IDs and enforce source order/root invariants.",
+      "verification_method": "Node stress tests use deterministic synthetic rigs; source data remains the user-supplied five-pose fixture and synthetic coordinates are generated in tests.",
+      "evidence": [
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/tests/rig-stress.test.mjs",
+          "symbol": "size/depth regression and corrupt topology rejection"
+        }
+      ],
+      "limitation": "Synthetic topology and runtime robustness do not establish the behavior or performance limits of Drawing Cartoons 2 or artistic motion quality."
     }
   ]
 }

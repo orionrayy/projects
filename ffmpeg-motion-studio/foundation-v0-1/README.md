@@ -52,3 +52,7 @@ The fixture records the SHA-256 of the user-provided archive. The inspected sour
 - Any training claim must cite the dataset version, license review, data manifest, configuration, resulting model digest, and a separate evaluation report.
 
 No external dataset is downloaded and no model is trained or fine-tuned in this increment.
+
+## Clean-room research and topology stress tests
+
+Aggregate-only static findings from the submitted Drawing Cartoons 2 sample are documented in `research/drawing-cartoons-2-clean-room-findings.md`, with eight controlled open questions in `research/format-semantics-experiment-plan.json`. The source archives, APK, DEX bytecode, character images and audio are not redistributed. Keyframe clip validation also checks that the ordered landmark list and numeric point-ID map match the clip's landmarks, that IDs are unique, and that the root has no parent. Synthetic stress tests cover 6, 27 (parent depth 26), 30, 64 and 128 landmarks. These tests are robustness checks, not claims about original-app limits or human-motion aesthetics.
