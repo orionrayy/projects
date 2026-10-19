@@ -37,7 +37,11 @@ test("complete preview preflight distinguishes geometry from artistic review", (
     assert.ok(report.minProjectedFootSeparationPx >= 30, "projected feet need a readable separation margin");
     assert.ok(report.torsoAngleRangeDegrees >= 8, "torso response must be visible across a gait cycle");
     assert.ok(report.headAngleRangeDegrees >= 5, "head response must be visible across a gait cycle");
-    if (mode === "free") { console.log("FREE_ARM_WRIST_RELATIVE_RANGE_PX", report.nearArmWristRelativeRangePx); assert.ok(report.nearArmWristRelativeRangePx >= 50, "free arm must visibly counter-swing; actual=" + report.nearArmWristRelativeRangePx); }
+    if (mode === "free") {
+      assert.ok(report.nearArmWristRelativeRangePx >= 50, "free arm must visibly counter-swing; actual=" + report.nearArmWristRelativeRangePx);
+      assert.ok(report.minNearArmElbowAngleDegrees >= 110, "free-arm pose must avoid an excessively folded elbow");
+      assert.ok(report.maxNearArmElbowAngleDegrees <= 160, "free-arm pose must preserve controlled elbow flexion");
+    }
     if (mode === "carry") assert.ok(report.maxBasketContactErrorPx <= 0.02);
     assert.equal(report.humanVisualAcceptance, "pending");
     assert.equal(report.pixelLevelNaturalnessMeasurement, "not_performed");

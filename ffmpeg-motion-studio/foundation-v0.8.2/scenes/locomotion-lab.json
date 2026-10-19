@@ -27,8 +27,8 @@
     "basket_offset_x_px": 68,
     "basket_center_offset_y_px": -6,
     "arm_mode": "carry",
-    "free_arm_swing_px": 31,
-    "free_arm_drop_px": 90,
+    "free_arm_swing_px": 42,
+    "free_arm_drop_px": 86,
     "heel_toe_roll_radians": 0.22,
     "screen_stride_scale": 0.62,
     "secondary_torso_sway_radians": 0.018,
@@ -36,7 +36,7 @@
     "head_follow_x_px": 3.5,
     "head_follow_radians": 0.018,
     "head_bob_radians": 0.008,
-    "free_arm_vertical_swing_px": 10
+    "free_arm_vertical_swing_px": 8
   },
   "character": {
     "upper_leg_px": 79,
