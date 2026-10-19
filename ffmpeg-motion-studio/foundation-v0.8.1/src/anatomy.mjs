@@ -48,7 +48,16 @@ function limb(a, b, r1, r2, fill, outline = "#29343B", highlight = null) {
   return '<path d="' + d + '" fill="' + fill + '" stroke="' + outline + '" stroke-width="1.5" stroke-linejoin="round"/>' +
     (highlight ? line(h0, h1, highlight, Math.max(1.1, Math.min(r1, r2) * 0.18), 'opacity="0.45"') : "");
 }
-function torsoGeometry(scene, pose) {
+function smoothClosedPath(points) {
+  const mid = (a, b) => mix(a, b, 0.5);
+  let d = "M " + pt(mid(points[points.length - 1], points[0]));
+  for (let i = 0; i < points.length; i++) {
+    const a = points[i], b = mid(a, points[(i + 1) % points.length]);
+    d += " Q " + pt(a) + " " + pt(b);
+  }
+  return d + " Z";
+}
+export function buildAnatomicalGeometry(scene, pose) {
   const c = scene.character, chest = pose.chest, pelvis = pose.pelvis;
   const axis = unit(sub(pelvis, chest)), n = normal(axis), h = length(sub(pelvis, chest));
   const scale = clamp(((c.upper_leg_px || 79) + (c.lower_leg_px || 81)) / 160, 0.75, 1.3);
@@ -63,9 +72,7 @@ function torsoGeometry(scene, pose) {
   const left = stations.map(v => add(add(chest, mul(axis, h * v.t)), mul(n, v.w)));
   const right = stations.slice().reverse().map(v => sub(add(chest, mul(axis, h * v.t)), mul(n, v.w)));
   const all = [...left, ...right];
-  let path = "M " + pt(all[0]);
-  for (let i = 1; i < all.length; i++) path += " L " + pt(all[i]);
-  path += " Z";
+  const path = smoothClosedPath(all);
   const headRadius = c.head_radius_px || 29;
   return { path, axis, n, height: h, scale, shoulderWidth: 2 * (c.shoulder_half_width_px || 25) * scale,
     headWidth: headRadius * 1.64, headHeight: headRadius * 2 };
@@ -205,7 +212,7 @@ function drawBasket(scene, pose) {
 
 /** Full SVG preview renderer for anatomy review; uses the pinned v0.8.0 locomotion scene contract. */
 export function renderAnatomySvg(scene, pose, armMode = scene.motion.arm_mode || "carry") {
-  const geo = torsoGeometry(scene, pose), c = scene.character, W = scene.canvas.width, H = scene.canvas.height;
+  const geo = buildAnatomicalGeometry(scene, pose), c = scene.character, W = scene.canvas.width, H = scene.canvas.height;
   const horizon = scene.background.horizon_y, floor = safeColor(scene.background.floor, "#E8E3D4");
   const bg = safeColor(scene.background.color, "#F4F2E8");
   const farLeg = drawLeg(pose.rightLeg, pose.rightFoot, c, geo.scale, false);
@@ -228,8 +235,8 @@ export function renderAnatomySvg(scene, pose, armMode = scene.motion.arm_mode ||
     '<rect width="' + W + '" height="' + H + '" fill="' + bg + '"/>' +
     '<rect y="' + horizon + '" width="' + W + '" height="' + (H - horizon) + '" fill="' + floor + '"/>' +
     '<path d="M 0 ' + horizon + ' H ' + W + '" stroke="#D6D0C3" stroke-width="2"/>' +
-    shadow + farLeg + farArm + neck + '<path d="' + geo.path + '" fill="' + safeColor(c.shirt, "#3B7892") + '" opacity="0"/>' +
-    drawTorso(scene, pose, geo) + nearLeg + drawHead(scene, pose) + accessory + basket + nearArm + hands +
+    shadow + farLeg + nearLeg + farArm + neck + drawTorso(scene, pose, geo) + drawHead(scene, pose) +
+    accessory + basket + nearArm + hands +
     '<g transform="translate(28 30)"><rect width="232" height="34" rx="8" fill="#FFFFFF" opacity="0.82"/>' +
     '<text x="14" y="22" font-family="sans-serif" font-size="14" font-weight="600" fill="#34414A">ANATOMY STUDY / v0.8.1</text></g></svg>';
 }
