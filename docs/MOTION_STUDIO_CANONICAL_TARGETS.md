@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.8.5 anatomy/proportion checkpoint on branch motion-studio-v0.8.5-anatomy-proportions; v0.8.5 hosted validation is pending. v0.8.1 through v0.8.4 workflows passed on the previous candidate, but human visual acceptance remains pending.
+Current engineering candidate: Motion Studio v0.8.6 organic-contour checkpoint on branch motion-studio-v0.8.6-organic-contours. v0.8.5 passed hosted engineering/render validation but remains visually unaccepted; v0.8.6 hosted validation and full-speed human acceptance are pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -69,7 +69,8 @@ Current status: FMA v0.2 is a research proposal/prototype with hand-designed sig
 - Stage 6 / v0.8.2: tuned torso/head coupling, free-arm trajectory, basket response, projected leg separation and silhouette; added quantitative regression gates. Hosted CI passed on commit `e36fd96e8a30c1699216a02e585d57b0332afd5b`, and the 8-second carry/free artifacts were verified as H.264 1280x720/24fps/192 frames with geometry reports. Contact sheets show clearer leg separation and more readable torso/head response, but the animation remains schematic; naturalness, full-speed acceptance, browser/FFmpeg parity and 240-second film integration remain unaccepted.
 - Stage 7 / v0.8.3: add per-frame displacement/acceleration diagnostics for pelvis, chest, head, elbows, wrists, knees and feet; stance-foot drift measurement; and contact-state transition counts. Hosted test/render/upload workflow passed on head 7a6eaa28659a148593bf6d46198cf95407de737e. Both carry/free output MP4s and 4-fps contact sheets were generated; temporal metrics include stance drift at approximately 1.14e-13 px/frame and maximum joint acceleration at 7.58 px/frame². Human naturalness remains pending.
 - Stage 8 / v0.8.4: fix scene semantics by hiding the unheld basket in free-arm mode and add a small phase-lagged basket tilt for carry mode. Hosted interaction workflow passed on head f5a95311e442356490555ab200bbe28c8f49f4b6; carry tilt range is 5.16 degrees and wrist-to-handle contact error remains 0. This is a procedural response, not full rigid-body physics.
-- Stage 9 / v0.8.5 candidate: replace line-heavy limb rendering with tapered anatomical silhouettes; reshape torso, reduce neck/head disproportion, widen shoulder structure, narrow hip projection, add hand contours and expose measurable anatomy ratios. Hosted validation and full-speed human review remain pending.
+- Stage 9 / v0.8.5: improve head/torso/neck ratios, distinguish visual pelvis width from projected leg depth, and replace line-only limbs with tapered silhouettes. Hosted workflow passed at commit a335a6c6ae53aa3434fed26e2e946a90667cd2ef; full-speed visual review remains pending.
+- Stage 9b / v0.8.6 candidate: introduce curved limb contours with subtle mid-segment bulges, less prominent integrated knee/elbow marks, sleeve cuffs, and clearer palm/thumb/finger contours without changing the stable locomotion solver. CI and full-speed visual acceptance remain pending.
 - Stage 9: compare v0.8.3/v0.8.4 MP4s and contact sheets, and review v0.8.5 anatomy at full speed. Fix foot-crossing/sliding, body proportions, weight transfer, upper-body synchronization and prop-contact defects with regression tests.
 - Stage 10: editable skeleton hierarchy, joint constraints, pivots, mirroring and IK/FK authoring.
 - Stage 11: weight painting/deformation, complete walk/run profiles, transitions, overlapping and secondary action.
@@ -83,3 +84,8 @@ Version numbers are checkpoints, not evidence of quality. When a gate fails, fix
 ## Stage 9 anatomy/proportion review checkpoint — 2026-10-20
 
 The v0.8.5 candidate targets defects demonstrated in v0.8.4 screenshots: short/narrow torso, long visible neck, oversized circular head relative to body, line-like limbs, large joint dots and hands that do not read as hands. It adds configurable torso/head offsets, separate hip placement from foot depth projection, tapered limb surfaces, shaped head/neck/torso, hand contours and machine-readable proportion diagnostics. This remains a candidate until hosted logs, MP4 metadata, evidence artifact and full-speed human inspection pass; it does not claim realistic anatomy, mesh deformation, complete rig editing or production readiness.
+
+
+## Stage 9b organic-contour review checkpoint — 2026-10-20
+
+Full-size inspection of v0.8.5 found that head/torso proportions were clearer but limbs remained tube-like, joint disks too prominent, sleeves visually merged with limbs, and hands lacked readable grip contours. The v0.8.6 candidate addresses these surface/rendering defects while deliberately preserving the v0.8.5 gait solver, hip/foot projection, cycle timing, contact constraints and temporal thresholds. It remains a procedural stylized 2D character; no claim of physically realistic anatomy or production acceptance is made.
