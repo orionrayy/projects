@@ -144,13 +144,15 @@
     },
     {
       "id": "robustness.synthetic-rig-topologies",
-      "status": "pending_ci",
+      "status": "passed_ci",
       "claim": "The generic keyframe clip validator and sampler handle synthetic landmark rigs at 6, 27-depth-26, 30, 64 and 128 landmarks, reject duplicated point IDs and enforce source order/root invariants.",
-      "verification_method": "Node stress tests use deterministic synthetic rigs; source data remains the user-supplied five-pose fixture and synthetic coordinates are generated in tests.",
+      "verification_method": "GitHub Actions run 39229427828 on revision 87ac00a54e018e26ae6940f8cb5ea7a6f7034e32 passed the complete pipeline; the synthetic rig topology/depth suite ran within the Node regression step alongside schema, preview, rendered-pose, FFmpeg and ffprobe checks.",
       "evidence": [
         {
           "path": "ffmpeg-motion-studio/foundation-v0-1/tests/rig-stress.test.mjs",
-          "symbol": "size/depth regression and corrupt topology rejection"
+          "symbol": "size/depth regression and corrupt topology rejection",
+          "revision": "87ac00a54e018e26ae6940f8cb5ea7a6f7034e32",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39229427828"
         }
       ],
       "limitation": "Synthetic topology and runtime robustness do not establish the behavior or performance limits of Drawing Cartoons 2 or artistic motion quality."
