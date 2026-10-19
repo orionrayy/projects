@@ -1,0 +1,84 @@
+name: Sugarnymous Cloudflare migration
+
+on:
+  push:
+    branches: [main, sugarnymous-cloudflare-runtime-snapshot]
+    paths:
+      - "sugarnymous-cloudflare/**"
+      - ".github/workflows/sugarnymous-cloudflare-verify.yml"
+  pull_request:
+    paths:
+      - "sugarnymous-cloudflare/**"
+      - ".github/workflows/sugarnymous-cloudflare-verify.yml"
+  workflow_dispatch:
+    inputs:
+      deploy_production:
+        description: "Attempt production deployment (blocked until migration gate is true)"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate snapshot syntax
+        run: |
+          node --check sugarnymous-cloudflare/runtime-snapshot/worker.mjs
+          node --check sugarnymous-cloudflare/runtime-snapshot/telegramBundle.mjs
+      - name: Verify migration gate, binding, route safety, and credential hygiene
+        run: |
+          node <<'NODE'
+          const fs = require("node:fs");
+          const entry = fs.readFileSync("sugarnymous-cloudflare/runtime-snapshot/worker.mjs", "utf8");
+          const bundle = fs.readFileSync("sugarnymous-cloudflare/runtime-snapshot/telegramBundle.mjs", "utf8");
+          const config = fs.readFileSync("sugarnymous-cloudflare/wrangler.toml", "utf8");
+          const gate = fs.readFileSync("sugarnymous-cloudflare/PRODUCTION_DEPLOY_ALLOWED", "utf8").trim();
+          const forbidden = [
+            /\d{8,10}:[A-Za-z0-9_-]{30,}/,
+            /postgres(?:ql)?:\/\/[^\s"'\x60]+/,
+            /sk-proj-[A-Za-z0-9_-]{20,}/,
+            /gh[pousr]_[A-Za-z0-9]{30,}/
+          ];
+          if (!entry.includes("/_api/telegram-webhook")) throw new Error("Webhook route missing from snapshot");
+          if (!entry.includes("https://sugarnymous-prerelease.floot.app")) throw new Error("Expected origin proxy marker absent; review snapshot before deployment");
+          if (!config.includes('binding = "HYPERDRIVE"')) throw new Error("Hyperdrive binding missing");
+          if (gate !== "false") throw new Error("First migration branch must remain deployment-gated");
+          for (const re of forbidden) if (re.test(entry) || re.test(bundle)) throw new Error("Potential credential pattern detected");
+          console.log("Snapshot contract passed; production deployment remains intentionally gated.");
+          NODE
+      - name: Verify expected tracked files
+        run: |
+          test -s sugarnymous-cloudflare/runtime-snapshot/worker.mjs
+          test -s sugarnymous-cloudflare/runtime-snapshot/telegramBundle.mjs
+          test -s sugarnymous-cloudflare/wrangler.toml
+          test "$(cat sugarnymous-cloudflare/PRODUCTION_DEPLOY_ALLOWED)" = "false"
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_production == true
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: sugarnymous-production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Enforce migration gate
+        run: |
+          if [ "$(cat sugarnymous-cloudflare/PRODUCTION_DEPLOY_ALLOWED)" != "true" ]; then
+            echo "::error::Production deploy blocked: site assets must be migrated and smoke tests must pass first."
+            exit 1
+          fi
+      - name: Deploy to Cloudflare without discarding existing variables
+        run: npx --yes wrangler@4 deploy --config sugarnymous-cloudflare/wrangler.toml --keep-vars
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
