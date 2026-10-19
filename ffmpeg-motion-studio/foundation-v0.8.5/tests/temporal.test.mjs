@@ -17,7 +17,7 @@ test("frame-step and acceleration metrics are finite and bounded", () => {
     assert.ok(t.maxNearWristStepPx < 18, "near wrist step spikes");
     assert.ok(t.maxFarWristStepPx < 18, "far wrist step spikes");
     assert.ok(t.maxKneeStepPx < 18, "knee step spikes");
-    assert.ok(t.maxJointAccelerationPxPerFrame2 < 8, "joint acceleration spikes");
+    assert.ok(t.maxJointAccelerationPxPerFrame2 < 8, "joint acceleration spikes: " + JSON.stringify(t));
     assert.ok(t.stanceFootSamplePairs > 100, "insufficient stance samples to support drift metric");
     assert.ok(t.stanceTransitions > 10, "contact-state transitions were not sampled");
   }
