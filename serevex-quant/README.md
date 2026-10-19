@@ -156,3 +156,11 @@ The older hosted run #280 has passed the initial real OHLCV â†’ alpha producer â
 ## v3 temporal-scope hardening checkpoint
 
 OOD diagnostics are now computed only on the final holdout using the frozen final training scaler. Earlier partitions are explicitly marked not applicable rather than receiving a distribution score from a model trained on later data. The frozen model hash also includes the governor/OOD policy constants. Current head `97dc2479b9012c30051fbaa9a33aa678fbd63ae6`; full benchmark #288 and isolated method tests #4 are queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282806410 and https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282806525. No latest-head test results yet.
+
+
+## Latest v3.1 code checkpoint
+
+The final-holdout-only OOD score is now kept out of earlier partitions, and the model hash includes the frozen governor/OOD policy parameters. Producer test expectations were corrected for dual-score v3 statuses, and the affected source/test/workflow/spec files were searched for stale v2 strings. Current head `1ec3ed8fc894a8f6692a5d69245b478b23af7985`; full workflow #289 and isolated tests #5 are queued:
+- https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282993148
+- https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282993160
+No latest-head CI result is confirmed.
