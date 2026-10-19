@@ -111,6 +111,7 @@ export function renderSvgFrame(scene,frameIndex,armMode) {
 }
 export function summarizeScene(scene, armMode) {
   const mode = armMode || scene.motion.arm_mode || "carry";
+  const c = scene.character, m = scene.motion;
   const poses = [];
   for (let i = 0; i < scene.duration_frames; i++) poses.push(evaluateLocomotion(scene, i, mode));
   const vals = (fn) => poses.map(fn);
