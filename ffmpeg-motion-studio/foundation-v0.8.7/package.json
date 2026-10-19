@@ -1,0 +1,13 @@
+{
+  "name": "motion-studio-foundation-gait-biomechanics-v0.8.7",
+  "version": "0.8.7",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "render:preview": "node scripts/render-preview.mjs .working"
+  }
+}

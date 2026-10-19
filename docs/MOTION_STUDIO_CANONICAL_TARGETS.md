@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.8.6 organic-contour checkpoint on branch motion-studio-v0.8.6-organic-contours. v0.8.5 passed hosted engineering/render validation but remains visually unaccepted; v0.8.6 hosted validation and full-speed human acceptance are pending.
+Current engineering candidate: Motion Studio v0.8.7 gait-biomechanics checkpoint on branch motion-studio-v0.8.7-gait-biomechanics. v0.8.6 hosted CI passed and organic-contour previews were produced, but human full-speed visual acceptance remains pending; v0.8.7 hosted validation and visual acceptance are pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -89,3 +89,8 @@ The v0.8.5 candidate targets defects demonstrated in v0.8.4 screenshots: short/n
 ## Stage 9b organic-contour review checkpoint — 2026-10-20
 
 Full-size inspection of v0.8.5 found that head/torso proportions were clearer but limbs remained tube-like, joint disks too prominent, sleeves visually merged with limbs, and hands lacked readable grip contours. The v0.8.6 candidate addresses these surface/rendering defects while deliberately preserving the v0.8.5 gait solver, hip/foot projection, cycle timing, contact constraints and temporal thresholds. It remains a procedural stylized 2D character; no claim of physically realistic anatomy or production acceptance is made.
+
+
+## Stage 10 gait-biomechanics checkpoint — 2026-10-20
+
+Full-size review of v0.8.6 found stance and swing phases both reading as a squat because the pelvis-to-floor span was short relative to fixed leg-chain length and knee pole bias stayed equally strong throughout the cycle. The v0.8.7 candidate raises pelvis position by 8px, reduces swing-foot clearance to 24px, and uses a smooth phase-aware knee bias (more extended stance, more flexed swing). Bone lengths, root stride speed, foot contact model, organic contours, hand/prop rendering and temporal limits are retained. Hosted checks and full-speed human acceptance remain separate gates.
