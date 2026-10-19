@@ -1,0 +1,51 @@
+id:t,text:e,disable_web_page_preview:!0};return r&&(i.reply_markup=r),{method:"sendMessage",data:i}}function Bd(t,e,r,i){return{method:"editMessageText",data:{chat_id:t,message_id:e,text:r,disable_web_page_preview:!0,reply_markup:i??{inline_keyboard:[]}}}}function q(t,e,r,i){return e===void 0?Qa(t,r,i):Bd(t,e,r,i)}function Dd(){return crypto.randomUUID().replace(/-/g,"").slice(0,20)}function Xu(t){return pi.some(e=>e.key===t)}function qi(t){return Array.isArray(t)?[...new Set(t.filter(e=>typeof e=="string"&&Xu(e)))]:[]}async function Ld(t,e,r){let i=String(e.id),o=await t.selectFrom("users").selectAll().where("telegramId","=",i).executeTakeFirst(),u=/^ref_([A-Za-z0-9_-]{8,64})$/.exec(r),a=null;if(u){let c=await t.selectFrom("users").select(["telegramId"]).where("referralCode","=",u[1]).executeTakeFirst();c&&c.telegramId!==i&&(a=c.telegramId)}let s=new Date;if(!o)await t.insertInto("users").values({telegramId:i,language:e.language_code?.toLowerCase().startsWith("id")?"id":"en",referralCode:Dd(),referredBy:a,lastSeenAt:s,updatedAt:s}).onConflict(c=>c.column("telegramId").doNothing()).execute();else{let c={lastSeenAt:s,updatedAt:s};!o.referredBy&&o.waitlistStatus==="not_joined"&&a&&(c.referredBy=a),await t.updateTable("users").set(c).where("telegramId","=",i).execute()}return await t.selectFrom("users").selectAll().where("telegramId","=",i).executeTakeFirstOrThrow()}async function Md(t,e){let r=new Date,i=new Date(e.rateWindowStartedAt);return!Number.isFinite(i.getTime())||r.getTime()-i.getTime()>=6e4?(await t.updateTable("users").set({rateWindowStartedAt:r,rateWindowCount:1}).where("telegramId","=",e.telegramId).execute(),!0):e.rateWindowCount>=15?!1:(await t.updateTable("users").set({rateWindowCount:e.rateWindowCount+1,updatedAt:r}).where("telegramId","=",e.telegramId).execute(),!0)}async function Yu(t,e){await t.deleteFrom("activeChats").where(r=>r.or([r("telegramId","=",e),r("peerTelegramId","=",e)])).execute(),await t.deleteFrom("profileBlocks").where(r=>r.or([r("blockerTelegramId","=",e),r("blockedTelegramId","=",e)])).execute(),await t.deleteFrom("profileReports").where(r=>r.or([r("reporterTelegramId","=",e),r("targetTelegramId","=",e)])).execute(),await t.deleteFrom("users").where("telegramId","=",e).execute()}function Zu(t,e,r,i,o=!1,u=!1){return q(t,e,f(r,o?`Sugarnymous
+Where sugar meets sugar.
+
+You have private closed-beta access. Dating tools are experimental, profiles are opt-in, and you can pause or delete your profile at any time.`:`Sugarnymous
+Where sugar meets sugar.
+
+Choose a destination below. This is early access; dating tools are not open to the public.`,o?`Sugarnymous
+Where sugar meets sugar.
+
+Kamu memiliki akses closed beta privat. Fitur dating masih eksperimental, profil bersifat opt-in, dan kamu bisa menjeda atau menghapus profil kapan saja.`:`Sugarnymous
+Where sugar meets sugar.
+
+Pilih menu di bawah. Ini masih akses awal; fitur dating belum dibuka untuk publik.`),_([w(f(r,"\u{1F48C} Early Access","\u{1F48C} Akses Awal"),"nav:join"),w(f(r,"\u{1F4CB} My Status","\u{1F4CB} Status Saya"),"nav:status")],...o?[[w(f(r,"\u{1F464} My Profile","\u{1F464} Profil Saya"),"dating:profile"),w(f(r,"\u{1F50E} Discover","\u{1F50E} Discovery"),"discover:open")],[w(f(r,"\u{1F49E} My Matches","\u{1F49E} Match Saya"),"matches:open")]]:[],[w(f(r,"\u{1F381} Invite Friends","\u{1F381} Undang Teman"),"nav:invite"),w(f(r,"\u2728 Feature Voting","\u2728 Voting Fitur"),"nav:survey")],[w(f(r,"\u2699\uFE0F Settings","\u2699\uFE0F Pengaturan"),"nav:settings"),w(f(r,"\u{1F6E1} Privacy & Help","\u{1F6E1} Privasi & Bantuan"),"nav:privacy")],[w(f(r,"\u2726 The Sugarnymous Concept","\u2726 Konsep Sugarnymous"),"nav:concept")],...u?[[w(f(r,"\u2601 Cloudflare staging","\u2601 Staging Cloudflare"),"admin:cloudflare-stage")]]:[]))}function el(t,e,r,i,o=!1){return q(t,e,f(r,o?`Welcome to Sugarnymous \u2764\uFE0F
+
+Where sugar meets sugar. Your private closed-beta tools are available through the menu. Be thoughtful, protect your privacy, and report concerns.`:`Welcome to Sugarnymous \u2764\uFE0F
+
+Where sugar meets sugar. Chemistry, generosity and mutually beneficial connections\u2014built around clear intentions and mutual choice.
+
+Early access is being prepared; dating tools are not open to the public.`,o?`Selamat datang di Sugarnymous \u2764\uFE0F
+
+Where sugar meets sugar. Fitur closed beta privatmu tersedia melalui menu. Jaga privasi dan laporkan hal yang mengkhawatirkan.`:`Selamat datang di Sugarnymous \u2764\uFE0F
+
+Where sugar meets sugar. Chemistry, generosity, dan koneksi yang saling menguntungkan\u2014dengan niat yang jelas dan pilihan bersama.
+
+Akses awal sedang disiapkan; fitur dating belum dibuka untuk publik.`),_([w(f(r,"\u{1F48C} Join Early Access","\u{1F48C} Gabung Akses Awal"),"join:start")],[w(f(r,"\u2728 Explore the Concept","\u2728 Kenali Konsep"),"nav:concept"),w(f(r,"\u{1F310} Language","\u{1F310} Bahasa"),"nav:language")],[ct(f(r,"\u{1F512} Privacy & Safety","\u{1F512} Privasi & Keamanan"),new URL("/privacy",i).toString()),w(f(r,"Open Menu","Buka Menu"),"nav:menu")]))}function Fd(t,e,r,i){return q(t,e,f(r,`THE SUGARNYMOUS IDEA
+
+A space being designed for adults who want to be clear about what they seek, what they offer and where their boundaries are.
+
+\u2022 Intentions before assumptions
+\u2022 Consent and privacy by design
+\u2022 English and Indonesian to start
+\u2022 No guarantee of matches or financial support
+
+Current stage: waitlist only.`,`KONSEP SUGARNYMOUS
+
+Ruang yang sedang dirancang untuk orang dewasa agar bisa menyampaikan apa yang dicari, ditawarkan, serta batasan masing-masing dengan jelas.
+
+\u2022 Niat sebelum asumsi
+\u2022 Privasi dan persetujuan sejak awal
+\u2022 Mulai dengan bahasa Inggris dan Indonesia
+\u2022 Tidak menjamin pasangan atau dukungan finansial
+
+Tahap saat ini: daftar tunggu saja.`),_([w(f(r,"Join Waitlist","Gabung Daftar Tunggu"),"join:start")],[ct(f(r,"Privacy Policy","Kebijakan Privasi"),new URL("/privacy",i).toString()),w(f(r,"Back to Menu","Kembali ke Menu"),"nav:menu")]))}function vt(t,e,r,i,o){return o.ageDeclinedAt?q(t,e,f(r,"Sugarnymous dating early access is for adults aged 18 or older. This registration cannot continue because adult eligibility was declined. You may review the privacy policy or delete your stored data from Privacy & Help.","Akses awal dating Sugarnymous hanya untuk orang berusia minimal 18 tahun. Pendaftaran ini tidak dapat dilanjutkan karena kelayakan usia ditolak. Kamu dapat membaca kebijakan privasi atau menghapus data melalui Privasi & Bantuan."),_([ct(f(r,"Privacy Policy","Kebijakan Privasi"),new URL("/privacy",i).toString())],[w(f(r,"Privacy & Help","Privasi & Bantuan"),"nav:privacy")])):o.waitlistStatus==="joined"&&o.privacyConsentAt&&o.privacyVersion===xo?q(t,e,f(r,"You're already on the Sugarnymous early-access list. You can update your feature interests or notification settings below.","Kamu sudah terdaftar di daftar akses awal Sugarnymous. Kamu bisa mengubah minat fitur atau pengaturan notifikasi di bawah."),_([w(f(r,"Check My Status","Periksa Status"),"nav:status"),w(f(r,"Feature Interests","Minat Fitur"),"nav:survey")],[w(f(r,"Notifications","Notifikasi"),"nav:updates"),w(f(r,"Back to Menu","Kembali ke Menu"),"nav:menu")])):o.adultConfirmedAt?!o.privacyConsentAt||o.privacyVersion!==xo?q(t,e,f(r,`BEFORE WE SAVE YOUR WAITLIST ENTRY
+
+Please read the privacy policy. The waitlist uses your Telegram identifier, language, consent timestamps and optional feature interests to operate registration. Launch messages are off unless you opt in. You can request deletion from the Privacy menu.`,`SEBELUM MENYIMPAN PENDAFTARAN
+
+Baca kebijakan privasi. Daftar tunggu menggunakan identitas Telegram, bahasa, waktu persetujuan, dan minat fitur opsional untuk menjalankan pendaftaran. Notifikasi peluncuran nonaktif sampai kamu mengaktifkannya. Kamu dapat meminta penghapusan melalui menu Privasi.`),_([ct(f(r,"Read Privacy Policy","Baca Kebijakan Privasi"),new URL("/privacy",i).toString())],[w(f(r,"Agree & Join Waitlist","Setuju & Gabung Daftar Tunggu"),"privacy:accept")],[w(f(r,"Decline","Tidak Setuju"),"privacy:decline"),w(f(r,"Back","Kembali"),"nav:menu")])):q(t,e,f(r,"Your waitlist registration is ready to continue.","Pendaftaran daftar tunggumu siap dilanjutkan."),_([w(f(r,"Continue","Lanjutkan"),"privacy:accept"),w(f(r,"Back to Menu","Kembali ke Menu"),"nav:menu")])):q(t,e,f(r,`EARLY ACCESS \xB7 ADULTS 18+
+
+Sugarnymous is designed for adults only. Confirm that you are at least 18 before continuing. This is a self-attestation, not an independent age-verification check.`,`AKSES AWAL \xB7 KHUSUS USIA 18+
+
+Sugarnymous dirancang khusus untuk orang dewasa. Konfirmasikan bahwa kamu berusia minimal 18 tahun. Ini adalah pernyataan mandiri, bukan pemeriksaan usia independen.`),_([w(f(r,"I am 18 or older","Saya berusia 18 tahun atau lebih"),"age:yes")],[w(f(r,"I am under 18","Saya belum berusia 18 tahun"),"age:no")],[w(f(r,"Back to Menu","Kembali ke Menu"),"nav:menu")]))}async function za(t
