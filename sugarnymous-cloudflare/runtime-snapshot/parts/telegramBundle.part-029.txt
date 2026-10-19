@@ -1,0 +1,69 @@
+,e,r,i,o){let u=i.language;if(i.waitlistStatus!=="joined"||!i.privacyConsentAt)return vt(e,r,u,o,i);let a=await t.selectFrom("users").select(({fn:p})=>p.countAll().as("count")).where("referredBy","=",i.telegramId).where("waitlistStatus","=","joined").executeTakeFirst(),c=qi(i.featureInterests).map(p=>pi.find(g=>g.key===p)?.[u==="id"?"id":"en"]).filter(Boolean);return q(e,r,f(u,`YOUR EARLY-ACCESS STATUS
+
+Status: Registered
+Launch notifications: ${i.notificationsEnabled?"On":"Off"}
+Feature interests: ${c.length?c.join(", "):"Not selected"}
+Successful referrals: ${Number(a?.count??0)}
+
+Matching is not live yet. No queue position or beta date is promised.`,`STATUS AKSES AWAL
+
+Status: Terdaftar
+Notifikasi peluncuran: ${i.notificationsEnabled?"Aktif":"Nonaktif"}
+Minat fitur: ${c.length?c.join(", "):"Belum dipilih"}
+Referral berhasil: ${Number(a?.count??0)}
+
+Matching belum aktif. Kami tidak menjanjikan nomor antrean atau tanggal beta.`),_([w(f(u,"Feature Interests","Minat Fitur"),"nav:survey"),w(f(u,"Invite Friends","Undang Teman"),"nav:invite")],[w(f(u,"Notification Settings","Pengaturan Notifikasi"),"nav:updates"),w(f(u,"Back to Menu","Kembali ke Menu"),"nav:menu")]))}function Ka(t,e,r,i){let o=[];for(let u=0;u<pi.length;u+=2){let a=pi[u],s=pi[u+1];o.push([w(`${i.includes(a.key)?"\u2705 ":""}${r==="id"?a.id:a.en}`,`survey:toggle:${a.key}`),...s?[w(`${i.includes(s.key)?"\u2705 ":""}${r==="id"?s.id:s.en}`,`survey:toggle:${s.key}`)]:[]])}return o.push([w(f(r,"Done","Selesai"),"survey:done"),w(f(r,"Back to Menu","Kembali ke Menu"),"nav:menu")]),q(t,e,f(r,`ROADMAP VOTING \xB7 V2
+
+Core beta features now include profiles, up to 3 Telegram photos, broad/approximate location, intent preferences, discovery, mutual likes, a free cooldown-based boost, and block/report controls. Vote for the next features you want us to prioritize. Select multiple options; this is a roadmap vote, not a promise or launch date.`,`VOTING ROADMAP \xB7 V2
+
+Fitur inti beta mencakup profil, hingga 3 foto Telegram, lokasi luas/perkiraan, preferensi niat, discovery, like mutual, booster gratis dengan jeda, serta blokir/laporan. Pilih beberapa fitur berikutnya yang ingin diprioritaskan. Ini voting roadmap, bukan janji atau tanggal rilis.`),_(...o))}function Hu(t,e,r,i){return q(t,e,f(r,`SETTINGS
+
+Language: ${r==="id"?"Bahasa Indonesia":"English"}
+Launch notifications: ${i?"On":"Off"}
+
+Notifications are optional and off by default.`,`PENGATURAN
+
+Bahasa: ${r==="id"?"Bahasa Indonesia":"English"}
+Notifikasi peluncuran: ${i?"Aktif":"Nonaktif"}
+
+Notifikasi opsional dan nonaktif secara default.`),_([w(f(r,"\u{1F310} Language","\u{1F310} Bahasa"),"nav:language")],[w(i?f(r,"Turn Notifications Off","Nonaktifkan Notifikasi"):f(r,"Turn Notifications On","Aktifkan Notifikasi"),i?"updates:off":"updates:on")],[w(f(r,"Privacy & Data","Privasi & Data"),"nav:privacy"),w(f(r,"Back to Menu","Kembali ke Menu"),"nav:menu")]))}function Ja(t,e,r,i){return q(t,e,f(r,`PRIVACY & SAFETY
+
+The public service is a waitlist; dating tools are restricted to invited closed-beta testers. If you use beta tools, the app may store profile fields, up to 3 Telegram photo references, broad region, optional coarse location, role/intent preferences, likes/matches, block/report records and active-chat state. Exact location is rounded before saving. Launch notifications are opt-in. You can review or delete your app data here.`,`PRIVASI & KEAMANAN
+
+Layanan publik saat ini berupa daftar tunggu; fitur dating dibatasi untuk penguji closed beta yang diundang. Jika menggunakan fitur beta, aplikasi dapat menyimpan data profil, hingga 3 referensi foto Telegram, kawasan umum, lokasi kasar opsional, preferensi peran/niat, like/match, blokir/laporan, dan status chat aktif. Lokasi persis dibulatkan sebelum disimpan. Notifikasi peluncuran harus diaktifkan secara sukarela. Kamu dapat meninjau atau menghapus data aplikasi di sini.`),_([ct(f(r,"Privacy Policy","Kebijakan Privasi"),new URL("/privacy",i).toString())],[ct(f(r,"Community Principles","Prinsip Komunitas"),new URL("/community-principles",i).toString())],[w(f(r,"Review My Data","Tinjau Data Saya"),"privacy:review"),w(f(r,"Delete My Data","Hapus Data Saya"),"delete:start")],[w(f(r,"Help","Bantuan"),"nav:help"),w(f(r,"Back to Menu","Kembali ke Menu"),"nav:menu")]))}function tl(t,e,r,i){return q(t,e,f(r,`SUGARNYMOUS HELP
+
+/start \u2014 Welcome and onboarding
+/menu \u2014 Main dashboard
+/join \u2014 Join the early-access waitlist
+/status \u2014 Check registration status
+/invite \u2014 Get your invitation link
+/survey \u2014 Vote for future roadmap features
+/updates \u2014 Manage launch notifications
+/language \u2014 Change language
+/privacy \u2014 Privacy, safety and account-data controls
+
+Dating tools are invite-only closed beta, not public launch. They require an adults-only confirmation and current privacy consent.`,`BANTUAN SUGARNYMOUS
+
+/start \u2014 Sambutan dan onboarding
+/menu \u2014 Dashboard utama
+/join \u2014 Gabung daftar akses awal
+/status \u2014 Cek status pendaftaran
+/invite \u2014 Dapatkan tautan undangan
+/survey \u2014 Voting fitur roadmap
+/updates \u2014 Atur notifikasi peluncuran
+/language \u2014 Ganti bahasa
+/privacy \u2014 Privasi, keamanan, dan kontrol data
+
+Fitur dating hanya closed beta undangan, bukan peluncuran publik. Fitur memerlukan konfirmasi dewasa dan persetujuan privasi terbaru.`),_([ct(f(r,"Privacy Policy","Kebijakan Privasi"),new URL("/privacy",i).toString())],[w(f(r,"Settings","Pengaturan"),"nav:settings"),w(f(r,"Back to Menu","Kembali ke Menu"),"nav:menu")]))}async function Ud(){let e=process.env.TELEGRAM_BOT_TOKEN;if(!e)return null;try{let r=await fetch(`https://api.telegram.org/bot${e}/getMe`,{method:"GET"});if(!r.ok)return null;let i=await r.json(),o=i.ok?i.result?.username:void 0;return o&&/^[A-Za-z0-9_]{5,32}$/.test(o)?o:null}catch{return null}}function Ga(t){if(Array.isArray(t))return t.map(Ga);if(!t||typeof t!="object")return t;let e={};for(let[r,i]of Object.entries(t)){let o=r.replace(/([a-z0-9])([A-Z])/g,"$1_$2").toLowerCase();e[o]=Ga(i)}return e}async function Vi(t,e){let i=process.env.TELEGRAM_BOT_TOKEN;if(!i)return{kind:"ambiguous",errorCode:"TOKEN_MISSING"};try{let o=Ga(e),u=await fetch(`https://api.telegram.org/bot${i}/${t}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)}),a=await u.json();return a.ok?{kind:"success",errorCode:0}:{kind:"rejected",errorCode:String(a.error_code??u.status),description:(a.description??"").slice(0,180)}}catch{return{kind:"ambiguous",errorCode:"NETWORK_AMBIGUOUS"}}}async function $d(t){await Vi("answerCallbackQuery",{callback_query_id:t})}async function To(t,e){for(let r of e.followups??[]){let i=await Vi(r.method,r.data);if(i.kind!=="success"){let o=i.kind==="rejected"?`${i.errorCode}: ${i.description??"Telegram rejected a follow-up message"}`:i.errorCode;await It.updateTable("botOutbox").set({status:"failed",lastErrorCode:`FOLLOWUP ${o}`.slice(0,80)}).where("updateId","=",t).execute();return}}await It.updateTable("botOutbox").set({status:"sent",sentAt:new Date,lastErrorCode:null,payload:{}}).where("updateId","=",t).execute()}async function _i(t,e,r,i,o,u,a,s){let c=e.language;switch(o){case"start":{let p=await Sr(t,e.telegramId);return u.trim().split(/\\s+/)[0]==="join"?vt(r,i,c,a,e):el(r,i,c,a,p)}case"menu":{let p=await t.selectFrom("projectAdmins").select("telegramId").where("telegramId","=",e.telegramId).executeTakeFirst();return Zu(r,i,c,a,await Sr(t,e.telegramId),!!p)}case"join":return vt(r,i,c,a,e);case"status":return za(t,r,i,e,a);case"invite":{if(e.waitlistStatus!=="joined")return vt(r,i,c,a,e);if(!s)return q(r,i,f(c,"Your invitation link will be available after the bot username is configured. You can continue exploring the waitlist.","Tautan undangan tersedia setelah username bot dikonfigurasi. Kamu tetap dapat menjelajahi daftar tunggu."),_([w(f(c,"My Status","Status Saya"),"nav:status"),w(f(c,"Back to Menu","Kembali ke Menu"),"nav:menu")]));let p=`https://t.me/${s}?start=ref_${e.referralCode}`,g=await t.selectFrom("users").select(({fn:h})=>h.countAll().as("count")).where("referredBy","=",e.telegramId).where("waitlistStatus","=","joined").executeTakeFirst();return q(r,i,f(c,`YOUR INVITATION LINK
+
+${p}
+
+Successful registrations: ${Number(g?.count??0)}
+
+Only completed registrations count. Please invite respectfully; spam and self-referrals are not allowed.`,`TAUTAN UNDANGANMU
+
+${p}
+
+Pendaftaran berhasil: ${Number(g?.count??0)}
+
+Hanya pendaftaran yang selesai dihitung. Undang dengan wajar; spam dan referral diri sendiri tidak diperbolehkan.`),_([ct(f(c,"Share Invite Link","Bagikan Tautan"),`https://t.me/share/url?url=${encodeURIComponent(p)}&text=${encodeURIComponent("Join Sugarnymous early access")}`)],[w(f(c,"Refresh Referral Status","Perbarui Status Referral"),"nav:invite"),w(f(c,"Back to Menu","Kembali ke Menu"),"nav:menu")]))}case"survey":return e.waitlistStatus!=="joined"||!e.privacyConsentAt||e.privacyVersion!==xo?vt(r,i,c,a,e):Ka(r,i,c,qi(e.featureInt
