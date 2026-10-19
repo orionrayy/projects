@@ -45,8 +45,8 @@
   "character": {
     "upper_leg_px": 91,
     "lower_leg_px": 91,
-    "upper_arm_px": 58,
-    "forearm_px": 55,
+    "upper_arm_px": 54,
+    "forearm_px": 53,
     "head_radius_px": 24,
     "shoulder_half_width_px": 23,
     "hip_half_width_px": 11,
