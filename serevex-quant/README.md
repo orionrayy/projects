@@ -94,3 +94,13 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 - Strict maturity is based on the target exit index being less than the next decision index. Naive timestamps require an explicit diagnostic-only UTC assumption; source semantics, licensing and broker-feed match remain unverified.
 - Hosted run #269 found a single failing test assertion (the test compared partition-name strings against integer ranks); the end-to-end producer and remaining new tests passed. The assertion was corrected. Workflow #271 has passed through step 10: all unit tests, data acquisition, tick audit and the actual reference-only OHLCV-to-stages-1–3 integration step succeeded. The 700k Bid/Ask replay is now running; the full workflow/artifact upload is not yet confirmed.
 - No live integration; NO_TRADE and all live-authority gates remain disabled. These are causal baseline candidates, not trained alpha models.
+
+
+## Research increment — alpha-trained Serevex ledger (2026-10-19)
+
+- Source branch: [PR #168](https://github.com/orionrayy/ai-determinism-engine/pull/168), head `fcd419fd36cdca935c4f472201754ac8cdad7eb8`.
+- Added [alpha model](https://github.com/orionrayy/ai-determinism-engine/blob/research/serevex-forecastability-discovery-v1/projects/aurum-intelligence/online-benchmark/serevex_alpha_model_v1.py), alpha tests, causal feature engineering, and the [v2 producer contract](https://github.com/orionrayy/ai-determinism-engine/blob/research/serevex-forecastability-discovery-v1/projects/aurum-intelligence/SEREVEX_FORECAST_LEDGER_PRODUCER_V2.md).
+- Alpha is a standard-library regularized logistic model over eight OHLCV-derived features. It uses separate chronological development/model-selection/calibration/final-holdout blocks, strict `label_available_index < cutoff` maturity, and a frozen model/calibrator during final holdout. Holdout labels are excluded from fit/calibration.
+- Initial hosted attempt #279 found a producer/trainer integration defect: raw events lacked the partition key. The partition was added to raw events; rerun [#39277093093](https://github.com/orionrayy/ai-determinism-engine/actions/runs/39277093093) is in progress. Do not treat the alpha-integrated head as hosted-pass until the entire workflow and artifact upload complete.
+- The previous full green run #271 predates alpha training. On that older producer/mixer, final holdout Brier was 0.230085 vs causal baseline 0.230054 (baseline-minus-mixer skill -0.0000309), so the prior mixer did not beat the baseline. That is not a result for the new alpha model.
+- Safety and evidence boundary unchanged: research only, `NO_TRADE`, model/deployment validation false, live signals/orders disabled, and no skill/profitability claim before independent replication.
