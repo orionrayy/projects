@@ -1,0 +1,63 @@
+name: Motion Studio Anatomy Refinement v0.8.1
+on:
+  push:
+    branches:
+      - motion-studio-v0.8.1-anatomy-refinement
+    paths:
+      - ".github/workflows/motion-studio-anatomy-v0.8.1.yml"
+      - "ffmpeg-motion-studio/foundation-v0.8.0/**"
+      - "ffmpeg-motion-studio/foundation-v0.8.1/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  anatomy-regression-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout anatomy review branch
+        uses: actions/checkout@v4
+        with:
+          ref: motion-studio-v0.8.1-anatomy-refinement
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install lightweight raster dependencies
+        run: python -m pip install --disable-pip-version-check cairosvg pillow
+      - name: Verify baseline locomotion regression
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.0
+        run: |
+          node --check src/locomotion.mjs
+          npm test
+      - name: Verify anatomy module and run all anatomy regressions
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.1
+        run: |
+          node --check src/anatomy.mjs
+          npm test
+      - name: Render deterministic 24 FPS SVG frame sequences
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.1
+        run: npm run preview -- ./dist
+      - name: Rasterize PNG sequences and encode H.264 previews
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.1
+        run: |
+          ffmpeg -version
+          python scripts/rasterize-preview.py dist
+      - name: Validate frame count, dimensions, codec, duration and checksums
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.1
+        run: python scripts/validate-preview.py
+      - name: Upload review media and machine-readable evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-v0.8.1-anatomy-review
+          path: |
+            ffmpeg-motion-studio/foundation-v0.8.1/dist/motion-studio-v0.8.1-anatomy-*.mp4
+            ffmpeg-motion-studio/foundation-v0.8.1/dist/anatomy-contact-sheet-*.jpg
+            ffmpeg-motion-studio/foundation-v0.8.1/dist/anatomy-manifest.json
+            ffmpeg-motion-studio/foundation-v0.8.1/dist/render-validation.json
+          if-no-files-found: error
+          retention-days: 14
