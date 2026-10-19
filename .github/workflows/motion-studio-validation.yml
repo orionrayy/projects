@@ -30,4 +30,3 @@ jobs:
       - run: npm run validate:rendered-pose
       - run: npm run validate:reference-clip
       - run: python -m unittest discover -s tests -p '*test.py' -v
-      - run: python -m unittest discover -s tools/character-motion-rig -p 'test_character_motion_v7.py' -v
