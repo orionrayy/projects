@@ -42,11 +42,15 @@ jobs:
       - name: Render deterministic 24 FPS SVG frame sequences
         working-directory: ffmpeg-motion-studio/foundation-v0.8.1
         run: npm run preview -- ./dist
+      - name: Install FFmpeg encoder and probe
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+          ffmpeg -version
+          ffprobe -version
       - name: Rasterize PNG sequences and encode H.264 previews
         working-directory: ffmpeg-motion-studio/foundation-v0.8.1
-        run: |
-          ffmpeg -version
-          python scripts/rasterize-preview.py dist
+        run: python scripts/rasterize-preview.py dist
       - name: Validate frame count, dimensions, codec, duration and checksums
         working-directory: ffmpeg-motion-studio/foundation-v0.8.1
         run: python scripts/validate-preview.py
