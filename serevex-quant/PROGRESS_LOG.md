@@ -180,3 +180,13 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Dataset concordance remains unresolved: 35,954 primary and 17,371 secondary M5 rows; 11,509 common timestamps, zero exact OHLC matches, 134.885/203.661 bps median/P95 close discrepancy. A separate tick audit finds 4,391/4,392 secondary bars exactly equal to reconstructed tick Bid bars despite reported mid-quote semantics.
 - GDELT scale reached 141,020 real unique records, but the 100 sampled archives cover only 0.114218% of the preregistered window; news features remain ineligible. Macro features remain ineligible. COT incremental Brier improvement versus price-only is 0.00008494 and its 95% interval crosses zero.
 - Maintain `NO_TRADE`, `deployment_calibrated=false`, `validated_model=false`, `validated_for_profitability=false`, `live_signal_enabled=false`. Draft PR #164 remains unmerged.
+
+## 2026-10-19 — causal forecastability discovery research prototype
+
+- Added the research-only forecastability gate as a draft PR in the source repository: https://github.com/orionrayy/ai-determinism-engine/pull/168. It is stacked on evidence-gate PR #167 and remains unmerged.
+- The prototype compares pre-generated causal out-of-sample probabilities with an identical matured-label baseline, rejects future/unmatured outcomes and future regime metadata, requires a paired candidate cohort, and applies a preregistered model × regime multiplicity correction to time/session/regime-bounded moving-block uncertainty intervals.
+- Local verification on the exported source: 10 synthetic contract tests passed; `py_compile` passed. Hosted workflow run #254 was still in progress at checkpoint time; hosted success must not be assumed.
+- New research note: [FORECASTABILITY_DISCOVERY_V1.md](FORECASTABILITY_DISCOVERY_V1.md).
+- Current large-scale branch evidence remains cautionary: prequential Brier was reported as 0.1747186248 versus 0.1745785974 for the matured-label baseline, with a paired interval entirely against the candidate. External COT/news improvements were not established, while GDELT temporal coverage remained partial. See PR #167; these are research diagnostics, not a validated skill estimate for production.
+- No automatic integration into the app or benchmark decision path. Required before integration: an auditable OOS forecast ledger with one shared target definition, a dedicated model-selection split before calibration/final holdout, later frozen evaluation, calibration/skill baselines, and execution-aware evidence.
+- NO_TRADE, live signals disabled, and live order execution disabled remain invariants. This prototype does not demonstrate original-in-the-world mathematics or a market edge.
