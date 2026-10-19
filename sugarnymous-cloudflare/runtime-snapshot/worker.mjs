@@ -484,8 +484,8 @@ export default {
       }
     }
 
-    // All public site routes are served by the separate Cloudflare static-site Worker.
-    // The Telegram webhook and database health routes are handled above and remain on this Worker.
+    // All public site routes are served by the independent Cloudflare static-site Worker.
+    // Telegram webhook and database health routes are handled above.
     if (env.STATIC_SITE && typeof env.STATIC_SITE.fetch === "function") {
       try {
         return await env.STATIC_SITE.fetch(request);
