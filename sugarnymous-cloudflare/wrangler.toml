@@ -7,3 +7,7 @@ keep_vars = true
 [[hyperdrive]]
 binding = "HYPERDRIVE"
 id = "b23842b9bb0f46808cde7d7acd199164"
+
+[[services]]
+binding = "STATIC_SITE"
+service = "sugarnymous-static-site"

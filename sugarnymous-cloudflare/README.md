@@ -23,6 +23,6 @@ This is **not yet the complete editable application source**. The Worker bundle 
 ## Next steps
 
 1. Recover original helpers/endpoints/pages plus their specs from the Floot project when project reads are available, and establish them as the maintainable source of truth.
-2. Copy the current public HTML/CSS/JS/assets and page routes into a static bundle, then remove the Floot origin proxy from the Worker.
+2. Promote the tested `sugarnymous-static-site` Worker through the `STATIC_SITE` service binding after production smoke/rollback readiness is confirmed.
 3. Add tests for `/`, `/privacy`, `/community-principles`, `/telegram-setup`, `/_api/health`, native health, webhook-secret rejection, idempotency, and bilingual /menu + /privacy flows.
-4. Set `PRODUCTION_DEPLOY_ALLOWED=true` only after those checks pass and a rollback snapshot exists.
+4. Set `PRODUCTION_DEPLOY_ALLOWED=true` only after those checks pass, preserved secrets/Hyperdrive are verified, and a rollback snapshot exists.

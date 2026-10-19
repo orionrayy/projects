@@ -1,5 +1,4 @@
 
-const ORIGIN = "https://sugarnymous-prerelease.floot.app";
 const MAX_BODY_BYTES = 1_000_000;
 let appPromise;
 
@@ -470,36 +469,30 @@ export default {
         if (!health.ok) {
           const body = incoming.pathname === "/_api/health" || incoming.pathname === "/health"
             ? { status: "degraded", service: "sugarnymous-cloudflare", database: "error", backend: "cloudflare-worker", reason: health.reason }
-            : { ok: false, stage: "cloudflare-native", database: "error", backend: "cloudflare-worker", reason: health.reason, timingsMs: health.timingsMs ?? {}, website: "floot-origin-proxy", productionWebhookChanged: false, fullMigration: false };
+            : { ok: false, stage: "cloudflare-native", database: "error", backend: "cloudflare-worker", reason: health.reason, timingsMs: health.timingsMs ?? {}, website: "cloudflare-static-service", productionWebhookChanged: false, fullMigration: false };
           return json(body, 503);
         }
         const body = incoming.pathname === "/_api/health" || incoming.pathname === "/health"
           ? { status: "ok", service: "sugarnymous-cloudflare", database: "ok", backend: "cloudflare-worker" }
-          : { ok: true, stage: "cloudflare-native", database: "ok", backend: "cloudflare-worker", timingsMs: health.timingsMs ?? {}, website: "floot-origin-proxy", productionWebhookChanged: false, fullMigration: false };
+          : { ok: true, stage: "cloudflare-native", database: "ok", backend: "cloudflare-worker", timingsMs: health.timingsMs ?? {}, website: "cloudflare-static-service", productionWebhookChanged: false, fullMigration: false };
         return json(body, 200);
       } catch {
         const body = incoming.pathname === "/_api/health" || incoming.pathname === "/health"
           ? { status: "degraded", service: "sugarnymous-cloudflare", database: "error", backend: "cloudflare-worker" }
-          : { ok: false, stage: "cloudflare-native", database: "error", backend: "cloudflare-worker", website: "floot-origin-proxy", productionWebhookChanged: false, fullMigration: false };
+          : { ok: false, stage: "cloudflare-native", database: "error", backend: "cloudflare-worker", website: "cloudflare-static-service", productionWebhookChanged: false, fullMigration: false };
         return json(body, 503);
       }
     }
 
-    // Public landing/privacy pages are temporarily proxied from Floot until the static bundle is migrated.
-    const upstream = new URL(incoming.pathname + incoming.search, ORIGIN);
-    const headers = new Headers(request.headers);
-    headers.delete("host");
-    headers.set("x-sugarnymous-cloudflare-stage", "cloudflare-native-backend");
-    const init = { method: request.method, headers, redirect: "manual" };
-    if (request.method !== "GET" && request.method !== "HEAD") init.body = request.body;
-    try {
-      const response = await fetch(new Request(upstream.toString(), init));
-      const responseHeaders = new Headers(response.headers);
-      responseHeaders.set("X-Sugarnymous-Backend", "cloudflare-native");
-      responseHeaders.set("Cache-Control", responseHeaders.get("Cache-Control") || "no-store");
-      return new Response(response.body, { status: response.status, statusText: response.statusText, headers: responseHeaders });
-    } catch {
-      return json({ error: "Origin temporarily unavailable", backend: "cloudflare-native" }, 502);
+    // All public site routes are served by the separate Cloudflare static-site Worker.
+    // The Telegram webhook and database health routes are handled above and remain on this Worker.
+    if (env.STATIC_SITE && typeof env.STATIC_SITE.fetch === "function") {
+      try {
+        return await env.STATIC_SITE.fetch(request);
+      } catch {
+        return json({ error: "Static site temporarily unavailable", backend: "cloudflare-native" }, 502);
+      }
     }
+    return json({ error: "Static site service binding is not configured", backend: "cloudflare-native" }, 503);
   }
 };
