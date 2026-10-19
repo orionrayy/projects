@@ -28,7 +28,7 @@ SCENES = [
  {"id":15,"motif":"evaluate","title":"Evaluator menghitung hasil akhir","short":"Rp54.000 − Rp5.400 = Rp48.600","narration":"Evaluasi post-order menghitung anak sebelum induk. Subtotal dikurangi diskon menghasilkan empat puluh delapan ribu enam ratus, lalu diuji terhadap persamaan."},
  {"id":16,"motif":"payment","title":"Pembayaran dilakukan setelah total tervalidasi","short":"Sentuhan kartu bukan bukti persetujuan transaksi","narration":"Terminal pembayaran terpisah dari parser. Kirim total tervalidasi; status berhasil dicatat setelah respons otorisasi diterima."},
  {"id":17,"motif":"receipt","title":"Struk membuat perhitungan bisa diaudit","short":"Subtotal − diskon = total","narration":"Struk adalah rekaman audit. Uji invariant: subtotal dikurangi diskon harus sama dengan total. Cocokkan pula baris item dan aturan diskon."},
- {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang bisa diperiksa","short":"Token → aturan → struktur → operasi → hasil","narration":"Alurnya: tokenisasi menghasilkan token; CFG memberi aturan; parser membangun pohon; AST merangkum operasi; semantik memeriksa konteks; evaluator menghitung nilai."}
+ {"id":18,"motif":"exit_recap","title":"Dari teks menuju hasil yang bisa diperiksa","short":"Token → aturan → struktur → operasi → hasil","narration":"Token, CFG, parse tree, AST; evaluasi menghasilkan total yang dapat diuji."}
 ]
 DURATIONS = [8,8,8,17,18,16,16,16,14,13,14,14,14,15,15,12,12,10]
 TOTAL = sum(DURATIONS)
