@@ -33,9 +33,16 @@ The isolated branch adds a standard-library function that consumes pre-generated
 ## Verification boundary
 
 - Local synthetic contract tests: 10 passed; py_compile passed (2026-10-19).
+- Hosted GitHub Actions run #254 completed PASS on the PR head (commit `1ed518cfaeafbfcf3c64b790214cae6c4d9cba9a`): https://github.com/orionrayy/ai-determinism-engine/actions/runs/39252496309. Artifact #12187650424: 2,660,665 bytes; SHA-256 `9ee23f1f9a881272fcdf80cade5e003442759824442a6f45b2ccc20d5d50922e`; expiry 2026-11-02.
 - Hosted GitHub Actions run #254 (39252496309) was observed in progress during checkpoint creation; do not treat it as passed until final status and all steps are verified.
 - Synthetic tests establish implementation behavior only. No new market skill, alpha, originality or global ranking is claimed.
 - The module is not wired into the current evaluation/Telegram decision path. Integration requires a genuine forecast ledger and a dedicated earlier model-selection partition; the frozen candidate/weights must then be evaluated on a later untouched holdout without further tuning.
+
+## Follow-up from hosted evidence
+
+- Current run still reports M1 aggregate Brier 0.1747186248 versus matured-label baseline 0.1745785974. Baseline-minus-candidate improvement is -0.0001400274 with 95% moving-block interval [-0.0002451349, -0.0000518749]. This is negative evidence against the current probability method, not against all future methods. Keep NO_TRADE.
+- On the 3,978-row external-context holdout, COT improves Brier by 0.00011857 versus price-only but its paired interval [-0.00042107, 0.00083390] crosses zero. News improves Brier by only 0.00000224; its paired interval [-0.00003016, 0.00004313] crosses zero. Current news coverage is only 205/19,894 rows at 1h and 100/19,894 at 24h; macro coverage is 0. These features cannot support promotion yet.
+- Execution replay across 19,975 overlapping momentum_5 events reports pessimistic gross mean -0.5563 R and profit factor 0.285; even before assumed extra costs these baseline strategies are not viable in this diagnostic. This is not a portfolio equity curve or broker fill simulation.
 
 ## Next gates
 
