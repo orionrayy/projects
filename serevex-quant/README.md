@@ -82,3 +82,15 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 - Latest hardened branch head: `8660f39223113cbc864bcdb79e7a5f192d35004c`. Workflow [#268](https://github.com/orionrayy/ai-determinism-engine/actions/runs/39270426351) has steps 1–6 passing, including the unit-test suite; data-acquisition step 7 is in progress at checkpoint creation. Full hosted validation is not yet confirmed.
 - The integrated module currently consumes pre-generated expert forecasts. It does not train price forecasters, and a qualified real-feed forecast-ledger producer remains outstanding. Existing real-data evidence for the previously tested probability method is negative vs. baseline; this increment has not been shown to improve market skill.
 - Safety state: research only; `NO_TRADE`; model/deployment validation false; live signals and order routing remain disabled.
+
+
+## Research increment — causal forecast-ledger producer v1 (2026-10-19)
+
+- Added producer and tests in draft [PR #168](https://github.com/orionrayy/ai-determinism-engine/pull/168):
+  - [Producer module](https://github.com/orionrayy/ai-determinism-engine/blob/research/serevex-forecastability-discovery-v1/projects/aurum-intelligence/online-benchmark/serevex_forecast_ledger_producer_v1.py)
+  - [Producer tests](https://github.com/orionrayy/ai-determinism-engine/blob/research/serevex-forecastability-discovery-v1/projects/aurum-intelligence/online-benchmark/test_serevex_forecast_ledger_producer_v1.py)
+  - [Producer contract](https://github.com/orionrayy/ai-determinism-engine/blob/research/serevex-forecastability-discovery-v1/projects/aurum-intelligence/SEREVEX_FORECAST_LEDGER_PRODUCER_V1.md)
+- The adapter maps the existing TP-before-SL evaluation protocol into one pre-registered rule-and-side forecast cohort. It emits an expanding Laplace baseline, constant-50%, rolling matured-rate, regime-conditioned and volatility-conditioned estimators, then runs the integrated stages 1–3 in one CLI path.
+- Strict maturity is based on the target exit index being less than the next decision index. Naive timestamps require an explicit diagnostic-only UTC assumption; source semantics, licensing and broker-feed match remain unverified.
+- Hosted workflow #269 was created for the producer revision and was pending at the latest checkpoint; no producer CI result is claimed yet.
+- No live integration; NO_TRADE and all live-authority gates remain disabled. These are causal baseline candidates, not trained alpha models.
