@@ -282,3 +282,10 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Full run #286 queued: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523541
 - Isolated probability tests run 2 queued: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523446
 - Previous full run #280 remains active at the real-data alpha integration step far longer than the prior baseline-only run. Latest head includes baseline-governed alpha, optimized training fits, compact metadata, and the linear-time maturity queue. No latest-head hosted validation or alpha holdout metric is confirmed yet.
+
+
+## 2026-10-19 — Hosted integration checkpoint corrected
+
+- The older full run #280 passed its real OHLCV → alpha-ledger → stages 1–3 step, so the earlier alpha producer integration has now passed hosted software/contract assertions.
+- Run #280's downstream 700k-candle/20k-real-timestamp replay step remains in progress; full workflow and artifact upload are not yet confirmed.
+- Current head `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`, containing the baseline-governor probabilistic model and linear-time maturity queue, is pending in full run #286 and isolated probability-test run 2. Neither has yet validated the latest head.
