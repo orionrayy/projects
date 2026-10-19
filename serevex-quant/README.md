@@ -15,6 +15,12 @@ Start with **PROJECT_MEMORY.md**, then **PROGRESS_LOG.md**, **BENCHMARKS_AND_EVI
 
 Never add credentials, tokens, .env files, or personal account information to this folder.
 
+## Research checkpoint — forecastability discovery (2026-10-19)
+
+- Research prototype and draft PR: [Causal Forecastability Discovery v1](FORECASTABILITY_DISCOVERY_V1.md) / [PR #168](https://github.com/orionrayy/ai-determinism-engine/pull/168). Hosted run #254 passed, but the model remains unvalidated and the change is unmerged.
+- The latest 1.31M-row paired Bid/Ask M1 benchmark still fails to demonstrate aggregate predictive skill versus the matured-label baseline (Brier 0.174719 vs 0.174579; 95% paired block interval for baseline-minus-model is entirely negative). COT/news improvements are inconclusive and news/macro coverage remains inadequate.
+- This new gate is research-only; it is not wired into the app or a live forecast/decision chain. `NO_TRADE`, no live signal and no live order execution remain mandatory.
+
 ## Final hosted verification — 2026-10-16, run 38851436990
 
 The GitHub Actions run is **green**, including unit tests, live acquisition, dataset/count assertions, job summary and artifact upload. Run: https://github.com/orionrayy/ai-determinism-engine/actions/runs/38851436990
