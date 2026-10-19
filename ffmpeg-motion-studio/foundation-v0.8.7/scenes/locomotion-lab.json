@@ -67,8 +67,8 @@
     "knee_up_bias_px": 17,
     "near_leg_projection_px": 0,
     "leg_depth_projection_px": 28,
-    "stance_knee_forward_ratio": 0.42,
-    "stance_knee_up_ratio": 0.25
+    "stance_knee_forward_ratio": 0.7,
+    "stance_knee_up_ratio": 0.65
   },
   "prop": {
     "basket_width_px": 68,
