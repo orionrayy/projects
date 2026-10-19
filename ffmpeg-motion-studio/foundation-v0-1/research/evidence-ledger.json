@@ -96,17 +96,21 @@
     },
     {
       "id": "quality.rendered-aim-from-svg",
-      "status": "pending_ci",
+      "status": "passed_ci",
       "claim": "The canonical 96-frame pilot checks the emitted SVG pointing-hand transform against deterministic pose state, including rendered aim, origin, fingertip and hand scale.",
-      "verification_method": "GitHub Actions runs scripts/validate-rendered-pose.mjs on every declared frame; regression tests require a deliberately altered hand rotation and missing index-finger group to fail closed.",
+      "verification_method": "GitHub Actions run 39212642233 on source revision c7641e25973969eb5ea51395f293d20f4cd8a26a passed: 31/31 Node tests, 96/96 serialized SVG frame checks, 7/7 synthetic motion scenarios, Python schema tests, FFmpeg export/ffprobe and source artifact packaging.",
       "evidence": [
         {
           "path": "ffmpeg-motion-studio/foundation-v0-1/src/rendered-pose-quality.mjs",
-          "symbol": "evaluateRenderedPoseQuality"
+          "symbol": "evaluateRenderedPoseQuality",
+          "revision": "c7641e25973969eb5ea51395f293d20f4cd8a26a",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39212642233"
         },
         {
           "path": "ffmpeg-motion-studio/foundation-v0-1/tests/visual-contract.test.mjs",
-          "symbol": "serialized SVG hand aim and transform mutation regressions"
+          "symbol": "serialized SVG hand aim and transform mutation regressions",
+          "revision": "c7641e25973969eb5ea51395f293d20f4cd8a26a",
+          "url": "https://github.com/orionrayy/projects/actions/runs/39212642233"
         }
       ],
       "limitation": "This verifies serialized geometry consistency, not natural motion, collision-free silhouettes, semantic correctness of arbitrary animation or artistic acceptance."
