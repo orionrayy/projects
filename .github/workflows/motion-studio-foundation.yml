@@ -1,4 +1,4 @@
-name: Motion Studio Foundation v0.4.0
+name: Motion Studio Foundation v0.5.0
 on:
   push:
     branches: ["feature/motion-studio-foundation-v0-1", "main"]
@@ -69,6 +69,8 @@ jobs:
           curl -fsS http://127.0.0.1:4173/scenes/scene-001.json | python -c 'import json,sys; x=json.load(sys.stdin); assert x["duration_frames"] == 96 and x["fps"] == 24; print("PREVIEW_HTTP_PASS", x["scene_id"])'
       - name: Motion, anatomy and rendering regression tests
         run: npm test
+      - name: Serialized SVG rendered-pose contract
+        run: npm run validate:rendered-pose
       - name: Synthetic motion benchmark
         run: npm run benchmark:motion
       - name: Rasterizer MAE diagnostic (uncalibrated)
@@ -83,7 +85,7 @@ jobs:
           from pathlib import Path
           from zipfile import ZipFile, ZIP_DEFLATED
           root = Path(".")
-          target = root / "out" / "motion-studio-foundation-v0-4-0-source.zip"
+          target = root / "out" / "motion-studio-foundation-v0-5-0-source.zip"
           target.parent.mkdir(parents=True, exist_ok=True)
           skip_parts = {"out", ".git", "node_modules", "__pycache__"}
           with ZipFile(target, "w", ZIP_DEFLATED) as archive:
@@ -99,16 +101,17 @@ jobs:
       - name: Upload pilot, source and regression evidence
         uses: actions/upload-artifact@v4
         with:
-          name: motion-studio-foundation-v0-4-0-bilateral-rig-evidence-ledger
+          name: motion-studio-foundation-v0-5-0-bilateral-rig-evidence-ledger
           path: |
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4
             ffmpeg-motion-studio/foundation-v0-1/out/foundation-scene-001.mp4.report.json
             ffmpeg-motion-studio/foundation-v0-1/out/motion-benchmark-report.json
+            ffmpeg-motion-studio/foundation-v0-1/out/rendered-pose-report.json
             ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-report.json
             ffmpeg-motion-studio/foundation-v0-1/out/evidence-ledger-validation-report.json
             ffmpeg-motion-studio/foundation-v0-1/research/evidence-ledger.json
             ffmpeg-motion-studio/foundation-v0-1/schemas/evidence-ledger.schema.json
             ffmpeg-motion-studio/foundation-v0-1/out/raster-parity-evidence/**
-            ffmpeg-motion-studio/foundation-v0-1/out/motion-studio-foundation-v0-4-0-source.zip
+            ffmpeg-motion-studio/foundation-v0-1/out/motion-studio-foundation-v0-5-0-source.zip
           if-no-files-found: error
           retention-days: 14

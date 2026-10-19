@@ -171,7 +171,7 @@ export function evaluateFrame(scene, frameIndex) {
     },
   };
   state.quality = evaluatePoseQuality(scene, state);
-  diagnostics.handAimErrorDegrees = state.quality.handAimErrorDegrees;
+  // Rendered hand aim is checked from serialized SVG in rendered-pose-quality.mjs.
   diagnostics.poseQualityPassed = state.quality.passed;
   return state;
 }

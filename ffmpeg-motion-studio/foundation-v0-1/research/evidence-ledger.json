@@ -93,6 +93,23 @@
       "verification_method": "Implementation scope declaration",
       "evidence": [],
       "limitation": "The code remains a deterministic procedural 2D rig and motion model."
+    },
+    {
+      "id": "quality.rendered-aim-from-svg",
+      "status": "pending_ci",
+      "claim": "The canonical 96-frame pilot checks the emitted SVG pointing-hand transform against deterministic pose state, including rendered aim, origin, fingertip and hand scale.",
+      "verification_method": "GitHub Actions runs scripts/validate-rendered-pose.mjs on every declared frame; regression tests require a deliberately altered hand rotation and missing index-finger group to fail closed.",
+      "evidence": [
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/src/rendered-pose-quality.mjs",
+          "symbol": "evaluateRenderedPoseQuality"
+        },
+        {
+          "path": "ffmpeg-motion-studio/foundation-v0-1/tests/visual-contract.test.mjs",
+          "symbol": "serialized SVG hand aim and transform mutation regressions"
+        }
+      ],
+      "limitation": "This verifies serialized geometry consistency, not natural motion, collision-free silhouettes, semantic correctness of arbitrary animation or artistic acceptance."
     }
   ]
 }

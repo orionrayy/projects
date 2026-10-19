@@ -27,6 +27,7 @@ report = {
         "evidence_ledger_schema",
         "http_preview_smoke",
         "bilateral_character_render_contract",
+        "serialized_rendered_pose_quality",
         "synthetic_motion_benchmarks",
         "rasterizer_consistency_diagnostic",
         "python_schema_tests",
@@ -45,6 +46,7 @@ report = {
     ],
     "limitations": [
         "This report certifies automated engineering gates only, not artistic approval.",
+        "Serialized hand-transform checks validate render-state consistency, not aesthetic quality or human-motion naturalness.",
         "The render is a procedural 2D prototype; human review of silhouette and anatomy remains required.",
         "No dataset learning or training capability is claimed."
     ]

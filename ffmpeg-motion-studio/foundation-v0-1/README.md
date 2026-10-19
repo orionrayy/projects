@@ -1,4 +1,4 @@
-# Motion Studio Foundation v0.4.0
+# Motion Studio Foundation v0.5.0
 
 ## Scope of this increment
 This is the first bilateral-character and evidence-ledger integration step. It does **not** claim that the renderer is production-grade or that motion data has been learned. The existing production renderer and `main` remain untouched; changes are isolated to `feature/motion-studio-foundation-v0-1`.
@@ -20,11 +20,15 @@ npm run validate:evidence
 npm test
 python -m unittest discover -s tests -p '*test.py' -v
 npm run benchmark:motion
+npm run validate:rendered-pose
 npm run measure:raster-parity
 npm run render
 ```
 
 CI must confirm required render groups and both arm chains on every frame, not merely check that SVG strings compile. Benchmark and raster reports are attached to the exact tested source revision.
+
+## Rendered-pose gate in v0.5.0
+The prior hand-aim metric compared `handAngle` to the same wrist-to-target angle used to construct it, so it could not detect a renderer transform defect. v0.5.0 evaluates the serialized `pointing-hand` transform across every declared frame and checks origin, rendered tip, scale, and angle. A mutation test changes the SVG rotation and must fail. This is a geometry/render contract only, not a human-motion or aesthetic score.
 
 ## Evidence policy
 - Dataset research is not dataset ingestion.
