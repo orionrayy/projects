@@ -164,3 +164,14 @@ The final-holdout-only OOD score is now kept out of earlier partitions, and the 
 - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282993148
 - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282993160
 No latest-head CI result is confirmed.
+
+
+## Probability method v4 — embargoed source-time block governor (2026-10-19)
+
+- Governor and paired holdout Brier uncertainty now use absolute source decision-index blocks, not filtered event-row positions. Each 12-source-bar scoring window is followed by a 12-source-bar embargo, separating the maximum 12-bar target horizons between scored blocks.
+- Blend eligibility requires both conservative paired Brier and log-loss lower screens above zero, plus positive gains in at least 70% of at least eight non-empty embargo-separated blocks for both scores. No adequate evidence means exact baseline probability.
+- Artifact hash includes the block span, embargo, blend grid, confidence multiplier, stability threshold and OOD policy. The holdout bootstrap resamples equal-weight embargo-separated block gains. This is a dependence-aware heuristic, not proof of edge.
+- Current head `517d4a27409fb5901317a8caada138ca765d40e1`; full CI #291 and isolated tests #7 are queued at:
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553856
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553998
+- Latest v4 tests and real-data metrics are not yet confirmed.
