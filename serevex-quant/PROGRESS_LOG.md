@@ -257,3 +257,13 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Reduced repeated optimizer work by reusing the default-L2 development scout and cutting deterministic epoch count.
 - New Serevex PR head `6e14a77b84725df1316618e12f671954a75e0c6c`; Actions run #281 is queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39279561218 behind the earlier run's concurrency slot. No hosted pass or alpha performance metric for this revision is yet confirmed.
 - Keep all deployment gates locked: NO_TRADE, model/deployment not validated, live signals/orders disabled, and no claim of profitability.
+
+
+## 2026-10-19 — Probability-governor integration and CI hardening
+
+- Added a conservative calibration-block baseline-shrinkage governor, separate from Platt fitting. The later part of calibration selects among preregistered alpha weights only when paired Brier gain survives a conservative chronological block-error screen. Otherwise alpha weight is exactly zero and holdout forecast falls back to the causal baseline.
+- Added paired moving-block bootstrap intervals and reliability/ECE diagnostics to final holdout reporting. These are descriptive; they do not establish economic value, independent replication or formal model-selection error control.
+- Optimized alpha fitting by sharing the default-L2 scout fit and reducing optimizer epochs; this shortens the heavy historical fit. Kept all label-maturity and final-holdout-freeze constraints.
+- Fixed the full CI workflow's alpha version assertion and prevented raw/calibrated prediction dictionaries from being copied into ledger metadata. Added a regression test for compact metadata.
+- Added isolated workflow for compile plus alpha/producer/stage-1–3 unit tests. Current head `cc24d69a1b75b2c5a63cecae438607c827727971`; isolated unit workflow #283 and full workflow #284 are queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280162321 and https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280162273. The prior full run remains inside the real-data alpha integration step, so neither new workflow has yet completed.
+- Preserve NO_TRADE; the new probabilistic method remains unverified against real final holdout.
