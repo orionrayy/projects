@@ -247,3 +247,13 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Added `test_serevex_alpha_model_v1.py` for deterministic artifacts, strict training/calibration cutoffs and holdout-label mutation invariance; expanded producer tests and CI reporting gates; added alpha-specific methodology and producer v2 docs.
 - First hosted attempt on head `0adb525d4d92793f2c452c3ddf300ef6747a3415` failed because event dictionaries did not carry the precomputed `partition` field used by the trainer. The isolated alpha tests passed; producer tests exposed the missing integration field. Fixed by assigning the chronological partition to each raw event before training.
 - Rerun #279 at head `fcd419fd36cdca935c4f472201754ac8cdad7eb8` is in progress: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39277093093. No alpha-integrated hosted pass or new alpha performance result is confirmed yet.
+
+
+## 2026-10-19 — Probabilistic method hardened with conservative baseline governor
+
+- Alpha pipeline now splits the chronological calibration window again: early calibration observations fit Platt scaling; the later disjoint slice selects a fixed alpha/baseline convex weight using paired Brier improvement over the row-specific causal baseline.
+- Blend weights are preregistered; nonzero weights must pass a conservative chronological block-mean standard-error screen across candidates. If support is short or gains remain inconclusive, weight becomes exactly zero and the final-holdout alpha expert emits the causal baseline probability. This is a cautious selection heuristic, not a formal finite-sample guarantee.
+- Added separate raw/calibrated/governed holdout Brier scores, log loss, reliability-bin/ECE diagnostics, deterministic paired moving-block Brier-improvement intervals, and tests for both baseline fallback and strong synthetic alpha benefit.
+- Reduced repeated optimizer work by reusing the default-L2 development scout and cutting deterministic epoch count.
+- New Serevex PR head `6e14a77b84725df1316618e12f671954a75e0c6c`; Actions run #281 is queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39279561218 behind the earlier run's concurrency slot. No hosted pass or alpha performance metric for this revision is yet confirmed.
+- Keep all deployment gates locked: NO_TRADE, model/deployment not validated, live signals/orders disabled, and no claim of profitability.
