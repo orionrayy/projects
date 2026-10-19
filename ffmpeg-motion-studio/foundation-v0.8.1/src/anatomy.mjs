@@ -131,12 +131,12 @@ function drawLeg(leg, foot, c, scale, near = true) {
     ' Z" fill="' + shoe + '" stroke="#202934" stroke-width="1.5"/><path d="M ' + fmt(sx - 7 * scale) +
     " " + fmt(sy + 2.5 * scale) + " Q " + fmt(sx + 2 * scale) + " " + fmt(sy + 4.5 * scale) +
     " " + fmt(sx + 15 * scale) + " " + fmt(sy + 2 * scale) + '" fill="none" stroke="#C5C9C8" stroke-width="1.6" stroke-linecap="round"/></g>';
-  return thigh + shin + circle(leg.knee, 7.2 * scale, pants, "#273343", 1.2) + shoeSvg;
+  return thigh + shin + circle(leg.knee, 7.2 * scale, pants, pants, 0.6) + shoeSvg;
 }
 function drawArm(arm, c, near = true) {
   const skin = safeColor(c.skin, "#DDA985"), shirt = safeColor(c.shirt, "#3B7892");
   const upper = limb(arm.shoulder, arm.elbow, near ? 9.9 : 9.2, 7.3, shirt, "#253D4A", near ? "#7FA9B5" : "#5E8797");
-  const elbow = circle(arm.elbow, 6, skin, "#704F41", 1.1);
+  const elbow = circle(arm.elbow, 5.8, skin, skin, 0.7);
   const fore = limb(arm.elbow, arm.wrist, 6.1, 4.9, skin, "#765645", "#F0C6A4");
   return upper + elbow + fore;
 }
@@ -218,7 +218,7 @@ export function renderAnatomySvg(scene, pose, armMode = scene.motion.arm_mode ||
   const farLeg = drawLeg(pose.rightLeg, pose.rightFoot, c, geo.scale, false);
   const nearLeg = drawLeg(pose.leftLeg, pose.leftFoot, c, geo.scale, true);
   const farArm = drawArm(pose.farArm, c, false);
-  const neckEnd = mix(pose.neck, pose.chest, 0.65);
+  const neckEnd = mix(pose.neck, pose.chest, 0.86);
   const neck = limb(pose.neck, neckEnd, 7.2, 8.1, safeColor(c.skin, "#DDA985"), "#815B49", "#F0C7A5");
   const shadow = '<ellipse cx="' + fmt((pose.leftFoot.x + pose.rightFoot.x) / 2) +
     '" cy="' + fmt(horizon + 2) + '" rx="44" ry="6.5" fill="#47504A" opacity="0.12"/>';
