@@ -151,3 +151,8 @@ The older hosted run #280 has passed the initial real OHLCV â†’ alpha producer â
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282535801
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282535854
 - No validation claim yet for v3. Keep NO_TRADE, live signal/order flags false, and require independent OOS replication.
+
+
+## v3 temporal-scope hardening checkpoint
+
+OOD diagnostics are now computed only on the final holdout using the frozen final training scaler. Earlier partitions are explicitly marked not applicable rather than receiving a distribution score from a model trained on later data. The frozen model hash also includes the governor/OOD policy constants. Current head `97dc2479b9012c30051fbaa9a33aa678fbd63ae6`; full benchmark #288 and isolated method tests #4 are queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282806410 and https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282806525. No latest-head test results yet.
