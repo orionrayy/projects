@@ -35,6 +35,18 @@ jobs:
         run: |
           node --check sugarnymous-cloudflare/runtime-snapshot/worker.mjs
           node --check sugarnymous-cloudflare/runtime-snapshot/telegramBundle.mjs
+      - name: Validate independent static site staging
+        run: |
+          node --check sugarnymous-cloudflare/static-site/worker.mjs
+          node <<'NODE'
+          const fs = require("node:fs");
+          const site = fs.readFileSync("sugarnymous-cloudflare/static-site/worker.mjs", "utf8");
+          const required = ["/privacy", "/community-principles", "t.me/sugarnymousbot", "Adults 18+", "consent", "originProxy:false"];
+          for (const token of required) if (!site.includes(token)) throw new Error("Static site contract missing: " + token);
+          if (/floot\\.app/i.test(site)) throw new Error("Static site must not depend on the Floot origin");
+          if (!site.includes('Content-Security-Policy') || !site.includes('X-Content-Type-Options')) throw new Error("Required security headers missing");
+          console.log("Independent static site contract passed.");
+          NODE
       - name: Verify migration gate, binding, route safety, and credential hygiene
         run: |
           node <<'NODE'
