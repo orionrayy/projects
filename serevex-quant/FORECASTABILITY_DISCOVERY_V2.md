@@ -56,3 +56,9 @@ The verified hosted run #254 reported M1 aggregate Brier 0.1747186248 versus mat
 ## Persistent safety boundary
 
 NO_TRADE; validated model false; deployment calibration false; live signals disabled; live order execution disabled. No merge or trading promotion based solely on this candidate's own selection dataset.
+
+## Empirical backdrop — larger models do not remove the baseline problem
+
+A June 2026 preprint, [Pretrained Time-Series Foundation Models for Financial Return Forecasting](https://arxiv.org/abs/2606.27100), compares several pretrained time-series foundation models and from-scratch neural baselines on five liquid U.S. equities, using rolling-origin evaluation and random-walk references. The study reports that pretrained models dominate the model-ranking distribution (8 of 10 task-level wins), but statistically significant one-sided Diebold–Mariano evidence of improvement over the random-walk benchmark appears in only two model/asset cases. The locally trained iTransformer also wins both META tasks. This is a preprint and its experiment is daily equity returns, not XAUUSD M1; it is contextual evidence, not a direct benchmark for Serevex.
+
+Implication for the candidate: compare against the right *causal, target-matched* baseline and report uncertainty for the exact task. Do not substitute model ranking, low error against a weak fixed reference, parameter count, or scale of upstream datasets for evidence of predictive skill.
