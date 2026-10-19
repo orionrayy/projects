@@ -274,3 +274,11 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - The stage-3 mixer had rescanned all prior predictions on every decision, giving quadratic history-scan complexity. Replaced this with a sorted index of label-maturity buckets; maturity ties retain deterministic batching and are applied only when `label_available_index < current_decision_index`.
 - Added explicit fail-closed validation for maturity indices, boolean maturity flags and binary labels, and a regression test with tied label maturities to verify exact strict-cutoff behaviour.
 - New head `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`; hosted full run and isolated unit suite are queued behind the earlier long-running real-data integration job. Performance and probability governor changes are not yet confirmed by CI.
+
+
+## 2026-10-19 — Latest CI checkpoint after probability / mixer hardening
+
+- Current head: `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`.
+- Full run #286 queued: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523541
+- Isolated probability tests run 2 queued: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523446
+- Previous full run #280 remains active at the real-data alpha integration step far longer than the prior baseline-only run. Latest head includes baseline-governed alpha, optimized training fits, compact metadata, and the linear-time maturity queue. No latest-head hosted validation or alpha holdout metric is confirmed yet.
