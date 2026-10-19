@@ -104,3 +104,12 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 - Initial hosted attempt #279 found a producer/trainer integration defect: raw events lacked the partition key. The partition was added to raw events; rerun [#39277093093](https://github.com/orionrayy/ai-determinism-engine/actions/runs/39277093093) is in progress. Do not treat the alpha-integrated head as hosted-pass until the entire workflow and artifact upload complete.
 - The previous full green run #271 predates alpha training. On that older producer/mixer, final holdout Brier was 0.230085 vs causal baseline 0.230054 (baseline-minus-mixer skill -0.0000309), so the prior mixer did not beat the baseline. That is not a result for the new alpha model.
 - Safety and evidence boundary unchanged: research only, `NO_TRADE`, model/deployment validation false, live signals/orders disabled, and no skill/profitability claim before independent replication.
+
+
+## Probability-method upgrade — baseline-governed alpha (2026-10-19)
+
+- PR #168 head `6e14a77b84725df1316618e12f671954a75e0c6c` now uses two disjoint chronological calibration sub-blocks: one fits Platt scaling; the later block selects a preregistered convex mix of alpha and the decision-time causal baseline.
+- Candidate alpha weights are `0, 0.1, 0.25, 0.5, 0.75, 1`. Nonzero weights must pass a conservative paired block-error screen; if support is insufficient or improvement is inconclusive, the alpha expert falls back to the exact causal baseline on final holdout. This is a guardrail heuristic, not a proof of skill.
+- Added paired moving-block Brier-improvement intervals and reliability/ECE diagnostics, plus tests for baseline fallback, stable synthetic alpha benefit, insufficient block support and holdout mutation invariance.
+- Hosted workflow #281 is queued pending the prior long-running run's shared concurrency slot: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39279561218. This new probability revision is not yet verified by hosted CI. Do not claim a new alpha score until the real-data step and final artifact complete.
+- Always preserve `NO_TRADE`; no live signal/order authority; no profitability claim before independent out-of-sample and economic validation.
