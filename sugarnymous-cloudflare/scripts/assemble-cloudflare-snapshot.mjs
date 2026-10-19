@@ -14,7 +14,7 @@ const expected = {
 };
 
 const names = fs.readdirSync(partsDir)
-  .filter((name) => /^telegramBundle\\.part-\\d{3}\\.txt$/.test(name))
+  .filter((name) => /^telegramBundle\.part-\d{3}\.txt$/.test(name))
   .sort();
 
 if (names.length !== 32) {
