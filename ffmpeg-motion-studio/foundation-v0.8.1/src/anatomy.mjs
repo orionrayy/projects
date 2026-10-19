@@ -62,7 +62,8 @@ export function buildAnatomicalGeometry(scene, pose) {
   const axis = unit(sub(pelvis, chest)), n = normal(axis), h = length(sub(pelvis, chest));
   const scale = clamp(((c.upper_leg_px || 79) + (c.lower_leg_px || 81)) / 160, 0.75, 1.3);
   const stations = [
-    { t: 0.02, w: (c.shoulder_half_width_px || 25) * 0.77 * scale },
+    { t: -0.22, w: (c.shoulder_half_width_px || 25) * 0.55 * scale },
+    { t: 0.02, w: (c.shoulder_half_width_px || 25) * 0.82 * scale },
     { t: 0.18, w: (c.shoulder_half_width_px || 25) * scale },
     { t: 0.38, w: 22 * scale },
     { t: 0.62, w: (c.waist_half_width_px || 16) * scale },
@@ -145,14 +146,15 @@ function drawTorso(scene, pose, geo) {
   const pants = safeColor(c.pants, "#34445A"), axis = geo.axis, n = geo.n, chest = pose.chest, pelvis = pose.pelvis, h = geo.height;
   const seamA = add(add(chest, mul(axis, h * 0.2)), mul(n, -8)), seamB = add(add(chest, mul(axis, h * 0.73)), mul(n, -11));
   const beltY = add(chest, mul(axis, h * 0.81));
-  const collarA = add(chest, mul(axis, 7)), collarB = add(chest, mul(axis, 22));
+  const collarA = add(add(chest, mul(axis, -14)), mul(n, -11));
+  const collarCenter = add(chest, mul(axis, 8));
+  const collarB = add(add(chest, mul(axis, -14)), mul(n, 11));
   const hipA = add(pelvis, mul(n, -9)), hipB = add(pelvis, mul(n, 8));
   return '<path d="' + geo.path + '" fill="' + shirt + '" stroke="#253C49" stroke-width="2" stroke-linejoin="round"/>' +
     line(seamA, seamB, shadow, 3.2, 'opacity="0.62"') +
     line(add(beltY, mul(n, -15)), add(beltY, mul(n, 15)), "#27313C", 4.5) +
     line(add(beltY, mul(n, -13)), add(beltY, mul(n, 13)), "#A5ABB0", 1.2) +
-    '<path d="M ' + pt(collarA) + " Q " + pt(add(chest, mul(axis, 16))) + " " + pt(collarB) +
-    '" fill="none" stroke="#D2E5E7" stroke-width="2.1" stroke-linecap="round"/>' +
+    line(collarA, collarCenter, "#D2E5E7", 2.1) + line(collarCenter, collarB, "#D2E5E7", 2.1) +
     line(hipA, hipB, pants, 2.4);
 }
 function drawHead(scene, pose) {
@@ -218,7 +220,7 @@ export function renderAnatomySvg(scene, pose, armMode = scene.motion.arm_mode ||
   const farLeg = drawLeg(pose.rightLeg, pose.rightFoot, c, geo.scale, false);
   const nearLeg = drawLeg(pose.leftLeg, pose.leftFoot, c, geo.scale, true);
   const farArm = drawArm(pose.farArm, c, false);
-  const neckEnd = mix(pose.neck, pose.chest, 0.86);
+  const neckEnd = mix(pose.neck, pose.chest, 0.58);
   const neck = limb(pose.neck, neckEnd, 7.2, 8.1, safeColor(c.skin, "#DDA985"), "#815B49", "#F0C7A5");
   const shadow = '<ellipse cx="' + fmt((pose.leftFoot.x + pose.rightFoot.x) / 2) +
     '" cy="' + fmt(horizon + 2) + '" rx="44" ry="6.5" fill="#47504A" opacity="0.12"/>';
