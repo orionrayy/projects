@@ -175,3 +175,15 @@ No latest-head CI result is confirmed.
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553856
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553998
 - Latest v4 tests and real-data metrics are not yet confirmed.
+
+
+## Latest Serevex probability status — v4 (2026-10-19)
+
+- Active research PR #168 head: `517d4a27409fb5901317a8caada138ca765d40e1`.
+- Model version: `serevex-alpha-logistic-v4-embargoed-dual-score-ood`. Blend selection requires Brier and log-loss gains with >=70% positive source-time block share for each metric; blocks use 12 scored source bars followed by a 12-bar embargo to reduce leakage from overlapping 12-bar targets. Final-holdout OOD fallback uses only training scaler statistics.
+- Earlier hosted validation on head `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`: isolated unit tests passed; real OHLCV stage 1–3 and replay steps for 700k+ candles / 20k real timestamp scenarios, quote-side and third-source tick gates passed. External-context benchmark step was cancelled, so this was not a complete successful workflow.
+- That earlier real-data alpha run chose alpha weight 0 (`BASELINE_ONLY_NO_CONFIRMED_CALIBRATION_GAIN`) and alpha Brier equalled the row-wise causal baseline at 0.2300542196. The baseline governed alpha did not claim incremental skill. Mixer Brier 0.2300486002 vs baseline 0.2300542196 is a difference of about 0.00000562, inconclusive without the later gates and independent replication.
+- Current v4 isolated tests #7 and full run #291 are queued; no v4 hosted pass or holdout metric is confirmed:
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553998
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553856
+- Keep `NO_TRADE`, live signals/orders disabled, and all model/deployment validation flags false.
