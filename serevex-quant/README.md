@@ -69,3 +69,16 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 - Source code and 13 synthetic contract tests are in draft [PR #168](https://github.com/orionrayy/ai-determinism-engine/pull/168).
 - v3 combines model probabilities and an explicit causal baseline, updates global/regime fixed-share weights only after labels mature, and falls back to baseline if support is insufficient. It does not claim a regret theorem, novel-world mathematics, or market alpha.
 - Local tests and py_compile passed. A fresh hosted run is required after v3 code changes. The previously tested probability method remains worse than the matured-label baseline; NO_TRADE stays enforced.
+
+
+## Research increment — integrated Serevex stages 1–3 (2026-10-19)
+
+- Source PR: [#168 — integrated ledger, predictability atlas and delayed mixer](https://github.com/orionrayy/ai-determinism-engine/pull/168).
+- Added the integrated standard-library module, contract tests, and execution specification on branch `research/serevex-forecastability-discovery-v1`:
+  - [Module](https://github.com/orionrayy/ai-determinism-engine/blob/research/serevex-forecastability-discovery-v1/projects/aurum-intelligence/online-benchmark/serevex_stage123_integrated_v1.py)
+  - [Tests](https://github.com/orionrayy/ai-determinism-engine/blob/research/serevex-forecastability-discovery-v1/projects/aurum-intelligence/online-benchmark/test_serevex_stage123_integrated_v1.py)
+  - [Contract](https://github.com/orionrayy/ai-determinism-engine/blob/research/serevex-forecastability-discovery-v1/projects/aurum-intelligence/SEREVEX_STAGE123_INTEGRATED_V1.md)
+- Stage 1 checks canonical ledger hashes, point-in-time feature facts, explicit data verification states, timestamp/index agreement and registered metadata. Stage 2 uses a preregistered state-category registry, paired Brier/log-loss diagnostics, block uncertainty and complementarity audits. Stage 3 combines experts with a causal baseline using maturity-gated Fixed-Share updates and a strict exclusive `as_of` cutoff. A CLI accepts an existing JSON forecast ledger.
+- Latest hardened branch head: `8660f39223113cbc864bcdb79e7a5f192d35004c`. Workflow [#267](https://github.com/orionrayy/ai-determinism-engine/actions/runs/39270364938) currently has steps 1–6 passing, including the unit-test suite; data-acquisition step 7 remains in progress at checkpoint creation. Full hosted validation is not yet confirmed.
+- The integrated module currently consumes pre-generated expert forecasts. It does not train price forecasters, and a qualified real-feed forecast-ledger producer remains outstanding. Existing real-data evidence for the previously tested probability method is negative vs. baseline; this increment has not been shown to improve market skill.
+- Safety state: research only; `NO_TRADE`; model/deployment validation false; live signals and order routing remain disabled.
