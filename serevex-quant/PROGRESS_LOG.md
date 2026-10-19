@@ -298,3 +298,13 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Added synthetic tests for dual-score rejection, OOD baseline fallback, deterministic artifact hashes, strict maturity cutoffs, and holdout mutation invariance.
 - New PR #168 head `8db76e0241f23f657cf600c4b17750769806a404`. Full CI #287 and isolated probability tests #3 are queued at https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282535801 and https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282535854; latest-head tests and real-data metrics are not yet confirmed.
 - Continue NO_TRADE. No predictive edge, profitability, or deployment readiness is asserted.
+
+
+## 2026-10-19 — v3 point-in-time OOD diagnostics hardened
+
+- OOD diagnostic is calculated only for final-holdout decisions using the frozen final training scaler. Earlier partitions now emit null/not-applicable OOD score and policy status, avoiding a future-trained scaler appearing as a per-row development/selection fact.
+- Model artifact SHA now binds governor/OOD policy constants plus label identity hashes and selected alpha weight.
+- Current head `97dc2479b9012c30051fbaa9a33aa678fbd63ae6`; full benchmark #288 and isolated probability tests #4 are queued:
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282806410
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282806525
+- Hosted validation of the newest head and any real-data alpha gain remain unconfirmed. Maintain NO_TRADE.
