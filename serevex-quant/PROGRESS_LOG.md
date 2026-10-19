@@ -228,3 +228,13 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Synthetic contract tests in run #268 passed at the main unit-test step (workflow step 6). At checkpoint time the workflow was running the next data-acquisition step; no final run success or upload had yet been confirmed.
 - Branch head: `8660f39223113cbc864bcdb79e7a5f192d35004c`; hosted run: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39270426351
 - Evidence boundary unchanged: this module does not train upstream forecast experts; no qualified real-data ledger producer is wired in; no positive skill, global originality, net profitability, or deployment readiness is established. Maintain `NO_TRADE`.
+
+
+## 2026-10-19 — Causal forecast-ledger producer integration
+
+- Added producer module, 8 contract tests, and contract specification under PR #168. The producer consumes the existing parsed OHLCV and TP-before-SL label protocol; it does not fetch a new provider, bypass licensing gates, or enable execution.
+- A fixed rule plus direction is the cohort key. Forecast estimators are prequential and use only labels with exit indices strictly before each decision: causal expanding baseline, constant-50% forecast, rolling matured-label rate, regime-conditioned matured rate, and volatility-conditioned matured rate.
+- Historical source timestamp semantics, data rights, feature availability and broker quote basis remain unverified. Naive timestamps are rejected unless an explicit diagnostic-only UTC assumption is supplied. These flags remain false in the output ledger.
+- End-to-end entrypoint writes a forecast ledger and integrated stages 1–3 report. Unit tests mutate future source bars to assert earlier predictions are unchanged; they also test missing and ambiguous-label handling, chronology, split order, finite probabilities, hashes and the NO_TRADE boundary.
+- Latest workflow: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39272747504 (run #269), pending at checkpoint creation. Hosted producer validation is not yet claimed.
+- PR head: ef82140af32add303d7fa814f460813396fbd75e. No market skill, originality, profitability or deployment readiness is asserted.
