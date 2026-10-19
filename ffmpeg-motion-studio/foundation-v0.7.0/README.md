@@ -8,11 +8,16 @@ This review branch isolates deterministic procedural biped locomotion with baske
 - Pelvis bob, torso sway, partial head compensation and constrained basket contacts.
 - Scene configuration and smoke tests over all 192 frames.
 
-## Run
-Use Node.js 20 or newer:
-- npm test
+## Hosted review-branch CI
+GitHub Actions smoke workflow completed successfully: 6/6 Node tests passed on the review branch.
+Run: https://github.com/orionrayy/projects/actions/runs/39303476254
 
-The complete locally verified source package includes the FFmpeg SVG renderer, 192 frame outputs, MP4, contact sheet, execution report and validation logs. The branch itself is a review slice of that package; hosted CI is not claimed until a workflow is run against the committed source.
+This CI tests the review slice's solver, scene configuration and geometry constraints. It does not run the complete local FFmpeg source archive or validate artistic naturalness.
+
+## Complete local evidence package
+The full locally verified source package includes the FFmpeg SVG renderer, 192 frame outputs, MP4, contact sheet, execution report and validation logs. The downloadable source bundle is the complete reproduction package; this branch is a review slice and does not contain the separate renderer.
+
+Local clean-extraction checks: JavaScript 52/52, Python 13/13, synthetic motion benchmark 7/7, rendered-pose gate 96/96, and a fresh 192-frame FFmpeg render passed.
 
 ## Known quality limits
 The current profile carries a basket, so both hands remain attached to the handles and do not exhibit a natural free-arm swing. The character is schematic, leg silhouettes sometimes cross, full-speed human review remains open, and browser-vs-FFmpeg raster parity is unverified.
