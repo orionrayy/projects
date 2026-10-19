@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: motion-studio-v0.8.2-natural-motion (CI validation pending as of this checkpoint).
+Current engineering candidate: motion-studio-v0.8.2-natural-motion (hosted CI and render artifact verified; human visual acceptance remains pending).
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -66,7 +66,7 @@ Current status: FMA v0.2 is a research proposal/prototype with hand-designed sig
 
 ## Next stages
 - Stage 5 / v0.8.1: rendered carry/free-arm previews, contact sheets and JSON geometry reports; hosted render CI passed and both contact sheets were inspected. Human acceptance remains pending. The review found an overly acute free-arm pose, weak torso/head readability and narrow projected foot separation.
-- Stage 6 / v0.8.2: tune torso/head coupling, free-arm trajectory, basket response, projected leg separation and rendered silhouette; introduce quantitative regression gates. The branch exists and hosted CI is the next gate; do not mark the stage complete until the run and new artifacts are verified.
+- Stage 6 / v0.8.2: tuned torso/head coupling, free-arm trajectory, basket response, projected leg separation and silhouette; added quantitative regression gates. Hosted CI passed on commit `e36fd96e8a30c1699216a02e585d57b0332afd5b`, and the 8-second carry/free artifacts were verified as H.264 1280x720/24fps/192 frames with geometry reports. Contact sheets show clearer leg separation and more readable torso/head response, but the animation remains schematic; naturalness, full-speed acceptance, browser/FFmpeg parity and 240-second film integration remain unaccepted.
 - Stage 7: compare v0.8.2 MP4/contact sheets against v0.8.1 at full speed, then fix any remaining foot crossings/sliding, weight transfer, body synchronization and hand/prop contact with regression tests.
 - Stage 8: editable skeleton hierarchy, joint constraints, pivots, mirroring and IK/FK authoring.
 - Stage 9: weight painting/deformation, complete walk/run profiles, transitions, overlapping and secondary action.
