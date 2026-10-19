@@ -140,3 +140,14 @@ Current PR head is `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d`. Full run #286 is 
 The older hosted run #280 has passed the initial real OHLCV → alpha producer → integrated stages 1–3 contract step; its following large replay is still running and final workflow success is not confirmed. This is the earlier alpha integration, not the new baseline-governor v2. Current head `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d` is queued in full run #286 and isolated probability-test run 2:
 - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523541
 - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39280523446
+
+
+## Probability method v3 — dual-score and OOD governor (2026-10-19)
+
+- Alpha/baseline blend weights must pass both paired Brier and log-loss improvement screens and show positive improvement in at least 70% of chronological non-overlapping calibration blocks for each metric. A metric conflict, weak block stability, or insufficient support keeps exact baseline probability.
+- A holdout feature-distribution gate uses only training scaler parameters: if at least 25% of the eight features are missing/invalid or exceed four training standard deviations, the row forecast falls back to the rowwise causal baseline. This is a guardrail, not a proof of shift resilience.
+- Added synthetic tests for overconfident alpha that harms log loss despite positive Brier gain and for OOD-triggered baseline fallback.
+- Current PR #168 head: `8db76e0241f23f657cf600c4b17750769806a404`. Full workflow #287 and isolated probability tests #3 are queued:
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282535801
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39282535854
+- No validation claim yet for v3. Keep NO_TRADE, live signal/order flags false, and require independent OOS replication.
