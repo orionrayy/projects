@@ -49,7 +49,7 @@
     "forearm_px": 53,
     "head_radius_px": 24,
     "shoulder_half_width_px": 23,
-    "hip_half_width_px": 11,
+    "pelvis_half_width_px": 18,
     "thigh_width_px": 27,
     "knee_width_px": 19,
     "ankle_width_px": 12,
