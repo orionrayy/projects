@@ -113,3 +113,11 @@ The current release remains a research prototype with `NO_TRADE`; no validated l
 - Added paired moving-block Brier-improvement intervals and reliability/ECE diagnostics, plus tests for baseline fallback, stable synthetic alpha benefit, insufficient block support and holdout mutation invariance.
 - Hosted workflow #281 is queued pending the prior long-running run's shared concurrency slot: https://github.com/orionrayy/ai-determinism-engine/actions/runs/39279561218. This new probability revision is not yet verified by hosted CI. Do not claim a new alpha score until the real-data step and final artifact complete.
 - Always preserve `NO_TRADE`; no live signal/order authority; no profitability claim before independent out-of-sample and economic validation.
+
+
+## CI / artifact hardening for probability governor (2026-10-19)
+
+- Removed large `raw_predictions_by_decision_index`, `calibrated_alpha_predictions_by_decision_index` and per-row stage maps from the compact alpha-model summary nested inside ledger metadata; per-row expert forecasts remain in the actual ledger. Regression test now enforces this to avoid duplicating a large forecast map and bloating the canonical hash.
+- Fixed the full CI workflow's model-version assertion for `serevex-alpha-logistic-v2-baseline-governed`.
+- Added an isolated test workflow to run `py_compile` and alpha/producer/ledger/atlas/mixer unit contracts separately from the slower real-data replay.
+- Current head: `cc24d69a1b75b2c5a63cecae438607c827727971`. Isolated tests #283 and full benchmark #284 are queued while the previous real-data alpha integration run is still active. No new governor test pass or holdout metric is confirmed yet.
