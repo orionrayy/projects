@@ -326,3 +326,15 @@ The +00:00 offset is the representation seen in the file, not independent proof 
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553856
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553998
 - No latest-head test pass or validated positive alpha is confirmed. Maintain NO_TRADE.
+
+
+## 2026-10-19 — Latest checkpoint: probability model v4
+
+- PR #168 current head: `517d4a27409fb5901317a8caada138ca765d40e1`; alpha protocol: `serevex-alpha-logistic-v4-embargoed-dual-score-ood`.
+- Governor uses source-time blocks: 12 scored decision bars followed by 12 embargo bars to avoid treating adjacent, overlapping 12-bar targets as independent. Nonzero alpha blend weights need conservative Brier and log-loss improvement screens plus positive gain in at least 70% of qualifying blocks for both scores. OOD features trigger exact row-wise causal-baseline fallback.
+- Earlier head `0734cffe5b5a23826d0b4b77583c2a8dc42cb00d) passed isolated tests, the real OHLCV → stages 1–3 step, 700k+/20k replay gates, quote-side and tick-data contracts. The external-context benchmark was cancelled, so full CI was not green.
+- On that earlier head the governor chose baseline-only (alpha blend weight 0) and alpha Brier equalled its causal baseline at 0.2300542196. This is an inconclusive/negative-alpha selection result, not a success claim. Stage-3 mixer Brier was 0.2300486002, only about 5.62e-6 below its paired baseline and without completed external-context gates/independent replication.
+- Current v4 isolated test run #7 and full benchmark #291 are queued:
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553998
+  - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553856
+- No v4 hosted verification yet. Maintain `NO_TRADE` and disabled deployment flags.
