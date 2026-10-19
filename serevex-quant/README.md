@@ -53,3 +53,11 @@ The current PR code commit `6017eec3141fb803907583abeca006a230e90be4` passed hos
 Calibration artifact: #12044756186, 14,966 bytes, SHA-256 `a2561de0161e79dbaac794988b5545cd8f32fe2cf55d38c875e8aed91e99d9b3`, expires 2026-10-30. It contains 35,954-row dataset diagnostics, 35,893 all-history opportunities per rule, 1,200/1,200 market-path contracts, 240/240 software checks, and the separate 240/240 temporal-calibration contract report. Synthetic calibration cases are not market-performance evidence.
 
 The current release remains a research prototype with `NO_TRADE`; no validated live model or trading activation is claimed.
+
+
+## Research upgrade — forecastability discovery v2 (2026-10-19)
+
+- Design, research sources, equations, limitations and acceptance gates: [FORECASTABILITY_DISCOVERY_V2.md](FORECASTABILITY_DISCOVERY_V2.md).
+- Implementation remains in isolated draft [PR #168](https://github.com/orionrayy/ai-determinism-engine/pull/168). v2 adds multi-window, regime-conditional paired skill checks and approximate max-|t| block-bootstrap bounds. These are research diagnostics, not a validated predictor.
+- Prior-art review confirms the broad ideas are established; mathematical originality is unproven. v2 must pass hosted CI, then a frozen selection must be evaluated on a later untouched OOS cohort. Benchmark evidence still does not show aggregate predictive superiority.
+- Safety state unchanged: NO_TRADE; model/deployment unvalidated; live signals and orders disabled.
