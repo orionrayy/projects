@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "scene_id": "locomotion-lab-001",
+  "scene_version": "0.7.0",
+  "title": "Coordinated whole-body locomotion with basket carry",
+  "fps": 24,
+  "duration_frames": 192,
+  "canvas": {"width": 1280, "height": 720},
+  "background": {"color": "#F4F2E8", "floor": "#E8E3D4", "horizon_y": 570},
+  "motion": {
+    "cycle_seconds": 1.02,
+    "stride_length_px": 94,
+    "stance_fraction": 0.62,
+    "swing_lift_px": 28,
+    "pelvis_bob_px": 2.8,
+    "torso_sway_radians": 0.035,
+    "basket_vertical_response_px": 1.25,
+    "start_x": 175,
+    "root_y": 418
+  },
+  "character": {
+    "upper_leg_px": 78,
+    "lower_leg_px": 82,
+    "upper_arm_px": 52,
+    "forearm_px": 49,
+    "head_radius_px": 27,
+    "skin": "#E6B08A",
+    "hair": "#253127",
+    "shirt": "#347B9E",
+    "shirt_shadow": "#285C78",
+    "pants": "#35465F",
+    "shoe": "#293243"
+  },
+  "prop": {"basket_width_px": 52, "basket_height_px": 39, "basket_color": "#E9923A", "handle_color": "#8A542C"},
+  "acceptance": {
+    "max_bone_length_error_px": 0.02,
+    "max_stance_foot_drift_px": 0.02,
+    "max_basket_contact_error_px": 0.02,
+    "max_ground_penetration_px": 0.02,
+    "max_arm_elbow_step_px": 8.0,
+    "max_knee_step_px": 18.0,
+    "min_head_counter_rotation_correlation": 0.25,
+    "min_left_right_gait_separation": 0.45
+  }
+}
