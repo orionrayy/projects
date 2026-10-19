@@ -38,10 +38,10 @@ test("anatomical torso geometry stays finite and has plausible stylized proporti
   const g = buildAnatomicalGeometry(scene, pose);
   assert.ok(g.path.startsWith("M "));
   assert.ok(Number.isFinite(g.height) && g.height > 0);
-  assert.ok(g.metrics.headWidthPx > 0);
-  assert.ok(g.metrics.shoulderWidthPx > g.metrics.headWidthPx * 0.75);
-  assert.ok(g.metrics.shoulderWidthPx < g.metrics.headWidthPx * 1.8);
-  assert.ok(g.metrics.torsoToHeadHeightRatio > 0.8 && g.metrics.torsoToHeadHeightRatio < 2.1);
+  assert.ok(g.headWidth > 0);
+  assert.ok(g.shoulderWidth > g.headWidth * 0.75);
+  assert.ok(g.shoulderWidth < g.headWidth * 1.8);
+  assert.ok(g.height / g.headHeight > 0.8 && g.height / g.headHeight < 2.1);
 });
 
 test("shoulders are distinct and arm IK preserves bone length across every carry frame", () => {
