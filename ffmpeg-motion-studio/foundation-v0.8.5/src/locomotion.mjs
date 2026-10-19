@@ -92,8 +92,7 @@ export function evaluateLocomotion(scene, frameIndex, armMode = scene.motion.arm
   };
   const depth = c.leg_depth_projection_px || 0;
   const leftFoot = makeFoot(p, 0, scene, rootX, depth), rightFoot = makeFoot(p, 0.5, scene, rootX, -depth);
-  const hipHalfWidth = c.hip_half_width_px ?? depth;
-  const leftHip = { x: pelvis.x + hipHalfWidth, y: pelvis.y + 2 }, rightHip = { x: pelvis.x - hipHalfWidth, y: pelvis.y + 2 };
+  const leftHip = { x: pelvis.x + depth, y: pelvis.y + 2 }, rightHip = { x: pelvis.x - depth, y: pelvis.y + 2 };
   const leftAnkle = { x: leftFoot.x, y: leftFoot.y - 3 }, rightAnkle = { x: rightFoot.x, y: rightFoot.y - 3 };
   const pole = (hip, ankle, extra) => ({
     x: (hip.x + ankle.x) / 2 + c.knee_forward_bias_px + extra,
