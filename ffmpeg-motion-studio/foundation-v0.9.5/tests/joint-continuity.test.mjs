@@ -59,7 +59,7 @@ test("elbow crease follows arm geometry instead of remaining horizontal on every
   for(const scene of scenes) {
     const frames=[renderSvgFrame({...scene,fps:24,duration_frames:72},0,"free","pick-up"),
       renderSvgFrame({...scene,fps:24,duration_frames:72},36,"free","pick-up")];
-    const foldPaths=frames.map(svg=>[...svg.matchAll(/<path\\b[^>]*data-joint-fold="forearm-normal"[^>]*>/g)].map(m=>m[0]));
+    const foldPaths=frames.map(svg=>[...svg.matchAll(/<path\b[^>]*data-joint-fold="forearm-normal"[^>]*>/g)].map(m=>m[0]));
     assert.equal(foldPaths[0].length,2);
     assert.equal(foldPaths[1].length,2);
     assert.notDeepEqual(foldPaths[0],foldPaths[1],
