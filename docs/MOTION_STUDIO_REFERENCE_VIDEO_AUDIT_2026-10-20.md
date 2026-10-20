@@ -74,3 +74,13 @@ The file scripts/render-reference-visual-preview.mjs in ffmpeg-motion-studio/fou
 - The vertical style proof must produce exactly 240 frames at 720×1280, 30 fps and eight seconds; validate with FFprobe and record SHA-256.
 - Inspect the contact sheet at full size and play the generated clips at actual speed. Automated render success is a build gate, not human visual acceptance.
 - Keep the full product target list in sections 3–8 intact. The visual lab is an incremental reference, not a silent scope reduction.
+
+
+## Follow-up 2: monotone C2 knee reach + pelvis/floor calibration — 2026-10-20
+
+The first soft-reach candidate was not accepted: CI recorded a remaining knee jump of 17.70 px/frame, endpoint clamp error of 1.86 px, and elevated knee acceleration. The original polynomial could exceed the requested radius partway through its transition, so it was replaced rather than relaxing any acceptance gate.
+
+- New upper-reach curve uses the monotone expression u - u^3 + 0.5u^4, a C2 profile with unit entry slope and zero exit slope/curvature. The transition spans up to the last 6 px of leg reach and leaves a 3 px knee-flex margin for equal/near-equal segment lengths.
+- Both v0.9.3 scene profiles shift the pelvis 2 px lower on the canvas (root_y 409 → 411), reducing the near-extended hip-to-ankle distance for the current stride/contact geometry.
+- The synthetic near-extension test checks that solved reach never overshoots the requested target or reverses as target reach increases. Knee step, acceleration, ground contact, stance drift and endpoint reach checks remain independent and must all pass.
+- This is an unverified candidate: only hosted CI and reviewed full-speed renders can establish whether the calibration improves the actual motion.

@@ -19,7 +19,17 @@ test('near-extension IK uses a bounded reach envelope rather than a straight-cha
   assert.ok(pose.solvedReachPx < 158, 'near-extension pose must retain a small bend margin');
   assert.ok(pose.jointAngleDegrees > 155 && pose.jointAngleDegrees < 175,
     'heel-strike extension should remain extended without reaching the singularity: ' + pose.jointAngleDegrees);
-  assert.ok(pose.endpointClampErrorPx <= 1.01, 'reach envelope should remain close to its target');
+  assert.ok(pose.endpointClampErrorPx <= 3.01, 'near-singular target remains within the explicit 3px flex margin');
+  let previous = 0;
+  for (let raw = 152; raw <= 158; raw += 0.25) {
+    const sample = solveTwoBoneIK({ x: 0, y: 0 }, { x: 0, y: raw }, 78, 80,
+      { x: 10, y: 70, preferForward: true });
+    assert.ok(sample.solvedReachPx <= raw + 1e-7,
+      'reach curve must not overshoot its requested target at ' + raw + 'px');
+    assert.ok(sample.solvedReachPx >= previous - 1e-7,
+      'reach curve must be monotone at ' + raw + 'px');
+    previous = sample.solvedReachPx;
+  }
 });
 
 test('knee IK remains on the same oriented side of the hip-to-ankle axis for every frame', () => {

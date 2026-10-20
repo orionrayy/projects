@@ -82,23 +82,19 @@ export function solveTwoBoneIK(root, target, upperLength, lowerLength, poleTarge
   const chainMaximum = upperLength + lowerLength;
   let reach = clamp(raw, chainMinimum, chainMaximum - 1e-7);
   if (poleTarget?.preferForward === true) {
-    // Near full extension, acos() in the two-bone solution becomes ill-conditioned:
-    // a tiny ankle change can move the knee many pixels. Start easing before the
-    // chain maximum, then settle at a 1px flex margin with C2 endpoint continuity.
-    // This applies only to gait knees; carry-arm endpoint contacts keep their exact IK.
-    const span = Math.min(8, Math.max(3, (chainMaximum - chainMinimum) * 0.3));
-    const margin = Math.min(1, span * 0.2);
+    // Near full extension, acos() becomes ill-conditioned and knee position
+    // becomes highly sensitive to tiny ankle movements. Start a C2 transition
+    // before maximum extension. The monotone profile has unit slope at entry,
+    // zero slope/curvature at exit, and retains half the transition span as flex.
+    // This is gait-knee-only: carry-arm endpoint contacts retain exact IK targets.
+    const span = Math.min(6, Math.max(4, (chainMaximum - chainMinimum) * 0.25));
     const transitionStart = chainMaximum - span;
     if (raw > transitionStart) {
       const u = clamp((raw - transitionStart) / span, 0, 1);
-      const a5 = 3 * (span - 2 * margin);
-      const a4 = margin - (7 / 3) * a5;
-      const a3 = -2 * a4 - (10 / 3) * a5;
-      const easedOffset = span * u + a3 * u ** 3 + a4 * u ** 4 + a5 * u ** 5;
+      const easedOffset = span * (u - u ** 3 + 0.5 * u ** 4);
       reach = transitionStart + easedOffset;
     }
-  }
-  const theta = raw < 1e-9 ? -Math.PI / 2 : Math.atan2(dy, dx);
+  }  const theta = raw < 1e-9 ? -Math.PI / 2 : Math.atan2(dy, dx);
   const offset = Math.acos(clamp((upperLength*upperLength + reach*reach - lowerLength*lowerLength) /
                                  (2 * upperLength * reach), -1, 1));
   const candidates = [theta + offset, theta - offset].map(a => ({

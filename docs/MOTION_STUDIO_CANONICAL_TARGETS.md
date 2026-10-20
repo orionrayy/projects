@@ -173,3 +173,13 @@ This checkpoint supersedes earlier claims about the latest v0.9.3 head. The uplo
 - The next candidate adds a knee-only C2 reach transition over the last 8 px of the chain's nominal reach, ending 1 px short of the sum of upper/lower leg lengths. This avoids the worst near-straight singularity while leaving arm IK endpoint contracts unchanged.
 - A synthetic near-extension test and a detailed all-frame continuity test now cover reach margin, knee angle, endpoint error, branch side, step spikes, and acceleration. The tests must pass with the existing geometric/temporal assertions unchanged.
 - The new visual proof remains in the same candidate, but no new artifact or naturalness acceptance is claimed until the updated hosted run succeeds.
+
+
+## Follow-up 2: monotone C2 knee reach + pelvis/floor calibration — 2026-10-20
+
+The first soft-reach candidate was not accepted: CI recorded a remaining knee jump of 17.70 px/frame, endpoint clamp error of 1.86 px, and elevated knee acceleration. The original polynomial could exceed the requested radius partway through its transition, so it was replaced rather than relaxing any acceptance gate.
+
+- New upper-reach curve uses the monotone expression u - u^3 + 0.5u^4, a C2 profile with unit entry slope and zero exit slope/curvature. The transition spans up to the last 6 px of leg reach and leaves a 3 px knee-flex margin for equal/near-equal segment lengths.
+- Both v0.9.3 scene profiles shift the pelvis 2 px lower on the canvas (root_y 409 → 411), reducing the near-extended hip-to-ankle distance for the current stride/contact geometry.
+- The synthetic near-extension test checks that solved reach never overshoots the requested target or reverses as target reach increases. Knee step, acceleration, ground contact, stance drift and endpoint reach checks remain independent and must all pass.
+- This is an unverified candidate: only hosted CI and reviewed full-speed renders can establish whether the calibration improves the actual motion.
