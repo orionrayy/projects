@@ -19,7 +19,7 @@ test("neutral profiles separate projected feet and place hands on distinct sides
     assert.ok(Math.abs(p.leftFoot.x - p.rightFoot.x) >= 15, activity + ": projected shoes overlap");
     assert.ok(p.nearArm.wrist.x > p.farArm.wrist.x + 15, activity + ": near and far wrists collapsed");
     const svg = renderSvgFrame(scene, 0, "free", activity);
-    assert.ok(svg.includes('data-contour="spine-aligned"'), activity + ": torso contour is not spine-aligned");
+    assert.ok(svg.includes('data-contour-frame="spine-aligned"'), activity + ": torso contour is not spine-aligned");
     assert.ok(svg.includes('data-hand-side="near"') && svg.includes('data-hand-side="far"'));
     const angles = handAngles(svg);
     assert.equal(angles.length, 2);
@@ -54,7 +54,7 @@ test("the torso contour follows trunk displacement rather than staying vertical"
   const p = frame("sit-to-stand", 31);
   const svg = renderSvgFrame(scene, 31, "free", "sit-to-stand");
   assert.ok(p.activityState.torsoLeanRadians > 0.28, "forward anticipation should be visible");
-  assert.ok(svg.includes('data-contour="spine-aligned"'));
+  assert.ok(svg.includes('data-contour-frame="spine-aligned"'));
   assert.ok(svg.includes('data-torso-detail="seam"'));
 });
 
