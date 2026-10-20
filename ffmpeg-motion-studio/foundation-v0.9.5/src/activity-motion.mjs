@@ -229,7 +229,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       Math.hypot(pose.farArm.wrist.x - pose.basket.handleLeft.x, pose.farArm.wrist.y - pose.basket.handleLeft.y)
     ) : 0,
     pickupItemContactErrorPx: pose.activityState.pickupItem?.held
-      ? Math.hypot(pose.activityState.pickupItem.x - (pose.nearArm.wrist.x + 15),
+      ? Math.hypot(pose.activityState.pickupItem.x - (pose.nearArm.wrist.x + 18),
           pose.activityState.pickupItem.y - pose.nearArm.wrist.y)
       : 0,
     groundPenetrationPx: Math.max(0, pose.leftFoot.y - scene.background.horizon_y, pose.rightFoot.y - scene.background.horizon_y),
