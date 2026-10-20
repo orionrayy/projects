@@ -9,7 +9,7 @@ export const ACTIVITY_NAMES = Object.freeze([
 ]);
 export const ACTIVITY_LABELS = Object.freeze({
   "stand": "STAND / BREATH",
-  "look-around": "HEAD SCAN / PROFILE",
+  "look-around": "HEAD TILT + GAZE / 2D PROFILE",
   "reach": "REACH FORWARD",
   "pick-up": "CROUCH / PICK UP",
   "sit-to-stand": "SIT TO STAND",
@@ -137,11 +137,11 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   if (activity === "look-around") {
     // A side-profile rig can scan its pitch/tilt and gaze offset; it cannot perform
     // true horizontal yaw. Keep the label explicit and give each glance a clear beat.
-    headTurn = keyCurve(u, [[0,0],[0.10,0],[0.25,0.30],[0.34,0.35],[0.48,0.30],[0.59,-0.29],[0.69,-0.34],[0.82,0.08],[0.93,0],[1,0]]);
-    headShift = keyCurve(u, [[0,0],[0.22,5.5],[0.40,6],[0.58,-4],[0.76,-3],[0.90,0],[1,0]]);
-    gazeOffsetX = keyCurve(u, [[0,0],[0.18,0],[0.30,1.4],[0.43,1.4],[0.56,-1.4],[0.68,-1.5],[0.82,0.8],[0.92,0],[1,0]]);
-    gazeOffsetY = keyCurve(u, [[0,0],[0.25,0.2],[0.38,-0.5],[0.60,0.4],[0.75,0],[1,0]]);
-    lean = keyCurve(u, [[0,0],[0.28,0.035],[0.55,-0.028],[0.78,0],[1,0]]);
+    headTurn = keyCurve(u, [[0,0],[0.08,0],[0.24,0.42],[0.34,0.48],[0.46,0.40],[0.58,-0.40],[0.69,-0.48],[0.82,0.10],[0.93,0],[1,0]]);
+    headShift = keyCurve(u, [[0,0],[0.20,7.0],[0.38,8],[0.56,-5.5],[0.74,-4],[0.90,0],[1,0]]);
+    gazeOffsetX = keyCurve(u, [[0,0],[0.16,0],[0.28,1.8],[0.42,1.8],[0.55,-1.8],[0.67,-1.8],[0.82,1.0],[0.92,0],[1,0]]);
+    gazeOffsetY = keyCurve(u, [[0,0],[0.24,0.4],[0.38,-0.8],[0.60,0.8],[0.75,0],[1,0]]);
+    lean = keyCurve(u, [[0,0],[0.28,0.045],[0.55,-0.035],[0.78,0],[1,0]]);
   }
   if (activity === "reach") {
     reachWeight = keyCurve(u, [[0,0],[0.10,0],[0.22,0.12],[0.40,0.90],[0.46,1],[0.62,1],[0.75,0.62],[0.90,0],[1,0]]);
