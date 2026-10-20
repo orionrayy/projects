@@ -83,11 +83,14 @@ function solveArm(shoulder, target, scene, counter = -1) {
   const ik = solveTwoBoneIK(shoulder, target, c.upper_arm_px, c.forearm_px, pole, -1);
   return limbPack(ik, shoulder, target);
 }
-function fixedPoseScene(scene, armMode) {
+function fixedPoseScene(scene, armMode, activity) {
   return {
     ...scene,
+    character: { ...scene.character, leg_depth_projection_px: 6 },
     motion: {
-      ...scene.motion, cycle_seconds: 1e9, stride_length_px: 0, screen_stride_scale: 0,
+      ...scene.motion,
+      root_y: (scene.motion.root_y ?? 408) - (activity === "sit-to-stand" ? 0 : 4),
+      cycle_seconds: 1e9, stride_length_px: 0, screen_stride_scale: 0,
       start_ramp_seconds: 0, stop_ramp_seconds: 0, pelvis_bob_px: 0, pelvis_bob_asymmetry_px: 0,
       pelvis_lateral_shift_px: 0, torso_forward_lean_radians: 0, torso_sway_radians: 0,
       secondary_torso_sway_radians: 0, cycle_torso_sway_variation_radians: 0, cycle_torso_shift_variation_px: 0,
@@ -113,12 +116,10 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   if (!Number.isInteger(frameIndex) || frameIndex < 0 || frameIndex >= scene.duration_frames) {
     throw new RangeError("Frame is outside activity timeline.");
   }
-  const staticScene = fixedPoseScene(scene, armMode);
+  const staticScene = fixedPoseScene(scene, armMode, activity);
   const base = evaluateLocomotion(staticScene, frameIndex, armMode);
-  // Static side-profile actions need a small depth cue for the two feet; zero stride
-  // otherwise projects both shoes and both leg chains onto almost the same pixels.
-  base.leftFoot = { ...base.leftFoot, x: base.leftFoot.x - 10 };
-  base.rightFoot = { ...base.rightFoot, x: base.rightFoot.x + 10 };
+  // Foot depth is projected by the same near/far offset as the hip joints in
+  // fixedPoseScene; moving only the shoes made the leg chains splay unnaturally.
   const duration = Math.max(1, scene.duration_frames - 1);
   const u = frameIndex / duration;
   // Action timelines are authored as explicit phases. The 3 s clip is a preview
@@ -193,7 +194,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   const postRiseSettle = activity === "sit-to-stand" && u >= 0.80
     ? 2.0 * Math.sin(Math.PI * (u - 0.80) / 0.20) * Math.exp(-6 * (u - 0.80))
     : 0;
-  const newPelvis = { x: oldPelvis.x + forwardShift, y: oldPelvis.y + drop };
+  const pelvisShiftY = drop - 4 * sitStandRestWeight;
+  const newPelvis = { x: oldPelvis.x + forwardShift, y: oldPelvis.y + pelvisShiftY };
   const transform = (pt, factor = 1, ex = 0, ey = 0) =>
     transformUpper(pt, oldPelvis, newPelvis, lean * factor, ex, ey);
   const pose = { ...base,
@@ -224,8 +226,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   const footPivot = activity === "turn-in-place" ? 0.42 * turnPulse : 0;
   pose.leftFoot = { ...base.leftFoot, angle: (base.leftFoot.angle || 0) + footPivot };
   pose.rightFoot = { ...base.rightFoot, angle: (base.rightFoot.angle || 0) - footPivot };
-  pose.leftHip = translatePoint(base.leftHip, forwardShift, drop);
-  pose.rightHip = translatePoint(base.rightHip, forwardShift, drop);
+  pose.leftHip = translatePoint(base.leftHip, forwardShift, pelvisShiftY);
+  pose.rightHip = translatePoint(base.rightHip, forwardShift, pelvisShiftY);
   pose.leftLeg = solveLeg(pose.leftHip, pose.leftFoot, staticScene);
   pose.rightLeg = solveLeg(pose.rightHip, pose.rightFoot, staticScene);
 
