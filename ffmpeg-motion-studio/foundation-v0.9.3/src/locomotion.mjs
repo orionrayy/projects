@@ -87,7 +87,7 @@ export function solveTwoBoneIK(root, target, upperLength, lowerLength, poleTarge
     // before maximum extension. The monotone profile has unit slope at entry,
     // zero slope/curvature at exit, and retains half the transition span as flex.
     // This is gait-knee-only: carry-arm endpoint contacts retain exact IK targets.
-    const span = Math.min(6, Math.max(4, (chainMaximum - chainMinimum) * 0.25));
+    const span = Math.min(5.75, Math.max(4, (chainMaximum - chainMinimum) * 0.25));
     const transitionStart = chainMaximum - span;
     if (raw > transitionStart) {
       const u = clamp((raw - transitionStart) / span, 0, 1);

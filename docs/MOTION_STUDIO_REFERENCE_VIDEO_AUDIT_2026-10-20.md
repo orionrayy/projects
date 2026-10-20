@@ -94,3 +94,11 @@ The monotone C2 reach curve stopped its radius overshoot, but the latest hosted 
 - Existing hard limits remain unchanged: maximum knee step <13 px/frame, ankle reach error <1.5 px, and the temporal acceleration threshold derived from stride length.
 - Added a frame-local ankle reach diagnostic test that reports the exact frame, side, hip, requested foot and solved ankle if the reach gate fails.
 - Await the latest hosted run. This candidate is not considered fixed until every source test, render/FFprobe gate and artifact upload passes. Full-speed human art-direction review remains an independent acceptance gate.
+
+
+## Follow-up 4: endpoint tolerance without gate relaxation — 2026-10-20
+
+Latest hosted run 39381538157 shows the stride/cadence tune brought the knee-step and temporal-acceleration tests inside their existing limits. The remaining failures were the side-view reachability gate and its new per-frame diagnostic: carry mode, frame 101, right leg entering swing, requested reach 158.452 px and solved reach 156.910 px, giving 1.5419 px endpoint error (limit <1.5 px).
+
+- The knee C2 transition width is narrowed from 6.0 to 5.75 px. This makes the solved radius approximately 0.12 px closer to the target at the observed worst frame; it does not change the endpoint-error threshold.
+- Re-run the complete source tests and render pipeline. Do not interpret a narrowly passing geometric metric as full-speed naturalness acceptance.
