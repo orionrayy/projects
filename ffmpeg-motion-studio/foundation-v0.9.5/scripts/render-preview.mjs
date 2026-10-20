@@ -58,25 +58,36 @@ function handSvg(arm,scene,mode,near,activity,pose) {
   let handPose=mode==="carry"?"grip":"relaxed";
   if(activity==="reach"&&near) handPose=state.reachTarget?.active?"press":"point";
   else if(activity==="pick-up"&&near) handPose=gripWeight>=0.30?"grip":((state.pickupReachWeight||0)>=0.22?"point":"relaxed");
-  let preferredAngle=armAngle,angleLimit=0.45;
+  let preferredAngle=armAngle,angleLimit=0.45,handOrientation="forearm-following";
   if(handPose==="relaxed") {
-    // SVG screen coordinates have +Y downward. Relaxed fingers should point down,
-    // independent of which elbow branch the analytic IK solver selected.
+    // In screen-space SVG, local +X is the finger axis. Keep relaxed fingers
+    // gravity-down in BOTH depth layers; mirroring local Y flips the thumb/palm.
     preferredAngle=Math.PI/2;
     angleLimit=0.56;
+    handOrientation="gravity-down";
   } else if(handPose==="point"||handPose==="press") {
-    preferredAngle=shoulderAngle;
+    let target=null;
+    if(activity==="reach"&&state.reachTarget) target=state.reachTarget;
+    else if(activity==="pick-up"&&state.pickupItem) {
+      const anchor=state.pickupItem.graspAnchor||state.pickupItem;
+      target={x:anchor.x,y:anchor.y};
+    }
+    preferredAngle=target?Math.atan2(target.y-arm.shoulder.y,target.x-arm.shoulder.x):shoulderAngle;
     angleLimit=0.40;
+    handOrientation="target-directed";
   } else {
     let target=null;
     if(activity==="pick-up"&&state.pickupItem) target={x:state.pickupItem.x,y:state.pickupItem.y};
     else if(pose?.basket?.center) target=pose.basket.center;
-    if(target) preferredAngle=Math.atan2(target.y-w.y,target.x-w.x);
+    if(target) {
+      preferredAngle=Math.atan2(target.y-w.y,target.x-w.x);
+      handOrientation="object-directed";
+    }
     angleLimit=0.78;
   }
   const angle=boundedAngle(armAngle,preferredAngle,angleLimit);
-  const flip=near?1:-1;
-  let s='<g data-anatomy="hand" data-hand-side="'+(near?"near":"far")+'" data-hand-pose="'+handPose+'" data-hand-angle-degrees="'+n(deg(angle))+'" data-grip="'+(handPose==="grip"?"grip":"relaxed")+'" transform="translate('+n(w.x)+' '+n(w.y)+') rotate('+n(deg(angle))+') scale(1 '+flip+')">';
+  const handScale=near?1:0.94;
+  let s='<g data-anatomy="hand" data-hand-side="'+(near?"near":"far")+'" data-hand-pose="'+handPose+'" data-hand-orientation="'+handOrientation+'" data-hand-mirror="none" data-hand-angle-degrees="'+n(deg(angle))+'" data-grip="'+(handPose==="grip"?"grip":"relaxed")+'" transform="translate('+n(w.x)+' '+n(w.y)+') rotate('+n(deg(angle))+') scale('+handScale+' '+handScale+')" opacity="'+(near?1:0.88)+'">';
   if(handPose==="point"||handPose==="press") {
     const tip=handPose==="point"?23:17;
     s+='<path data-anatomy="palm" d="M -5 -3.8 Q -5 -7 -.5 -7.3 L 4.5 -6.4 Q 7 -5.7 7.8 -4.2 L '+(tip-2)+' -4.1 Q '+tip+' -4.1 '+tip+' -1.8 Q '+tip+' .1 '+(tip-2)+' .1 L 9 .1 Q 12 1.1 10.8 3.4 Q 10 5.5 7.1 4.7 L 3.8 3.4 Q 1.7 6.1 -.5 4.7 L -3 2.7 Q -6 1.4 -5 -3.8 Z" fill="'+c.skin+'" stroke="#7B5544" stroke-width="1.35" stroke-linejoin="round"/>';
