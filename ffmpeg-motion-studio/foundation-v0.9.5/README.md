@@ -63,3 +63,10 @@ Acceptance remains gated by reviewing rendered full-speed clips and their comple
 The first post-orientation render was checked at enlarged crop scale as well as through the full-frame sheets. The remaining visible defect was not bone length: elbows and knees were being drawn as two outlined segments that met at undersized, screen-aligned caps. That made the limbs read as hinged tubes, especially during the reach and pickup poses.
 
 This revision adds integrated elbow/knee caps sized from the current rig widths, aligns elbow crease marks to the forearm-normal direction rather than a fixed horizontal screen axis, and reduces arm widths relative to the torso. These are visual-continuity changes only; they do not claim 3D anatomy. New regression gates verify that the cap sizes are proportionate to the rig and that crease geometry is present for the tested action families. The six full-speed clips and all-frame contact sheets must be reviewed again before visual acceptance.
+
+
+## Follow-up audit — reaching anticipation and whole-body participation
+
+The next full-speed pass showed that the button interaction was geometrically correct but visually arm-led: the wrist began advancing with almost no preceding body response. The reach phase now has a small backward preload before the arm commits, then a stronger forward torso lean, a slight head/gaze response and a counterbalancing far arm. The button remains a world-fixed target and its contact gate remains fingertip-based.
+
+Regression tests assert that anticipation peaks while the wrist is still near its rest pose, the pelvis preloads backward, the torso then leans forward, and the fixed target is still contacted. These changes improve action staging in a 2D profile rig; they do not establish full 3D biomechanics or human-level visual acceptance.

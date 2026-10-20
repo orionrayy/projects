@@ -80,6 +80,18 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   assert.ok(Math.min(...look.poses.map(p => p.activityState.headTurnRadians)) < -0.45);
 
   const reach = summarize("reach");
+  const anticipationFrame = Math.round(0.16 * (scene.duration_frames - 1));
+  const anticipationPose = reach.poses[anticipationFrame];
+  assert.ok(anticipationPose.activityState.reachAnticipationWeight > 0.90,
+    "torso anticipation should peak before the wrist commits");
+  assert.ok(anticipationPose.activityState.reachWeight < 0.05,
+    "the wrist should remain near rest during the anticipation beat");
+  assert.ok(anticipationPose.pelvis.x < reach.poses[0].pelvis.x - 2,
+    "anticipation should include a small backward weight preload");
+  assert.ok(anticipationPose.activityState.torsoLeanRadians < -0.025,
+    "torso should counter-lean briefly before the forward reach");
+  assert.ok(reach.poses[36].activityState.torsoLeanRadians > 0.09,
+    "the forward reach should recruit the torso, not only the arm");
   assert.ok(reach.maxReach >= 70);
   assert.ok(reach.maxReachWeight >= 0.99);
   assert.ok(reach.poses.at(-1).activityState.reachWeight < 0.1, "reach must retract and settle before clip end");

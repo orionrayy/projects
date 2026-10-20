@@ -141,6 +141,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   const pickupTarget = { x: pickupOrigin.x - 18, y: pickupOrigin.y };
   let drop = 0, forwardShift = 0, lean = 0, headTurn = 0, headShift = 0, reachWeight = 0, breath = 0;
   let gazeOffsetX = 0, gazeOffsetY = 0, armCounterBalance = 0, sitStandRestWeight = 0;
+  let reachAnticipationWeight = 0;
 
   if (activity === "stand") {
     breath = 1.7 * Math.sin(TAU * 0.78 * u);
@@ -156,9 +157,15 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     lean = keyCurve(u, [[0,0],[0.28,0.045],[0.55,-0.035],[0.78,0],[1,0]]);
   }
   if (activity === "reach") {
-    reachWeight = keyCurve(u, [[0,0],[0.10,0],[0.22,0.12],[0.40,0.90],[0.46,1],[0.62,1],[0.75,0.62],[0.90,0],[1,0]]);
-    lean = 0.075 * reachWeight;
-    forwardShift = 3.5 * reachWeight;
+    // Let the torso/weight shift anticipate the reach before the wrist commits.
+    // This separates intention (small backward preload) from the forward action.
+    reachAnticipationWeight = keyCurve(u, [[0,0],[0.07,0],[0.12,0.88],[0.16,1],[0.20,0.25],[0.24,0],[1,0]]);
+    reachWeight = keyCurve(u, [[0,0],[0.16,0],[0.23,0.12],[0.40,0.90],[0.46,1],[0.62,1],[0.75,0.62],[0.90,0],[1,0]]);
+    lean = 0.105 * reachWeight - 0.035 * reachAnticipationWeight;
+    forwardShift = 4.5 * reachWeight - 3.0 * reachAnticipationWeight;
+    headTurn = 0.06 * reachWeight;
+    gazeOffsetX = 0.85 * reachWeight;
+    gazeOffsetY = 0.55 * reachWeight;
   }
   if (activity === "pick-up") {
     drop = 30 * pickupCrouch;
@@ -209,7 +216,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   const pose = { ...base,
     activityName: activity, activityProgress: u,
     activityState: { pelvisDropPx: drop, torsoLeanRadians: lean, headTurnRadians: headTurn,
-      reachWeight, reachDisplacementPx: 76 * reachWeight, breathingOffsetPx: breath,
+      reachWeight, reachDisplacementPx: 76 * reachWeight,
+      reachAnticipationWeight, breathingOffsetPx: breath,
       respiratorySwayPx: respiratorySway,
       gazeOffsetX, gazeOffsetY,
       pickupReachWeight: activity === "pick-up" ? pickupReach : 0,
@@ -281,7 +289,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       x: restTarget.x + (wristTargetX - restTarget.x) * reachWeight,
       y: restTarget.y + (buttonY - restTarget.y) * reachWeight - 12 * Math.sin(Math.PI * reachWeight)
     };
-    farTarget = { x: farTarget.x - 7 * reachWeight, y: farTarget.y - 3 * reachWeight };
+    // The free arm counterbalances the upper-body reach rather than remaining passive.
+    farTarget = { x: farTarget.x - 10 * reachWeight, y: farTarget.y - 4 * reachWeight };
   } else if (activity === "pick-up") {
     // The hand meets the parcel's fixed grasp anchor, then the parcel follows the
     // same wrist-relative offset while the arm lifts toward a carry position.
