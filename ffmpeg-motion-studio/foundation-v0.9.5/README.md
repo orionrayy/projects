@@ -22,3 +22,6 @@ The last item is not true 3D yaw or a multi-view turn. The code explicitly decla
 The hosted workflow runs all historical regression tests, new face-design and activity tests, then renders five additional action families plus the breathing stand preview at 1280×720/24 FPS, 72 frames per clip. FFprobe checks and SHA-256 checksums are recorded in the artifact.
 
 CI passing verifies kinematic consistency and reproducible renders, not human-like naturalness. Full-speed review and 3D/multi-view turning remain separate acceptance gates. Browser/FFmpeg parity and audio QC are still not verified.
+
+## Action semantics refinement (review-driven)
+The activity proof now renders a chair for the sit-to-stand clip and a table-top parcel for the pick-up clip. The parcel stays on the table before the grasp, then follows a deterministic reach/grasp/lift trajectory and remains in hand at the clip end. New regression tests check those semantic cues, object-to-hand attachment, prop step continuity and chair presence. These remain procedural 2D proofs: they do not establish full-body naturalness or true 3D turning.

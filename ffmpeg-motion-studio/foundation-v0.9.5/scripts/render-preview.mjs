@@ -107,6 +107,36 @@ function neckSvg(p,scene) {
   return '<path data-anatomy="neck" d="M '+n(top.x-5)+' '+n(top.y)+' Q '+n(top.x)+' '+n(top.y-1)+' '+n(top.x+5)+' '+n(top.y)+' L '+n(bottom.x+8)+' '+n(bottom.y)+' Q '+n(bottom.x)+' '+n(bottom.y+5)+' '+n(bottom.x-8)+' '+n(bottom.y)+' Z" fill="'+c.skin+'" stroke="#7B5544" stroke-width="1.6" stroke-linejoin="round"/>'+
     '<path data-anatomy="collar" d="M '+n(bottom.x-11)+' '+n(bottom.y+2)+' Q '+n(bottom.x)+' '+n(bottom.y+10)+' '+n(bottom.x+11)+' '+n(bottom.y+2)+'" fill="none" stroke="#203348" stroke-width="2.6" stroke-linecap="round"/>';
 }
+function activityEnvironmentSvg(p, scene, activity) {
+  const floor = scene.background.horizon_y;
+  let s = "";
+  if (activity === "sit-to-stand" && p.activityState?.chair) {
+    const chair = p.activityState.chair, x = chair.x, y = chair.seatY;
+    s += '<g data-environment="chair" fill="none" stroke="#4A5564" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">';
+    s += '<path d="M '+n(x-25)+' '+n(y-2)+' L '+n(x-25)+' '+n(y-43)+' L '+n(x-15)+' '+n(y-43)+' L '+n(x-15)+' '+n(y-4)+'"/>';
+    s += '<path d="M '+n(x-25)+' '+n(y-3)+' L '+n(x+25)+' '+n(y-3)+'" stroke-width="9"/>';
+    s += '<path d="M '+n(x-17)+' '+n(y+2)+' L '+n(x-20)+' '+n(floor-2)+' M '+n(x+17)+' '+n(y+2)+' L '+n(x+20)+' '+n(floor-2)+'"/>';
+    s += '<path d="M '+n(x-20)+' '+n(floor-2)+' L '+n(x-15)+' '+n(floor-2)+' M '+n(x+15)+' '+n(floor-2)+' L '+n(x+20)+' '+n(floor-2)+'" stroke-width="3"/>';
+    s += '</g>';
+  }
+  if (activity === "pick-up" && p.activityState?.pickupItem) {
+    const item = p.activityState.pickupItem;
+    s += '<g data-environment="pickup-table" fill="none" stroke="#566273" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">';
+    s += '<path d="M '+n(item.tableX-34)+' '+n(item.tableTopY)+' L '+n(item.tableX+27)+' '+n(item.tableTopY)+'" stroke-width="7"/>';
+    s += '<path d="M '+n(item.tableX-27)+' '+n(item.tableTopY+3)+' L '+n(item.tableX-27)+' '+n(floor-2)+' M '+n(item.tableX+20)+' '+n(item.tableTopY+3)+' L '+n(item.tableX+20)+' '+n(floor-2)+'"/>';
+    s += '</g>';
+  }
+  return s;
+}
+function pickupItemSvg(item) {
+  if (!item) return "";
+  const x = item.x, y = item.y;
+  return '<g data-prop="pickup-item" data-held="'+String(item.held)+'" transform="translate('+n(x)+' '+n(y)+')">' +
+    '<path d="M -12 -6 L -7 -10 L 11 -8 L 12 5 L 5 9 L -12 6 Z" fill="#C58B51" stroke="#6F492B" stroke-width="1.8" stroke-linejoin="round"/>' +
+    '<path d="M -7 -10 L -5 3 L 12 5 M -5 3 L 5 9" fill="none" stroke="#E5BB83" stroke-width="1.5"/>' +
+    '<path d="M -2 -9 L 1 7" stroke="#8D5E35" stroke-width="2.2" opacity=".72"/>' +
+    '</g>';
+}
 function basketSvg(p,scene) {
   const b=p.basket,prop=scene.prop,cx=b.x+b.width/2,cy=b.y+b.height/2;
   let s='<g transform="rotate('+n(b.angleDegrees||0)+' '+n(cx)+' '+n(cy)+')">';
@@ -127,6 +157,7 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   s+='<path d="M 0 '+n(floor)+' L '+scene.canvas.width+' '+n(floor)+'" stroke="#C7C0B0" stroke-width="2"/>';
   for(let i=0;i<11;i++){const x=i*145+22;s+='<path d="M '+x+' '+(floor+24)+' L '+(x+70)+' '+(floor+24)+'" stroke="#D8D2C3" stroke-width="1"/>';}
   if(activity!=="walk") s+='<g data-activity-overlay="label"><text x="'+(scene.canvas.width-36)+'" y="48" text-anchor="end" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="750" fill="#203348" letter-spacing="0.7">'+(ACTIVITY_LABELS[activity]||activity.toUpperCase())+'</text></g>';
+  s += activityEnvironmentSvg(p, scene, activity);
   s+='<g id="characterRig" data-rig-frame="'+frameIndex+'">';
   s+='<ellipse cx="'+n(p.pelvis.x+12)+'" cy="'+n(floor+5)+'" rx="63" ry="9" fill="#9C988B" opacity=".22"/>';
   s+=legSvg(p.rightLeg,p.rightFoot,scene,false)+legSvg(p.leftLeg,p.leftFoot,scene,true);
@@ -147,7 +178,10 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   s+='<path data-anatomy="waistband" d="M '+n(pel.x-hip)+' '+n(pel.y+6)+' Q '+n(pel.x)+' '+n(pel.y+13)+' '+n(pel.x+hip)+' '+n(pel.y+6)+'" fill="none" stroke="#263347" stroke-width="2.6"/>';
   }
   s+=neckSvg(p,scene);
-  s+=headSvg(p,scene); if(mode==="carry") s+=basketSvg(p,scene); s+=armSvg(p.nearArm,scene,"#3A82A3",true,mode);
+  s+=headSvg(p,scene);
+  if (activity === "pick-up") s += pickupItemSvg(p.activityState.pickupItem);
+  if(mode==="carry") s+=basketSvg(p,scene);
+  s+=armSvg(p.nearArm,scene,"#3A82A3",true,mode);
   s+='</g><!--CHARACTER-RIG-END-->';
   s+='<rect x="34" y="28" width="388" height="82" rx="14" fill="#FFFEFA" opacity=".92" stroke="#DAD5C7"/>';
   s+='<text x="54" y="57" font-family="DejaVu Sans,sans-serif" font-size="18" font-weight="700" fill="#243345">MOTION STUDIO / v0.9.5</text>';

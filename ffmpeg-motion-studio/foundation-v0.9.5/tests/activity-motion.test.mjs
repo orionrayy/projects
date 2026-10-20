@@ -68,6 +68,36 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   assert.ok(turn.maxTorso - turn.minTorso > 0.22);
 });
 
+test("pick-up shows a real object, keeps it on the table before grasp, and ends holding it", () => {
+  const first = evaluateActivity(scene, 0, "pick-up", "free");
+  const last = evaluateActivity(scene, scene.duration_frames - 1, "pick-up", "free");
+  assert.ok(first.activityState.pickupItem, "pickup item metadata missing at start");
+  assert.ok(Math.abs(first.activityState.pickupItem.y + first.activityState.pickupItem.height / 2 -
+    first.activityState.pickupItem.tableTopY) < 1e-8, "item must begin resting on its table");
+  assert.equal(first.activityState.pickupItem.held, false);
+  assert.equal(last.activityState.pickupItem.held, true, "the item should remain held at clip end");
+  assert.ok(last.diagnostics.pickupItemContactErrorPx < 1e-8, "held item must stay attached to the hand");
+
+  let previous = first.activityState.pickupItem, maxItemStep = 0;
+  for (let frame = 1; frame < scene.duration_frames; frame++) {
+    const current = evaluateActivity(scene, frame, "pick-up", "free").activityState.pickupItem;
+    maxItemStep = Math.max(maxItemStep, Math.hypot(current.x - previous.x, current.y - previous.y));
+    previous = current;
+  }
+  assert.ok(maxItemStep < 15, "pickup prop trajectory has a step spike: " + maxItemStep);
+  const svg = renderSvgFrame(scene, scene.duration_frames - 1, "free", "pick-up");
+  assert.ok(svg.includes('data-prop="pickup-item"'));
+  assert.ok(svg.includes('data-environment="pickup-table"'));
+});
+
+test("sit-to-stand includes a stable chair behind the character", () => {
+  const pose = evaluateActivity(scene, 0, "sit-to-stand", "free");
+  assert.ok(pose.activityState.chair, "chair context missing from sit-to-stand");
+  assert.ok(pose.activityState.chair.seatY < pose.activityState.chair.floorY);
+  const svg = renderSvgFrame(scene, 0, "free", "sit-to-stand");
+  assert.ok(svg.includes('data-environment="chair"'));
+});
+
 test("SVG renderer tags and labels every activity preview", () => {
   for (const activity of ACTIVITY_NAMES) {
     const svg = renderSvgFrame(scene, 36, "free", activity);
