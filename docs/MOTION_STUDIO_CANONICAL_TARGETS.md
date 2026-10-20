@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.8.8 sagittal-gait checkpoint on branch motion-studio-v0.8.8-sagittal-gait. v0.8.6 contour-render workflow passed; v0.8.7 gait-biomechanics changes exposed unresolved temporal failures. v0.8.8 side-view projection and gait tests are pending hosted validation and full-speed human acceptance.
+Current engineering candidate: Motion Studio v0.8.9 contact-extension checkpoint on branch motion-studio-v0.8.9-contact-extension. v0.8.8 passed hosted CI and produced 720p carry/free previews, but full-speed visual acceptance is still pending; v0.8.9 gait geometry and heel-strike tests are pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -99,3 +99,8 @@ Full-size review of v0.8.6 found stance and swing phases both reading as a squat
 ## Stage 11 sagittal gait and near/far leg overlap — 2026-10-20
 
 References consulted: Monmouth Animation Instruction Pages, “Movement: Walk Cycle” (https://animation.monmouth.edu/instruct/animation/walk-cycle/); Arnold et al., “Biomechanics of Multi-ligament Knee Injuries and Effects on Gait,” sagittal-plane gait summary (https://pmc.ncbi.nlm.nih.gov/articles/PMC2953341/); van der Zee et al., “A biomechanics dataset of healthy human walking at various speeds, step lengths and step widths,” Scientific Data (https://www.nature.com/articles/s41597-022-01817-1). The references support building from contact/loading, mid-stance extension, toe-off, and swing rather than holding one crouched knee pose throughout the cycle. Code inspection identified that the prior side-view profile added 28 px to one leg and -28 px to the other in the screen-horizontal axis, exaggerating apparent leg spread by 56 px. v0.8.8 reduces that projection to 6 px per side while retaining the sagittal stride trajectory; reduces pelvis bounce to avoid the two-bone IK repeatedly approaching its maximum-extension singularity; and adds explicit tests for near/far attachment spacing, stance/swing distinction, ankle reachability, and acceleration. No acceptance is claimed until CI and full-speed video review pass.
+
+
+## Stage 12 — Heel-strike contact extension v0.8.9 — 2026-10-20
+
+Visual review of v0.8.8 full-size frames confirmed that near/far leg separation was corrected, but the contact pose remained visibly crouched. The two-bone chain length was 160px against a 155px hip-to-ankle span at contact, giving an internal knee angle of roughly 151 degrees (about 29 degrees of flexion), too bent for a neutral heel-strike pose. v0.8.9 uses a 158px leg chain (78px upper / 80px lower), places the pelvis at y=410, keeps bob at 0.5px, and lengthens the full gait cycle to 1.20s to retain a temporal margin. The expected heel-strike angle is tested explicitly (>155 degrees), as are phase-separated stance/swing flexion, ankle reachability, foot drift, bone length, side-view leg projection and the unchanged <8 px/frame² acceleration limit. Visual acceptance remains independent.
