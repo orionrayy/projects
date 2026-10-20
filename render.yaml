@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: full-motion-analysis-orionrayy
+    runtime: docker
+    plan: free
+    region: singapore
+    rootDir: full-motion-analysis
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      - key: MOTION_API_TOKEN
+        generateValue: true
+      - key: MOTION_MAX_UPLOAD_BYTES
+        value: "26214400"
+      - key: MOTION_UPLOAD_TTL_SECONDS
+        value: "3600"
+      - key: MOTION_TICKET_TTL_SECONDS
+        value: "900"
+      - key: MOTION_MAX_VIDEO_DURATION_SECONDS
+        value: "120"
+      - key: MOTION_MAX_ACTIVE_UPLOADS
+        value: "4"
