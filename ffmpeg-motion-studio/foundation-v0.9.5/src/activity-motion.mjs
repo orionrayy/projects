@@ -97,7 +97,7 @@ function fixedPoseScene(scene, armMode) {
       contact_head_drop_px: 0, contact_basket_response_px: 0, contact_basket_tilt_radians: 0,
       contact_arm_reaction_px: 0, cycle_lift_variation_fraction: 0, cycle_arm_variation_fraction: 0,
       arm_lag_cycles: 0, phase_variation_cycles: 0, free_arm_swing_px: 0, free_arm_vertical_swing_px: 0,
-      free_arm_drop_px: 68, basket_vertical_response_px: 0, basket_tilt_radians: 0, arm_mode: armMode
+      free_arm_drop_px: 100, basket_vertical_response_px: 0, basket_tilt_radians: 0, arm_mode: armMode
     }
   };
 }
@@ -227,6 +227,12 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
 
   let nearTarget = transform(base.nearArm.wrist);
   let farTarget = transform(base.farArm.wrist);
+  // In a side-profile projection the two relaxed hands need a small near/far
+  // separation; otherwise both arms collapse into one wrist at the pelvis.
+  if (["stand", "look-around", "turn-in-place"].includes(activity)) {
+    nearTarget = { ...nearTarget, x: nearTarget.x + 7 };
+    farTarget = { ...farTarget, x: farTarget.x - 7 };
+  }
   if (armMode === "carry") {
     const b = base.basket;
     pose.basket = {
