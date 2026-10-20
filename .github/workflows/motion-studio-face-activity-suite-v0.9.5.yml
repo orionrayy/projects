@@ -66,6 +66,16 @@ jobs:
             done
             ffmpeg -hide_banner -loglevel error -y -framerate 24 -i ".working/activities/$activity/frame-%04d.png" -frames:v 72 -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart "artifacts/activity-$activity-v0.9.5.mp4"
             ffmpeg -hide_banner -loglevel error -y -i "artifacts/activity-$activity-v0.9.5.mp4" -vf "fps=4,scale=320:180,tile=4x3" -frames:v 1 -update 1 "artifacts/activity-$activity-contact-sheet.png"
+            # All-frame proof: every encoded frame appears once across two contact sheets.
+            ffmpeg -hide_banner -loglevel error -y -i "artifacts/activity-$activity-v0.9.5.mp4" -vf "select='between(n,0,35)',scale=320:180,tile=6x6" -frames:v 1 -update 1 "artifacts/activity-$activity-allframes-p1.png"
+            ffmpeg -hide_banner -loglevel error -y -i "artifacts/activity-$activity-v0.9.5.mp4" -vf "select='between(n,36,71)',scale=320:180,tile=6x6" -frames:v 1 -update 1 "artifacts/activity-$activity-allframes-p2.png"
+            # Zoomed action-area sheets support wrist/prop/contact inspection at every frame.
+            ffmpeg -hide_banner -loglevel error -y -i "artifacts/activity-$activity-v0.9.5.mp4" -vf "select='between(n,0,35)',crop=700:620:220:45,scale=320:284,tile=6x6" -frames:v 1 -update 1 "artifacts/activity-$activity-detail-allframes-p1.png"
+            ffmpeg -hide_banner -loglevel error -y -i "artifacts/activity-$activity-v0.9.5.mp4" -vf "select='between(n,36,71)',crop=700:620:220:45,scale=320:284,tile=6x6" -frames:v 1 -update 1 "artifacts/activity-$activity-detail-allframes-p2.png"
+            test -s "artifacts/activity-$activity-allframes-p1.png"
+            test -s "artifacts/activity-$activity-allframes-p2.png"
+            test -s "artifacts/activity-$activity-detail-allframes-p1.png"
+            test -s "artifacts/activity-$activity-detail-allframes-p2.png"
             test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=s=x:p=0 "artifacts/activity-$activity-v0.9.5.mp4")" = "1280"
             test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=s=x:p=0 "artifacts/activity-$activity-v0.9.5.mp4")" = "720"
             test "$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of csv=s=x:p=0 "artifacts/activity-$activity-v0.9.5.mp4")" = "24/1"
