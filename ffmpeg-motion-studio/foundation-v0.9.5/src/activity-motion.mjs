@@ -234,8 +234,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   // Neutral projected hands should occupy opposite depth layers instead of collapsing
   // at the pelvis or meeting in front of the torso due to the base gait's arm swing.
   if (["stand", "look-around", "turn-in-place"].includes(activity)) {
-    nearTarget = { x: pose.shoulders.near.x + 12, y: pose.shoulders.near.y + 88 };
-    farTarget = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 88 };
+    nearTarget = { x: pose.shoulders.near.x + 12, y: pose.shoulders.near.y + 98 };
+    farTarget = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 98 };
   }
   // In a side-profile projection the two relaxed hands need a small near/far
   // separation; otherwise both arms collapse into one wrist at the pelvis.
