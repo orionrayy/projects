@@ -13,7 +13,9 @@ The landscape profile still uses an 85.2 px effective stride; the integrated por
 - Calibrate leg lengths to 80/82 px with pelvis root y=408. The first attempt used 80/82 at root y=414 and collapsed stance knees; restoring legacy leg lengths at 93 px stride produced a 13.64 px/frame knee spike. The combined parameter calibration is intended to retain flex margin without violating existing angle or displacement limits.
 - Evaluate start/stop ramps against (frame_count - 1) / fps, the timestamp of the last actually rendered frame.
 - Replace accumulated phase offsets with bounded C2 phase warping proportional to sin(pi*u)^3; phase offset and its first derivative are zero at cycle boundaries.
-- Replace swing lift with a symmetric quintic C2 pulse, and test its contact/apex derivatives; this targets the observed swing-phase knee-step spike without relaxing the 13 px/frame limit.
+- Replace swing lift with a symmetric quintic C2 pulse, and test its contact/apex derivatives.
+- Tune only the two landscape scenes to a 56/44 stance/swing split to reduce peak swing trajectory speed; portrait deliberately retains 60/40.
+- This targets the observed swing-phase knee-step spike without relaxing the 13 px/frame limit.
 - Select equal ramp durations so five cycles land on the last rendered frame for both the 192-frame/24fps landscape preview and 240-frame/30fps portrait preview.
 - Raise the stride acceptance floor to 92 px without relaxing existing knee-step, ankle-reach, planted-foot, cadence, acceleration or FFprobe gates.
 

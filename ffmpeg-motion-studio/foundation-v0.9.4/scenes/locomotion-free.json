@@ -17,7 +17,7 @@
   "motion": {
     "cycle_seconds": 1.33,
     "stride_length_px": 150,
-    "stance_fraction": 0.6,
+    "stance_fraction": 0.56,
     "swing_lift_px": 16.5,
     "pelvis_bob_px": 2.2,
     "torso_sway_radians": 0.04,
