@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.9.0 true-side-profile checkpoint on branch motion-studio-v0.9.0-true-side-profile. Both push and pull-request GitHub Actions runs passed and 720p/24fps carry/free previews were produced; side-profile metrics now report the actual rendered near/far projection. Full-speed human visual acceptance remains pending.
+Current engineering candidate: Motion Studio v0.9.1 damped-human-gait checkpoint on branch motion-studio-v0.9.1-damped-human-gait. v0.9.0 side-profile render and tests passed; v0.9.1 amplitude damping, C2 gait continuity and stricter temporal gates are pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -114,3 +114,8 @@ Review of the v0.8.9 full-size frame showed that the renderer still presented a 
 ## Stage 13 validation update — 2026-10-20
 
 The push run 39366594252 and pull-request run 39366610236 both completed successfully at commit 30b5db07cca260831e5d857852fe10e6f23c83d8. The hosted artifact `motion-studio-v0.9.0-true-side-profile-review` was uploaded and reviewed at full frame size. It reports 192 frames at 24fps for both profiles, max bone-length error below 1e-12px, basket handle-contact error 0px, planted stance-foot drift below 1e-12px, and maximum tracked-point acceleration 7.6813px/frame² (<8). Visual review shows a right-facing single-eye profile and clear near/far leg overlap; however, full-speed artistic-naturalness acceptance is still pending. A follow-up adds explicit projection metrics (`nearFarLegCenterGapPx`, shoulder gap, profile torso/hip widths and far/near segment-width ratios) so the diagnostics describe side-view geometry rather than frontal widths.
+
+
+## Stage 14 — Damped human gait v0.9.1 — 2026-10-20
+
+The v0.9.0 artifact had exact stance-foot planting but excessive secondary motion: knee peak step 11.02px/frame, maximum acceleration 7.68px/frame², free-arm wrist step 14.31px/frame, torso orientation range 11.47°, head 5.97°, basket tilt range 5.16° and 24px swing lift. v0.9.1 damps these amplitudes and replaces cubic swing interpolation with quintic Hermite interpolation that matches acceleration at phase boundaries, a C2 foot-clearance pulse, and smoother heel/toe roll. References: van der Zee et al. (2022) https://www.nature.com/articles/s41597-022-01817-1; Meyns et al. (2013) https://pubmed.ncbi.nlm.nih.gov/23489950/; Spallone et al. (2026) https://pmc.ncbi.nlm.nih.gov/articles/PMC13418446/; healthy Thai gait cohort (2023) https://pmc.ncbi.nlm.nih.gov/articles/PMC10696785/. Validation pending.
