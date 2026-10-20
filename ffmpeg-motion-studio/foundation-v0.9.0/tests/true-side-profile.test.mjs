@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import {renderSvgFrame} from "../scripts/render-preview.mjs";
+import {renderSvgFrame,summarizeScene} from "../scripts/render-preview.mjs";
 
 const carry=JSON.parse(fs.readFileSync(new URL("../scenes/locomotion-lab.json",import.meta.url),"utf8"));
 const free=JSON.parse(fs.readFileSync(new URL("../scenes/locomotion-free.json",import.meta.url),"utf8"));
@@ -26,4 +26,18 @@ test("far-side leg is narrower and rendered before the near-side leg",()=>{
   const farStart=svg.indexOf('data-leg-depth="far"'),nearStart=svg.indexOf('data-leg-depth="near"');
   assert.ok(farStart>=0&&nearStart>farStart,"far leg should draw first behind near leg");
   assert.ok((svg.match(/data-contour="organic"/g)||[]).length>=8);
+});
+
+
+test("side-profile metrics report rendered projection dimensions instead of frontal widths",()=>{
+  for(const [scene,mode] of [[carry,"carry"],[free,"free"]]){
+    const report=summarizeScene(scene,mode),p=report.sideProfileDiagnostics;
+    assert.equal(p.viewMode,"profile-right");
+    assert.equal(p.nearFarLegCenterGapPx,4);
+    assert.equal(p.nearFarShoulderCenterGapPx,10);
+    assert.equal(p.torsoHalfWidthPx,15);
+    assert.equal(p.hipHalfWidthPx,10);
+    assert.ok(p.farToNearThighWidthRatio<0.7);
+    assert.ok(p.farToNearKneeWidthRatio<0.7);
+  }
 });

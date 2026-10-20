@@ -250,6 +250,15 @@ export function summarizeScene(scene, armMode) {
       shoulderHalfWidthPx: c.shoulder_half_width_px || 15,
       hipHalfWidthPx: c.pelvis_half_width_px || 22
     },
+    sideProfileDiagnostics: {
+      viewMode: c.view_mode || "front",
+      nearFarLegCenterGapPx: 2 * (c.leg_depth_projection_px || 0),
+      nearFarShoulderCenterGapPx: 2 * (c.shoulder_depth_projection_px || 0),
+      torsoHalfWidthPx: c.profile_torso_half_width_px ?? null,
+      hipHalfWidthPx: c.profile_hip_half_width_px ?? null,
+      farToNearThighWidthRatio: c.far_thigh_width_px && c.thigh_width_px ? c.far_thigh_width_px / c.thigh_width_px : null,
+      farToNearKneeWidthRatio: c.far_knee_width_px && c.knee_width_px ? c.far_knee_width_px / c.knee_width_px : null
+    },
     minNearArmElbowAngleDegrees:Math.min(...vals((p)=>p.nearArm.elbowAngleDegrees)),
     maxNearArmElbowAngleDegrees:Math.max(...vals((p)=>p.nearArm.elbowAngleDegrees)),
     temporalDiagnostics,

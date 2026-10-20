@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.9.0 true-side-profile checkpoint on branch motion-studio-v0.9.0-true-side-profile. v0.8.9 hosted CI passed, but full-size frames remained visually front-facing; v0.9.0 side-profile regression tests and hosted render validation are pending.
+Current engineering candidate: Motion Studio v0.9.0 true-side-profile checkpoint on branch motion-studio-v0.9.0-true-side-profile. Both push and pull-request GitHub Actions runs passed and 720p/24fps carry/free previews were produced; side-profile metrics now report the actual rendered near/far projection. Full-speed human visual acceptance remains pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -109,3 +109,8 @@ Visual review of v0.8.8 full-size frames confirmed that near/far leg separation 
 ## Stage 13 — True side-profile projection v0.9.0 — 2026-10-20
 
 Review of the v0.8.9 full-size frame showed that the renderer still presented a frontal face (bilateral eyes), front-view torso/shoulder width, and equally wide near/far legs. This made the otherwise narrow hip-centre spacing read as splayed limbs. v0.9.0 adds a right-facing single-eye profile face, narrows the torso and hips, brings near/far shoulders to ±5px, reduces leg projection to ±2px, and renders a narrower/darker far leg behind the near leg. It also reduces carry basket handle depth spacing to 14px so hands overlap in side projection. The v0.8.9 locomotion solver, foot trajectories, bone lengths, heel-strike extension, cycle cadence and <8px/frame² temporal gate remain unchanged. Hosted CI and full-speed human visual acceptance remain separate gates.
+
+
+## Stage 13 validation update — 2026-10-20
+
+The push run 39366594252 and pull-request run 39366610236 both completed successfully at commit 30b5db07cca260831e5d857852fe10e6f23c83d8. The hosted artifact `motion-studio-v0.9.0-true-side-profile-review` was uploaded and reviewed at full frame size. It reports 192 frames at 24fps for both profiles, max bone-length error below 1e-12px, basket handle-contact error 0px, planted stance-foot drift below 1e-12px, and maximum tracked-point acceleration 7.6813px/frame² (<8). Visual review shows a right-facing single-eye profile and clear near/far leg overlap; however, full-speed artistic-naturalness acceptance is still pending. A follow-up adds explicit projection metrics (`nearFarLegCenterGapPx`, shoulder gap, profile torso/hip widths and far/near segment-width ratios) so the diagnostics describe side-view geometry rather than frontal widths.
