@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.8.7 gait-biomechanics checkpoint on branch motion-studio-v0.8.7-gait-biomechanics. v0.8.6 hosted CI passed and organic-contour previews were produced, but human full-speed visual acceptance remains pending; v0.8.7 hosted validation and visual acceptance are pending.
+Current engineering candidate: Motion Studio v0.8.8 sagittal-gait checkpoint on branch motion-studio-v0.8.8-sagittal-gait. v0.8.6 contour-render workflow passed; v0.8.7 gait-biomechanics changes exposed unresolved temporal failures. v0.8.8 side-view projection and gait tests are pending hosted validation and full-speed human acceptance.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -94,3 +94,8 @@ Full-size inspection of v0.8.5 found that head/torso proportions were clearer bu
 ## Stage 10 gait-biomechanics checkpoint — 2026-10-20
 
 Full-size review of v0.8.6 found stance and swing phases both reading as a squat because the pelvis-to-floor span was short relative to fixed leg-chain length and knee pole bias stayed equally strong throughout the cycle. The v0.8.7 candidate raises pelvis position by 8px, reduces swing-foot clearance to 24px, and uses a smooth phase-aware knee bias (more extended stance, more flexed swing). Bone lengths, root stride speed, foot contact model, organic contours, hand/prop rendering and temporal limits are retained. Hosted checks and full-speed human acceptance remain separate gates.
+
+
+## Stage 11 sagittal gait and near/far leg overlap — 2026-10-20
+
+References consulted: Monmouth Animation Instruction Pages, “Movement: Walk Cycle” (https://animation.monmouth.edu/instruct/animation/walk-cycle/); Arnold et al., “Biomechanics of Multi-ligament Knee Injuries and Effects on Gait,” sagittal-plane gait summary (https://pmc.ncbi.nlm.nih.gov/articles/PMC2953341/); van der Zee et al., “A biomechanics dataset of healthy human walking at various speeds, step lengths and step widths,” Scientific Data (https://www.nature.com/articles/s41597-022-01817-1). The references support building from contact/loading, mid-stance extension, toe-off, and swing rather than holding one crouched knee pose throughout the cycle. Code inspection identified that the prior side-view profile added 28 px to one leg and -28 px to the other in the screen-horizontal axis, exaggerating apparent leg spread by 56 px. v0.8.8 reduces that projection to 6 px per side while retaining the sagittal stride trajectory; reduces pelvis bounce to avoid the two-bone IK repeatedly approaching its maximum-extension singularity; and adds explicit tests for near/far attachment spacing, stance/swing distinction, ankle reachability, and acceleration. No acceptance is claimed until CI and full-speed video review pass.
