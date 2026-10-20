@@ -128,7 +128,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   const pickupOrigin = { x: base.shoulders.near.x + 50, y: pickupTableTopY - 13 };
   const pickupTarget = { x: pickupOrigin.x - 18, y: pickupOrigin.y };
   let drop = 0, forwardShift = 0, lean = 0, headTurn = 0, headShift = 0, reachWeight = 0, breath = 0;
-  let armCounterBalance = 0;
+  let gazeOffsetX = 0, gazeOffsetY = 0, armCounterBalance = 0, sitStandRestWeight = 0;
 
   if (activity === "stand") {
     breath = 1.7 * Math.sin(TAU * 0.78 * u);
@@ -137,9 +137,11 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   if (activity === "look-around") {
     // A side-profile rig can scan its pitch/tilt and gaze offset; it cannot perform
     // true horizontal yaw. Keep the label explicit and give each glance a clear beat.
-    headTurn = keyCurve(u, [[0,0],[0.12,0],[0.27,0.19],[0.36,0.24],[0.50,0.24],[0.61,-0.22],[0.70,-0.25],[0.83,0.04],[0.93,0],[1,0]]);
-    headShift = keyCurve(u, [[0,0],[0.25,3.5],[0.42,4],[0.60,-2.5],[0.78,-2],[0.90,0],[1,0]]);
-    lean = keyCurve(u, [[0,0],[0.28,0.025],[0.55,-0.018],[0.78,0],[1,0]]);
+    headTurn = keyCurve(u, [[0,0],[0.10,0],[0.25,0.30],[0.34,0.35],[0.48,0.30],[0.59,-0.29],[0.69,-0.34],[0.82,0.08],[0.93,0],[1,0]]);
+    headShift = keyCurve(u, [[0,0],[0.22,5.5],[0.40,6],[0.58,-4],[0.76,-3],[0.90,0],[1,0]]);
+    gazeOffsetX = keyCurve(u, [[0,0],[0.18,0],[0.30,1.4],[0.43,1.4],[0.56,-1.4],[0.68,-1.5],[0.82,0.8],[0.92,0],[1,0]]);
+    gazeOffsetY = keyCurve(u, [[0,0],[0.25,0.2],[0.38,-0.5],[0.60,0.4],[0.75,0],[1,0]]);
+    lean = keyCurve(u, [[0,0],[0.28,0.035],[0.55,-0.028],[0.78,0],[1,0]]);
   }
   if (activity === "reach") {
     reachWeight = keyCurve(u, [[0,0],[0.10,0],[0.22,0.12],[0.40,0.90],[0.46,1],[0.62,1],[0.75,0.62],[0.90,0],[1,0]]);
@@ -159,12 +161,13 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     forwardShift = keyCurve(u, [[0,0],[0.14,0],[0.30,7],[0.40,12],[0.52,10],[0.70,4],[0.86,0],[1,0]]);
     lean = keyCurve(u, [[0,0.02],[0.14,0.02],[0.29,0.20],[0.40,0.34],[0.50,0.28],[0.65,0.12],[0.80,0],[1,0]]);
     armCounterBalance = keyCurve(u, [[0,0],[0.16,0],[0.30,0.62],[0.42,1],[0.55,0.76],[0.72,0.24],[0.88,0],[1,0]]);
+    sitStandRestWeight = keyCurve(u, [[0,0],[0.28,0],[0.43,0],[0.56,0.16],[0.72,0.72],[0.86,1],[1,1]]);
   }
   if (activity === "turn-in-place") {
     // This is an explicit 2D weight-shift/foot-pivot cue, not a true 3D turn.
-    lean = 0.09 * turnPulse;
-    headTurn = -0.14 * turnPulse;
-    forwardShift = 8 * turnPulse;
+    lean = 0.11 * turnPulse;
+    headTurn = -0.17 * turnPulse;
+    forwardShift = 10 * turnPulse;
     armCounterBalance = Math.abs(turnPulse);
   }
 
@@ -179,10 +182,12 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     activityState: { pelvisDropPx: drop, torsoLeanRadians: lean, headTurnRadians: headTurn,
       reachWeight, reachDisplacementPx: 76 * reachWeight, breathingOffsetPx: breath,
       respiratorySwayPx: respiratorySway,
+      gazeOffsetX, gazeOffsetY,
       pickupReachWeight: activity === "pick-up" ? pickupReach : 0,
       pickupGripWeight: activity === "pick-up" ? pickupGrip : 0,
       pickupLiftWeight: activity === "pick-up" ? pickupLift : 0,
       armCounterBalanceWeight: armCounterBalance,
+      sitStandRestWeight,
       pickupItem: null, chair: null, reachTarget: null },
     pelvis: newPelvis, rootX: newPelvis.x, torsoAngle: lean,
     chestLocal: transform(base.chestLocal, 1, respiratorySway, -breath * 0.82),
@@ -197,7 +202,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     }
   };
 
-  const footPivot = activity === "turn-in-place" ? 0.13 * turnPulse : 0;
+  const footPivot = activity === "turn-in-place" ? 0.22 * turnPulse : 0;
   pose.leftFoot = { ...base.leftFoot, angle: (base.leftFoot.angle || 0) + footPivot };
   pose.rightFoot = { ...base.rightFoot, angle: (base.rightFoot.angle || 0) - footPivot };
   pose.leftHip = translatePoint(base.leftHip, forwardShift, drop);
@@ -218,9 +223,17 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     nearTarget = { ...pose.basket.handleRight };
     farTarget = { ...pose.basket.handleLeft };
   } else if (activity === "reach") {
+    // Target is fixed in world-space; only the wrist travels. A target parented to
+    // the moving shoulder made the old contact test self-fulfilling.
+    const restTarget = {
+      x: pose.shoulders.near.x + (base.nearArm.wrist.x - base.shoulders.near.x),
+      y: pose.shoulders.near.y + (base.nearArm.wrist.y - base.shoulders.near.y)
+    };
+    const targetX = base.shoulders.near.x + 76;
+    const targetY = base.shoulders.near.y + 8;
     nearTarget = {
-      x: pose.shoulders.near.x + 76 * reachWeight + (base.nearArm.wrist.x - base.shoulders.near.x) * (1 - reachWeight),
-      y: pose.shoulders.near.y + 8 * reachWeight + (base.nearArm.wrist.y - base.shoulders.near.y) * (1 - reachWeight)
+      x: restTarget.x + (targetX - restTarget.x) * reachWeight,
+      y: restTarget.y + (targetY - restTarget.y) * reachWeight - 12 * Math.sin(Math.PI * reachWeight)
     };
     farTarget = { x: farTarget.x - 7 * reachWeight, y: farTarget.y - 3 * reachWeight };
   } else if (activity === "pick-up") {
@@ -229,6 +242,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     const reachingTarget = {
       x: base.nearArm.wrist.x + (pickupTarget.x - base.nearArm.wrist.x) * pickupReach,
       y: base.nearArm.wrist.y + (pickupTarget.y - base.nearArm.wrist.y) * pickupReach
+        - 9 * Math.sin(Math.PI * pickupReach)
     };
     const holdingTarget = { x: pose.shoulders.near.x + 42, y: pose.shoulders.near.y + 27 };
     nearTarget = {
@@ -238,13 +252,24 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     farTarget = { x: farTarget.x - 5 * pickupCrouch + 2 * pickupLift,
       y: farTarget.y - 8 * pickupCrouch - 3 * pickupLift };
   } else if (activity === "sit-to-stand") {
-    const counter = armCounterBalance;
-    const balanceNear = { x: pose.shoulders.near.x + 37, y: pose.shoulders.near.y + 48 };
-    const balanceFar = { x: pose.shoulders.far.x + 30, y: pose.shoulders.far.y + 55 };
-    nearTarget = { x: nearTarget.x + (balanceNear.x - nearTarget.x) * counter,
-      y: nearTarget.y + (balanceNear.y - nearTarget.y) * counter };
-    farTarget = { x: farTarget.x + (balanceFar.x - farTarget.x) * counter,
-      y: farTarget.y + (balanceFar.y - farTarget.y) * counter };
+    // Separate the seated lap pose, forward counterbalance, and relaxed standing
+    // pose. Reusing the generic folded-arm pose made the entire action read as
+    // crossed arms rather than a lower-body transfer.
+    const counter = armCounterBalance, rest = sitStandRestWeight;
+    const lapNear = { x: pose.shoulders.near.x + 38, y: pose.shoulders.near.y + 86 };
+    const lapFar = { x: pose.shoulders.far.x + 22, y: pose.shoulders.far.y + 90 };
+    const balanceNear = { x: pose.shoulders.near.x + 52, y: pose.shoulders.near.y + 87 };
+    const balanceFar = { x: pose.shoulders.far.x + 34, y: pose.shoulders.far.y + 91 };
+    const standingNear = { x: pose.shoulders.near.x + 22, y: pose.shoulders.near.y + 75 };
+    const standingFar = { x: pose.shoulders.far.x + 12, y: pose.shoulders.far.y + 75 };
+    const actionNear = { x: lapNear.x + (balanceNear.x - lapNear.x) * counter,
+      y: lapNear.y + (balanceNear.y - lapNear.y) * counter };
+    const actionFar = { x: lapFar.x + (balanceFar.x - lapFar.x) * counter,
+      y: lapFar.y + (balanceFar.y - lapFar.y) * counter };
+    nearTarget = { x: actionNear.x + (standingNear.x - actionNear.x) * rest,
+      y: actionNear.y + (standingNear.y - actionNear.y) * rest };
+    farTarget = { x: actionFar.x + (standingFar.x - actionFar.x) * rest,
+      y: actionFar.y + (standingFar.y - actionFar.y) * rest };
   } else if (activity === "turn-in-place") {
     nearTarget = { x: nearTarget.x + 8 * turnPulse, y: nearTarget.y + 5 * turnPulse };
     farTarget = { x: farTarget.x - 6 * turnPulse, y: farTarget.y + 3 * turnPulse };
@@ -272,8 +297,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   }
   if (activity === "reach") {
     pose.activityState.reachTarget = {
-      x: pose.shoulders.near.x + 76,
-      y: pose.shoulders.near.y + 8,
+      x: base.shoulders.near.x + 76,
+      y: base.shoulders.near.y + 8,
       radius: 10,
       active: reachWeight >= 0.999999999
     };
