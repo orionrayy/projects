@@ -209,3 +209,12 @@ The latest source run passed the per-frame ankle-reach diagnostic, stance-foot, 
 - Slightly shorten and re-balance each leg chain to 78.5/80.5 px (total 159 px), making the same contact pose less crouched.
 - Use a 4.5 px C2 transition and a small monotone smoothstep bias (0.055) that preserves no-overshoot and makes the upper reach settle about 2 px below chain maximum. The transition remains C2 at each boundary; tests still prohibit target overshoot and preserve the endpoint error gate.
 - This may increase sensitivity near near-straight poses; therefore the same-frame knee step/acceleration, branch-side, reach, and >155° heel-strike gates must all pass together. No gate is relaxed.
+
+
+## Follow-up 6: final temporal cadence calibration — 2026-10-20
+
+The latest hosted run passed heel-strike extension, stance-foot contact, ankle reach, no-overshoot and visual-proof tests. Two temporal tests still found a 13.3348 px/frame knee displacement against the unchanged <13 px/frame limit after the leg-length/curve calibration.
+
+- Both scene profiles now use cycle_seconds 1.33 and screen_stride_scale 0.568. This gives an effective stride of 85.2 px/cycle and a modeled cadence of about 90.2 steps/minute.
+- Expected effect is a small reduction in swing-phase knee displacement while retaining a longer stride than the 44.64 px/cycle baseline; CI must confirm the actual frame-level maxima.
+- All geometry and temporal assertions remain unchanged. The PR stays draft and unmerged until the new head passes hosted render checks and full-speed human visual acceptance.
