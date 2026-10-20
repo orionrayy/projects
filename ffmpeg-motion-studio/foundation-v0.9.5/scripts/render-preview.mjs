@@ -141,10 +141,10 @@ function activityEnvironmentSvg(p, scene, activity) {
 function pickupItemSvg(item) {
   if (!item) return "";
   const x = item.x, y = item.y;
-  return '<g data-prop="pickup-item" data-held="'+String(item.held)+'" transform="translate('+n(x)+' '+n(y)+')">' +
-    '<path d="M -15 -7 L -9 -12 L 13 -10 L 15 6 L 5 11 L -15 7 Z" fill="#C58B51" stroke="#6F492B" stroke-width="1.8" stroke-linejoin="round"/>' +
-    '<path d="M -9 -12 L -7 3 L 15 6 M -7 3 L 5 11" fill="none" stroke="#E5BB83" stroke-width="1.7"/>' +
-    '<path d="M -2 -11 L 1 9" stroke="#8D5E35" stroke-width="2.4" opacity=".72"/>' +
+  return '<g data-prop="pickup-item" data-held="'+String(item.held)+'" data-grip-weight="'+n(item.gripWeight)+'" transform="translate('+n(x)+' '+n(y)+')">' +
+    '<path d="M -17 -8 L -10 -13 L 15 -11 L 17 7 L 6 13 L -17 8 Z" fill="#C58B51" stroke="#6F492B" stroke-width="1.8" stroke-linejoin="round"/>' +
+    '<path d="M -10 -13 L -8 4 L 17 7 M -8 4 L 6 13" fill="none" stroke="#E5BB83" stroke-width="1.7"/>' +
+    '<path d="M -2 -12 L 1 11" stroke="#8D5E35" stroke-width="2.4" opacity=".72"/>' +
     '</g>';
 }
 function basketSvg(p,scene) {
