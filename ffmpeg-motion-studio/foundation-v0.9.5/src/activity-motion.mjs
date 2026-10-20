@@ -152,6 +152,9 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     drop = 30 * pickupCrouch;
     forwardShift = 10 * pickupCrouch;
     lean = 0.34 * pickupCrouch;
+    headTurn = 0.14 * pickupReach;
+    gazeOffsetX = 0.60 * pickupReach;
+    gazeOffsetY = 0.45 * pickupReach;
     reachWeight = pickupReach;
   }
   if (activity === "sit-to-stand") {
@@ -244,7 +247,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       y: base.nearArm.wrist.y + (pickupTarget.y - base.nearArm.wrist.y) * pickupReach
         - 9 * Math.sin(Math.PI * pickupReach)
     };
-    const holdingTarget = { x: pose.shoulders.near.x + 42, y: pose.shoulders.near.y + 27 };
+    // Keep the lifted parcel close to the torso instead of carrying it at arm's length.
+    const holdingTarget = { x: pose.shoulders.near.x + 12, y: pose.shoulders.near.y + 42 };
     nearTarget = {
       x: reachingTarget.x + (holdingTarget.x - reachingTarget.x) * pickupLift,
       y: reachingTarget.y + (holdingTarget.y - reachingTarget.y) * pickupLift
