@@ -140,7 +140,7 @@ function armSvg(arm,scene,sleeve,near,mode,activity,pose) {
   const foldA={x:arm.elbow.x+foreX*0.8-perpX*3.0,y:arm.elbow.y+foreY*0.8-perpY*3.0};
   const foldM={x:arm.elbow.x+foreX*2.5,y:arm.elbow.y+foreY*2.5};
   const foldB={x:arm.elbow.x+foreX*0.8+perpX*3.0,y:arm.elbow.y+foreY*0.8+perpY*3.0};
-  s+='<path data-anatomy="elbow-fold" data-joint-fold="forearm-normal" d="M '+n(foldA.x)+' '+n(foldA.y)+' Q '+n(foldM.x)+' '+n(foldM.y)+' '+n(foldB.x)+' '+n(foldB.y)+'" fill="none" stroke="#925F49" stroke-width="1.05" stroke-linecap="round" opacity=".65"/>';';
+  s+='<path data-anatomy="elbow-fold" data-joint-fold="forearm-normal" d="M '+n(foldA.x)+' '+n(foldA.y)+' Q '+n(foldM.x)+' '+n(foldM.y)+' '+n(foldB.x)+' '+n(foldB.y)+'" fill="none" stroke="#925F49" stroke-width="1.05" stroke-linecap="round" opacity=".65"/>';
   return s+handSvg(arm,scene,mode,near,activity,pose);
 }
 function frontHeadSvg(p,scene) {
