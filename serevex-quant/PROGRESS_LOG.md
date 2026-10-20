@@ -358,3 +358,9 @@ The +00:00 offset is the representation seen in the file, not independent proof 
 - Current readiness audit test file has 15 regression tests. The initial audit version's hosted tests passed in run #39474246762 before these latest hardening changes. Latest branch workflow #39476729569 is pending; a complete hosted pass for the latest SHA and final artifact is not yet verified.
 - Evidence boundary unchanged: hierarchical-shrinkage v2.0b failed the model-selection gate (Brier 0.2172755504 vs baseline 0.2172705916; log loss 0.6262322919 vs 0.6262239541; 50% positive block share against 70% minimum); calibration was correctly not run and the 0.1b baseline remains selected.
 - Source provenance/rights/time/quote basis, primary-secondary price discrepancy, near-exact tick/secondary lineage, external news/macro temporal eligibility, and net-of-cost broker execution remain unresolved. No code-only patch can authoritatively settle source-owner or broker facts. Maintain `NO_TRADE` and keep deployment, live signals and order routing disabled.
+
+
+## 2026-10-21 — Latest CI continuation
+
+
+- Follow-up audit-test fixture correction committed after the preceding run was cancelled: latest PR #173 head is `a908629f45a4401ae25d3534b6be197acf5dd0f9`. Latest full benchmark is [run #39477177824](https://github.com/orionrayy/ai-determinism-engine/actions/runs/39477177824); setup and 240 synthetic calibration contracts passed, while the full unit-test step is still in progress. There is no final result/artifact yet. Previous run #39476729569 was cancelled when the follow-up correction arrived.
