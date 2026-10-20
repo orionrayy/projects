@@ -201,3 +201,11 @@ Latest hosted run 39381538157 shows the stride/cadence tune brought the knee-ste
 
 - The knee C2 transition width is narrowed from 6.0 to 5.75 px. This makes the solved radius approximately 0.12 px closer to the target at the observed worst frame; it does not change the endpoint-error threshold.
 - Re-run the complete source tests and render pipeline. Do not interpret a narrowly passing geometric metric as full-speed naturalness acceptance.
+
+
+## Follow-up 5: heel-strike extension vs endpoint reach — 2026-10-20
+
+The latest source run passed the per-frame ankle-reach diagnostic, stance-foot, knee-step and temporal-acceleration limits, but the biomechanical heel-strike angle was 153.39° (target >155°). The updated candidate balances these competing constraints explicitly:
+- Slightly shorten and re-balance each leg chain to 78.5/80.5 px (total 159 px), making the same contact pose less crouched.
+- Use a 4.5 px C2 transition and a small monotone smoothstep bias (0.055) that preserves no-overshoot and makes the upper reach settle about 2 px below chain maximum. The transition remains C2 at each boundary; tests still prohibit target overshoot and preserve the endpoint error gate.
+- This may increase sensitivity near near-straight poses; therefore the same-frame knee step/acceleration, branch-side, reach, and >155° heel-strike gates must all pass together. No gate is relaxed.

@@ -63,8 +63,8 @@
     "phase_variation_cycles": 0.018
   },
   "character": {
-    "upper_leg_px": 79,
-    "lower_leg_px": 81,
+    "upper_leg_px": 78.5,
+    "lower_leg_px": 80.5,
     "upper_arm_px": 54,
     "forearm_px": 53,
     "head_radius_px": 24,
