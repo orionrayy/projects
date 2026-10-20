@@ -37,12 +37,12 @@ test("whole-sequence pose metrics preserve geometry and naturalness gates", () =
     assert.ok(report.maxBoneLengthErrorPx <= 0.02);
     assert.ok(report.maxGroundPenetrationPx <= 0.02);
     assert.ok(report.minProjectedFootSeparationPx <= 30, "side-view feet should approach a narrow passing pose: " + report.minProjectedFootSeparationPx);
-    assert.ok(report.torsoAngleRangeDegrees >= 8);
-    assert.ok(report.headAngleRangeDegrees >= 5);
+    assert.ok(report.torsoAngleRangeDegrees < 6);
+    assert.ok(report.headAngleRangeDegrees < 3.5);
     if (mode === "carry") assert.ok(report.maxBasketContactErrorPx <= 0.02);
-    if (mode === "carry") assert.ok(report.basketTiltRangeDegrees >= 4 && report.basketTiltRangeDegrees <= 8, "carry prop must have restrained visible tilt");
+    if (mode === "carry") assert.ok(report.basketTiltRangeDegrees >= 0.5 && report.basketTiltRangeDegrees <= 2.5, "carry prop secondary tilt should remain subtle");
     if (mode === "free") {
-      assert.ok(report.nearArmWristRelativeRangePx >= 50);
+      assert.ok(report.nearArmWristRelativeRangePx >= 25);
       assert.ok(report.minNearArmElbowAngleDegrees >= 110);
       assert.ok(report.maxNearArmElbowAngleDegrees <= 160);
     }

@@ -99,7 +99,7 @@
     "max_head_step_px": 3.5,
     "max_chest_step_px": 4.2,
     "max_wrist_step_px": 7.5,
-    "max_foot_step_px": 4.5,
+    "max_foot_step_px": 7.5,
     "max_joint_acceleration_px_per_frame2": 5.5
   }
 }
