@@ -27,7 +27,7 @@ test('portrait motion proof uses a full 10s timeline, six distinct shot families
   assert.ok(gait.cadenceStepsPerMinute >= 88 && gait.cadenceStepsPerMinute <= 96);
   assert.ok(gait.maxKneeStepPx < 13.0, 'portrait knee step spike: ' + gait.maxKneeStepPx);
   assert.ok(gait.minStanceKneeAngleDegrees > 148, 'portrait stance knee collapses: ' + gait.minStanceKneeAngleDegrees);
-  assert.ok(gait.maxAnkleClampErrorPx < 1.5, 'portrait ankle reach error: ' + gait.maxAnkleClampErrorPx);
+  assert.ok(gait.maxAnkleClampErrorPx < 1.5, 'portrait ankle reach error: ' + JSON.stringify(gait.maxAnkleClampDetail));
   assert.ok(gait.maxBoneLengthErrorPx < 0.02, 'portrait bone-length error: ' + gait.maxBoneLengthErrorPx);
   assert.ok(gait.maxStanceFootDriftPerFramePx < 0.05, 'portrait stance foot drift: ' + gait.maxStanceFootDriftPerFramePx);
   assert.equal(spec.audioIncluded, false);
