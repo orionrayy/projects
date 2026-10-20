@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.9.0 true-side-profile checkpoint on branch motion-studio-v0.9.0-true-side-profile. Both push and pull-request GitHub Actions runs passed and 720p/24fps carry/free previews were produced; side-profile metrics now report the actual rendered near/far projection. Full-speed human visual acceptance remains pending.
+Current engineering candidate: Motion Studio v0.9.3 longer-stride phase-adaptive gait in `ffmpeg-motion-studio/foundation-v0.9.3/` on branch motion-studio-v0.9.1-damped-human-gait. v0.9.1 and v0.9.2 are retained as comparison baselines. Earlier CI success on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 is superseded by the latest-head checkpoint in section 14; full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -114,3 +114,107 @@ Review of the v0.8.9 full-size frame showed that the renderer still presented a 
 ## Stage 13 validation update — 2026-10-20
 
 The push run 39366594252 and pull-request run 39366610236 both completed successfully at commit 30b5db07cca260831e5d857852fe10e6f23c83d8. The hosted artifact `motion-studio-v0.9.0-true-side-profile-review` was uploaded and reviewed at full frame size. It reports 192 frames at 24fps for both profiles, max bone-length error below 1e-12px, basket handle-contact error 0px, planted stance-foot drift below 1e-12px, and maximum tracked-point acceleration 7.6813px/frame² (<8). Visual review shows a right-facing single-eye profile and clear near/far leg overlap; however, full-speed artistic-naturalness acceptance is still pending. A follow-up adds explicit projection metrics (`nearFarLegCenterGapPx`, shoulder gap, profile torso/hip widths and far/near segment-width ratios) so the diagnostics describe side-view geometry rather than frontal widths.
+
+
+## Stage 14 — Damped human gait v0.9.1 — 2026-10-20
+
+The v0.9.0 artifact had exact stance-foot planting but excessive secondary motion: knee peak step 11.02px/frame, maximum acceleration 7.68px/frame², free-arm wrist step 14.31px/frame, torso orientation range 11.47°, head 5.97°, basket tilt range 5.16° and 24px swing lift. v0.9.1 damps these amplitudes and replaces cubic swing interpolation with quintic Hermite interpolation that matches acceleration at phase boundaries, a C2 foot-clearance pulse, and smoother heel/toe roll. References: van der Zee et al. (2022) https://www.nature.com/articles/s41597-022-01817-1; Meyns et al. (2013) https://pubmed.ncbi.nlm.nih.gov/23489950/; Spallone et al. (2026) https://pmc.ncbi.nlm.nih.gov/articles/PMC13418446/; healthy Thai gait cohort (2023) https://pmc.ncbi.nlm.nih.gov/articles/PMC10696785/. Validation pending.
+
+
+## Stage 14 validation results — 2026-10-20
+
+The v0.9.1 push and pull-request workflows both completed successfully and generated two 1280×720, 24fps, 192-frame MP4 previews plus 4fps contact sheets, metrics and SHA-256 checksums. Compared with v0.9.0 metrics: maximum tracked-point acceleration fell from 7.6813 to 3.0994px/frame² (−59.7%); maximum knee step fell from 11.0177 to 7.3980px/frame (−32.8%); chest step fell from 5.4096 to 2.8082px/frame (−48.1%); head step fell from 4.3670 to 2.4259px/frame (−44.4%); torso-angle range fell from 11.4712° to 4.5055° (−60.7%); head-angle range fell from 5.9741° to 2.6302° (−56.0%); basket tilt range fell from 5.1559° to 1.3677° (−73.5%). Stance-foot drift remained below 1e-12px/frame and basket-hand contact error remained 0px. Peak foot displacement per frame rose from 4.0345 to 6.8856px because the C2 trajectory trades some peak velocity for smoother acceleration; maximum total acceleration declined substantially. Continuous full-speed human-naturalness review remains pending, so this stays a draft.
+
+
+## Stage 15 — Adaptive, contact-reactive gait v0.9.2 — 2026-10-20
+
+The user's review correctly identified that v0.9.1 was smoother by per-frame acceleration metrics but still stiff, repetitive and robotic. The key defect was a fixed-speed phase loop with pure sinusoidal upper-body targets and too little weight-transfer response, not merely excessive amplitude.
+
+Research inputs:
+- van der Zee et al. (2022), open motion-capture/ground-reaction-force data across 33 combinations of speed, step length and width: https://www.nature.com/articles/s41597-022-01817-1
+- Van Criekinge et al. (2023), full-body motion-capture gait data from 138 able-bodied adults across ages 21–86 and 50 stroke survivors: https://www.nature.com/articles/s41597-023-02767-y
+- Ferber et al. (2002), reactive balance corrections after unexpected walking perturbations, with coordinated hip/trunk and lower-limb contributions: https://www.sciencedirect.com/science/article/pii/S0966636202000103
+- Meyns et al. (2013), gait-coordinated arm swing and its stabilization: https://pubmed.ncbi.nlm.nih.gov/23489950/
+
+The v0.9.2 candidate adds an integrated smooth start/stop gait clock whose phase coordinate drives both root travel and foot trajectory, preserving stance-foot locking during the speed ramps. It adds contact-localized pelvis compression and lateral transfer, torso/head reaction, balanced free-arm counter-swing using a multi-harmonic waveform, subtle basket response, and deterministic smoothed cycle variation with small left/right asymmetry. Amplitudes are restored modestly after over-damping; the goal is coordinated response, not random jitter.
+
+Validation status: CI/render is pending after this commit. Full-speed naturalness acceptance remains pending until both previews are watched continuously at actual speed. Do not infer human likeness from tests or frame-step metrics alone.
+
+
+## Stage 16 — Longer-stride phase-adaptive gait v0.9.3 — 2026-10-20
+
+Full-size inspection of v0.9.2 remained stiff, short-strided and robotic despite successful tests/render. The effective stride was 44.64px for a character roughly 300px tall, torso response was subtle, and arm swing was not clearly legible. v0.9.3 increases effective stride to 93px/cycle and foot lift to 16.5px, adds a subtle forward torso lean and asymmetric pelvis rhythm, and varies stride timing through bounded deterministic phase warping of ±0.018 cycles. A shared phase coordinate drives root translation, foot stance/swing, contact response and arm timing so planted stance is preserved. Contact compression remains low because larger body displacement degraded heel-strike extension in early trials.
+
+Research inputs:
+- van der Zee et al. (2022), healthy walking capture across speed/step length/step width with motion capture and GRFs: https://www.nature.com/articles/s41597-022-01817-1
+- Van Criekinge et al. (2023), full-body gait capture for 138 able-bodied adults: https://www.nature.com/articles/s41597-023-02767-y
+- Ferber et al. (2002), perturbation-based reactive balance adjustments: https://www.sciencedirect.com/science/article/pii/S0966636202000103
+- Collins et al. (2009), dynamic arm swinging in human walking: https://pmc.ncbi.nlm.nih.gov/articles/PMC2817299/
+
+Validation: CI and full render must pass; continuous full-speed naturalness review remains independent. Do not call this human-like until visual acceptance clears.
+
+
+## 14. Reference-led visual review and gait-branch correction — 2026-10-20
+
+This checkpoint supersedes earlier claims about the latest v0.9.3 head. The uploaded reference set contains eight vertical H.264 videos (720×1280, 30 fps, approximately 157–331 seconds each). An initial evenly spaced contact-sheet inspection identified a consistent visual grammar; the video set has not been accepted as exhaustive full-speed human motion review.
+
+- Audit: MOTION_STUDIO_REFERENCE_VIDEO_AUDIT_2026-10-20.md.
+- The reference visual proof is a separate, dependency-free Node/SVG preview, rendered by CI to a 720×1280, 30 fps, 240-frame MP4 plus a contact sheet. It demonstrates four reusable shot families: room-wide staging, object detail, numbered rule card, and evidence/connection diagram.
+- Visual-system requirements now explicitly include composition-safe zones, fixed hierarchy, restrained alert accents, prop-driven action, camera/cut rhythm, typography legibility, and cross-shot continuity. This is a proof slice, not a finished NLE/editor or a full-length export.
+- The most recent v0.9.3 workflow before this change was run 39374481048 and failed two temporal assertions. The maximum knee step was 20.0466 px/frame and maximum joint acceleration was 17.7348 px/frame². The fixed-X knee-branch choice could swap geometric solutions as candidate ordering crossed.
+- The candidate solver now chooses the knee branch relative to the oriented hip-to-ankle normal, rather than sorting candidates by world-space X. The first hosted rerun retained the exact 20.0466 px knee-step and 17.7348 px/frame² acceleration maxima, so that branch-only change was insufficient. The follow-up adds a knee-only C2 upper-reach transition with a 1 px flex margin to avoid the near-straight two-bone singularity while preserving exact carry-arm IK targets. It must still pass all-frame continuity and hosted rendering gates before being called verified.
+- Required evidence: all source tests pass without relaxing thresholds; CI renders carry/free videos and the vertical visual proof; FFprobe confirms resolution, frame rate, frame count and duration; checksums are recorded; the resulting contact sheet and clips still need full-speed visual acceptance.
+- Still open: full-speed naturalness and action readability; broader speed/step-width/starting/stopping coverage; browser-vs-FFmpeg raster parity; audio and full editor/timeline subsystems. Successful CI is not production approval.
+
+
+## 15. Follow-up: near-extension singularity mitigation — 2026-10-20
+
+- The first geometric knee-branch selection change did not alter the CI maxima; the subsequent run still reported a 20.0466 px knee step and 17.7348 px/frame² maximum joint acceleration.
+- The next candidate adds a knee-only C2 reach transition over the last 8 px of the chain's nominal reach, ending 1 px short of the sum of upper/lower leg lengths. This avoids the worst near-straight singularity while leaving arm IK endpoint contracts unchanged.
+- A synthetic near-extension test and a detailed all-frame continuity test now cover reach margin, knee angle, endpoint error, branch side, step spikes, and acceleration. The tests must pass with the existing geometric/temporal assertions unchanged.
+- The new visual proof remains in the same candidate, but no new artifact or naturalness acceptance is claimed until the updated hosted run succeeds.
+
+
+## Follow-up 2: monotone C2 knee reach + pelvis/floor calibration — 2026-10-20
+
+The first soft-reach candidate was not accepted: CI recorded a remaining knee jump of 17.70 px/frame, endpoint clamp error of 1.86 px, and elevated knee acceleration. The original polynomial could exceed the requested radius partway through its transition, so it was replaced rather than relaxing any acceptance gate.
+
+- New upper-reach curve uses the monotone expression u - u^3 + 0.5u^4, a C2 profile with unit entry slope and zero exit slope/curvature. The transition spans up to the last 6 px of leg reach and leaves a 3 px knee-flex margin for equal/near-equal segment lengths.
+- Both v0.9.3 scene profiles shift the pelvis 2 px lower on the canvas (root_y 409 → 411), reducing the near-extended hip-to-ankle distance for the current stride/contact geometry.
+- The synthetic near-extension test checks that solved reach never overshoots the requested target or reverses as target reach increases. Knee step, acceleration, ground contact, stance drift and endpoint reach checks remain independent and must all pass.
+- This is an unverified candidate: only hosted CI and reviewed full-speed renders can establish whether the calibration improves the actual motion.
+
+
+## Follow-up 3: stride/cadence envelope calibration — 2026-10-20
+
+The monotone C2 reach curve stopped its radius overshoot, but the latest hosted run still failed at a 13.9645 px/frame knee displacement and 1.9303 px maximum ankle clamp. These remain real quality-gate failures.
+
+- Both v0.9.3 profiles now use a 1.29 s gait cycle and screen stride scale 0.57, giving an effective stride of 85.5 px/cycle and a predicted cadence around 93 steps/min. That remains above the previous 44.64 px/cycle short-shuffle baseline while moderating peak swing geometry.
+- Existing hard limits remain unchanged: maximum knee step <13 px/frame, ankle reach error <1.5 px, and the temporal acceleration threshold derived from stride length.
+- Added a frame-local ankle reach diagnostic test that reports the exact frame, side, hip, requested foot and solved ankle if the reach gate fails.
+- Await the latest hosted run. This candidate is not considered fixed until every source test, render/FFprobe gate and artifact upload passes. Full-speed human art-direction review remains an independent acceptance gate.
+
+
+## Follow-up 4: endpoint tolerance without gate relaxation — 2026-10-20
+
+Latest hosted run 39381538157 shows the stride/cadence tune brought the knee-step and temporal-acceleration tests inside their existing limits. The remaining failures were the side-view reachability gate and its new per-frame diagnostic: carry mode, frame 101, right leg entering swing, requested reach 158.452 px and solved reach 156.910 px, giving 1.5419 px endpoint error (limit <1.5 px).
+
+- The knee C2 transition width is narrowed from 6.0 to 5.75 px. This makes the solved radius approximately 0.12 px closer to the target at the observed worst frame; it does not change the endpoint-error threshold.
+- Re-run the complete source tests and render pipeline. Do not interpret a narrowly passing geometric metric as full-speed naturalness acceptance.
+
+
+## Follow-up 5: heel-strike extension vs endpoint reach — 2026-10-20
+
+The latest source run passed the per-frame ankle-reach diagnostic, stance-foot, knee-step and temporal-acceleration limits, but the biomechanical heel-strike angle was 153.39° (target >155°). The updated candidate balances these competing constraints explicitly:
+- Slightly shorten and re-balance each leg chain to 78.5/80.5 px (total 159 px), making the same contact pose less crouched.
+- Use a 4.5 px C2 transition and a small monotone smoothstep bias (0.055) that preserves no-overshoot and makes the upper reach settle about 2 px below chain maximum. The transition remains C2 at each boundary; tests still prohibit target overshoot and preserve the endpoint error gate.
+- This may increase sensitivity near near-straight poses; therefore the same-frame knee step/acceleration, branch-side, reach, and >155° heel-strike gates must all pass together. No gate is relaxed.
+
+
+## Follow-up 6: final temporal cadence calibration — 2026-10-20
+
+The latest hosted run passed heel-strike extension, stance-foot contact, ankle reach, no-overshoot and visual-proof tests. Two temporal tests still found a 13.3348 px/frame knee displacement against the unchanged <13 px/frame limit after the leg-length/curve calibration.
+
+- Both scene profiles now use cycle_seconds 1.33 and screen_stride_scale 0.568. This gives an effective stride of 85.2 px/cycle and a modeled cadence of about 90.2 steps/minute.
+- Expected effect is a small reduction in swing-phase knee displacement while retaining a longer stride than the 44.64 px/cycle baseline; CI must confirm the actual frame-level maxima.
+- All geometry and temporal assertions remain unchanged. The PR stays draft and unmerged until the new head passes hosted render checks and full-speed human visual acceptance.
