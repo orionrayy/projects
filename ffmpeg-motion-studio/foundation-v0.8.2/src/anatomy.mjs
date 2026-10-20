@@ -1,4 +1,4 @@
-import { evaluateLocomotion, solveTwoBoneIK } from "../../foundation-v0.8.0/src/locomotion.mjs";
+import { evaluateLocomotion, solveTwoBoneIK } from "./locomotion.mjs";
 
 const finitePoint = p => !!p && Number.isFinite(p.x) && Number.isFinite(p.y);
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -106,7 +106,7 @@ export function evaluateAnatomyPose(scene, frameIndex, armMode = scene.motion.ar
     const old = side === "near" ? pose.nearArm : pose.farArm;
     const pole = armMode === "carry"
       ? { x: (shoulder.x + wrist.x) / 2 + (side === "near" ? -3 : 5), y: (shoulder.y + wrist.y) / 2 + 14 }
-      : { x: (shoulder.x + wrist.x) / 2 - 12, y: (shoulder.y + wrist.y) / 2 + 3 };
+      : { x: (shoulder.x + wrist.x) / 2 + (side === "near" ? 14 : -14), y: (shoulder.y + wrist.y) / 2 + 8 };
     const ik = solveTwoBoneIK(shoulder, wrist, c.upper_arm_px, c.forearm_px, pole, -1);
     return { ...old, ...ik, shoulder, elbow: ik.joint, wrist: ik.end, target: wrist,
       elbowAngleDegrees: ik.jointAngleDegrees };
