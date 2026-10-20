@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { ACTIVITY_NAMES, evaluateActivity } from "../src/activity-motion.mjs";
+import { ACTIVITY_NAMES, ACTIVITY_DESCRIPTIONS, evaluateActivity } from "../src/activity-motion.mjs";
 import { renderSvgFrame } from "../scripts/render-preview.mjs";
 import { buildActivityManifest } from "../scripts/render-activity-previews.mjs";
 
@@ -278,6 +278,10 @@ test("SVG renderer tags and labels every activity preview", () => {
     const svg = renderSvgFrame(scene, 36, "free", activity);
     assert.ok(svg.includes('data-activity="' + activity + '"'));
     assert.ok(svg.includes('data-activity-overlay="label"'));
+    assert.ok(svg.includes(ACTIVITY_DESCRIPTIONS[activity]),
+      activity + " HUD subtitle must describe the action actually being rendered");
+    assert.ok(!svg.includes("Free-arm counter-swing"),
+      activity + " must not inherit the walk-mode subtitle for an activity clip");
     assert.ok(svg.includes('data-camera-framing="close-action"'), activity + " must use close-action framing");
     assert.ok(svg.includes('data-camera-anchor="static-root-start"'), activity + " camera must not track/cancel the animated root");
     assert.ok(svg.includes("MOTION STUDIO / v0.9.5"));

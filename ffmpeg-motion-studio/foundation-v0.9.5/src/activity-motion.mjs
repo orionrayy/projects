@@ -15,6 +15,14 @@ export const ACTIVITY_LABELS = Object.freeze({
   "sit-to-stand": "SIT TO STAND",
   "turn-in-place": "WEIGHT SHIFT / FOOT PIVOT"
 });
+export const ACTIVITY_DESCRIPTIONS = Object.freeze({
+  "stand": "Relaxed stance + subtle breathing",
+  "look-around": "Head tilt + gaze scan (2D profile)",
+  "reach": "Anticipate, reach and press button",
+  "pick-up": "Crouch, grasp parcel and lift",
+  "sit-to-stand": "Forward lean, rise and stabilize",
+  "turn-in-place": "2D weight shift / foot pivot"
+});
 
 function pulse(u, rise = 0.2, fall = 0.78) {
   return smoothstep(u / rise) * (1 - smoothstep((u - fall) / (1 - fall)));

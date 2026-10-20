@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { evaluateLocomotion } from "../src/locomotion.mjs";
-import { evaluateActivity, ACTIVITY_LABELS } from "../src/activity-motion.mjs";
+import { evaluateActivity, ACTIVITY_LABELS, ACTIVITY_DESCRIPTIONS } from "../src/activity-motion.mjs";
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const n = (v) => Number.isFinite(v) ? Number(v).toFixed(2) : "0.00";
@@ -309,7 +309,10 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   if (activity !== "walk") s += '</g><!--ACTIVITY-CAMERA-END-->';
   s+='<rect x="34" y="28" width="388" height="82" rx="14" fill="#FFFEFA" opacity=".92" stroke="#DAD5C7"/>';
   s+='<text x="54" y="57" font-family="DejaVu Sans,sans-serif" font-size="18" font-weight="700" fill="#243345">MOTION STUDIO / v0.9.5</text>';
-  s+='<text x="54" y="82" font-family="DejaVu Sans,sans-serif" font-size="14" fill="#526173">'+(mode==="carry"?"Carry interaction + hand contact":"Free-arm counter-swing")+'</text>';
+  const hudDescription = activity === "walk"
+    ? (mode === "carry" ? "Carry interaction + hand contact" : "Free-arm counter-swing")
+    : (ACTIVITY_DESCRIPTIONS[activity] || activity.toUpperCase());
+  s+='<text x="54" y="82" font-family="DejaVu Sans,sans-serif" font-size="14" fill="#526173">'+hudDescription+'</text>';
   s+='<text x="54" y="99" font-family="DejaVu Sans,sans-serif" font-size="11" fill="#697687">FRAME '+String(frameIndex+1).padStart(3,"0")+' / '+scene.duration_frames+' TIME '+n(p.timeSeconds)+' s</text>';
   s+='<text x="34" y="690" font-family="DejaVu Sans,sans-serif" font-size="12" fill="#716B60">Geometry diagnostics are not an artistic-naturalness score.</text>';
   s+='<text x="'+(scene.canvas.width-34)+'" y="690" text-anchor="end" font-family="DejaVu Sans,sans-serif" font-size="12" fill="#716B60">24 FPS · Procedural 2D preview</text></svg>';
