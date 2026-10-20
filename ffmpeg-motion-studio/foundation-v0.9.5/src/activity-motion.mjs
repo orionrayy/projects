@@ -120,10 +120,10 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   // Action timelines are authored as explicit phases. The 3 s clip is a preview
   // duration, not permission to hold one pose for most of the sequence.
   const turnPulse = keyCurve(u, [[0,0],[0.12,0],[0.30,1],[0.43,0.82],[0.60,-0.62],[0.72,-0.62],[0.90,0],[1,0]]);
-  const pickupCrouch = keyCurve(u, [[0,0],[0.08,0],[0.20,0.62],[0.32,1],[0.41,1],[0.56,0.28],[0.70,0],[1,0]]);
-  const pickupReach = keyCurve(u, [[0,0],[0.10,0],[0.23,0.50],[0.34,1],[0.42,1],[0.51,0.58],[0.63,0],[1,0]]);
-  const pickupGrip = keyCurve(u, [[0,0],[0.33,0],[0.38,0.90],[0.405,1],[1,1]]);
-  const pickupLift = keyCurve(u, [[0,0],[0.40,0],[0.51,0.22],[0.64,1],[1,1]]);
+  const pickupCrouch = keyCurve(u, [[0,0],[0.04,0],[0.14,0.48],[0.28,1],[0.37,1],[0.54,0.28],[0.68,0],[1,0]]);
+  const pickupReach = keyCurve(u, [[0,0],[0.04,0],[0.14,0.45],[0.27,1],[0.36,1],[0.47,0.58],[0.60,0],[1,0]]);
+  const pickupGrip = keyCurve(u, [[0,0],[0.27,0],[0.32,0.90],[0.35,1],[1,1]]);
+  const pickupLift = keyCurve(u, [[0,0],[0.36,0],[0.47,0.22],[0.60,1],[1,1]]);
   const pickupTableTopY = scene.background.horizon_y - 144;
   const pickupOrigin = { x: base.shoulders.near.x + 50, y: pickupTableTopY - 13 };
   const pickupTarget = { x: pickupOrigin.x - 18, y: pickupOrigin.y };
@@ -175,8 +175,20 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   }
 
   const oldPelvis = { ...base.pelvis };
-  // Breathing is an upper-body expansion cue. Do not bob the entire root or feet.
-  const respiratorySway = activity === "stand" ? 0.65 * Math.sin(TAU * 0.78 * u + 0.25) : 0;
+  // Breathing/settling are upper-body-only secondary motion: root and planted feet
+  // remain stable. Held-prop and post-rise holds should not freeze into a repeated still frame.
+  const pickupCarryBreath = activity === "pick-up" ? pickupLift * 2.0 * Math.sin(TAU * 1.15 * u + 0.2) : 0;
+  const chestBreath = activity === "stand" ? breath : pickupCarryBreath;
+  const respiratorySway = activity === "stand"
+    ? 0.65 * Math.sin(TAU * 0.78 * u + 0.25)
+    : activity === "pick-up"
+      ? 1.1 * pickupLift * Math.sin(TAU * 1.15 * u + 0.6)
+      : activity === "sit-to-stand"
+        ? 0.55 * sitStandRestWeight * Math.sin(TAU * 1.2 * u + 0.3)
+        : 0;
+  const postRiseSettle = activity === "sit-to-stand" && u >= 0.80
+    ? 2.0 * Math.sin(Math.PI * (u - 0.80) / 0.20) * Math.exp(-6 * (u - 0.80))
+    : 0;
   const newPelvis = { x: oldPelvis.x + forwardShift, y: oldPelvis.y + drop };
   const transform = (pt, factor = 1, ex = 0, ey = 0) =>
     transformUpper(pt, oldPelvis, newPelvis, lean * factor, ex, ey);
@@ -193,15 +205,15 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       sitStandRestWeight,
       pickupItem: null, chair: null, reachTarget: null },
     pelvis: newPelvis, rootX: newPelvis.x, torsoAngle: lean,
-    chestLocal: transform(base.chestLocal, 1, respiratorySway, -breath * 0.82),
-    chest: transform(base.chest, 1, respiratorySway, -breath * 0.82),
-    neck: transform(base.neck, 0.72, respiratorySway * 0.5, -breath * 0.55),
-    headLocal: transform(base.headLocal, 0.42, headShift + respiratorySway * 0.25, -breath * 0.35),
-    head: transform(base.head, 0.42, headShift + respiratorySway * 0.25, -breath * 0.35),
+    chestLocal: transform(base.chestLocal, 1, respiratorySway, -chestBreath * 0.82 - postRiseSettle * 0.65),
+    chest: transform(base.chest, 1, respiratorySway, -chestBreath * 0.82 - postRiseSettle * 0.65),
+    neck: transform(base.neck, 0.72, respiratorySway * 0.5, -chestBreath * 0.55 - postRiseSettle * 0.35),
+    headLocal: transform(base.headLocal, 0.42, headShift + respiratorySway * 0.25, -chestBreath * 0.35 - postRiseSettle * 0.15),
+    head: transform(base.head, 0.42, headShift + respiratorySway * 0.25, -chestBreath * 0.35 - postRiseSettle * 0.15),
     headAngle: base.headAngle + headTurn - lean * 0.18,
     shoulders: {
-      near: transform(base.shoulders.near, 1, respiratorySway, -breath * 0.72),
-      far: transform(base.shoulders.far, 1, respiratorySway, -breath * 0.72)
+      near: transform(base.shoulders.near, 1, respiratorySway, -chestBreath * 0.72 - postRiseSettle * 0.58),
+      far: transform(base.shoulders.far, 1, respiratorySway, -chestBreath * 0.72 - postRiseSettle * 0.58)
     }
   };
 
