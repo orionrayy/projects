@@ -1,0 +1,67 @@
+name: Motion Studio Sagittal Gait v0.8.8
+on:
+  push:
+    branches: [motion-studio-v0.8.8-sagittal-gait]
+    paths:
+      - ".github/workflows/motion-studio-sagittal-gait-v0.8.8.yml"
+      - "ffmpeg-motion-studio/foundation-v0.8.8/**"
+  pull_request:
+    paths:
+      - ".github/workflows/motion-studio-sagittal-gait-v0.8.8.yml"
+      - "ffmpeg-motion-studio/foundation-v0.8.8/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install render-only tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg librsvg2-bin
+      - name: Syntax and regression tests
+        run: |
+          node --check src/locomotion.mjs
+          node --check scripts/render-preview.mjs
+          npm test
+      - name: Render SVG frames and diagnostics
+        run: |
+          mkdir -p artifacts
+          npm run render:preview -- .working
+          test -s .working/carry-metrics.json
+          test -s .working/free-metrics.json
+          test -s .working/render-manifest.json
+      - name: Rasterize and encode previews
+        run: |
+          set -euo pipefail
+          for mode in carry free; do
+            for svg in .working/.working/$mode/frame-*.svg; do
+              png=$(printf '%s' "$svg" | sed 's/\.svg$/.png/')
+              rsvg-convert -w 1280 -h 720 "$svg" > "$png"
+            done
+            ffmpeg -hide_banner -loglevel error -y -framerate 24 -i ".working/.working/$mode/frame-%04d.png" -frames:v 192 -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart "artifacts/$mode-preview-v0.8.8.mp4"
+            ffmpeg -hide_banner -loglevel error -y -i "artifacts/$mode-preview-v0.8.8.mp4" -vf "fps=4,scale=320:180,tile=8x4" -frames:v 1 -update 1 "artifacts/$mode-contact-sheet-4fps.png"
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=s=x:p=0 "artifacts/$mode-preview-v0.8.8.mp4")" = "1280"
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=s=x:p=0 "artifacts/$mode-preview-v0.8.8.mp4")" = "720"
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of csv=s=x:p=0 "artifacts/$mode-preview-v0.8.8.mp4")" = "24/1"
+            test "$(ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of csv=s=x:p=0 "artifacts/$mode-preview-v0.8.8.mp4")" = "192"
+            sha256sum "artifacts/$mode-preview-v0.8.8.mp4" >> artifacts/SHA256SUMS
+          done
+          cp .working/carry-metrics.json .working/free-metrics.json .working/render-manifest.json artifacts/
+          rm -rf .working
+      - name: Upload preview videos and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-v0.8.8-sagittal-gait-review
+          path: ffmpeg-motion-studio/foundation-v0.8.8/artifacts/*
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,13 @@
+{
+  "name": "motion-studio-foundation-sagittal-gait-v0.8.8",
+  "version": "0.8.8",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "render:preview": "node scripts/render-preview.mjs .working"
+  }
+}
