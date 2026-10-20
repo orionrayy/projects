@@ -13,7 +13,8 @@ export function buildActivityManifest(scene) {
     let maxPelvisDropPx = 0, maxHeadTurnRadians = 0, maxTorsoLeanRadians = 0, maxReachDisplacementPx = 0;
     let maxPickupItemStepPx = 0, maxPickupItemContactErrorPx = 0, maxReachTargetContactErrorPx = 0;
     let initialSeatContactErrorPx = null, finalSeatContactErrorPx = null, reachTargetContactedAtPeak = false;
-    let pickupGripContactFrames = 0, pickupGripContactViolation = false, maxReachWeight = 0, previous = null;
+    let pickupGripContactFrames = 0, pickupGripContactViolation = false, maxReachWeight = 0;
+    let finalPickupItemChestDistancePx = null, previous = null;
     for (let frame = 0; frame < scene.duration_frames; frame++) {
       const pose = evaluateActivity(scene, frame, activity, "free");
       maxBoneErrorPx = Math.max(maxBoneErrorPx, pose.diagnostics.boneLengthErrorPx);
@@ -25,7 +26,10 @@ export function buildActivityManifest(scene) {
       maxReachDisplacementPx = Math.max(maxReachDisplacementPx, pose.activityState.reachDisplacementPx);
       maxReachWeight = Math.max(maxReachWeight, pose.activityState.reachWeight ?? 0);
       if (frame === 0) initialSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
-      if (frame === scene.duration_frames - 1) finalSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
+      if (frame === scene.duration_frames - 1) {
+        finalSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
+        finalPickupItemChestDistancePx = pose.diagnostics.pickupItemChestDistancePx;
+      }
       if (pose.activityState.pickupItem?.gripWeight >= 0.95) {
         const contactError = pose.diagnostics.pickupItemContactErrorPx ?? Infinity;
         pickupGripContactFrames++;
@@ -64,6 +68,7 @@ export function buildActivityManifest(scene) {
       pickupObjectContactedWhileGripping: activity === "pick-up"
         ? pickupGripContactFrames >= 20 && !pickupGripContactViolation : null,
       pickupGripContactFrames: activity === "pick-up" ? pickupGripContactFrames : null,
+      finalPickupItemChestDistancePx: activity === "pick-up" ? finalPickupItemChestDistancePx : null,
       maxReachWeight: activity === "reach" ? maxReachWeight : null,
       reachReturnsToRest: activity === "reach" ? previous.activityState.reachWeight < 0.1 : null,
       chairRendered: activity === "sit-to-stand" && renderSvgFrame(scene, 0, "free", activity).includes('data-environment="chair"'),
