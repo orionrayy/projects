@@ -23,7 +23,7 @@
     "torso_sway_radians": 0.04,
     "basket_vertical_response_px": 0.55,
     "start_x": 175,
-    "root_y": 414,
+    "root_y": 411,
     "torso_length_px": 98,
     "head_center_offset_y_px": 145,
     "basket_offset_x_px": 68,
@@ -63,8 +63,8 @@
     "phase_variation_cycles": 0.008
   },
   "character": {
-    "upper_leg_px": 80,
-    "lower_leg_px": 82,
+    "upper_leg_px": 78.5,
+    "lower_leg_px": 80.5,
     "upper_arm_px": 54,
     "forearm_px": 53,
     "head_radius_px": 24,

@@ -1,6 +1,6 @@
 # Stage 17 — Motion Studio v0.9.4 contact-aligned long-stride gait
 
-Date: 2026-10-20 (Asia/Jakarta)
+Date: 2026-10-20 (Asia/Jakarta) — revision after first CI failure.
 
 ## Baseline and defect
 This checkpoint is based on current v0.9.3 head 24e216af8b4fde254c4fb3a896aa80841e8dbbbd, which includes the integrated portrait gait/scene and recent portrait IK calibration. That work is preserved in this isolated candidate.
@@ -10,7 +10,7 @@ The landscape profile still uses an 85.2 px effective stride; the integrated por
 ## Candidate changes
 - Landscape effective stride: 85.2 → 93 px (+9.2%), with the nominal 1.33 s cycle retained (about 90.2 steps/min).
 - Retain the 96 px portrait stride and portrait-specific IK reach easing; align its ramp with the last rendered sample.
-- Calibrate leg proportions to 80/82 px and pelvis root y=414 to provide more IK flex margin at contact.
+- Preserve baseline leg lengths 78.5/80.5 px and pelvis root y=411. The first v0.9.4 attempt changed these values and failed stance-angle gates, so this correction restores the last passing anatomy parameters.
 - Evaluate start/stop ramps against (frame_count - 1) / fps, the timestamp of the last actually rendered frame.
 - Replace accumulated phase offsets with bounded C2 phase warping proportional to sin(pi*u)^3; phase offset and its first derivative are zero at cycle boundaries.
 - Select equal ramp durations so five cycles land on the last rendered frame for both the 192-frame/24fps landscape preview and 240-frame/30fps portrait preview.

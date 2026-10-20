@@ -31,7 +31,7 @@ test("carry hands show grip detail and free-arm hands stay relaxed",()=>{
 test("organic contours preserve contact, proportion, deterministic and temporal gates",()=>{
   for(const [scene,mode] of [[carry,"carry"],[free,"free"]]){
     const r=summarizeScene(scene,mode),t=r.temporalDiagnostics;
-    assert.equal(r.sceneVersion,"0.9.3");
+    assert.equal(r.sceneVersion,"0.9.4");
     assert.ok(r.maxBoneLengthErrorPx<0.02);
     assert.ok(r.maxGroundPenetrationPx<0.02);
     assert.ok(r.maxBasketContactErrorPx<0.02);
