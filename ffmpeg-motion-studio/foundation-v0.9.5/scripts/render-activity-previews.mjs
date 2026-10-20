@@ -12,7 +12,8 @@ export function buildActivityManifest(scene) {
     let maxBoneErrorPx = 0, maxAnkleClampErrorPx = 0, maxArmClampErrorPx = 0, maxKneeStepPx = 0, maxStanceFootDriftPx = 0;
     let maxPelvisDropPx = 0, maxHeadTurnRadians = 0, maxTorsoLeanRadians = 0, maxReachDisplacementPx = 0;
     let maxPickupItemStepPx = 0, maxPickupItemContactErrorPx = 0, maxReachTargetContactErrorPx = 0;
-    let initialSeatContactErrorPx = null, finalSeatContactErrorPx = null, reachTargetContactedAtPeak = false, previous = null;
+    let initialSeatContactErrorPx = null, finalSeatContactErrorPx = null, reachTargetContactedAtPeak = false;
+    let pickupObjectContactedWhileGripping = false, maxReachWeight = 0, previous = null;
     for (let frame = 0; frame < scene.duration_frames; frame++) {
       const pose = evaluateActivity(scene, frame, activity, "free");
       maxBoneErrorPx = Math.max(maxBoneErrorPx, pose.diagnostics.boneLengthErrorPx);
@@ -22,11 +23,13 @@ export function buildActivityManifest(scene) {
       maxHeadTurnRadians = Math.max(maxHeadTurnRadians, Math.abs(pose.activityState.headTurnRadians));
       maxTorsoLeanRadians = Math.max(maxTorsoLeanRadians, Math.abs(pose.activityState.torsoLeanRadians));
       maxReachDisplacementPx = Math.max(maxReachDisplacementPx, pose.activityState.reachDisplacementPx);
+      maxReachWeight = Math.max(maxReachWeight, pose.activityState.reachWeight ?? 0);
       if (frame === 0) initialSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
       if (frame === scene.duration_frames - 1) finalSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
-      if (pose.activityState.pickupItem?.held) {
-        maxPickupItemContactErrorPx = Math.max(maxPickupItemContactErrorPx,
-          pose.diagnostics.pickupItemContactErrorPx || 0);
+      if (pose.activityState.pickupItem?.gripWeight >= 0.95) {
+        const contactError = pose.diagnostics.pickupItemContactErrorPx ?? Infinity;
+        maxPickupItemContactErrorPx = Math.max(maxPickupItemContactErrorPx, contactError);
+        if (contactError < 2) pickupObjectContactedWhileGripping = true;
       }
       if (pose.activityState.reachTarget?.active) {
         reachTargetContactedAtPeak = true;
@@ -57,6 +60,9 @@ export function buildActivityManifest(scene) {
       pickupObjectHeldAtEnd: activity === "pick-up" ? Boolean(previous?.activityState.pickupItem?.held) : null,
       maxPickupItemStepPx: activity === "pick-up" ? maxPickupItemStepPx : null,
       maxPickupItemContactErrorPx: activity === "pick-up" ? maxPickupItemContactErrorPx : null,
+      pickupObjectContactedWhileGripping: activity === "pick-up" ? pickupObjectContactedWhileGripping : null,
+      maxReachWeight: activity === "reach" ? maxReachWeight : null,
+      reachReturnsToRest: activity === "reach" ? previous.activityState.reachWeight < 0.1 : null,
       chairRendered: activity === "sit-to-stand" && renderSvgFrame(scene, 0, "free", activity).includes('data-environment="chair"'),
       initialSeatContactErrorPx: activity === "sit-to-stand" ? initialSeatContactErrorPx : null,
       finalSeatContactErrorPx: activity === "sit-to-stand" ? finalSeatContactErrorPx : null,
@@ -67,9 +73,11 @@ export function buildActivityManifest(scene) {
     });
   }
   return {
-    schemaVersion: "1.4.0", sceneId: "motion-studio-activity-suite-v0.9.5",
+    schemaVersion: "1.5.0", sceneId: "motion-studio-activity-suite-v0.9.5",
     renderer: "procedural SVG + FFmpeg H.264", canvas: scene.canvas, fps: scene.fps,
+    actionCurveModel: "shape-preserving-cubic-keyframes",
     cameraFraming: { activityClips: "close-action-1.50x", floorAnchor: "screen-space horizon; planted feet remain grounded" },
+    evaluationPolicy: "geometry, phase timing, semantic contact and all-frame review are separate acceptance gates",
     activityCount: activities.length, activities,
     limitation: "2D side-profile action proof; turn-in-place is torso/head counter-rotation, not full 3D yaw",
     audioIncluded: false, browserFfmpegParity: "not_verified", humanFullSpeedAcceptance: "pending"
