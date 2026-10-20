@@ -249,12 +249,12 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
       'C '+xy(P(.17,-1,bodyHalf))+' '+xy(P(.12,-1,bodyHalf*.98))+' '+xy(topL),
       'Q '+xy(P(0,0,0))+' '+xy(topR)+' Z'
     ].join(' ');
-    s+='<path data-anatomy="torso" data-contour="spine-aligned" d="'+d+'" fill="'+c.shirt+'" stroke="#203348" stroke-width="2.7" stroke-linejoin="round"/>';
+    s+='<path data-anatomy="torso" data-contour="side-profile" data-contour-frame="spine-aligned" d="'+d+'" fill="'+c.shirt+'" stroke="#203348" stroke-width="2.7" stroke-linejoin="round"/>';
     const seamA=P(.17,-1,bodyHalf*.28),seamB=P(.46,-1,bodyHalf*.25),seamC=P(.70,-1,bodyHalf*.16);
     const seamControl=P(.31,-1,bodyHalf*.26);
     s+='<path data-torso-detail="seam" d="M '+xy(seamA)+' Q '+xy(seamControl)+' '+xy(seamB)+' L '+xy(seamC)+'" fill="none" stroke="'+c.shirt_shadow+'" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>';
     const wb1=P(.965,-1,hipHalf*.78),wb2=P(.965,1,hipHalf*.78),wbm=P(1,0,0);
-    s+='<path data-anatomy="waistband" data-contour="spine-aligned" d="M '+xy(wb1)+' Q '+xy(wbm)+' '+xy(wb2)+'" fill="none" stroke="#263347" stroke-width="2.2"/>';
+    s+='<path data-anatomy="waistband" data-contour="side-profile" data-contour-frame="spine-aligned" d="M '+xy(wb1)+' Q '+xy(wbm)+' '+xy(wb2)+'" fill="none" stroke="#263347" stroke-width="2.2"/>';
   }else{
   const sh=c.shoulder_half_width_px||23,hip=c.pelvis_half_width_px||22;
   s+='<path data-anatomy="torso" d="M '+n(chest.x-sh-8)+' '+n(chest.y+7)+' Q '+n(chest.x-sh-14)+' '+n(chest.y+20)+' '+n(chest.x-22)+' '+n(chest.y+42)+' L '+n(chest.x-17)+' '+n(pel.y-6)+' Q '+n(pel.x-hip*.65)+' '+n(pel.y+6)+' '+n(pel.x-hip)+' '+n(pel.y+5)+' Q '+n(pel.x)+' '+n(pel.y+15)+' '+n(pel.x+hip)+' '+n(pel.y+5)+' Q '+n(pel.x+hip*.65)+' '+n(pel.y+6)+' '+n(chest.x+17)+' '+n(pel.y-6)+' L '+n(chest.x+22)+' '+n(chest.y+42)+' Q '+n(chest.x+sh+14)+' '+n(chest.y+20)+' '+n(chest.x+sh+8)+' '+n(chest.y+7)+' Q '+n(chest.x+sh*.45)+' '+n(chest.y-5)+' '+n(chest.x)+' '+n(chest.y-4)+' Q '+n(chest.x-sh*.45)+' '+n(chest.y-5)+' '+n(chest.x-sh-8)+' '+n(chest.y+7)+' Z" fill="'+c.shirt+'" stroke="#203348" stroke-width="2.7" stroke-linejoin="round"/>';
