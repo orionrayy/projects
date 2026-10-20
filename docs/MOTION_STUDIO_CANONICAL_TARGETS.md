@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.8.9 contact-extension checkpoint on branch motion-studio-v0.8.9-contact-extension. v0.8.8 passed hosted CI and produced 720p carry/free previews, but full-speed visual acceptance is still pending; v0.8.9 gait geometry and heel-strike tests are pending.
+Current engineering candidate: Motion Studio v0.9.0 true-side-profile checkpoint on branch motion-studio-v0.9.0-true-side-profile. v0.8.9 hosted CI passed, but full-size frames remained visually front-facing; v0.9.0 side-profile regression tests and hosted render validation are pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -104,3 +104,8 @@ References consulted: Monmouth Animation Instruction Pages, “Movement: Walk Cy
 ## Stage 12 — Heel-strike contact extension v0.8.9 — 2026-10-20
 
 Visual review of v0.8.8 full-size frames confirmed that near/far leg separation was corrected, but the contact pose remained visibly crouched. The two-bone chain length was 160px against a 155px hip-to-ankle span at contact, giving an internal knee angle of roughly 151 degrees (about 29 degrees of flexion), too bent for a neutral heel-strike pose. v0.8.9 uses a 158px leg chain (78px upper / 80px lower), places the pelvis at y=410, keeps bob at 0.5px, and lengthens the full gait cycle to 1.20s to retain a temporal margin. The expected heel-strike angle is tested explicitly (>155 degrees), as are phase-separated stance/swing flexion, ankle reachability, foot drift, bone length, side-view leg projection and the unchanged <8 px/frame² acceleration limit. Visual acceptance remains independent.
+
+
+## Stage 13 — True side-profile projection v0.9.0 — 2026-10-20
+
+Review of the v0.8.9 full-size frame showed that the renderer still presented a frontal face (bilateral eyes), front-view torso/shoulder width, and equally wide near/far legs. This made the otherwise narrow hip-centre spacing read as splayed limbs. v0.9.0 adds a right-facing single-eye profile face, narrows the torso and hips, brings near/far shoulders to ±5px, reduces leg projection to ±2px, and renders a narrower/darker far leg behind the near leg. It also reduces carry basket handle depth spacing to 14px so hands overlap in side projection. The v0.8.9 locomotion solver, foot trajectories, bone lengths, heel-strike extension, cycle cadence and <8px/frame² temporal gate remain unchanged. Hosted CI and full-speed human visual acceptance remain separate gates.
