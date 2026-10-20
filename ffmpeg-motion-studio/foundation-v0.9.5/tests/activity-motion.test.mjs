@@ -110,7 +110,9 @@ test("sit-to-stand includes a stable chair behind the character", () => {
 
 test("activity manifest records semantic props and interaction continuity", () => {
   const manifest = buildActivityManifest(scene);
-  assert.equal(manifest.schemaVersion, "1.3.0");
+  assert.equal(manifest.schemaVersion, "1.4.0");
+  assert.equal(manifest.cameraFraming.activityClips, "close-action-1.50x");
+  assert.match(manifest.cameraFraming.floorAnchor, /screen-space horizon/);
   const pickup = manifest.activities.find(item => item.id === "pick-up");
   const reach = manifest.activities.find(item => item.id === "reach");
   const sit = manifest.activities.find(item => item.id === "sit-to-stand");
@@ -132,7 +134,10 @@ test("SVG renderer tags and labels every activity preview", () => {
     const svg = renderSvgFrame(scene, 36, "free", activity);
     assert.ok(svg.includes('data-activity="' + activity + '"'));
     assert.ok(svg.includes('data-activity-overlay="label"'));
+    assert.ok(svg.includes('data-camera-framing="close-action"'), activity + " must use close-action framing");
     assert.ok(svg.includes("MOTION STUDIO / v0.9.5"));
   }
+  const fullSceneWalk = renderSvgFrame(scene, 36, "free", "walk");
+  assert.ok(!fullSceneWalk.includes('data-camera-framing="close-action"'), "legacy walk preview must retain its original full-scene framing");
   assert.throws(() => renderSvgFrame(scene, 20, "free", "unknown-action"), /Unsupported activity/);
 });
