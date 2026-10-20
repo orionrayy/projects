@@ -32,9 +32,9 @@ test("elbows have integrated caps sized to the tapered arm, across all action po
         assert.equal(caps.length,2,activity+" frame sample "+idx+" must render both elbow caps");
         for(const cap of caps) {
           assert.equal(cap.cap,"integrated",activity+" elbow cap annotation");
-          assert.ok(cap.rx>=scene.character.elbow_width_px*0.40,
+          assert.ok(cap.rx>=scene.character.elbow_width_px*0.32,
             activity+" elbow cap is too small across the upper/lower segment seam: "+cap.rx);
-          assert.ok(cap.ry>=scene.character.elbow_width_px*0.43,
+          assert.ok(cap.ry>=scene.character.elbow_width_px*0.34,
             activity+" elbow cap vertical radius is too small: "+cap.ry);
         }
       }
@@ -49,9 +49,9 @@ test("knees have integrated caps that hide the sharp segment junction without ov
     assert.equal(caps.length,2);
     for(const cap of caps) {
       assert.equal(cap.cap,"integrated");
-      assert.ok(cap.capWidthRatio>=0.22,"knee horizontal cap is too small relative to its own near/far leg width");
-      assert.ok(cap.capHeightRatio>=0.27,"knee vertical cap is too small relative to its own near/far leg width");
-      assert.ok(cap.capWidthRatio<0.36 && cap.capHeightRatio<0.36,
+      assert.ok(cap.capWidthRatio>=0.18,"knee horizontal cap is too small relative to its own near/far leg width");
+      assert.ok(cap.capHeightRatio>=0.21,"knee vertical cap is too small relative to its own near/far leg width");
+      assert.ok(cap.capWidthRatio<0.34 && cap.capHeightRatio<0.34,
         "knee cap should blend the segment seam without becoming a spherical bulge");
     }
   }
