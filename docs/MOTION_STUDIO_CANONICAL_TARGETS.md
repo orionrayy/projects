@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.9.1 damped-human-gait checkpoint on branch motion-studio-v0.9.1-damped-human-gait. v0.9.0 side-profile render and tests passed; v0.9.1 amplitude damping, C2 gait continuity and stricter temporal gates are pending.
+Current engineering candidate: Motion Studio v0.9.1 damped-human-gait on branch motion-studio-v0.9.1-damped-human-gait. Latest code CI passed on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 (push run 39368994640, PR run 39368999495); full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -119,3 +119,8 @@ The push run 39366594252 and pull-request run 39366610236 both completed success
 ## Stage 14 — Damped human gait v0.9.1 — 2026-10-20
 
 The v0.9.0 artifact had exact stance-foot planting but excessive secondary motion: knee peak step 11.02px/frame, maximum acceleration 7.68px/frame², free-arm wrist step 14.31px/frame, torso orientation range 11.47°, head 5.97°, basket tilt range 5.16° and 24px swing lift. v0.9.1 damps these amplitudes and replaces cubic swing interpolation with quintic Hermite interpolation that matches acceleration at phase boundaries, a C2 foot-clearance pulse, and smoother heel/toe roll. References: van der Zee et al. (2022) https://www.nature.com/articles/s41597-022-01817-1; Meyns et al. (2013) https://pubmed.ncbi.nlm.nih.gov/23489950/; Spallone et al. (2026) https://pmc.ncbi.nlm.nih.gov/articles/PMC13418446/; healthy Thai gait cohort (2023) https://pmc.ncbi.nlm.nih.gov/articles/PMC10696785/. Validation pending.
+
+
+## Stage 14 validation results — 2026-10-20
+
+The v0.9.1 push and pull-request workflows both completed successfully and generated two 1280×720, 24fps, 192-frame MP4 previews plus 4fps contact sheets, metrics and SHA-256 checksums. Compared with v0.9.0 metrics: maximum tracked-point acceleration fell from 7.6813 to 3.0994px/frame² (−59.7%); maximum knee step fell from 11.0177 to 7.3980px/frame (−32.8%); chest step fell from 5.4096 to 2.8082px/frame (−48.1%); head step fell from 4.3670 to 2.4259px/frame (−44.4%); torso-angle range fell from 11.4712° to 4.5055° (−60.7%); head-angle range fell from 5.9741° to 2.6302° (−56.0%); basket tilt range fell from 5.1559° to 1.3677° (−73.5%). Stance-foot drift remained below 1e-12px/frame and basket-hand contact error remained 0px. Peak foot displacement per frame rose from 4.0345 to 6.8856px because the C2 trajectory trades some peak velocity for smoother acceleration; maximum total acceleration declined substantially. Continuous full-speed human-naturalness review remains pending, so this stays a draft.
