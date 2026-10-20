@@ -16,44 +16,58 @@ function contrastRatio(a, b) {
   return (values[0] + 0.05) / (values[1] + 0.05);
 }
 
-test('vertical visual proof has the exact portrait profile and four shot families', () => {
+test('portrait motion proof uses a full 10s timeline, six distinct shot families and the actual gait rig', () => {
   const spec = summarizeReferenceVisualSequence();
-  assert.deepEqual([spec.width, spec.height, spec.fps, spec.frameCount], [720, 1280, 30, 240]);
-  assert.equal(spec.durationSeconds, 8);
-  assert.deepEqual(spec.shots, ['room-wide', 'object-detail', 'rule-card', 'evidence-diagram']);
+  assert.deepEqual([spec.width, spec.height, spec.fps, spec.frameCount], [720, 1280, 30, 300]);
+  assert.equal(spec.durationSeconds, 10);
+  assert.deepEqual(spec.shots, ['hook-time', 'room-tracking-walk', 'device-impact', 'kinetic-rule', 'walk-to-settle', 'cause-evidence']);
+  assert.equal(spec.integratedGaitRig, true);
   assert.equal(spec.audioIncluded, false);
   assert.equal(spec.humanFullSpeedAcceptance, 'pending');
 });
 
-test('keyframes preserve the persistent title, instruction accent and safe zones', () => {
-  for (const frameIndex of [0, 59, 60, 119, 120, 179, 180, 239]) {
+test('hook, character walk, object impact, kinetic type and evidence all render deterministically', () => {
+  const examples = [
+    [0, 'hook-time', '03:04'],
+    [45, 'room-tracking-walk', 'characterRig'],
+    [130, 'device-impact', 'MIKROFON / AKTIF'],
+    [175, 'kinetic-rule', 'JAWAB DIA.'],
+    [225, 'walk-to-settle', 'characterRig'],
+    [275, 'cause-evidence', 'data-evidence-node="signal"']
+  ];
+  for (const [frameIndex, shot, content] of examples) {
     const svg = renderReferenceVisualFrame(frameIndex);
     assert.match(svg, /width="720" height="1280"/);
-    assert.match(svg, /IF YOUR SMART SPEAKER TALKS AT 03:04 AM/);
-    assert.match(svg, /data-safe-zone="top-header"/);
-    assert.match(svg, /data-safe-zone="main-stage"/);
-    assert.match(svg, /data-safe-zone="caption"/);
-    assert.match(svg, /data-safe-zone="footer"/);
-    assert.doesNotMatch(svg, /\b(?:NaN|Infinity)\b/);
+    assert.ok(svg.includes('data-visual-shot="' + shot + '"'), 'missing shot: ' + shot);
+    assert.ok(svg.includes(content), 'missing visible content: ' + content);
+    assert.doesNotMatch(svg, /\b(?:NaN|Infinity|undefined)\b/);
+    assert.equal(svg, renderReferenceVisualFrame(frameIndex), 'random-access frame should be deterministic');
   }
 });
 
-test('shot transitions are deterministic and all composition variants render', () => {
-  const frames = [0, 60, 120, 180];
-  const markers = ['room-wide', 'object-detail', 'rule-card', 'evidence-diagram'];
-  for (let i = 0; i < frames.length; i++) {
-    const a = renderReferenceVisualFrame(frames[i]);
-    assert.equal(a, renderReferenceVisualFrame(frames[i]));
-    assert.ok(a.includes('data-visual-shot="' + markers[i] + '"'));
-  }
+test('walk and text-animation frames change over time, without forcing all objects to move', () => {
+  assert.notEqual(renderReferenceVisualFrame(45), renderReferenceVisualFrame(46));
+  assert.notEqual(renderReferenceVisualFrame(175), renderReferenceVisualFrame(176));
+  assert.notEqual(renderReferenceVisualFrame(275), renderReferenceVisualFrame(276));
+  const walk = renderReferenceVisualFrame(60);
+  assert.match(walk, /data-rig-stage="portrait-walk"/);
+  assert.match(walk, /data-depth="far"/);
+  assert.match(walk, /data-depth="world"/);
   assert.throws(() => renderReferenceVisualFrame(-1), RangeError);
-  assert.throws(() => renderReferenceVisualFrame(240), RangeError);
+  assert.throws(() => renderReferenceVisualFrame(300), RangeError);
 });
 
-test('palette maintains strong contrast for primary instructional text', () => {
+test('persistent header/caption safe zones and strong text contrast are preserved', () => {
+  for (const frameIndex of [0, 32, 33, 113, 114, 157, 158, 200, 201, 256, 257, 299]) {
+    const svg = renderReferenceVisualFrame(frameIndex);
+    assert.match(svg, /data-safe-zone="top-header"/);
+    assert.match(svg, /data-safe-zone="caption"/);
+    assert.match(svg, /PUKUL 03:04/);
+    assert.match(svg, /JANGAN JAWAB/);
+  }
   const { background, white, muted, red, gold } = REFERENCE_VISUAL_SPEC.colors;
-  assert.ok(contrastRatio(white, background) >= 12, 'primary text contrast must remain high');
-  assert.ok(contrastRatio(muted, background) >= 5, 'secondary text must remain legible');
-  assert.ok(contrastRatio(red, background) >= 5, 'warning accent must remain identifiable');
-  assert.ok(contrastRatio(gold, background) >= 7, 'secondary accent must remain legible');
+  assert.ok(contrastRatio(white, background) >= 12);
+  assert.ok(contrastRatio(muted, background) >= 5);
+  assert.ok(contrastRatio(red, background) >= 5);
+  assert.ok(contrastRatio(gold, background) >= 7);
 });

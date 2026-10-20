@@ -124,6 +124,7 @@ export function renderSvgFrame(scene,frameIndex,armMode) {
   s+='<path d="M 0 '+n(floor)+' L '+scene.canvas.width+' '+n(floor)+' L '+scene.canvas.width+' '+scene.canvas.height+' L 0 '+scene.canvas.height+' Z" fill="'+scene.background.floor+'"/>';
   s+='<path d="M 0 '+n(floor)+' L '+scene.canvas.width+' '+n(floor)+'" stroke="#C7C0B0" stroke-width="2"/>';
   for(let i=0;i<11;i++){const x=i*145+22;s+='<path d="M '+x+' '+(floor+24)+' L '+(x+70)+' '+(floor+24)+'" stroke="#D8D2C3" stroke-width="1"/>';}
+  s+='<g id="characterRig" data-rig-frame="'+frameIndex+'">';
   s+='<ellipse cx="'+n(p.pelvis.x+12)+'" cy="'+n(floor+5)+'" rx="63" ry="9" fill="#9C988B" opacity=".22"/>';
   s+=legSvg(p.rightLeg,p.rightFoot,scene,false)+legSvg(p.leftLeg,p.leftFoot,scene,true);
   s+=armSvg(p.farArm,scene,"#2F6D8D",false,mode);
@@ -144,6 +145,7 @@ export function renderSvgFrame(scene,frameIndex,armMode) {
   }
   s+=neckSvg(p,scene);
   s+=headSvg(p,scene); if(mode==="carry") s+=basketSvg(p,scene); s+=armSvg(p.nearArm,scene,"#3A82A3",true,mode);
+  s+='</g><!--CHARACTER-RIG-END-->';
   s+='<rect x="34" y="28" width="388" height="82" rx="14" fill="#FFFEFA" opacity=".92" stroke="#DAD5C7"/>';
   s+='<text x="54" y="57" font-family="DejaVu Sans,sans-serif" font-size="18" font-weight="700" fill="#243345">MOTION STUDIO / v0.9.3</text>';
   s+='<text x="54" y="82" font-family="DejaVu Sans,sans-serif" font-size="14" fill="#526173">'+(mode==="carry"?"Carry interaction + hand contact":"Free-arm counter-swing")+'</text>';
