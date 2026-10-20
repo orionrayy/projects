@@ -13,7 +13,7 @@ export function buildActivityManifest(scene) {
     let maxPelvisDropPx = 0, maxHeadTurnRadians = 0, maxTorsoLeanRadians = 0, maxReachDisplacementPx = 0;
     let maxPickupItemStepPx = 0, maxPickupItemContactErrorPx = 0, maxReachTargetContactErrorPx = 0;
     let initialSeatContactErrorPx = null, finalSeatContactErrorPx = null, reachTargetContactedAtPeak = false;
-    let pickupObjectContactedWhileGripping = false, maxReachWeight = 0, previous = null;
+    let pickupGripContactFrames = 0, pickupGripContactViolation = false, maxReachWeight = 0, previous = null;
     for (let frame = 0; frame < scene.duration_frames; frame++) {
       const pose = evaluateActivity(scene, frame, activity, "free");
       maxBoneErrorPx = Math.max(maxBoneErrorPx, pose.diagnostics.boneLengthErrorPx);
@@ -28,8 +28,9 @@ export function buildActivityManifest(scene) {
       if (frame === scene.duration_frames - 1) finalSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
       if (pose.activityState.pickupItem?.gripWeight >= 0.95) {
         const contactError = pose.diagnostics.pickupItemContactErrorPx ?? Infinity;
+        pickupGripContactFrames++;
         maxPickupItemContactErrorPx = Math.max(maxPickupItemContactErrorPx, contactError);
-        if (contactError < 2) pickupObjectContactedWhileGripping = true;
+        if (contactError >= 2) pickupGripContactViolation = true;
       }
       if (pose.activityState.reachTarget?.active) {
         reachTargetContactedAtPeak = true;
@@ -60,7 +61,9 @@ export function buildActivityManifest(scene) {
       pickupObjectHeldAtEnd: activity === "pick-up" ? Boolean(previous?.activityState.pickupItem?.held) : null,
       maxPickupItemStepPx: activity === "pick-up" ? maxPickupItemStepPx : null,
       maxPickupItemContactErrorPx: activity === "pick-up" ? maxPickupItemContactErrorPx : null,
-      pickupObjectContactedWhileGripping: activity === "pick-up" ? pickupObjectContactedWhileGripping : null,
+      pickupObjectContactedWhileGripping: activity === "pick-up"
+        ? pickupGripContactFrames >= 20 && !pickupGripContactViolation : null,
+      pickupGripContactFrames: activity === "pick-up" ? pickupGripContactFrames : null,
       maxReachWeight: activity === "reach" ? maxReachWeight : null,
       reachReturnsToRest: activity === "reach" ? previous.activityState.reachWeight < 0.1 : null,
       chairRendered: activity === "sit-to-stand" && renderSvgFrame(scene, 0, "free", activity).includes('data-environment="chair"'),
