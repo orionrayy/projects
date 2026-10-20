@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.9.2 adaptive-reactive-gait in `ffmpeg-motion-studio/foundation-v0.9.2/` on branch motion-studio-v0.9.1-damped-human-gait. v0.9.1 is retained as the comparison baseline. Latest code CI passed on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 (push run 39368994640, PR run 39368999495); full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
+Current engineering candidate: Motion Studio v0.9.3 longer-stride phase-adaptive gait in `ffmpeg-motion-studio/foundation-v0.9.3/` on branch motion-studio-v0.9.1-damped-human-gait. v0.9.1 and v0.9.2 are retained as comparison baselines. Latest code CI passed on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 (push run 39368994640, PR run 39368999495); full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -139,3 +139,16 @@ Research inputs:
 The v0.9.2 candidate adds an integrated smooth start/stop gait clock whose phase coordinate drives both root travel and foot trajectory, preserving stance-foot locking during the speed ramps. It adds contact-localized pelvis compression and lateral transfer, torso/head reaction, balanced free-arm counter-swing using a multi-harmonic waveform, subtle basket response, and deterministic smoothed cycle variation with small left/right asymmetry. Amplitudes are restored modestly after over-damping; the goal is coordinated response, not random jitter.
 
 Validation status: CI/render is pending after this commit. Full-speed naturalness acceptance remains pending until both previews are watched continuously at actual speed. Do not infer human likeness from tests or frame-step metrics alone.
+
+
+## Stage 16 — Longer-stride phase-adaptive gait v0.9.3 — 2026-10-20
+
+Full-size inspection of v0.9.2 remained stiff, short-strided and robotic despite successful tests/render. The effective stride was 44.64px for a character roughly 300px tall, torso response was subtle, and arm swing was not clearly legible. v0.9.3 increases effective stride to 93px/cycle and foot lift to 16.5px, adds a subtle forward torso lean and asymmetric pelvis rhythm, and varies stride timing through bounded deterministic phase warping of ±0.018 cycles. A shared phase coordinate drives root translation, foot stance/swing, contact response and arm timing so planted stance is preserved. Contact compression remains low because larger body displacement degraded heel-strike extension in early trials.
+
+Research inputs:
+- van der Zee et al. (2022), healthy walking capture across speed/step length/step width with motion capture and GRFs: https://www.nature.com/articles/s41597-022-01817-1
+- Van Criekinge et al. (2023), full-body gait capture for 138 able-bodied adults: https://www.nature.com/articles/s41597-023-02767-y
+- Ferber et al. (2002), perturbation-based reactive balance adjustments: https://www.sciencedirect.com/science/article/pii/S0966636202000103
+- Collins et al. (2009), dynamic arm swinging in human walking: https://pmc.ncbi.nlm.nih.gov/articles/PMC2817299/
+
+Validation: CI and full render must pass; continuous full-speed naturalness review remains independent. Do not call this human-like until visual acceptance clears.

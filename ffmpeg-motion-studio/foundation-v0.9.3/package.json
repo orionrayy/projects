@@ -1,0 +1,13 @@
+{
+  "name": "motion-studio-foundation-phase-adaptive-gait-v0.9.3",
+  "version": "0.9.3",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "render:preview": "node scripts/render-preview.mjs .working"
+  }
+}
