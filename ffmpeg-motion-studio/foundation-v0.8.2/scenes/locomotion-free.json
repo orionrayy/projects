@@ -23,18 +23,18 @@
     "torso_sway_radians": 0.045,
     "basket_vertical_response_px": 0.8,
     "start_x": 175,
-    "root_y": 418,
+    "root_y": 420,
     "basket_offset_x_px": 68,
     "basket_center_offset_y_px": -6,
     "arm_mode": "free",
-    "free_arm_swing_px": 22,
-    "free_arm_drop_px": 64,
+    "free_arm_swing_px": 14,
+    "free_arm_drop_px": 70,
     "heel_toe_roll_radians": 0.18,
     "screen_stride_scale": 0.62
   },
   "character": {
-    "upper_leg_px": 77,
-    "lower_leg_px": 77,
+    "upper_leg_px": 74,
+    "lower_leg_px": 74,
     "upper_arm_px": 54,
     "forearm_px": 53,
     "head_radius_px": 29,
@@ -44,14 +44,17 @@
     "shirt_shadow": "#285C78",
     "pants": "#35465F",
     "shoe": "#293243",
-    "knee_forward_bias_px": 22,
-    "knee_up_bias_px": 19,
+    "knee_forward_bias_px": 18,
+    "knee_up_bias_px": 16,
     "near_leg_projection_px": 0,
-    "leg_depth_projection_px": 20,
+    "leg_depth_projection_px": 32,
     "shoulder_half_width_px": 34,
     "waist_half_width_px": 18,
     "hip_half_width_px": 23,
-    "head_drop_px": 8
+    "head_drop_px": 8,
+    "knee_stance_forward_bias_px": 8,
+    "knee_lane_bias_px": 30,
+    "knee_swing_up_bias_px": 4
   },
   "prop": {
     "basket_width_px": 64,
@@ -72,6 +75,6 @@
     "max_contact_error_px": 2,
     "max_root_step_px": 4,
     "max_swing_knee_angle_degrees": 125,
-    "min_stance_knee_angle_degrees": 145
+    "min_stance_knee_angle_degrees": 158
   }
 }
