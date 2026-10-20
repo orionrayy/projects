@@ -94,7 +94,12 @@ function profileHeadSvg(p,scene) {
   s+='<path data-profile-feature="hair" d="M '+n(h.x-rx*.96)+' '+n(h.y+ry*.06)+' C '+n(h.x-rx*1.02)+' '+n(h.y-ry*.43)+' '+n(h.x-rx*.61)+' '+n(h.y-ry*.99)+' '+n(h.x-rx*.13)+' '+n(h.y-ry*.98)+' C '+n(h.x+rx*.36)+' '+n(h.y-ry*1.02)+' '+n(h.x+rx*.77)+' '+n(h.y-ry*.72)+' '+n(h.x+rx*.83)+' '+n(h.y-ry*.36)+' C '+n(h.x+rx*.58)+' '+n(h.y-ry*.55)+' '+n(h.x+rx*.25)+' '+n(h.y-ry*.60)+' '+n(h.x-rx*.04)+' '+n(h.y-ry*.42)+' C '+n(h.x-rx*.25)+' '+n(h.y-ry*.27)+' '+n(h.x-rx*.57)+' '+n(h.y-ry*.19)+' '+n(h.x-rx*.66)+' '+n(h.y+ry*.12)+' Z" fill="'+c.hair+'"/>';
   s+='<ellipse data-profile-feature="ear" cx="'+n(h.x-rx*.62)+'" cy="'+n(h.y+ry*.12)+'" rx="2.8" ry="3.7" fill="'+c.skin+'" stroke="#8C604B" stroke-width="1.0"/>';
   s+='<path data-profile-feature="brow" d="M '+n(h.x+rx*.30)+' '+n(h.y-ry*.18)+' Q '+n(h.x+rx*.48)+' '+n(h.y-ry*.25)+' '+n(h.x+rx*.62)+' '+n(h.y-ry*.16)+'" fill="none" stroke="#543C32" stroke-width="1.05" stroke-linecap="round"/>';
-  s+='<ellipse data-profile-feature="eye" cx="'+n(h.x+rx*.50)+'" cy="'+n(h.y-ry*.07)+'" rx="1.65" ry="2.15" fill="#252A31"/><circle cx="'+n(h.x+rx*.53)+'" cy="'+n(h.y-ry*.11)+'" r=".48" fill="#FFFDF6"/>';
+  const eyeX = h.x + rx * .50, eyeY = h.y - ry * .07;
+  const gazeX = Math.max(-1.25, Math.min(1.25, p.activityState?.gazeOffsetX || 0));
+  const gazeY = Math.max(-.75, Math.min(.75, p.activityState?.gazeOffsetY || 0));
+  s+='<ellipse data-profile-feature="eye" cx="'+n(eyeX)+'" cy="'+n(eyeY)+'" rx="2.6" ry="2.2" fill="#FFF7E9" stroke="#543C32" stroke-width=".75"/>';
+  s+='<circle data-profile-feature="pupil" cx="'+n(eyeX+gazeX)+'" cy="'+n(eyeY+gazeY)+'" r="1.25" fill="#252A31"/>';
+  s+='<circle cx="'+n(eyeX+gazeX-.38)+'" cy="'+n(eyeY+gazeY-.42)+'" r=".35" fill="#FFFDF6"/>';
   s+='<path data-profile-feature="nose" d="M '+n(h.x+rx*.75)+' '+n(h.y-ry*.01)+' Q '+n(h.x+rx*.86)+' '+n(h.y+ry*.055)+' '+n(h.x+rx*.81)+' '+n(h.y+ry*.12)+'" fill="none" stroke="#8A5B48" stroke-width=".95" stroke-linecap="round" stroke-linejoin="round"/>';
   s+='<path data-profile-feature="mouth" d="M '+n(h.x+rx*.60)+' '+n(h.y+ry*.44)+' Q '+n(h.x+rx*.72)+' '+n(h.y+ry*.455)+' '+n(h.x+rx*.84)+' '+n(h.y+ry*.44)+'" fill="none" stroke="#8D5144" stroke-width="1.0" stroke-linecap="round"/>';
   return s+'</g>';
@@ -172,9 +177,13 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   // remain visually grounded while the pose/prop interaction becomes readable at normal playback size.
   if (activity !== "walk") {
     const cameraScale = 1.5;
-    const translateX = scene.canvas.width * 0.42 - cameraScale * p.pelvis.x;
+    // Anchor the action camera to the initial root, not the animated pelvis.
+    // Tracking the pelvis every frame erased visible horizontal root/weight
+    // transfer and made a moving camera compensate for the character's motion.
+    const cameraAnchorX = Number.isFinite(scene.motion.start_x) ? scene.motion.start_x : p.pelvis.x;
+    const translateX = scene.canvas.width * 0.42 - cameraScale * cameraAnchorX;
     const translateY = floor * (1 - cameraScale);
-    s += '<g data-camera-framing="close-action" transform="translate('+n(translateX)+' '+n(translateY)+') scale('+cameraScale+')">';
+    s += '<g data-camera-framing="close-action" data-camera-anchor="static-root-start" transform="translate('+n(translateX)+' '+n(translateY)+') scale('+cameraScale+')">';
   }
   s += activityEnvironmentSvg(p, scene, activity);
   s+='<g id="characterRig" data-rig-frame="'+frameIndex+'">';
