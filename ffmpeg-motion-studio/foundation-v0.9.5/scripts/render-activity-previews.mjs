@@ -9,12 +9,19 @@ const sourceScene = JSON.parse(fs.readFileSync(new URL("../scenes/locomotion-fre
 export function buildActivityManifest(scene) {
   const activities = [];
   for (const activity of ACTIVITY_NAMES) {
-    let maxBoneErrorPx = 0, maxAnkleClampErrorPx = 0, maxArmClampErrorPx = 0, maxKneeStepPx = 0, maxStanceFootDriftPx = 0;
+    let maxBoneErrorPx = 0, maxAnkleClampErrorPx = 0, maxArmClampErrorPx = 0, maxKneeStepPx = 0, maxKneeStepFrame = 0, maxStanceFootDriftPx = 0;
     let maxPelvisDropPx = 0, maxHeadTurnRadians = 0, maxTorsoLeanRadians = 0, maxReachDisplacementPx = 0;
-    let maxPickupItemStepPx = 0, maxPickupItemContactErrorPx = 0, maxReachTargetContactErrorPx = 0;
+    let maxPickupItemStepPx = 0, maxPickupItemStepFrame = 0, maxPickupItemAccelerationPxPerFrame2 = 0;
+    let maxPickupItemContactErrorPx = 0, maxReachTargetContactErrorPx = 0;
+    const trackedPointNames = ["pelvis","chest","head","nearElbow","farElbow","nearWrist","farWrist","leftKnee","rightKnee"];
+    const maxPoseStepByPointPx = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
+    const maxPoseStepFrameByPoint = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
+    const maxJointAccelerationByPointPxPerFrame2 = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
+    const maxJointAccelerationFrameByPoint = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
+    let maxJointAccelerationPxPerFrame2 = 0;
     let initialSeatContactErrorPx = null, finalSeatContactErrorPx = null, reachTargetContactedAtPeak = false;
     let pickupGripContactFrames = 0, pickupGripContactViolation = false, maxReachWeight = 0;
-    let finalPickupItemChestDistancePx = null, previous = null;
+    let finalPickupItemChestDistancePx = null, previousPrevious = null, previous = null;
     for (let frame = 0; frame < scene.duration_frames; frame++) {
       const pose = evaluateActivity(scene, frame, activity, "free");
       maxBoneErrorPx = Math.max(maxBoneErrorPx, pose.diagnostics.boneLengthErrorPx);
@@ -44,22 +51,70 @@ export function buildActivityManifest(scene) {
       if (previous) {
         const oldItem = previous.activityState.pickupItem, newItem = pose.activityState.pickupItem;
         if (oldItem && newItem) {
-          maxPickupItemStepPx = Math.max(maxPickupItemStepPx, Math.hypot(newItem.x-oldItem.x, newItem.y-oldItem.y));
+          const itemStep = Math.hypot(newItem.x-oldItem.x,newItem.y-oldItem.y);
+          if (itemStep > maxPickupItemStepPx) { maxPickupItemStepPx = itemStep; maxPickupItemStepFrame = frame; }
+          const olderItem = previousPrevious?.activityState.pickupItem;
+          if (olderItem) {
+            const itemAccel = Math.hypot(newItem.x - 2*oldItem.x + olderItem.x, newItem.y - 2*oldItem.y + olderItem.y);
+            maxPickupItemAccelerationPxPerFrame2 = Math.max(maxPickupItemAccelerationPxPerFrame2, itemAccel);
+          }
+        }
+        const points = {
+          pelvis: pose.pelvis, chest: pose.chest, head: pose.head,
+          nearElbow: pose.nearArm.elbow, farElbow: pose.farArm.elbow,
+          nearWrist: pose.nearArm.wrist, farWrist: pose.farArm.wrist,
+          leftKnee: pose.leftLeg.knee, rightKnee: pose.rightLeg.knee
+        };
+        const previousPoints = {
+          pelvis: previous.pelvis, chest: previous.chest, head: previous.head,
+          nearElbow: previous.nearArm.elbow, farElbow: previous.farArm.elbow,
+          nearWrist: previous.nearArm.wrist, farWrist: previous.farArm.wrist,
+          leftKnee: previous.leftLeg.knee, rightKnee: previous.rightLeg.knee
+        };
+        const olderPoints = previousPrevious ? {
+          pelvis: previousPrevious.pelvis, chest: previousPrevious.chest, head: previousPrevious.head,
+          nearElbow: previousPrevious.nearArm.elbow, farElbow: previousPrevious.farArm.elbow,
+          nearWrist: previousPrevious.nearArm.wrist, farWrist: previousPrevious.farArm.wrist,
+          leftKnee: previousPrevious.leftLeg.knee, rightKnee: previousPrevious.rightLeg.knee
+        } : null;
+        for (const name of trackedPointNames) {
+          const a = previousPoints[name], b = points[name];
+          const step = Math.hypot(b.x-a.x,b.y-a.y);
+          if (step > maxPoseStepByPointPx[name]) {
+            maxPoseStepByPointPx[name] = step;
+            maxPoseStepFrameByPoint[name] = frame;
+          }
+          if ((name === "leftKnee" || name === "rightKnee") && step > maxKneeStepPx) {
+            maxKneeStepPx = step; maxKneeStepFrame = frame;
+          }
+          if (olderPoints) {
+            const p2 = olderPoints[name];
+            const acceleration = Math.hypot(b.x - 2*a.x + p2.x, b.y - 2*a.y + p2.y);
+            if (acceleration > maxJointAccelerationByPointPxPerFrame2[name]) {
+              maxJointAccelerationByPointPxPerFrame2[name] = acceleration;
+              maxJointAccelerationFrameByPoint[name] = frame;
+            }
+            maxJointAccelerationPxPerFrame2 = Math.max(maxJointAccelerationByPointPxPerFrame2[name], maxJointAccelerationPxPerFrame2);
+          }
         }
         for (const side of ["left", "right"]) {
-          const a = previous[side + "Leg"].knee, b = pose[side + "Leg"].knee;
-          maxKneeStepPx = Math.max(maxKneeStepPx, Math.hypot(b.x-a.x,b.y-a.y));
           const oldFoot = previous[side + "Foot"], newFoot = pose[side + "Foot"];
           maxStanceFootDriftPx = Math.max(maxStanceFootDriftPx, Math.hypot(newFoot.x-oldFoot.x,newFoot.y-oldFoot.y));
         }
       }
+      previousPrevious = previous;
       previous = pose;
     }
     activities.push({
       id: activity, label: ACTIVITY_LABELS[activity], fps: scene.fps,
       frameCount: scene.duration_frames, durationSeconds: scene.duration_frames / scene.fps,
       cameraFraming: "close-action-1.50x",
-      maxBoneErrorPx, maxAnkleClampErrorPx, maxArmClampErrorPx, maxKneeStepPx, maxStanceFootDriftPx,
+      maxBoneErrorPx, maxAnkleClampErrorPx, maxArmClampErrorPx, maxKneeStepPx, maxKneeStepFrame, maxStanceFootDriftPx,
+      maxPoseStepByPointPx, maxPoseStepFrameByPoint,
+      maxJointAccelerationByPointPxPerFrame2, maxJointAccelerationFrameByPoint, maxJointAccelerationPxPerFrame2,
+      maxPickupItemAccelerationPxPerFrame2, maxPickupItemStepFrame,
+      temporalMetricsFinite: [...Object.values(maxPoseStepByPointPx), ...Object.values(maxJointAccelerationByPointPxPerFrame2),
+        maxJointAccelerationPxPerFrame2, maxPickupItemAccelerationPxPerFrame2].every(Number.isFinite),
       maxPelvisDropPx, maxHeadTurnRadians, maxTorsoLeanRadians, maxReachDisplacementPx,
       pickupObjectRendered: activity === "pick-up" && renderSvgFrame(scene, scene.duration_frames - 1, "free", activity).includes('data-prop="pickup-item"'),
       pickupObjectHeldAtEnd: activity === "pick-up" ? Boolean(previous?.activityState.pickupItem?.held) : null,
