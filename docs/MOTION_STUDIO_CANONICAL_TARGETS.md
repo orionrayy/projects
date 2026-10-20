@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.9.1 damped-human-gait on branch motion-studio-v0.9.1-damped-human-gait. Latest code CI passed on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 (push run 39368994640, PR run 39368999495); full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
+Current engineering candidate: Motion Studio v0.9.2 adaptive-reactive-gait in `ffmpeg-motion-studio/foundation-v0.9.2/` on branch motion-studio-v0.9.1-damped-human-gait. v0.9.1 is retained as the comparison baseline. Latest code CI passed on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 (push run 39368994640, PR run 39368999495); full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -124,3 +124,18 @@ The v0.9.0 artifact had exact stance-foot planting but excessive secondary motio
 ## Stage 14 validation results — 2026-10-20
 
 The v0.9.1 push and pull-request workflows both completed successfully and generated two 1280×720, 24fps, 192-frame MP4 previews plus 4fps contact sheets, metrics and SHA-256 checksums. Compared with v0.9.0 metrics: maximum tracked-point acceleration fell from 7.6813 to 3.0994px/frame² (−59.7%); maximum knee step fell from 11.0177 to 7.3980px/frame (−32.8%); chest step fell from 5.4096 to 2.8082px/frame (−48.1%); head step fell from 4.3670 to 2.4259px/frame (−44.4%); torso-angle range fell from 11.4712° to 4.5055° (−60.7%); head-angle range fell from 5.9741° to 2.6302° (−56.0%); basket tilt range fell from 5.1559° to 1.3677° (−73.5%). Stance-foot drift remained below 1e-12px/frame and basket-hand contact error remained 0px. Peak foot displacement per frame rose from 4.0345 to 6.8856px because the C2 trajectory trades some peak velocity for smoother acceleration; maximum total acceleration declined substantially. Continuous full-speed human-naturalness review remains pending, so this stays a draft.
+
+
+## Stage 15 — Adaptive, contact-reactive gait v0.9.2 — 2026-10-20
+
+The user's review correctly identified that v0.9.1 was smoother by per-frame acceleration metrics but still stiff, repetitive and robotic. The key defect was a fixed-speed phase loop with pure sinusoidal upper-body targets and too little weight-transfer response, not merely excessive amplitude.
+
+Research inputs:
+- van der Zee et al. (2022), open motion-capture/ground-reaction-force data across 33 combinations of speed, step length and width: https://www.nature.com/articles/s41597-022-01817-1
+- Van Criekinge et al. (2023), full-body motion-capture gait data from 138 able-bodied adults across ages 21–86 and 50 stroke survivors: https://www.nature.com/articles/s41597-023-02767-y
+- Ferber et al. (2002), reactive balance corrections after unexpected walking perturbations, with coordinated hip/trunk and lower-limb contributions: https://www.sciencedirect.com/science/article/pii/S0966636202000103
+- Meyns et al. (2013), gait-coordinated arm swing and its stabilization: https://pubmed.ncbi.nlm.nih.gov/23489950/
+
+The v0.9.2 candidate adds an integrated smooth start/stop gait clock whose phase coordinate drives both root travel and foot trajectory, preserving stance-foot locking during the speed ramps. It adds contact-localized pelvis compression and lateral transfer, torso/head reaction, balanced free-arm counter-swing using a multi-harmonic waveform, subtle basket response, and deterministic smoothed cycle variation with small left/right asymmetry. Amplitudes are restored modestly after over-damping; the goal is coordinated response, not random jitter.
+
+Validation status: CI/render is pending after this commit. Full-speed naturalness acceptance remains pending until both previews are watched continuously at actual speed. Do not infer human likeness from tests or frame-step metrics alone.
