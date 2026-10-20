@@ -1,0 +1,14 @@
+{
+  "name": "motion-studio-foundation-face-activity-suite-v0.9.5",
+  "version": "0.9.5",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "render:preview": "node scripts/render-preview.mjs .working",
+    "render:activities": "node scripts/render-activity-previews.mjs .working/activities"
+  }
+}

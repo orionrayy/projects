@@ -1,0 +1,79 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import { ACTIVITY_NAMES, evaluateActivity } from "../src/activity-motion.mjs";
+import { renderSvgFrame } from "../scripts/render-preview.mjs";
+
+const source = JSON.parse(fs.readFileSync(new URL("../scenes/locomotion-free.json", import.meta.url), "utf8"));
+const scene = { ...source, fps: 24, duration_frames: 72 };
+
+test("activity catalog includes six deterministic non-walk motion families", () => {
+  assert.deepEqual([...ACTIVITY_NAMES], ["stand", "look-around", "reach", "pick-up", "sit-to-stand", "turn-in-place"]);
+});
+
+test("all activity clips preserve grounded feet, finite poses and solved bone lengths", () => {
+  for (const activity of ACTIVITY_NAMES) {
+    let maxBoneError = 0, maxAnkleClamp = 0, maxArmClamp = 0, maxKneeStep = 0, maxFootDrift = 0;
+    let previous = null;
+    for (let frame = 0; frame < scene.duration_frames; frame++) {
+      const pose = evaluateActivity(scene, frame, activity, "free");
+      assert.ok(Number.isFinite(pose.pelvis.x) && Number.isFinite(pose.pelvis.y), activity + " pelvis is non-finite");
+      assert.equal(pose.diagnostics.stance.left, true, activity + " left foot must stay planted");
+      assert.equal(pose.diagnostics.stance.right, true, activity + " right foot must stay planted");
+      assert.ok(Math.abs(pose.leftFoot.y - scene.background.horizon_y) < 1e-8, activity + " left foot left the floor");
+      assert.ok(Math.abs(pose.rightFoot.y - scene.background.horizon_y) < 1e-8, activity + " right foot left the floor");
+      maxBoneError = Math.max(maxBoneError, pose.diagnostics.boneLengthErrorPx);
+      maxAnkleClamp = Math.max(maxAnkleClamp, pose.diagnostics.ankleClampErrorPx);
+      maxArmClamp = Math.max(maxArmClamp, pose.diagnostics.armClampErrorPx);
+      if (previous) {
+        for (const side of ["left", "right"]) {
+          const a = previous[side + "Leg"].knee, b = pose[side + "Leg"].knee;
+          maxKneeStep = Math.max(maxKneeStep, Math.hypot(b.x - a.x, b.y - a.y));
+          const oldFoot = previous[side + "Foot"], newFoot = pose[side + "Foot"];
+          maxFootDrift = Math.max(maxFootDrift, Math.hypot(newFoot.x - oldFoot.x, newFoot.y - oldFoot.y));
+        }
+      }
+      previous = pose;
+    }
+    assert.ok(maxBoneError < 0.02, activity + " bone error: " + maxBoneError);
+    assert.ok(maxAnkleClamp < 1.5, activity + " ankle clamp: " + maxAnkleClamp);
+    assert.ok(maxArmClamp < 1.5, activity + " arm clamp: " + maxArmClamp);
+    assert.ok(maxKneeStep < 13, activity + " knee step: " + maxKneeStep);
+    assert.ok(maxFootDrift < 0.05, activity + " foot drift: " + maxFootDrift);
+  }
+});
+
+test("each non-walk clip visibly changes its intended control channel", () => {
+  const summarize = (activity) => {
+    const poses = Array.from({ length: scene.duration_frames }, (_, frame) => evaluateActivity(scene, frame, activity, "free"));
+    return {
+      poses,
+      minDrop: Math.min(...poses.map(p => p.activityState.pelvisDropPx)),
+      maxDrop: Math.max(...poses.map(p => p.activityState.pelvisDropPx)),
+      minHead: Math.min(...poses.map(p => p.headAngle)),
+      maxHead: Math.max(...poses.map(p => p.headAngle)),
+      minTorso: Math.min(...poses.map(p => p.torsoAngle)),
+      maxTorso: Math.max(...poses.map(p => p.torsoAngle)),
+      maxReach: Math.max(...poses.map(p => p.activityState.reachDisplacementPx))
+    };
+  };
+  const look = summarize("look-around");
+  assert.ok(look.maxHead - look.minHead > 0.45);
+  assert.ok(summarize("reach").maxReach >= 70);
+  assert.ok(summarize("pick-up").maxDrop >= 18);
+  const sit = summarize("sit-to-stand");
+  assert.ok(sit.poses[0].activityState.pelvisDropPx > 20);
+  assert.ok(sit.poses.at(-1).activityState.pelvisDropPx < 0.1);
+  const turn = summarize("turn-in-place");
+  assert.ok(turn.maxTorso - turn.minTorso > 0.25);
+});
+
+test("SVG renderer tags and labels every activity preview", () => {
+  for (const activity of ACTIVITY_NAMES) {
+    const svg = renderSvgFrame(scene, 36, "free", activity);
+    assert.ok(svg.includes('data-activity="' + activity + '"'));
+    assert.ok(svg.includes('data-activity-overlay="label"'));
+    assert.ok(svg.includes("MOTION STUDIO / v0.9.5"));
+  }
+  assert.throws(() => renderSvgFrame(scene, 20, "free", "unknown-action"), /Unsupported activity/);
+});
