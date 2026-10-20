@@ -67,6 +67,12 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   assert.ok(stand.maxBreath - stand.minBreath > 3.0, "breathing cue should be perceptible in the chest channel");
   assert.ok(stand.pelvisYRange < 0.1, "breathing must not bounce the entire pelvis/root");
   assert.ok(stand.chestYRange > 2.0, "breathing should move the upper torso, not only a diagnostic value");
+  for (const p of [stand.poses[0], summarize("look-around").poses[0]]) {
+    assert.ok(p.nearArm.wrist.y > p.pelvis.y - 2,
+      "neutral profile wrist should rest below the pelvis line, not bunch at the waist");
+    assert.ok(Math.hypot(p.nearArm.wrist.x-p.farArm.wrist.x, p.nearArm.wrist.y-p.farArm.wrist.y) > 10,
+      "near and far resting hands must retain visible projected separation");
+  }
 
   const look = summarize("look-around");
   assert.ok(look.maxHead - look.minHead > 0.45, "profile head scan must contain two readable glances");
