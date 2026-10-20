@@ -126,11 +126,12 @@ function activityEnvironmentSvg(p, scene, activity) {
   }
   if (activity === "reach" && p.activityState?.reachTarget) {
     const target = p.activityState.reachTarget, x = target.x, y = target.y;
-    s += '<g data-environment="reach-target" stroke="#566273" stroke-linejoin="round" stroke-linecap="round">';
+    s += '<g data-environment="reach-target" data-button-state="'+(target.active ? "pressed" : "idle")+'" stroke="#566273" stroke-linejoin="round" stroke-linecap="round">';
     s += '<path d="M '+n(x)+' '+n(y+20)+' L '+n(x)+' '+n(floor-2)+'" fill="none" stroke-width="5"/>';
     s += '<rect x="'+n(x-16)+'" y="'+n(y-22)+'" width="32" height="44" rx="5" fill="#E8E2D4" stroke-width="2.3"/>';
     s += '<rect x="'+n(x-11)+'" y="'+n(y-17)+'" width="22" height="34" rx="3" fill="#F8F4E9" stroke="#9CA6AE" stroke-width="1.1"/>';
-    s += '<circle cx="'+n(x)+'" cy="'+n(y)+'" r="'+n(target.radius)+'" fill="#C45B43" stroke="#713F36" stroke-width="2.2"/>';
+    if (target.active) s += '<circle data-button-feedback="press-ring" cx="'+n(x)+'" cy="'+n(y)+'" r="14" fill="none" stroke="#E8A15C" stroke-width="2.4" opacity=".85"/>';
+    s += '<circle cx="'+n(x)+'" cy="'+n(y)+'" r="'+n(target.active ? target.radius * 0.72 : target.radius)+'" fill="'+(target.active ? "#8E3D32" : "#C45B43")+'" stroke="#713F36" stroke-width="2.2"/>';
     s += '<circle cx="'+n(x)+'" cy="'+n(y)+'" r="3.2" fill="#F9D9AC" stroke="none"/>';
     s += '</g>';
   }
