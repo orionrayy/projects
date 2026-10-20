@@ -4,7 +4,7 @@ Status: engineering candidate until hosted CI and full-speed visual acceptance p
 
 - Retain v0.8.8's narrow 6px near/far depth projection.
 - Recalibrate leg chain to upper=79px, lower=81px (160px total), with torso length 98px, pelvis root y=409 and bob amplitude 0.5px.
-- Set full gait cycle to 1.14 seconds to allow smoother per-frame acceleration while retaining a normal walking cadence.
+- Set full gait cycle to 1.20 seconds to allow smoother per-frame acceleration while retaining a normal walking cadence.
 - Add a heel-strike knee internal-angle gate above 155°.
 - Keep planted-foot drift, ankle reachability, bone-length, swing/stance and <8px/frame² temporal acceptance gates.
 

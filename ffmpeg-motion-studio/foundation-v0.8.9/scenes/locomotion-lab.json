@@ -15,7 +15,7 @@
     "horizon_y": 570
   },
   "motion": {
-    "cycle_seconds": 1.14,
+    "cycle_seconds": 1.2,
     "stride_length_px": 78,
     "stance_fraction": 0.6,
     "swing_lift_px": 24,
