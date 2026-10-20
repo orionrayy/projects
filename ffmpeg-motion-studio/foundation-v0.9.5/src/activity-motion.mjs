@@ -305,8 +305,18 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       x: reachingTarget.x + (holdingTarget.x - reachingTarget.x) * pickupLift,
       y: reachingTarget.y + (holdingTarget.y - reachingTarget.y) * pickupLift
     };
-    farTarget = { x: pose.shoulders.far.x - 10 - 4 * pickupCrouch + 2 * pickupLift,
-      y: pose.shoulders.far.y + 84 - 8 * pickupCrouch - 3 * pickupLift };
+    // During the crouch, the non-grasping arm counterbalances behind the hip.
+    // Keeping this wrist only 10px behind the shoulder made the far forearm fold
+    // across the torso in profile and read as a crossed-arm pose.
+    const relaxedFarTarget = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 84 };
+    const counterbalanceFarTarget = {
+      x: pose.pelvis.x - 26 - 8 * pickupCrouch + 4 * pickupLift,
+      y: pose.pelvis.y - 6 + 5 * pickupLift
+    };
+    farTarget = {
+      x: relaxedFarTarget.x + (counterbalanceFarTarget.x - relaxedFarTarget.x) * pickupCrouch,
+      y: relaxedFarTarget.y + (counterbalanceFarTarget.y - relaxedFarTarget.y) * pickupCrouch
+    };
   } else if (activity === "sit-to-stand") {
     // Separate the seated lap pose, forward counterbalance, and relaxed standing
     // pose. Reusing the generic folded-arm pose made the entire action read as
@@ -341,11 +351,18 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
 
   if (activity === "pick-up") {
     const held = { x: pose.nearArm.wrist.x + 18, y: pose.nearArm.wrist.y };
+    const isHeld = pickupGrip >= 0.999999;
+    const graspContactErrorPx = Math.hypot(pose.nearArm.wrist.x - pickupTarget.x,
+      pose.nearArm.wrist.y - pickupTarget.y);
+    // The parcel must not slide toward the hand before the grip is established.
+    // At the attach frame, wrist+offset equals the table-resting parcel center,
+    // so attachment is continuous; only then does lift move it with the wrist.
     pose.activityState.pickupItem = {
-      x: pickupOrigin.x + (held.x - pickupOrigin.x) * pickupGrip,
-      y: pickupOrigin.y + (held.y - pickupOrigin.y) * pickupGrip,
+      x: isHeld ? held.x : pickupOrigin.x,
+      y: isHeld ? held.y : pickupOrigin.y,
       width: 34, height: 26, tableX: pickupOrigin.x, tableTopY: pickupTableTopY,
-      gripWeight: pickupGrip, held: pickupGrip >= 0.999999,
+      gripWeight: pickupGrip, held: isHeld,
+      graspContactErrorPx,
       graspAnchor: { ...pickupTarget }, handOffsetPx: { x: 18, y: 0 }
     };
   }
@@ -386,10 +403,11 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       Math.hypot(pose.nearArm.wrist.x - pose.basket.handleRight.x, pose.nearArm.wrist.y - pose.basket.handleRight.y),
       Math.hypot(pose.farArm.wrist.x - pose.basket.handleLeft.x, pose.farArm.wrist.y - pose.basket.handleLeft.y)
     ) : 0,
-    pickupItemContactErrorPx: pose.activityState.pickupItem?.gripWeight >= 0.95
+    pickupItemContactErrorPx: pose.activityState.pickupItem?.held
       ? Math.hypot(pose.activityState.pickupItem.x - (pose.nearArm.wrist.x + 18),
           pose.activityState.pickupItem.y - pose.nearArm.wrist.y)
       : 0,
+    pickupGraspContactErrorPx: pose.activityState.pickupItem?.graspContactErrorPx ?? null,
     pickupItemChestDistancePx: pose.activityState.pickupItem
       ? Math.hypot(pose.activityState.pickupItem.x - pose.nearArm.shoulder.x,
           pose.activityState.pickupItem.y - pose.nearArm.shoulder.y)

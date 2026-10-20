@@ -70,3 +70,10 @@ This revision adds integrated elbow/knee caps sized from the current rig widths,
 The next full-speed pass showed that the button interaction was geometrically correct but visually arm-led: the wrist began advancing with almost no preceding body response. The reach phase now has a small backward preload before the arm commits, then a stronger forward torso lean, a slight head/gaze response and a counterbalancing far arm. The button remains a world-fixed target and its contact gate remains fingertip-based.
 
 Regression tests assert that anticipation peaks while the wrist is still near its rest pose, the pelvis preloads backward, the torso then leans forward, and the fixed target is still contacted. These changes improve action staging in a 2D profile rig; they do not establish full 3D biomechanics or human-level visual acceptance.
+
+
+## Follow-up audit — pickup staging and truthful object contact
+
+A rendered close-frame pass showed the non-grasping far forearm folded across the torso, while the parcel eased away from its tabletop origin before the grip was fully established. Both issues could pass the earlier endpoint-only contact metric.
+
+The pickup action now moves the non-grasping hand behind the hip during the deepest part of the crouch, using it as a counterbalance rather than a second reaching arm. The parcel remains exactly on the table until the grip reaches its attachment state; the attach frame is required to place the wrist at the fixed grasp anchor, after which the parcel follows the wrist with a fixed offset. Regression checks cover the entire pre-grip interval, the first attachment frame, continuity of the object-hand offset, and the far hand's position relative to the pelvis. This still remains a procedural 2D profile animation and needs another visual acceptance pass.

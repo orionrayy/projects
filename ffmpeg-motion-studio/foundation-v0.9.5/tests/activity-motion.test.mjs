@@ -184,6 +184,28 @@ test("pick-up shows a real object, keeps it on the table before grasp, and ends 
     previous = current;
   }
   assert.ok(maxItemStep < 15, "pickup prop trajectory has a step spike: " + maxItemStep);
+
+  const firstHeldFrame=pickup.poses.findIndex(p=>p.activityState.pickupItem?.held);
+  assert.ok(firstHeldFrame>0,"parcel must not be marked held before the reach/grip phases");
+  for(let frame=0;frame<firstHeldFrame;frame++) {
+    const item=pickup.poses[frame].activityState.pickupItem;
+    assert.ok(Math.abs(item.x-item.tableX)<1e-8,
+      "parcel must remain fixed on the table until grip is established at frame "+frame);
+    assert.ok(Math.abs(item.y+item.height/2-item.tableTopY)<1e-8,
+      "parcel must remain seated on the table until grip is established at frame "+frame);
+  }
+  const attachPose=pickup.poses[firstHeldFrame];
+  assert.ok(attachPose.diagnostics.pickupGraspContactErrorPx<1.5,
+    "the reaching wrist must contact the fixed grasp anchor before parcel attachment: "+
+      attachPose.diagnostics.pickupGraspContactErrorPx);
+  assert.ok(Math.hypot(attachPose.activityState.pickupItem.x-(attachPose.nearArm.wrist.x+18),
+      attachPose.activityState.pickupItem.y-attachPose.nearArm.wrist.y)<1e-8,
+    "parcel attachment must match wrist offset exactly at grip onset");
+
+  const crouchPose=pickup.poses.reduce((best,p)=>p.activityState.pelvisDropPx>best.activityState.pelvisDropPx?p:best,pickup.poses[0]);
+  assert.ok(crouchPose.farArm.wrist.x<crouchPose.pelvis.x-10,
+    "non-grasping far hand should counterbalance behind the hip instead of crossing the torso");
+
   const svg = renderSvgFrame(scene, scene.duration_frames - 1, "free", "pick-up");
   assert.ok(svg.includes('data-prop="pickup-item"'));
   assert.ok(svg.includes('data-environment="pickup-table"'));
