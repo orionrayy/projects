@@ -78,6 +78,11 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   const reachPeak = evaluateActivity(scene, 36, "reach", "free");
   assert.equal(reachPeak.activityState.reachTarget.active, true);
   assert.ok(reachPeak.diagnostics.reachTargetContactErrorPx < 1e-8);
+  const targetPositions = Array.from({ length: scene.duration_frames }, (_, frame) =>
+    evaluateActivity(scene, frame, "reach", "free").activityState.reachTarget);
+  assert.ok(targetPositions.every(t => Math.abs(t.x - targetPositions[0].x) < 1e-8 &&
+    Math.abs(t.y - targetPositions[0].y) < 1e-8),
+    "reach target must be fixed in world space, not follow the moving shoulder");
   const reachSvg = renderSvgFrame(scene, 36, "free", "reach");
   assert.ok(reachSvg.includes('data-environment="reach-target"'));
 
@@ -161,6 +166,7 @@ test("activity manifest records semantic props and interaction continuity", () =
   assert.ok(pickup.maxPickupItemStepPx < 15);
   assert.ok(pickup.maxPickupItemContactErrorPx < 2);
   assert.equal(pickup.pickupObjectContactedWhileGripping, true);
+  assert.ok(pickup.pickupGripContactFrames >= 20);
   assert.equal(reach.reachTargetRendered, true);
   assert.equal(reach.reachTargetContactedAtPeak, true);
   assert.ok(reach.maxReachTargetContactErrorPx < 1e-8);
@@ -178,9 +184,21 @@ test("SVG renderer tags and labels every activity preview", () => {
     assert.ok(svg.includes('data-activity="' + activity + '"'));
     assert.ok(svg.includes('data-activity-overlay="label"'));
     assert.ok(svg.includes('data-camera-framing="close-action"'), activity + " must use close-action framing");
+    assert.ok(svg.includes('data-camera-anchor="static-root-start"'), activity + " camera must not track/cancel the animated root");
     assert.ok(svg.includes("MOTION STUDIO / v0.9.5"));
   }
   const fullSceneWalk = renderSvgFrame(scene, 36, "free", "walk");
   assert.ok(!fullSceneWalk.includes('data-camera-framing="close-action"'), "legacy walk preview must retain its original full-scene framing");
+  const glanceStart = renderSvgFrame(scene, 5, "free", "look-around");
+  const glanceLeft = renderSvgFrame(scene, 25, "free", "look-around");
+  assert.ok(glanceStart.includes('data-profile-feature="pupil"') && glanceLeft.includes('data-profile-feature="pupil"'),
+    "profile gaze must be drawn as a separate, testable pupil");
+  const pupilPosition = svg => {
+    const match = svg.match(/data-profile-feature="pupil" cx="([0-9.\-]+)" cy="([0-9.\-]+)"/);
+    assert.ok(match, "profile pupil coordinates missing");
+    return [Number(match[1]), Number(match[2])];
+  };
+  assert.ok(Math.hypot(...pupilPosition(glanceStart).map((v,i)=>v-pupilPosition(glanceLeft)[i])) > 0.5,
+    "look-around must move eye gaze as well as head tilt");
   assert.throws(() => renderSvgFrame(scene, 20, "free", "unknown-action"), /Unsupported activity/);
 });
