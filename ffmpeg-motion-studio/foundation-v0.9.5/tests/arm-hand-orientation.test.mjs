@@ -71,11 +71,25 @@ test("relaxed hands stay gravity-directed and interaction hands align to their t
   for (let frame=0; frame<scene.duration_frames; frame++) {
     const p=evaluateActivity(scene,frame,"reach","free");
     const hand=handRecords(renderSvgFrame(scene,frame,"free","reach")).find(h=>h.side==="near");
-    assert.equal(hand.orientation,"target-directed");
-    const targetAngle=Math.atan2(p.activityState.reachTarget.y-p.nearArm.shoulder.y,
-      p.activityState.reachTarget.x-p.nearArm.shoulder.x);
-    assert.ok(Math.abs(angleDelta(radians(hand.angle),targetAngle))<=0.42,
-      "reach hand must point toward the button at frame "+frame);
+    const weight=p.activityState.reachWeight||0;
+    if(weight<0.22) {
+      assert.equal(hand.pose,"relaxed","reach should begin from a relaxed hand pose");
+      assert.equal(hand.orientation,"gravity-down");
+    } else {
+      assert.equal(hand.orientation,"target-directed");
+      const targetAngle=Math.atan2(p.activityState.reachTarget.y-p.nearArm.wrist.y,
+        p.activityState.reachTarget.x-p.nearArm.wrist.x);
+      assert.ok(Math.abs(angleDelta(radians(hand.angle),targetAngle))<=0.42,
+        "reach hand must point from the wrist toward the button at frame "+frame);
+    }
+    if(p.activityState.reachTarget.active) {
+      const tip={x:p.nearArm.wrist.x+17*Math.cos(radians(hand.angle)),
+        y:p.nearArm.wrist.y+17*Math.sin(radians(hand.angle))};
+      assert.ok(Math.hypot(tip.x-p.activityState.reachTarget.x,tip.y-p.activityState.reachTarget.y)<1e-6,
+        "press fingertip must touch the visible target at frame "+frame);
+      assert.ok(p.diagnostics.reachTargetContactErrorPx<1e-8,
+        "contact metric must measure fingertip, not wrist, at frame "+frame);
+    }
   }
 
   const p=evaluateActivity(scene,71,"pick-up","free");
@@ -102,5 +116,25 @@ test("hand rotation has no frame-to-frame half-turn discontinuity", () => {
         previous[hand.side]=radians(hand.angle);
       }
     }
+  }
+});
+
+test("reach contact is measured at the fingertip and begins from rest", () => {
+  const initial=evaluateActivity(scene,0,"reach","free");
+  const initialHand=handRecords(renderSvgFrame(scene,0,"free","reach")).find(h=>h.side==="near");
+  assert.equal(initialHand.pose,"relaxed");
+  assert.equal(initial.activityState.reachTarget.active,false);
+  const contactFrames=[];
+  for(let frame=0;frame<scene.duration_frames;frame++) {
+    const p=evaluateActivity(scene,frame,"reach","free");
+    if(p.activityState.reachTarget.active) contactFrames.push(frame);
+  }
+  assert.ok(contactFrames.length>=5,"a stable multi-frame contact should be visible, not a one-frame flash");
+  for(const frame of contactFrames) {
+    const p=evaluateActivity(scene,frame,"reach","free");
+    const hand=handRecords(renderSvgFrame(scene,frame,"free","reach")).find(h=>h.side==="near");
+    const tip={x:p.nearArm.wrist.x+17*Math.cos(radians(hand.angle)),
+      y:p.nearArm.wrist.y+17*Math.sin(radians(hand.angle))};
+    assert.ok(Math.hypot(tip.x-p.activityState.reachTarget.x,tip.y-p.activityState.reachTarget.y)<1e-6);
   }
 });
