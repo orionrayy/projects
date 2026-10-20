@@ -43,13 +43,12 @@ const GAIT_SCENE = {
   fps: FPS,
   duration_frames: FRAME_COUNT,
   character: {
-    ...baseScene.character,
-    upper_leg_px: 80.5,
-    lower_leg_px: 82.5
+    ...baseScene.character
   },
   motion: {
     ...baseScene.motion,
     cycle_seconds: 1.33,
+    stance_fraction: 0.62,
     screen_stride_scale: 0.64,
     root_y: 411,
     start_ramp_seconds: 0.48,
