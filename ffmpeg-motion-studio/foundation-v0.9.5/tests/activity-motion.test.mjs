@@ -114,9 +114,9 @@ test("each non-walk clip visibly changes its intended control channel", () => {
 
   const pickup = summarize("pick-up");
   assert.ok(pickup.maxDrop >= 25, "pick-up must produce a readable crouch");
-  assert.ok(pickupPoses.at(-1).activityState.pelvisDropPx < 0.1, "pick-up must recover to a standing hold");
+  assert.ok(pickup.poses.at(-1).activityState.pelvisDropPx < 0.1, "pick-up must recover to a standing hold");
   let pickupContactFrames = 0, maxPickupContactError = 0;
-  for (const pose of pickupPoses) {
+  for (const pose of pickup.poses) {
     if (pose.activityState.pickupItem?.gripWeight >= 0.95) {
       pickupContactFrames++;
       maxPickupContactError = Math.max(maxPickupContactError, pose.diagnostics.pickupItemContactErrorPx);
@@ -124,7 +124,7 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   }
   assert.ok(pickupContactFrames >= 20, "grasped-object contact must be checked across a continuous interval");
   assert.ok(maxPickupContactError < 2, "parcel must stay attached to the wrist after grasp: " + maxPickupContactError);
-  const pickupTail = pickupPoses.slice(-18);
+  const pickupTail = pickup.poses.slice(-18);
   const pickupTailChestRange = Math.max(
     Math.max(...pickupTail.map(p => p.chest.x)) - Math.min(...pickupTail.map(p => p.chest.x)),
     Math.max(...pickupTail.map(p => p.chest.y)) - Math.min(...pickupTail.map(p => p.chest.y))
