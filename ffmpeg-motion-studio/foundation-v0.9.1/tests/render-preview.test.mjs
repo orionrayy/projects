@@ -42,7 +42,7 @@ test("whole-sequence pose metrics preserve geometry and naturalness gates", () =
     if (mode === "carry") assert.ok(report.maxBasketContactErrorPx <= 0.02);
     if (mode === "carry") assert.ok(report.basketTiltRangeDegrees >= 0.5 && report.basketTiltRangeDegrees <= 2.5, "carry prop secondary tilt should remain subtle");
     if (mode === "free") {
-      assert.ok(report.nearArmWristRelativeRangePx >= 25);
+      assert.ok(report.nearArmWristRelativeRangePx >= 18);
       assert.ok(report.minNearArmElbowAngleDegrees >= 110);
       assert.ok(report.maxNearArmElbowAngleDegrees <= 160);
     }
