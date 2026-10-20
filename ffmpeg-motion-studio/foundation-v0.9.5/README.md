@@ -46,3 +46,13 @@ The sit-to-stand seat/backrest and pick-up table are now rendered as filled silh
 
 ## Reach action context (review-driven)
 The reach clip now contains a visible wall-mounted button aligned to the reach target. Its contact window is explicit in the pose state, and regression tests verify the wrist reaches the target at peak extension without weakening the existing IK/contact gates. Manifest schema 1.3.0 records target presence, peak contact and maximum contact error; artistic acceptance remains pending.
+
+## Visual-forensics rework: hand orientation, crossed arms, torso and profile depth
+
+The first 432-frame contact sheet failed visual acceptance despite passing the numerical joint-step and bone-length tests. Cross-checking the renderer, pose solver and activity timelines exposed defects those metrics did not test: near/far elbow branches could converge across the torso; relaxed hands inherited forearm-dependent rotations; the trunk silhouette was drawn with mostly screen-vertical offsets instead of following the spine axis; and zero-stride activity poses projected both feet almost on top of each other.
+
+This revision makes hand pose semantic (relaxed, point, press, grip), constrains relaxed-hand orientation toward screen-down, adds explicit near/far hand metadata to SVG for audit, builds the side-profile torso contour in the chest-to-pelvis local frame, separates the static projected feet, and chooses elbow branches that preserve the far arm behind the torso in idle profile poses. Look-around and turn-in-place cues are more legible but remain 2D profile approximations; this does not claim true 3D yaw or production-level human realism.
+
+The sit-to-stand action should not be judged only by a smooth pelvis trajectory. A 2023 systematic review reports that trunk flexion/momentum, vertical momentum, and postural stabilization are important to sit-to-stand performance and balance regulation ([Sadeh et al., Clinical Biomechanics, 2023](https://pubmed.ncbi.nlm.nih.gov/37639862/)). Animation review also needs clear anticipation, staging, timing, arcs and follow-through rather than mechanically smooth interpolation ([Microsoft Learn: Animation Principles](https://learn.microsoft.com/en-us/windows/win32/lwef/animation-principles); [Disney Animation: Animation Process](https://www.disneyanimation.com/process/animation/)).
+
+Acceptance remains gated by reviewing rendered full-speed clips and their complete frame sheets. Geometry tests are necessary but cannot stand in for human visual acceptance. Audio integration, browser-to-FFmpeg raster parity and long-video integration remain unverified.
