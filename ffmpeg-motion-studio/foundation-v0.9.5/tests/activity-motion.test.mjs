@@ -179,6 +179,28 @@ test("activity manifest records semantic props and interaction continuity", () =
   assert.ok(sit.initialSeatContactErrorPx < 1);
   assert.ok(sit.finalSeatContactErrorPx > 20);
   assert.equal(manifest.humanFullSpeedAcceptance, "pending");
+
+  for (const action of manifest.activities) {
+    assert.equal(action.temporalMetricsFinite, true, action.id + " temporal metrics must remain finite");
+    assert.ok(action.maxJointAccelerationPxPerFrame2 < 5,
+      action.id + " joint acceleration spike: " + action.maxJointAccelerationPxPerFrame2);
+    for (const [point, step] of Object.entries(action.maxPoseStepByPointPx)) {
+      assert.ok(step < 12, action.id + " " + point + " step spike " + step +
+        " px/frame at frame " + action.maxPoseStepFrameByPoint[point]);
+      assert.ok(action.maxPoseStepFrameByPoint[point] >= 0 &&
+        action.maxPoseStepFrameByPoint[point] < action.frameCount,
+        action.id + " " + point + " worst-step frame is out of range");
+    }
+    for (const [point, acceleration] of Object.entries(action.maxJointAccelerationByPointPxPerFrame2)) {
+      assert.ok(acceleration < 5, action.id + " " + point + " acceleration spike " + acceleration +
+        " px/frame² at frame " + action.maxJointAccelerationFrameByPoint[point]);
+    }
+    if (action.id === "pick-up") {
+      assert.ok(action.maxPickupItemStepPx < 10, "parcel step spike " + action.maxPickupItemStepPx);
+      assert.ok(action.maxPickupItemAccelerationPxPerFrame2 < 5,
+        "parcel acceleration spike " + action.maxPickupItemAccelerationPxPerFrame2);
+    }
+  }
 });
 
 test("SVG renderer tags and labels every activity preview", () => {
