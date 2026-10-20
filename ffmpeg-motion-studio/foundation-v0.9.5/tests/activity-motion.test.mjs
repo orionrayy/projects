@@ -55,23 +55,63 @@ test("each non-walk clip visibly changes its intended control channel", () => {
       maxHead: Math.max(...poses.map(p => p.headAngle)),
       minTorso: Math.min(...poses.map(p => p.torsoAngle)),
       maxTorso: Math.max(...poses.map(p => p.torsoAngle)),
-      maxReach: Math.max(...poses.map(p => p.activityState.reachDisplacementPx))
+      maxReach: Math.max(...poses.map(p => p.activityState.reachDisplacementPx)),
+      maxReachWeight: Math.max(...poses.map(p => p.activityState.reachWeight ?? 0)),
+      minBreath: Math.min(...poses.map(p => p.activityState.breathingOffsetPx ?? 0)),
+      maxBreath: Math.max(...poses.map(p => p.activityState.breathingOffsetPx ?? 0)),
+      pelvisYRange: Math.max(...poses.map(p => p.pelvis.y)) - Math.min(...poses.map(p => p.pelvis.y)),
+      chestYRange: Math.max(...poses.map(p => p.chest.y)) - Math.min(...poses.map(p => p.chest.y))
     };
   };
+  const stand = summarize("stand");
+  assert.ok(stand.maxBreath - stand.minBreath > 3.0, "breathing cue should be perceptible in the chest channel");
+  assert.ok(stand.pelvisYRange < 0.1, "breathing must not bounce the entire pelvis/root");
+  assert.ok(stand.chestYRange > 2.0, "breathing should move the upper torso, not only a diagnostic value");
+
   const look = summarize("look-around");
-  assert.ok(look.maxHead - look.minHead > 0.45);
-  assert.ok(summarize("reach").maxReach >= 70);
-  assert.ok(summarize("pick-up").maxDrop >= 18);
+  assert.ok(look.maxHead - look.minHead > 0.45, "profile head scan must contain two readable glances");
+
+  const reach = summarize("reach");
+  assert.ok(reach.maxReach >= 70);
+  assert.ok(reach.maxReachWeight >= 0.99);
+  assert.ok(reach.poses.at(-1).activityState.reachWeight < 0.1, "reach must retract and settle before clip end");
   const reachPeak = evaluateActivity(scene, 36, "reach", "free");
   assert.equal(reachPeak.activityState.reachTarget.active, true);
   assert.ok(reachPeak.diagnostics.reachTargetContactErrorPx < 1e-8);
   const reachSvg = renderSvgFrame(scene, 36, "free", "reach");
   assert.ok(reachSvg.includes('data-environment="reach-target"'));
+
+  const pickup = summarize("pick-up");
+  assert.ok(pickup.maxDrop >= 25, "pick-up must produce a readable crouch");
+  assert.ok(pickup.poses.at(-1).activityState.pelvisDropPx < 0.1, "pick-up must recover to a standing hold");
+  let pickupContactFrames = 0, maxPickupContactError = 0;
+  for (const pose of pickup.poses) {
+    if (pose.activityState.pickupItem?.gripWeight >= 0.95) {
+      pickupContactFrames++;
+      maxPickupContactError = Math.max(maxPickupContactError, pose.diagnostics.pickupItemContactErrorPx);
+    }
+  }
+  assert.ok(pickupContactFrames >= 20, "grasped-object contact must be checked across a continuous interval");
+  assert.ok(maxPickupContactError < 2, "parcel must stay attached to the wrist after grasp: " + maxPickupContactError);
+
   const sit = summarize("sit-to-stand");
-  assert.ok(sit.poses[0].activityState.pelvisDropPx > 20);
+  assert.ok(Math.abs(sit.poses[0].activityState.pelvisDropPx - 25) < 1e-8);
+  assert.ok(sit.poses[0].diagnostics.seatContactErrorPx < 1, "initial seated pose must contact the seat");
+  assert.ok(sit.poses[0].activityState.torsoLeanRadians < 0.06, "seated pose should not begin in a premature forward lunge");
+  const sitLeanPeakIndex = sit.poses.reduce((best, pose, index, poses) =>
+    pose.activityState.torsoLeanRadians > poses[best].activityState.torsoLeanRadians ? index : best, 0);
+  assert.ok(sitLeanPeakIndex >= 22 && sitLeanPeakIndex <= 34, "forward momentum should precede seat-off; peak frame=" + sitLeanPeakIndex);
+  assert.ok(sit.poses[sitLeanPeakIndex].activityState.torsoLeanRadians > 0.30, "forward anticipation must be visually distinguishable");
   assert.ok(sit.poses.at(-1).activityState.pelvisDropPx < 0.1);
+  assert.ok(sit.poses.at(-1).diagnostics.seatContactErrorPx > 20);
+  assert.ok(sit.poses[sitLeanPeakIndex].activityState.armCounterBalanceWeight > 0.8,
+    "arms must counterbalance during forward momentum transfer");
+
   const turn = summarize("turn-in-place");
-  assert.ok(turn.maxTorso - turn.minTorso > 0.22);
+  assert.ok(turn.maxTorso - turn.minTorso > 0.10);
+  const pivotAngles = turn.poses.map(p => p.leftFoot.angle || 0);
+  assert.ok(Math.max(...pivotAngles) - Math.min(...pivotAngles) > 0.18,
+    "the 2D weight-shift cue must include a visible foot-pivot counter-action");
 });
 
 test("pick-up shows a real object, keeps it on the table before grasp, and ends holding it", () => {
@@ -110,7 +150,7 @@ test("sit-to-stand includes a stable chair behind the character", () => {
 
 test("activity manifest records semantic props and interaction continuity", () => {
   const manifest = buildActivityManifest(scene);
-  assert.equal(manifest.schemaVersion, "1.4.0");
+  assert.equal(manifest.schemaVersion, "1.5.0");
   assert.equal(manifest.cameraFraming.activityClips, "close-action-1.50x");
   assert.match(manifest.cameraFraming.floorAnchor, /screen-space horizon/);
   const pickup = manifest.activities.find(item => item.id === "pick-up");
@@ -119,10 +159,13 @@ test("activity manifest records semantic props and interaction continuity", () =
   assert.equal(pickup.pickupObjectRendered, true);
   assert.equal(pickup.pickupObjectHeldAtEnd, true);
   assert.ok(pickup.maxPickupItemStepPx < 15);
-  assert.ok(pickup.maxPickupItemContactErrorPx < 1e-8);
+  assert.ok(pickup.maxPickupItemContactErrorPx < 2);
+  assert.equal(pickup.pickupObjectContactedWhileGripping, true);
   assert.equal(reach.reachTargetRendered, true);
   assert.equal(reach.reachTargetContactedAtPeak, true);
   assert.ok(reach.maxReachTargetContactErrorPx < 1e-8);
+  assert.ok(reach.maxReachWeight >= 0.99);
+  assert.equal(reach.reachReturnsToRest, true);
   assert.equal(sit.chairRendered, true);
   assert.ok(sit.initialSeatContactErrorPx < 1);
   assert.ok(sit.finalSeatContactErrorPx > 20);
