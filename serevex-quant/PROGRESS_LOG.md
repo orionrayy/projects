@@ -338,3 +338,13 @@ The +00:00 offset is the representation seen in the file, not independent proof 
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553998
   - https://github.com/orionrayy/ai-determinism-engine/actions/runs/39283553856
 - No v4 hosted verification yet. Maintain `NO_TRADE` and disabled deployment flags.
+
+
+## 2026-10-21 — Fail-closed readiness audit implementation
+
+- Added a separate research branch and stacked draft PR #173: https://github.com/orionrayy/ai-determinism-engine/pull/173 (branch `research/serevex-readiness-audit-2026-10-21`, current head `ad3925b403a2ff8c1ace90df105be4abacf8f312`). It is based on the hierarchical-shrinkage v2.0b research branch/PR #172, not production main.
+- Added `serevex_readiness_audit_v1.py`, regression tests and `SEREVEX_READINESS_FINDINGS_2026-10-21.md`; wired the fail-closed report into the hosted online benchmark workflow.
+- Audit covers missing or unqualified price sources, quote/tick lineage, source-disagreement review, news/macro temporal coverage, execution validation, model-selection/calibration gates, baseline fallback equality, final-holdout isolation and live-authority invariants. It emits JSON/Markdown status and hashes of input reports.
+- Hosted workflow #39474246762: setup, temporal calibration contracts (240/240 synthetic scenarios), unit-test suite (including readiness-audit regressions), online dataset acquisition, tick Bid/Ask audit and data/test-count assertions have all completed successfully. At the time of checkpoint, real OHLCV through integrated Serevex stages 1–3 was still running; no complete workflow conclusion or final readiness artifact is claimed yet.
+- Evidence still does not qualify a model: hierarchical-shrinkage v2.0b selected candidate 4.9b on development but failed the later model-selection gate (Brier 0.2172755504 vs baseline 0.2172705916; log loss 0.6262322919 vs 0.6262239541; positive block share 50% vs required 70%). Calibration was not run, and final policy correctly remained the exact 0.1b baseline.
+- Price provenance/rights/timestamp/quote basis, secondary/tick lineage, execution cost/fill semantics and independent profitability remain unresolved. Maintain `NO_TRADE`; deployment calibration, live signals and live orders remain disabled.
