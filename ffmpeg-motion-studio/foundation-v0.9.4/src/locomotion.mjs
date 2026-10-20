@@ -66,6 +66,12 @@ const rotate = (p, pivot, a) => {
   return { x: pivot.x + dx * c - dy * s, y: pivot.y + dx * s + dy * c };
 };
 
+/** C2-smooth swing clearance pulse with zero velocity/acceleration at contact and apex. */
+export function swingLiftPulse(swingU) {
+  const u = clamp(swingU, 0, 1);
+  return u <= 0.5 ? smootherstep(2 * u) : smootherstep(2 * (1 - u));
+}
+
 /** Quintic Hermite trajectory matches position, velocity and acceleration at stance/swing boundaries. */
 export function footLocalOffset(phase, strideLength, stanceFraction) {
   const p = clamp(phase, 0, 1), sf = clamp(stanceFraction, 0.1, 0.9);
@@ -141,7 +147,7 @@ function makeFoot(cycleCoordinate, phaseOffset, scene, rootX, depth, swingScale 
   const stance = phase < m.stance_fraction, swingU = stance ? 0 : (phase - m.stance_fraction) / (1 - m.stance_fraction);
   const stride = m.stride_length_px * (m.screen_stride_scale || 1);
   const x = rootX + footLocalOffset(phase, stride, m.stance_fraction) + depth;
-  const liftPulse = stance ? 0 : 64 * swingU*swingU*swingU*(1-swingU)*(1-swingU)*(1-swingU);
+  const liftPulse = stance ? 0 : swingLiftPulse(swingU);
   const lift = m.swing_lift_px * swingScale * (1 + (m.cycle_lift_variation_fraction || 0) * cycleVariation) * liftPulse;
   const roll = m.heel_toe_roll_radians;
   let angle;

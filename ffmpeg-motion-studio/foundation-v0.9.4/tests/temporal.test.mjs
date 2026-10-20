@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import {summarizeScene} from "../scripts/render-preview.mjs";
 import {evaluateLocomotion} from "../src/locomotion.mjs";
-import {footLocalOffset} from "../src/locomotion.mjs";
+import {footLocalOffset, swingLiftPulse} from "../src/locomotion.mjs";
 
 const carry = JSON.parse(fs.readFileSync(new URL("../scenes/locomotion-lab.json", import.meta.url), "utf8"));
 const free = JSON.parse(fs.readFileSync(new URL("../scenes/locomotion-free.json", import.meta.url), "utf8"));
@@ -25,6 +25,30 @@ test("frame-step and acceleration metrics are finite and bounded", () => {
     assert.ok(t.maxJointAccelerationPxPerFrame2 < accelerationLimit, "joint acceleration spikes (scaled stride limit " + accelerationLimit.toFixed(2) + "): " + JSON.stringify(t));
     assert.ok(t.stanceFootSamplePairs > 100, "insufficient stance samples to support drift metric");
     assert.ok(t.stanceTransitions > 10, "contact-state transitions were not sampled");
+  }
+});
+
+
+test("swing lift has C2-smooth contact and apex boundaries", () => {
+  assert.equal(swingLiftPulse(0), 0);
+  assert.equal(swingLiftPulse(0.5), 1);
+  assert.equal(swingLiftPulse(1), 0);
+  for (let i = 0; i <= 100; i++) {
+    const u = i / 100;
+    assert.ok(swingLiftPulse(u) >= 0 && swingLiftPulse(u) <= 1);
+    assert.ok(Math.abs(swingLiftPulse(u) - swingLiftPulse(1 - u)) < 1e-12);
+    if (i < 100) {
+      const next = (i + 1) / 100;
+      if (u < 0.5) assert.ok(swingLiftPulse(next) >= swingLiftPulse(u) - 1e-12);
+      if (u >= 0.5) assert.ok(swingLiftPulse(next) <= swingLiftPulse(u) + 1e-12);
+    }
+  }
+  const h = 1e-3;
+  for (const boundary of [0, 0.5, 1]) {
+    const first = (swingLiftPulse(boundary + h) - swingLiftPulse(boundary - h)) / (2 * h);
+    const second = (swingLiftPulse(boundary + h) - 2 * swingLiftPulse(boundary) + swingLiftPulse(boundary - h)) / (h * h);
+    assert.ok(Math.abs(first) < 0.01, "nonzero swing-lift velocity at " + boundary + ": " + first);
+    assert.ok(Math.abs(second) < 1, "nonzero swing-lift acceleration at " + boundary + ": " + second);
   }
 });
 
