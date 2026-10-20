@@ -204,7 +204,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       x: origin.x + (held.x - origin.x) * pickupGrip,
       y: origin.y + (held.y - origin.y) * pickupGrip,
       width: 30, height: 22, tableX: origin.x, tableTopY,
-      gripWeight: pickupGrip, held: pickupGrip >= 0.98
+      gripWeight: pickupGrip, held: pickupGrip >= 0.999999
     };
   }
   if (activity === "sit-to-stand") {
