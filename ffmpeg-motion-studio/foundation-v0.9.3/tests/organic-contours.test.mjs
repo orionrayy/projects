@@ -25,13 +25,13 @@ test("carry hands show grip detail and free-arm hands stay relaxed",()=>{
   assert.equal((freeSvg.match(/data-grip="relaxed"/g)||[]).length,2);
   assert.match(carrySvg,/data-anatomy="palm"/);
   assert.match(carrySvg,/data-anatomy="thumb-fold"/);
-  assert.match(freeSvg,/MOTION STUDIO \/ v0\.9\.2/);
+  assert.match(freeSvg,/MOTION STUDIO \/ v0\.9\.3/);
 });
 
 test("organic contours preserve contact, proportion, deterministic and temporal gates",()=>{
   for(const [scene,mode] of [[carry,"carry"],[free,"free"]]){
     const r=summarizeScene(scene,mode),t=r.temporalDiagnostics;
-    assert.equal(r.sceneVersion,"0.9.2");
+    assert.equal(r.sceneVersion,"0.9.3");
     assert.ok(r.maxBoneLengthErrorPx<0.02);
     assert.ok(r.maxGroundPenetrationPx<0.02);
     assert.ok(r.maxBasketContactErrorPx<0.02);
