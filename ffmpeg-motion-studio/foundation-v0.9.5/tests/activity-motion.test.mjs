@@ -128,6 +128,8 @@ test("pick-up shows a real object, keeps it on the table before grasp, and ends 
   assert.equal(first.activityState.pickupItem.held, false);
   assert.equal(last.activityState.pickupItem.held, true, "the item should remain held at clip end");
   assert.ok(last.diagnostics.pickupItemContactErrorPx < 1e-8, "held item must stay attached to the hand");
+  assert.ok(last.diagnostics.pickupItemChestDistancePx < 55,
+    "parcel should be carried close to the torso, not at full arm extension: " + last.diagnostics.pickupItemChestDistancePx);
 
   let previous = first.activityState.pickupItem, maxItemStep = 0;
   for (let frame = 1; frame < scene.duration_frames; frame++) {
@@ -167,6 +169,7 @@ test("activity manifest records semantic props and interaction continuity", () =
   assert.ok(pickup.maxPickupItemContactErrorPx < 2);
   assert.equal(pickup.pickupObjectContactedWhileGripping, true);
   assert.ok(pickup.pickupGripContactFrames >= 20);
+  assert.ok(pickup.finalPickupItemChestDistancePx < 55);
   assert.equal(reach.reachTargetRendered, true);
   assert.equal(reach.reachTargetContactedAtPeak, true);
   assert.ok(reach.maxReachTargetContactErrorPx < 1e-8);
