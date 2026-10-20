@@ -229,3 +229,12 @@ The six-action suite initially passed geometry tests while the pick-up scene sho
 - Latest completed hosted run for head `840d2f3da30c8f1b252c0f6d25e1269d0ef70a91`: both push and PR workflows passed source tests, scene rendering, encoding, FFprobe checks and artifact upload. The current follow-up adds an explicit pelvis-to-seat contact assertion and is awaiting its own hosted validation.
 - Visual inspection confirms the object is visible at the tabletop and held at the end of pick-up; the chair is visible and the character begins seated and finishes standing. The movement remains schematic, with arms and weight transfer needing further artistic refinement. Six 3-second activity clips are test slices, not a broad activity benchmark.
 - Explicit limitations remain: turn-in-place is a 2D torso/head counter-rotation, not a true 3D turn; no audio is in the action-suite clips; browser/FFmpeg parity, full interactive rig/editor features, and integration into the complete 240-second film are not verified. Human full-speed acceptance remains pending.
+
+
+## Stage 18 — Reach action context and contact verification — 2026-10-20
+
+The v0.9.5 semantic review found that a reach gesture without an object or environmental target was ambiguous even when the arm solver reached the requested coordinates. The current follow-up adds a visible wall-mounted button aligned to the reach target and a bounded target-contact window.
+
+- Regression gates require the target to be present in the rendered SVG and verify wrist-to-target contact at peak extension. Existing IK, foot-planting and temporal checks are unchanged.
+- Activity manifest schema 1.3.0 records target presence, whether peak contact was sampled, and maximum contact error. Hosted rendering remains required before this stage is called validated.
+- Human naturalness remains pending; this is a procedural side-profile action, not mocap-derived performance or a production editor.

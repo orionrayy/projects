@@ -62,6 +62,11 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   assert.ok(look.maxHead - look.minHead > 0.45);
   assert.ok(summarize("reach").maxReach >= 70);
   assert.ok(summarize("pick-up").maxDrop >= 18);
+  const reachPeak = evaluateActivity(scene, 36, "reach", "free");
+  assert.equal(reachPeak.activityState.reachTarget.active, true);
+  assert.ok(reachPeak.diagnostics.reachTargetContactErrorPx < 1e-8);
+  const reachSvg = renderSvgFrame(scene, 36, "free", "reach");
+  assert.ok(reachSvg.includes('data-environment="reach-target"'));
   const sit = summarize("sit-to-stand");
   assert.ok(sit.poses[0].activityState.pelvisDropPx > 20);
   assert.ok(sit.poses.at(-1).activityState.pelvisDropPx < 0.1);
@@ -105,13 +110,17 @@ test("sit-to-stand includes a stable chair behind the character", () => {
 
 test("activity manifest records semantic props and interaction continuity", () => {
   const manifest = buildActivityManifest(scene);
-  assert.equal(manifest.schemaVersion, "1.2.0");
+  assert.equal(manifest.schemaVersion, "1.3.0");
   const pickup = manifest.activities.find(item => item.id === "pick-up");
+  const reach = manifest.activities.find(item => item.id === "reach");
   const sit = manifest.activities.find(item => item.id === "sit-to-stand");
   assert.equal(pickup.pickupObjectRendered, true);
   assert.equal(pickup.pickupObjectHeldAtEnd, true);
   assert.ok(pickup.maxPickupItemStepPx < 15);
   assert.ok(pickup.maxPickupItemContactErrorPx < 1e-8);
+  assert.equal(reach.reachTargetRendered, true);
+  assert.equal(reach.reachTargetContactedAtPeak, true);
+  assert.ok(reach.maxReachTargetContactErrorPx < 1e-8);
   assert.equal(sit.chairRendered, true);
   assert.ok(sit.initialSeatContactErrorPx < 1);
   assert.ok(sit.finalSeatContactErrorPx > 20);

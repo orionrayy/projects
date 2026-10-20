@@ -28,3 +28,6 @@ The activity proof now renders a chair for the sit-to-stand clip and a table-top
 
 ## Visual-review follow-up
 The sit-to-stand seat/backrest and pick-up table are now rendered as filled silhouettes instead of thin lines; the parcel has been enlarged while preserving the grasp anchor. The activity manifest now records whether the chair/object actually appears, whether the parcel remains held at the final frame, maximum per-frame parcel displacement, and held-object contact error. Visual acceptance remains pending.
+
+## Reach action context (review-driven)
+The reach clip now contains a visible wall-mounted button aligned to the reach target. Its contact window is explicit in the pose state, and regression tests verify the wrist reaches the target at peak extension without weakening the existing IK/contact gates. Manifest schema 1.3.0 records target presence, peak contact and maximum contact error; artistic acceptance remains pending.

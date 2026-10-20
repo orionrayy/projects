@@ -135,7 +135,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       pickupReachWeight: activity === "pick-up" ? pickupReach : 0,
       pickupGripWeight: activity === "pick-up" ? pickupGrip : 0,
       pickupLiftWeight: activity === "pick-up" ? pickupLift : 0,
-      pickupItem: null, chair: null },
+      pickupItem: null, chair: null, reachTarget: null },
     pelvis: newPelvis, rootX: newPelvis.x, torsoAngle: lean,
     chestLocal: transform(base.chestLocal),
     chest: transform(base.chest),
@@ -214,6 +214,14 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       floorY: scene.background.horizon_y
     };
   }
+  if (activity === "reach") {
+    pose.activityState.reachTarget = {
+      x: pose.shoulders.near.x + 76,
+      y: pose.shoulders.near.y + 8,
+      radius: 10,
+      active: reachWeight >= 0.999999999
+    };
+  }
   pose.basketCenter = pose.basket?.center || translatePoint(base.basketCenter, forwardShift, drop - breath);
   const boneErrors = [
     pose.leftLeg.upperErrorPx, pose.leftLeg.lowerErrorPx, pose.rightLeg.upperErrorPx, pose.rightLeg.lowerErrorPx,
@@ -236,6 +244,10 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // The intended seated pose places the pelvis center about 10px below the seat top.
     seatContactErrorPx: pose.activityState.chair
       ? Math.abs(pose.pelvis.y - (pose.activityState.chair.seatY + 8))
+      : null,
+    reachTargetContactErrorPx: pose.activityState.reachTarget?.active
+      ? Math.hypot(pose.nearArm.wrist.x - pose.activityState.reachTarget.x,
+          pose.nearArm.wrist.y - pose.activityState.reachTarget.y)
       : null,
     groundPenetrationPx: Math.max(0, pose.leftFoot.y - scene.background.horizon_y, pose.rightFoot.y - scene.background.horizon_y),
     stance: { left: pose.leftFoot.inStance, right: pose.rightFoot.inStance },
