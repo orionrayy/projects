@@ -25,7 +25,7 @@ test("carry hands show grip detail and free-arm hands stay relaxed",()=>{
   assert.equal((freeSvg.match(/data-grip="relaxed"/g)||[]).length,2);
   assert.match(carrySvg,/data-anatomy="palm"/);
   assert.match(carrySvg,/data-anatomy="thumb-fold"/);
-  assert.match(freeSvg,/MOTION STUDIO \/ v0\.9\.3/);
+  assert.match(freeSvg,/MOTION STUDIO \/ v0\.9\.4/);
 });
 
 test("organic contours preserve contact, proportion, deterministic and temporal gates",()=>{
