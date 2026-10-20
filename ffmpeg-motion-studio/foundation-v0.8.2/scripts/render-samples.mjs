@@ -26,8 +26,8 @@ for (const item of profiles) {
     shoulder_half_width_px: 34,
     waist_half_width_px: 18,
     hip_half_width_px: 23,
-    upper_leg_px: 77,
-    lower_leg_px: 77,
+    upper_leg_px: 74,
+    lower_leg_px: 74,
     head_drop_px: 8
   };
   const dir = path.join(output, "svg", item.name);
@@ -54,7 +54,11 @@ for (const item of profiles) {
       left_stance: pose.leftFoot.inStance,
       right_stance: pose.rightFoot.inStance,
       left_swing_u: pose.leftFoot.swingU,
-      right_swing_u: pose.rightFoot.swingU
+      right_swing_u: pose.rightFoot.swingU,
+      left_hip: pose.leftLeg.hip, left_knee: pose.leftLeg.knee, left_ankle: pose.leftLeg.ankle,
+      right_hip: pose.rightLeg.hip, right_knee: pose.rightLeg.knee, right_ankle: pose.rightLeg.ankle,
+      near_arm_shoulder: pose.nearArm.shoulder, near_arm_elbow: pose.nearArm.elbow, near_arm_wrist: pose.nearArm.wrist,
+      far_arm_shoulder: pose.farArm.shoulder, far_arm_elbow: pose.farArm.elbow, far_arm_wrist: pose.farArm.wrist
     });
   }
   const maxContact = Math.max(...rows.map(r => r.contact_error_px));
