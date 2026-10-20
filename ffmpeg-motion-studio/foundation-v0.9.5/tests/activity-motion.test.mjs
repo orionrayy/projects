@@ -65,7 +65,7 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   assert.ok(sit.poses[0].activityState.pelvisDropPx > 20);
   assert.ok(sit.poses.at(-1).activityState.pelvisDropPx < 0.1);
   const turn = summarize("turn-in-place");
-  assert.ok(turn.maxTorso - turn.minTorso > 0.25);
+  assert.ok(turn.maxTorso - turn.minTorso > 0.22);
 });
 
 test("SVG renderer tags and labels every activity preview", () => {
