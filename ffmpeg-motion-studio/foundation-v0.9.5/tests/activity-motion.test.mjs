@@ -105,7 +105,7 @@ test("sit-to-stand includes a stable chair behind the character", () => {
 
 test("activity manifest records semantic props and interaction continuity", () => {
   const manifest = buildActivityManifest(scene);
-  assert.equal(manifest.schemaVersion, "1.1.0");
+  assert.equal(manifest.schemaVersion, "1.2.0");
   const pickup = manifest.activities.find(item => item.id === "pick-up");
   const sit = manifest.activities.find(item => item.id === "sit-to-stand");
   assert.equal(pickup.pickupObjectRendered, true);
@@ -115,7 +115,6 @@ test("activity manifest records semantic props and interaction continuity", () =
   assert.equal(sit.chairRendered, true);
   assert.ok(sit.initialSeatContactErrorPx < 1);
   assert.ok(sit.finalSeatContactErrorPx > 20);
-  assert.equal(manifest.schemaVersion, "1.2.0");
   assert.equal(manifest.humanFullSpeedAcceptance, "pending");
 });
 
