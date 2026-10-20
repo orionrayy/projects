@@ -114,9 +114,9 @@ test("each non-walk clip visibly changes its intended control channel", () => {
 
   const pickup = summarize("pick-up");
   assert.ok(pickup.maxDrop >= 25, "pick-up must produce a readable crouch");
-  assert.ok(pickup.poses.at(-1).activityState.pelvisDropPx < 0.1, "pick-up must recover to a standing hold");
+  assert.ok(pickupPoses.at(-1).activityState.pelvisDropPx < 0.1, "pick-up must recover to a standing hold");
   let pickupContactFrames = 0, maxPickupContactError = 0;
-  for (const pose of pickup.poses) {
+  for (const pose of pickupPoses) {
     if (pose.activityState.pickupItem?.gripWeight >= 0.95) {
       pickupContactFrames++;
       maxPickupContactError = Math.max(maxPickupContactError, pose.diagnostics.pickupItemContactErrorPx);
@@ -124,7 +124,7 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   }
   assert.ok(pickupContactFrames >= 20, "grasped-object contact must be checked across a continuous interval");
   assert.ok(maxPickupContactError < 2, "parcel must stay attached to the wrist after grasp: " + maxPickupContactError);
-  const pickupTail = pickup.poses.slice(-18);
+  const pickupTail = pickupPoses.slice(-18);
   const pickupTailChestRange = Math.max(
     Math.max(...pickupTail.map(p => p.chest.x)) - Math.min(...pickupTail.map(p => p.chest.x)),
     Math.max(...pickupTail.map(p => p.chest.y)) - Math.min(...pickupTail.map(p => p.chest.y))
@@ -166,8 +166,10 @@ test("each non-walk clip visibly changes its intended control channel", () => {
 });
 
 test("pick-up shows a real object, keeps it on the table before grasp, and ends holding it", () => {
-  const first = evaluateActivity(scene, 0, "pick-up", "free");
-  const last = evaluateActivity(scene, scene.duration_frames - 1, "pick-up", "free");
+  const pickupPoses = Array.from({ length: scene.duration_frames },
+    (_, frame) => evaluateActivity(scene, frame, "pick-up", "free"));
+  const first = pickupPoses[0];
+  const last = pickupPoses.at(-1);
   assert.ok(first.activityState.pickupItem, "pickup item metadata missing at start");
   assert.ok(Math.abs(first.activityState.pickupItem.y + first.activityState.pickupItem.height / 2 -
     first.activityState.pickupItem.tableTopY) < 1e-8, "item must begin resting on its table");
@@ -185,16 +187,16 @@ test("pick-up shows a real object, keeps it on the table before grasp, and ends 
   }
   assert.ok(maxItemStep < 15, "pickup prop trajectory has a step spike: " + maxItemStep);
 
-  const firstHeldFrame=pickup.poses.findIndex(p=>p.activityState.pickupItem?.held);
+  const firstHeldFrame=pickupPoses.findIndex(p=>p.activityState.pickupItem?.held);
   assert.ok(firstHeldFrame>0,"parcel must not be marked held before the reach/grip phases");
   for(let frame=0;frame<firstHeldFrame;frame++) {
-    const item=pickup.poses[frame].activityState.pickupItem;
+    const item=pickupPoses[frame].activityState.pickupItem;
     assert.ok(Math.abs(item.x-item.tableX)<1e-8,
       "parcel must remain fixed on the table until grip is established at frame "+frame);
     assert.ok(Math.abs(item.y+item.height/2-item.tableTopY)<1e-8,
       "parcel must remain seated on the table until grip is established at frame "+frame);
   }
-  const attachPose=pickup.poses[firstHeldFrame];
+  const attachPose=pickupPoses[firstHeldFrame];
   assert.ok(attachPose.diagnostics.pickupGraspContactErrorPx<1.5,
     "the reaching wrist must contact the fixed grasp anchor before parcel attachment: "+
       attachPose.diagnostics.pickupGraspContactErrorPx);
@@ -202,7 +204,7 @@ test("pick-up shows a real object, keeps it on the table before grasp, and ends 
       attachPose.activityState.pickupItem.y-attachPose.nearArm.wrist.y)<1e-8,
     "parcel attachment must match wrist offset exactly at grip onset");
 
-  const crouchPose=pickup.poses.reduce((best,p)=>p.activityState.pelvisDropPx>best.activityState.pelvisDropPx?p:best,pickup.poses[0]);
+  const crouchPose=pickupPoses.reduce((best,p)=>p.activityState.pelvisDropPx>best.activityState.pelvisDropPx?p:best,pickupPoses[0]);
   assert.ok(crouchPose.farArm.wrist.x<crouchPose.pelvis.x-10,
     "non-grasping far hand should counterbalance behind the hip instead of crossing the torso");
 
