@@ -50,6 +50,7 @@ export function buildActivityManifest(scene) {
     activities.push({
       id: activity, label: ACTIVITY_LABELS[activity], fps: scene.fps,
       frameCount: scene.duration_frames, durationSeconds: scene.duration_frames / scene.fps,
+      cameraFraming: "close-action-1.50x",
       maxBoneErrorPx, maxAnkleClampErrorPx, maxArmClampErrorPx, maxKneeStepPx, maxStanceFootDriftPx,
       maxPelvisDropPx, maxHeadTurnRadians, maxTorsoLeanRadians, maxReachDisplacementPx,
       pickupObjectRendered: activity === "pick-up" && renderSvgFrame(scene, scene.duration_frames - 1, "free", activity).includes('data-prop="pickup-item"'),
@@ -66,8 +67,9 @@ export function buildActivityManifest(scene) {
     });
   }
   return {
-    schemaVersion: "1.3.0", sceneId: "motion-studio-activity-suite-v0.9.5",
+    schemaVersion: "1.4.0", sceneId: "motion-studio-activity-suite-v0.9.5",
     renderer: "procedural SVG + FFmpeg H.264", canvas: scene.canvas, fps: scene.fps,
+    cameraFraming: { activityClips: "close-action-1.50x", floorAnchor: "screen-space horizon; planted feet remain grounded" },
     activityCount: activities.length, activities,
     limitation: "2D side-profile action proof; turn-in-place is torso/head counter-rotation, not full 3D yaw",
     audioIncluded: false, browserFfmpegParity: "not_verified", humanFullSpeedAcceptance: "pending"
