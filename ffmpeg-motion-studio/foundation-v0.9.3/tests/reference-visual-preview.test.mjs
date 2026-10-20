@@ -28,6 +28,7 @@ test('portrait motion proof uses a full 10s timeline, six distinct shot families
   assert.ok(gait.maxKneeStepPx < 13.0, 'portrait knee step spike: ' + gait.maxKneeStepPx);
   assert.ok(gait.minStanceKneeAngleDegrees > 148, 'portrait stance knee collapses: ' + gait.minStanceKneeAngleDegrees);
   assert.ok(gait.maxAnkleClampErrorPx < 1.5, 'portrait ankle reach error: ' + JSON.stringify(gait.maxAnkleClampDetail));
+  assert.ok(gait.portraitReachEaseBias === 0.10, 'portrait-only IK reach easing should be isolated from landscape defaults');
   assert.ok(gait.maxBoneLengthErrorPx < 0.02, 'portrait bone-length error: ' + gait.maxBoneLengthErrorPx);
   assert.ok(gait.maxStanceFootDriftPerFramePx < 0.05, 'portrait stance foot drift: ' + gait.maxStanceFootDriftPerFramePx);
   assert.equal(spec.audioIncluded, false);

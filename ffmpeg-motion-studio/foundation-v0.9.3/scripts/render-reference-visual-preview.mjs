@@ -43,7 +43,8 @@ const GAIT_SCENE = {
   fps: FPS,
   duration_frames: FRAME_COUNT,
   character: {
-    ...baseScene.character
+    ...baseScene.character,
+    knee_reach_ease_bias: 0.10
   },
   motion: {
     ...baseScene.motion,
@@ -362,6 +363,7 @@ export function summarizeReferenceVisualSequence() {
     colorTokens: { ...C },
     safeZones: { ...REFERENCE_VISUAL_SPEC.safeZones },
     integratedGaitRig: true,
+    portraitReachEaseBias: GAIT_SCENE.character.knee_reach_ease_bias,
     cameraMode: 'tracking camera with world-space scene parallax',
     motionDesign: ['hook-first typography', 'meaningful camera tracking', 'single prop alert pulse', 'staggered kinetic type', 'motion settles at end', 'stacked cause-evidence reveal'],
     secondaryMotionPolicy: 'reduced and phase-coupled; gait remains the primary motion',
