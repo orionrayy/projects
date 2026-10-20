@@ -1,0 +1,67 @@
+name: Motion Studio Anatomy + Gait Calibration v0.8.2
+on:
+  push:
+    branches:
+      - motion-studio-v0.8.2-anatomy-locomotion
+    paths:
+      - ".github/workflows/motion-studio-anatomy-v0.8.2.yml"
+      - "ffmpeg-motion-studio/foundation-v0.8.0/**"
+      - "ffmpeg-motion-studio/foundation-v0.8.2/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  anatomy-regression-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout anatomy review branch
+        uses: actions/checkout@v4
+        with:
+          ref: motion-studio-v0.8.2-anatomy-locomotion
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install lightweight raster dependencies
+        run: python -m pip install --disable-pip-version-check cairosvg pillow
+      - name: Verify baseline locomotion regression
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.0
+        run: |
+          node --check src/locomotion.mjs
+          npm test
+      - name: Verify anatomy and gait acceptance tests
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.2
+        run: |
+          node --check src/anatomy.mjs
+          npm test
+      - name: Render all 384 deterministic SVG frames
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.2
+        run: npm run preview -- ./dist
+      - name: Install FFmpeg and FFprobe
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+          ffmpeg -version
+          ffprobe -version
+      - name: Rasterize all frames and encode H.264 previews
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.2
+        run: python scripts/rasterize-preview.py dist
+      - name: Validate gait, render metadata, checksums, and full-cycle screenshots
+        working-directory: ffmpeg-motion-studio/foundation-v0.8.2
+        run: python scripts/validate-preview.py
+      - name: Upload videos, 16 full-cycle contact sheets, and machine-readable evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-studio-v0.8.2-anatomy-gait-review
+          path: |
+            ffmpeg-motion-studio/foundation-v0.8.2/dist/motion-studio-v0.8.2-anatomy-*.mp4
+            ffmpeg-motion-studio/foundation-v0.8.2/dist/anatomy-contact-sheet-*.jpg
+            ffmpeg-motion-studio/foundation-v0.8.2/dist/anatomy-manifest.json
+            ffmpeg-motion-studio/foundation-v0.8.2/dist/render-validation.json
+          if-no-files-found: error
+          retention-days: 14
