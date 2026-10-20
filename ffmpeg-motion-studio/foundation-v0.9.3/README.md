@@ -1,4 +1,4 @@
-# Motion Studio Foundation v0.9.3 — Longer-Str ide, Phase-Adaptive Gait
+# Motion Studio Foundation v0.9.3 — Longer-Stride, Phase-Adaptive Gait
 
 This candidate follows v0.9.2 after full-size preview inspection still showed a short, shuffling gait with a nearly fixed torso and weakly readable arm motion. It preserves v0.9.2 as a comparison baseline rather than treating low acceleration as a proxy for naturalness.
 
