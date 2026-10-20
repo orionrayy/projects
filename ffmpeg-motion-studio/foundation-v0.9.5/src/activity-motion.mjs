@@ -79,7 +79,14 @@ function solveArm(shoulder, target, scene, counter = -1) {
   const dx = target.x - shoulder.x, dy = target.y - shoulder.y;
   const dist = Math.hypot(dx, dy);
   const mid = { x: (shoulder.x + target.x) / 2, y: (shoulder.y + target.y) / 2 };
-  const pole = { x: mid.x + counter * Math.min(15, Math.max(6, dist * 0.12)), y: mid.y + 12 };
+  // Use a pole perpendicular to the shoulder-wrist axis. A screen-horizontal
+  // offset plus a constant downward offset can cross the chain's bend plane as
+  // the arm changes direction, creating reversed elbows or forearms across the torso.
+  const side = counter < 0 ? -1 : 1;
+  const offset = Math.min(18, Math.max(9, dist * 0.18));
+  const pole = dist > 1e-6
+    ? { x: mid.x - (dy / dist) * offset * side, y: mid.y + (dx / dist) * offset * side }
+    : { x: mid.x, y: mid.y + offset * side };
   const ik = solveTwoBoneIK(shoulder, target, c.upper_arm_px, c.forearm_px, pole, -1);
   return limbPack(ik, shoulder, target);
 }
@@ -310,10 +317,11 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     farTarget = { x: farTarget.x - 6 * turnPulse, y: farTarget.y + 3 * turnPulse };
   }
 
-  // Keep the far arm behind the torso and use the near-side elbow branch for neutral poses.
-  // The old opposing screen-space poles made both forearms converge across the chest.
-  const nearBend = ["stand", "look-around", "turn-in-place"].includes(activity) ? 1 : -1;
-  const farBend = armMode === "carry" ? 1 : -1;
+  // Keep a stable, opposite elbow branch for the near/far projected chains.
+  // Painter order handles depth; the IK bend side must not depend on armMode or
+  // activity, otherwise the same limb can reverse merely when a prop is toggled.
+  const nearBend = 1;
+  const farBend = -1;
   pose.nearArm = solveArm(pose.shoulders.near, nearTarget, staticScene, nearBend);
   pose.farArm = solveArm(pose.shoulders.far, farTarget, staticScene, farBend);
 
