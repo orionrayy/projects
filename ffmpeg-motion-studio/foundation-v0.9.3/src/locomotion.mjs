@@ -87,8 +87,15 @@ export function solveTwoBoneIK(root, target, upperLength, lowerLength, poleTarge
   }));
   let joint;
   if (poleTarget && Number.isFinite(poleTarget.x) && Number.isFinite(poleTarget.y)) {
-    const score = p => (p.x - poleTarget.x) ** 2 + (p.y - poleTarget.y) ** 2;
-    joint = score(candidates[0]) <= score(candidates[1]) ? candidates[0] : candidates[1];
+    if (poleTarget.preferForward === true) {
+      // Side-profile legs should keep the knee on the forward-facing IK branch.
+      // Nearest-point pole selection can cross its decision boundary at heel/toe-off
+      // and flip the knee by tens of pixels, producing a robotic snap.
+      joint = candidates[0].x >= candidates[1].x ? candidates[0] : candidates[1];
+    } else {
+      const score = p => (p.x - poleTarget.x) ** 2 + (p.y - poleTarget.y) ** 2;
+      joint = score(candidates[0]) <= score(candidates[1]) ? candidates[0] : candidates[1];
+    }
   } else joint = candidates[bendSign >= 0 ? 0 : 1];
   const end = { x: root.x + reach * Math.cos(theta), y: root.y + reach * Math.sin(theta) };
   return {
@@ -178,7 +185,8 @@ export function evaluateLocomotion(scene, frameIndex, armMode = scene.motion.arm
     const upwardBias = c.knee_up_bias_px * (upwardRatio + (1 - upwardRatio) * swingEnvelope);
     return {
       x: (hip.x + ankle.x) / 2 + forwardBias,
-      y: (hip.y + ankle.y) / 2 - upwardBias
+      y: (hip.y + ankle.y) / 2 - upwardBias,
+      preferForward: true
     };
   };
   const l = solveTwoBoneIK(leftHip, leftAnkle, c.upper_leg_px, c.lower_leg_px, pole(leftHip, leftAnkle, leftFoot), -1);
