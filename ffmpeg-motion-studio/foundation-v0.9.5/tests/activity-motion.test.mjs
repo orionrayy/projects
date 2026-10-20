@@ -98,6 +98,17 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   }
   assert.ok(pickupContactFrames >= 20, "grasped-object contact must be checked across a continuous interval");
   assert.ok(maxPickupContactError < 2, "parcel must stay attached to the wrist after grasp: " + maxPickupContactError);
+  const pickupTail = pickup.poses.slice(-18);
+  const pickupTailChestRange = Math.max(
+    Math.max(...pickupTail.map(p => p.chest.x)) - Math.min(...pickupTail.map(p => p.chest.x)),
+    Math.max(...pickupTail.map(p => p.chest.y)) - Math.min(...pickupTail.map(p => p.chest.y))
+  );
+  const pickupTailPelvisRange = Math.max(...pickupTail.map(p => p.pelvis.y)) -
+    Math.min(...pickupTail.map(p => p.pelvis.y));
+  assert.ok(pickupTailChestRange > 1.0, "held-object tail must not freeze into repeated identical frames");
+  assert.ok(pickupTailPelvisRange < 0.1, "carry breathing must not bounce the pelvis/root");
+  assert.ok(pickupTail.every(p => p.diagnostics.pickupItemContactErrorPx < 2),
+    "upper-body carry motion must preserve object-hand contact");
 
   const sit = summarize("sit-to-stand");
   assert.ok(Math.abs(sit.poses[0].activityState.pelvisDropPx - 25) < 1e-8);
@@ -111,6 +122,15 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   assert.ok(sit.poses.at(-1).diagnostics.seatContactErrorPx > 20);
   assert.ok(sit.poses[sitLeanPeakIndex].activityState.armCounterBalanceWeight > 0.8,
     "arms must counterbalance during forward momentum transfer");
+  const sitTail = sit.poses.slice(-10);
+  const sitTailChestRange = Math.max(
+    Math.max(...sitTail.map(p => p.chest.x)) - Math.min(...sitTail.map(p => p.chest.x)),
+    Math.max(...sitTail.map(p => p.chest.y)) - Math.min(...sitTail.map(p => p.chest.y))
+  );
+  const sitTailPelvisRange = Math.max(...sitTail.map(p => p.pelvis.y)) -
+    Math.min(...sitTail.map(p => p.pelvis.y));
+  assert.ok(sitTailChestRange > 0.5, "post-rise stabilization must not be a dead still hold");
+  assert.ok(sitTailPelvisRange < 0.1, "post-rise stabilization must keep the pelvis settled");
 
   const turn = summarize("turn-in-place");
   assert.ok(turn.maxTorso - turn.minTorso > 0.10);
