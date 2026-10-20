@@ -84,3 +84,13 @@ The first soft-reach candidate was not accepted: CI recorded a remaining knee ju
 - Both v0.9.3 scene profiles shift the pelvis 2 px lower on the canvas (root_y 409 → 411), reducing the near-extended hip-to-ankle distance for the current stride/contact geometry.
 - The synthetic near-extension test checks that solved reach never overshoots the requested target or reverses as target reach increases. Knee step, acceleration, ground contact, stance drift and endpoint reach checks remain independent and must all pass.
 - This is an unverified candidate: only hosted CI and reviewed full-speed renders can establish whether the calibration improves the actual motion.
+
+
+## Follow-up 3: stride/cadence envelope calibration — 2026-10-20
+
+The monotone C2 reach curve stopped its radius overshoot, but the latest hosted run still failed at a 13.9645 px/frame knee displacement and 1.9303 px maximum ankle clamp. These remain real quality-gate failures.
+
+- Both v0.9.3 profiles now use a 1.29 s gait cycle and screen stride scale 0.57, giving an effective stride of 85.5 px/cycle and a predicted cadence around 93 steps/min. That remains above the previous 44.64 px/cycle short-shuffle baseline while moderating peak swing geometry.
+- Existing hard limits remain unchanged: maximum knee step <13 px/frame, ankle reach error <1.5 px, and the temporal acceleration threshold derived from stride length.
+- Added a frame-local ankle reach diagnostic test that reports the exact frame, side, hip, requested foot and solved ankle if the reach gate fails.
+- Await the latest hosted run. This candidate is not considered fixed until every source test, render/FFprobe gate and artifact upload passes. Full-speed human art-direction review remains an independent acceptance gate.

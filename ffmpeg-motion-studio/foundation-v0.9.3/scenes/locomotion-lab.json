@@ -15,7 +15,7 @@
     "horizon_y": 570
   },
   "motion": {
-    "cycle_seconds": 1.27,
+    "cycle_seconds": 1.29,
     "stride_length_px": 150,
     "stance_fraction": 0.6,
     "swing_lift_px": 16.5,
@@ -32,7 +32,7 @@
     "free_arm_swing_px": 22,
     "free_arm_drop_px": 94,
     "heel_toe_roll_radians": 0.12,
-    "screen_stride_scale": 0.62,
+    "screen_stride_scale": 0.57,
     "secondary_torso_sway_radians": 0.012,
     "torso_shift_px": 2.4,
     "head_follow_x_px": 1.2,

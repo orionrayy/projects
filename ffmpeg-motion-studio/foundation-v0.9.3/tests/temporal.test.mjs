@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {summarizeScene} from "../scripts/render-preview.mjs";
+import {evaluateLocomotion} from "../src/locomotion.mjs";
 import {footLocalOffset} from "../src/locomotion.mjs";
 
 const carry = JSON.parse(fs.readFileSync(new URL("../scenes/locomotion-lab.json", import.meta.url), "utf8"));
@@ -55,5 +56,24 @@ test("adaptive gait profile stays inside bounded motion envelopes",()=>{
     assert.ok(m.torsoSwayPeakDegrees<=4&&m.basketTiltPeakDegrees<=1.5);
     assert.ok(report.torsoAngleRangeDegrees<9);
     assert.ok(report.headAngleRangeDegrees<6.5);
+  }
+});
+
+
+test("ankle reach diagnostics identify the exact frame if leg geometry becomes unreachable", () => {
+  for (const [scene, mode] of [[carry,"carry"],[free,"free"]]) {
+    let worst = { error: -1 };
+    for (let frame = 0; frame < scene.duration_frames; frame++) {
+      const pose = evaluateLocomotion(scene, frame, mode);
+      for (const side of ["left","right"]) {
+        const leg = side === "left" ? pose.leftLeg : pose.rightLeg;
+        if (leg.endpointClampErrorPx > worst.error) {
+          worst = { error: leg.endpointClampErrorPx, frame, side, hip: leg.hip,
+            target: side === "left" ? pose.leftFoot : pose.rightFoot, solvedAnkle: leg.end,
+            requestedReachPx: leg.requestedReachPx, solvedReachPx: leg.solvedReachPx };
+        }
+      }
+    }
+    assert.ok(worst.error < 1.5, mode + " ankle reach exceeds tolerance: " + JSON.stringify(worst));
   }
 });
