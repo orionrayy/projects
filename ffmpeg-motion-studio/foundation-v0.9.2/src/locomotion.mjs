@@ -44,7 +44,7 @@ function gaitClock(scene, seconds) {
   return { cycles, rateCyclesPerSecond: rate, cycleVariation: smoothCycleVariation(cycles, 1), effectiveSeconds };
 }
 function armHorizontalWave(phase) {
-  return Math.sin(TAU * phase) + 0.22 * Math.sin(2 * TAU * phase - 0.55) + 0.07 * Math.sin(3 * TAU * phase + 0.28);
+  return Math.sin(TAU * phase) + 0.14 * Math.sin(2 * TAU * phase - 0.55) + 0.035 * Math.sin(3 * TAU * phase + 0.28);
 }
 function armVerticalWave(phase) {
   return Math.cos(TAU * phase + 0.18) + 0.16 * Math.cos(2 * TAU * phase - 0.42);
