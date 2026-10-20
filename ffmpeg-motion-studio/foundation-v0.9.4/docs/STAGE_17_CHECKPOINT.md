@@ -10,7 +10,7 @@ The landscape profile still uses an 85.2 px effective stride; the integrated por
 ## Candidate changes
 - Landscape effective stride: 85.2 → 93 px (+9.2%), with the nominal 1.33 s cycle retained (about 90.2 steps/min).
 - Retain the 96 px portrait stride and portrait-specific IK reach easing; align its ramp with the last rendered sample.
-- Preserve baseline leg lengths 78.5/80.5 px and pelvis root y=411. The first v0.9.4 attempt changed these values and failed stance-angle gates, so this correction restores the last passing anatomy parameters.
+- Calibrate leg lengths to 80/82 px with pelvis root y=408. The first attempt used 80/82 at root y=414 and collapsed stance knees; restoring legacy leg lengths at 93 px stride produced a 13.64 px/frame knee spike. The combined parameter calibration is intended to retain flex margin without violating existing angle or displacement limits.
 - Evaluate start/stop ramps against (frame_count - 1) / fps, the timestamp of the last actually rendered frame.
 - Replace accumulated phase offsets with bounded C2 phase warping proportional to sin(pi*u)^3; phase offset and its first derivative are zero at cycle boundaries.
 - Select equal ramp durations so five cycles land on the last rendered frame for both the 192-frame/24fps landscape preview and 240-frame/30fps portrait preview.

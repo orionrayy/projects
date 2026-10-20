@@ -51,7 +51,7 @@ const GAIT_SCENE = {
     cycle_seconds: 1.33,
     stance_fraction: 0.6,
     screen_stride_scale: 0.64,
-    root_y: 411,
+    root_y: 408,
     start_ramp_seconds: (FRAME_COUNT - 1) / FPS - 5 * 1.33,
     stop_ramp_seconds: (FRAME_COUNT - 1) / FPS - 5 * 1.33
   }
