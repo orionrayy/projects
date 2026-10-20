@@ -1,0 +1,31 @@
+name: Motion Studio Locomotion v0.7.0 Review
+
+on:
+  push:
+    branches:
+      - motion-studio-locomotion-v0.7.0
+    paths:
+      - ".github/workflows/motion-studio-locomotion-v0.7.0.yml"
+      - "ffmpeg-motion-studio/foundation-v0.7.0/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  locomotion-smoke:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ffmpeg-motion-studio/foundation-v0.7.0
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Syntax check
+        run: node --check src/locomotion.mjs
+      - name: Run locomotion geometry smoke tests
+        run: npm test
