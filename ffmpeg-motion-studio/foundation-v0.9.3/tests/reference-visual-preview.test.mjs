@@ -38,7 +38,7 @@ test('hook, character walk, object impact, kinetic type and evidence all render 
   const examples = [
     [0, 'hook-time', '03:04'],
     [45, 'room-tracking-walk', 'characterRig'],
-    [130, 'device-impact', 'MIKROFON / AKTIF'],
+    [130, 'device-impact', 'MIKROFON AKTIF'],
     [175, 'kinetic-rule', 'JAWAB DIA.'],
     [225, 'walk-to-settle', 'characterRig'],
     [275, 'cause-evidence', 'data-evidence-node="signal"']
