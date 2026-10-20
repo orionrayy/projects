@@ -42,6 +42,26 @@ def knee_metrics(frames):
         "max_peak_swing_knee_angle_degrees": max(peak_swing) if peak_swing else None
     }
 
+def orient(a, b, c):
+    return (b["x"]-a["x"])*(c["y"]-a["y"]) - (b["y"]-a["y"])*(c["x"]-a["x"])
+
+def proper_cross(a, b, c, d):
+    o1, o2 = orient(a, b, c), orient(a, b, d)
+    o3, o4 = orient(c, d, a), orient(c, d, b)
+    return o1 * o2 < -1e-6 and o3 * o4 < -1e-6
+
+def intersection_metrics(frames):
+    leg_crossings = 0
+    free_arm_crossings = 0
+    for frame in frames:
+        left = [(frame["left_hip"], frame["left_knee"]), (frame["left_knee"], frame["left_ankle"])]
+        right = [(frame["right_hip"], frame["right_knee"]), (frame["right_knee"], frame["right_ankle"])]
+        leg_crossings += sum(proper_cross(a, b, c, d) for (a, b) in left for (c, d) in right)
+        near = [(frame["near_arm_shoulder"], frame["near_arm_elbow"]), (frame["near_arm_elbow"], frame["near_arm_wrist"])]
+        far = [(frame["far_arm_shoulder"], frame["far_arm_elbow"]), (frame["far_arm_elbow"], frame["far_arm_wrist"])]
+        free_arm_crossings += sum(proper_cross(a, b, c, d) for (a, b) in near for (c, d) in far)
+    return {"opposite_leg_centerline_crossings": leg_crossings, "free_arm_centerline_crossings": free_arm_crossings}
+
 def main():
     manifest_path = ROOT / "anatomy-manifest.json"
     if not manifest_path.exists():
@@ -64,7 +84,13 @@ def main():
             failures.append("manifest must cover all 192 frames")
         else:
             knee = knee_metrics(frames)
+            intersections = intersection_metrics(frames)
             item.update(knee)
+            item.update(intersections)
+            if intersections["opposite_leg_centerline_crossings"] != 0:
+                failures.append("opposite leg centerlines intersect")
+            if profile == "free" and intersections["free_arm_centerline_crossings"] != 0:
+                failures.append("free-arm centerlines intersect")
             if knee["stance_samples"] < 100: failures.append("insufficient stance knee samples")
             if knee["min_stance_knee_angle_degrees"] is None or knee["min_stance_knee_angle_degrees"] < MIN_STANCE_ANGLE:
                 failures.append(f"minimum stance knee angle must be >= {MIN_STANCE_ANGLE} degrees")
