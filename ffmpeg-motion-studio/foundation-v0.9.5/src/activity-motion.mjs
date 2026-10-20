@@ -115,6 +115,10 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   }
   const staticScene = fixedPoseScene(scene, armMode);
   const base = evaluateLocomotion(staticScene, frameIndex, armMode);
+  // Static side-profile actions need a small depth cue for the two feet; zero stride
+  // otherwise projects both shoes and both leg chains onto almost the same pixels.
+  base.leftFoot = { ...base.leftFoot, x: base.leftFoot.x - 10 };
+  base.rightFoot = { ...base.rightFoot, x: base.rightFoot.x + 10 };
   const duration = Math.max(1, scene.duration_frames - 1);
   const u = frameIndex / duration;
   // Action timelines are authored as explicit phases. The 3 s clip is a preview
@@ -137,8 +141,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   if (activity === "look-around") {
     // A side-profile rig can scan its pitch/tilt and gaze offset; it cannot perform
     // true horizontal yaw. Keep the label explicit and give each glance a clear beat.
-    headTurn = keyCurve(u, [[0,0],[0.08,0],[0.24,0.42],[0.34,0.48],[0.46,0.40],[0.58,-0.40],[0.69,-0.48],[0.82,0.10],[0.93,0],[1,0]]);
-    headShift = keyCurve(u, [[0,0],[0.20,7.0],[0.38,8],[0.56,-5.5],[0.74,-4],[0.90,0],[1,0]]);
+    headTurn = keyCurve(u, [[0,0],[0.08,0],[0.24,0.58],[0.34,0.64],[0.46,0.50],[0.58,-0.55],[0.69,-0.62],[0.82,0.12],[0.93,0],[1,0]]);
+    headShift = keyCurve(u, [[0,0],[0.20,10],[0.38,11],[0.56,-8],[0.74,-6],[0.90,0],[1,0]]);
     gazeOffsetX = keyCurve(u, [[0,0],[0.16,0],[0.28,1.8],[0.42,1.8],[0.55,-1.8],[0.67,-1.8],[0.82,1.0],[0.92,0],[1,0]]);
     gazeOffsetY = keyCurve(u, [[0,0],[0.24,0.4],[0.38,-0.8],[0.60,0.8],[0.75,0],[1,0]]);
     lean = keyCurve(u, [[0,0],[0.28,0.045],[0.55,-0.035],[0.78,0],[1,0]]);
@@ -168,9 +172,9 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   }
   if (activity === "turn-in-place") {
     // This is an explicit 2D weight-shift/foot-pivot cue, not a true 3D turn.
-    lean = 0.11 * turnPulse;
-    headTurn = -0.17 * turnPulse;
-    forwardShift = 10 * turnPulse;
+    lean = 0.18 * turnPulse;
+    headTurn = -0.38 * turnPulse;
+    forwardShift = 15 * turnPulse;
     armCounterBalance = Math.abs(turnPulse);
   }
 
@@ -217,7 +221,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     }
   };
 
-  const footPivot = activity === "turn-in-place" ? 0.22 * turnPulse : 0;
+  const footPivot = activity === "turn-in-place" ? 0.42 * turnPulse : 0;
   pose.leftFoot = { ...base.leftFoot, angle: (base.leftFoot.angle || 0) + footPivot };
   pose.rightFoot = { ...base.rightFoot, angle: (base.rightFoot.angle || 0) - footPivot };
   pose.leftHip = translatePoint(base.leftHip, forwardShift, drop);
@@ -227,6 +231,12 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
 
   let nearTarget = transform(base.nearArm.wrist);
   let farTarget = transform(base.farArm.wrist);
+  // Neutral projected hands should occupy opposite depth layers instead of collapsing
+  // at the pelvis or meeting in front of the torso due to the base gait's arm swing.
+  if (["stand", "look-around", "turn-in-place"].includes(activity)) {
+    nearTarget = { x: pose.shoulders.near.x + 12, y: pose.shoulders.near.y + 88 };
+    farTarget = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 88 };
+  }
   // In a side-profile projection the two relaxed hands need a small near/far
   // separation; otherwise both arms collapse into one wrist at the pelvis.
   if (["stand", "look-around", "turn-in-place"].includes(activity)) {
@@ -271,19 +281,19 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       x: reachingTarget.x + (holdingTarget.x - reachingTarget.x) * pickupLift,
       y: reachingTarget.y + (holdingTarget.y - reachingTarget.y) * pickupLift
     };
-    farTarget = { x: farTarget.x - 5 * pickupCrouch + 2 * pickupLift,
-      y: farTarget.y - 8 * pickupCrouch - 3 * pickupLift };
+    farTarget = { x: pose.shoulders.far.x - 10 - 4 * pickupCrouch + 2 * pickupLift,
+      y: pose.shoulders.far.y + 84 - 8 * pickupCrouch - 3 * pickupLift };
   } else if (activity === "sit-to-stand") {
     // Separate the seated lap pose, forward counterbalance, and relaxed standing
     // pose. Reusing the generic folded-arm pose made the entire action read as
     // crossed arms rather than a lower-body transfer.
     const counter = armCounterBalance, rest = sitStandRestWeight;
     const lapNear = { x: pose.shoulders.near.x + 38, y: pose.shoulders.near.y + 86 };
-    const lapFar = { x: pose.shoulders.far.x + 22, y: pose.shoulders.far.y + 90 };
+    const lapFar = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 88 };
     const balanceNear = { x: pose.shoulders.near.x + 52, y: pose.shoulders.near.y + 87 };
-    const balanceFar = { x: pose.shoulders.far.x + 34, y: pose.shoulders.far.y + 91 };
+    const balanceFar = { x: pose.shoulders.far.x - 5, y: pose.shoulders.far.y + 88 };
     const standingNear = { x: pose.shoulders.near.x + 22, y: pose.shoulders.near.y + 75 };
-    const standingFar = { x: pose.shoulders.far.x + 12, y: pose.shoulders.far.y + 75 };
+    const standingFar = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 82 };
     const actionNear = { x: lapNear.x + (balanceNear.x - lapNear.x) * counter,
       y: lapNear.y + (balanceNear.y - lapNear.y) * counter };
     const actionFar = { x: lapFar.x + (balanceFar.x - lapFar.x) * counter,
@@ -297,8 +307,12 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     farTarget = { x: farTarget.x - 6 * turnPulse, y: farTarget.y + 3 * turnPulse };
   }
 
-  pose.nearArm = solveArm(pose.shoulders.near, nearTarget, staticScene, -1);
-  pose.farArm = solveArm(pose.shoulders.far, farTarget, staticScene, 1);
+  // Keep the far arm behind the torso and use the near-side elbow branch for neutral poses.
+  // The old opposing screen-space poles made both forearms converge across the chest.
+  const nearBend = ["stand", "look-around", "turn-in-place"].includes(activity) ? 1 : -1;
+  const farBend = armMode === "carry" ? 1 : -1;
+  pose.nearArm = solveArm(pose.shoulders.near, nearTarget, staticScene, nearBend);
+  pose.farArm = solveArm(pose.shoulders.far, farTarget, staticScene, farBend);
 
   if (activity === "pick-up") {
     const held = { x: pose.nearArm.wrist.x + 18, y: pose.nearArm.wrist.y };
