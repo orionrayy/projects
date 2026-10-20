@@ -48,23 +48,54 @@ function legSvg(leg,foot,scene,near) {
   s+='<path d="M -12 4 Q 0 6 15 4" stroke="#E9E7DE" stroke-width="1.8" stroke-linecap="round"/><path d="M -5 -3 L 2 -1" stroke="#AAB4C0" stroke-width="1.1" stroke-linecap="round" opacity=".7"/><path d="M -2 -2 L 1 0 M 1 -3 L 4 -1" stroke="#B7C1CC" stroke-width=".8" stroke-linecap="round" opacity=".75"/></g>';
   return s+'</g>';
 }
-function handSvg(arm,scene,mode,near) {
-  const w=arm.wrist,e=arm.elbow,c=scene.character;
-  const armAngle=deg(Math.atan2(w.y-e.y,w.x-e.x));
-  const angle=armAngle+(mode==="carry"?42:16);
-  let s='<g data-anatomy="hand" data-grip="'+(mode==="carry"?"grip":"relaxed")+'" transform="translate('+n(w.x)+' '+n(w.y)+') rotate('+n(angle)+')">';
-  s+='<path data-anatomy="palm" d="M -5 -3.8 Q -5 -7.1 -.8 -7.4 L 3.5 -6.5 Q 6.4 -6.1 7.7 -3.2 Q 10.3 -4.9 13.1 -3.2 Q 16.2 -1.5 14.6 1.1 Q 14.2 3.1 11.3 3.1 L 8.2 3.1 Q 10.1 5.1 7.5 7.1 Q 5.1 8.1 3.5 5.6 Q 1.7 7.2 -.1 5.1 L -2.5 3.2 Q -5.8 1.8 -5 -3.8 Z" fill="'+c.skin+'" stroke="#7B5544" stroke-width="1.35" stroke-linejoin="round"/>';
-  if(mode==="carry") {
+function handSvg(arm,scene,mode,near,activity,pose) {
+  const w=arm.wrist,e=arm.elbow,c=scene.character,state=pose?.activityState||{};
+  const armAngle=Math.atan2(w.y-e.y,w.x-e.x);
+  const shoulderAngle=Math.atan2(w.y-arm.shoulder.y,w.x-arm.shoulder.x);
+  const angleDelta=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
+  const boundedAngle=(angle,reference,limit)=>reference+Math.max(-limit,Math.min(limit,angleDelta(angle,reference)));
+  const gripWeight=state.pickupGripWeight||0;
+  let handPose=mode==="carry"?"grip":"relaxed";
+  if(activity==="reach"&&near) handPose=state.reachTarget?.active?"press":"point";
+  else if(activity==="pick-up"&&near) handPose=gripWeight>=0.30?"grip":((state.pickupReachWeight||0)>=0.22?"point":"relaxed");
+  let preferredAngle=armAngle,angleLimit=0.45;
+  if(handPose==="relaxed") {
+    // SVG screen coordinates have +Y downward. Relaxed fingers should point down,
+    // independent of which elbow branch the analytic IK solver selected.
+    preferredAngle=Math.PI/2;
+    angleLimit=0.56;
+  } else if(handPose==="point"||handPose==="press") {
+    preferredAngle=shoulderAngle;
+    angleLimit=0.40;
+  } else {
+    let target=null;
+    if(activity==="pick-up"&&state.pickupItem) target={x:state.pickupItem.x,y:state.pickupItem.y};
+    else if(pose?.basket?.center) target=pose.basket.center;
+    if(target) preferredAngle=Math.atan2(target.y-w.y,target.x-w.x);
+    angleLimit=0.78;
+  }
+  const angle=boundedAngle(armAngle,preferredAngle,angleLimit);
+  const flip=near?1:-1;
+  let s='<g data-anatomy="hand" data-hand-side="'+(near?"near":"far")+'" data-hand-pose="'+handPose+'" data-hand-angle-degrees="'+n(deg(angle))+'" data-grip="'+(handPose==="grip"?"grip":"relaxed")+'" transform="translate('+n(w.x)+' '+n(w.y)+') rotate('+n(deg(angle))+') scale(1 '+flip+')">';
+  if(handPose==="point"||handPose==="press") {
+    const tip=handPose==="point"?23:17;
+    s+='<path data-anatomy="palm" d="M -5 -3.8 Q -5 -7 -.5 -7.3 L 4.5 -6.4 Q 7 -5.7 7.8 -4.2 L '+(tip-2)+' -4.1 Q '+tip+' -4.1 '+tip+' -1.8 Q '+tip+' .1 '+(tip-2)+' .1 L 9 .1 Q 12 1.1 10.8 3.4 Q 10 5.5 7.1 4.7 L 3.8 3.4 Q 1.7 6.1 -.5 4.7 L -3 2.7 Q -6 1.4 -5 -3.8 Z" fill="'+c.skin+'" stroke="#7B5544" stroke-width="1.35" stroke-linejoin="round"/>';
+    s+='<path data-anatomy="index-finger" d="M 6.5 -4.2 L '+(tip-1)+' -4.2" fill="none" stroke="#F6D0B1" stroke-width="1.0" stroke-linecap="round" opacity=".95"/>';
+    s+='<path data-anatomy="finger-detail" d="M 5.2 -.9 Q 8 -2.1 10.7 -.2 M 4.1 1.2 Q 6.8 .4 8.7 2.4" fill="none" stroke="#925F49" stroke-width="1.0" stroke-linecap="round"/>';
+    s+='<path data-anatomy="thumb-fold" d="M -1.7 -2.2 Q .2 .1 3.3 .5" fill="none" stroke="#925F49" stroke-width="1.15" stroke-linecap="round"/>';
+  } else if(handPose==="grip") {
+    s+='<path data-anatomy="palm" d="M -5 -3.8 Q -5 -7.1 -.8 -7.4 L 3.5 -6.5 Q 6.4 -6.1 7.7 -3.2 Q 10.3 -4.9 13.1 -3.2 Q 16.2 -1.5 14.6 1.1 Q 14.2 3.1 11.3 3.1 L 8.2 3.1 Q 10.1 5.1 7.5 7.1 Q 5.1 8.1 3.5 5.6 Q 1.7 7.2 -.1 5.1 L -2.5 3.2 Q -5.8 1.8 -5 -3.8 Z" fill="'+c.skin+'" stroke="#7B5544" stroke-width="1.35" stroke-linejoin="round"/>';
     s+='<path data-anatomy="finger-detail" d="M 4.7 -4.6 Q 8.5 -7.4 11.9 -4.8 Q 13.8 -3.4 12.5 -.7 M 5.8 -1.7 Q 9.5 -4.6 13.4 -1.9 Q 15.2 -.6 13.5 1.6 M 4.9 1.3 Q 8.7 -.6 11.2 2.2 Q 12.4 3.7 10.4 4.5" fill="none" stroke="#925F49" stroke-width="1.05" stroke-linecap="round"/>';
     s+='<path data-anatomy="thumb-fold" d="M -1.7 -2.2 Q .2 .1 3.3 .5 Q 5.3 .7 6.2 2.5" fill="none" stroke="#925F49" stroke-width="1.15" stroke-linecap="round"/>';
     s+='<path d="M -2.6 2.5 Q -.8 3.6 1 3.3" fill="none" stroke="#F6D0B1" stroke-width=".9" stroke-linecap="round" opacity=".85"/>';
   } else {
-    s+='<path data-anatomy="finger-detail" d="M 5 -4.1 Q 8.1 -7 11 -4.8 Q 12.5 -3.4 11.9 -1.6 M 6 -1.2 Q 9.6 -3.9 12.6 -1.6 Q 14 .2 12.2 1.6 M 5.1 1.5 Q 8.1 .2 10.1 2.7 Q 11 4.1 9.2 4.8" fill="none" stroke="#925F49" stroke-width="1.0" stroke-linecap="round"/>';
+    s+='<path data-anatomy="palm" d="M -5 -3.8 Q -5 -7.1 -.8 -7.4 L 3.5 -6.5 Q 6.4 -6.1 7.7 -3.2 Q 10.3 -4.9 12.3 -2.9 Q 13.8 -1.1 12.2 .6 L 9.6 2.2 Q 10.7 4.5 8.0 6.4 Q 5.3 7.5 3.3 4.8 L -.3 3.4 Q -5.8 1.8 -5 -3.8 Z" fill="'+c.skin+'" stroke="#7B5544" stroke-width="1.35" stroke-linejoin="round"/>';
+    s+='<path data-anatomy="finger-detail" d="M 5.2 -4.1 Q 8.1 -6.4 10.7 -4.1 M 5.3 -1.6 Q 8.3 -3.7 10.8 -1.6 M 4.6 .8 Q 7.2 -.1 9.1 1.7" fill="none" stroke="#925F49" stroke-width="1.0" stroke-linecap="round"/>';
     s+='<path d="M -2.7 -2.2 Q -.1 -.1 2 1" fill="none" stroke="#F6D0B1" stroke-width="1.0" stroke-linecap="round" opacity=".85"/>';
   }
   return s+'</g>';
 }
-function armSvg(arm,scene,sleeve,near,mode) {
+function armSvg(arm,scene,sleeve,near,mode,activity,pose) {
   const c=scene.character;
   let s=organicLimb(arm.shoulder,arm.elbow,c.upper_arm_width_px||20,c.elbow_width_px||15,sleeve,"#203348",{midBulgeFactor:1.08});
   const dx=arm.elbow.x-arm.shoulder.x,dy=arm.elbow.y-arm.shoulder.y,len=Math.max(1e-6,Math.hypot(dx,dy)),nx=-dy/len,ny=dx/len;
@@ -73,7 +104,7 @@ function armSvg(arm,scene,sleeve,near,mode) {
   s+=organicLimb(arm.elbow,arm.wrist,c.forearm_width_px||14,c.wrist_width_px||10,c.skin||"#E6B08A","#7B5544",{midBulgeFactor:1.12});
   s+='<ellipse data-anatomy="elbow" cx="'+n(arm.elbow.x)+'" cy="'+n(arm.elbow.y)+'" rx="2.8" ry="3.1" fill="'+c.skin+'" opacity=".92"/>';
   s+='<path data-anatomy="elbow-fold" d="M '+n(arm.elbow.x-2.6)+' '+n(arm.elbow.y+1.2)+' Q '+n(arm.elbow.x)+' '+n(arm.elbow.y+2.7)+' '+n(arm.elbow.x+2.6)+' '+n(arm.elbow.y+1.0)+'" fill="none" stroke="#925F49" stroke-width=".95" stroke-linecap="round" opacity=".56"/>';
-  return s+handSvg(arm,scene,mode,near);
+  return s+handSvg(arm,scene,mode,near,activity,pose);
 }
 function frontHeadSvg(p,scene) {
   const h=p.head,neck=p.neck,r=scene.character.head_radius_px,c=scene.character,rx=r*.84,ry=r*1.03;
@@ -190,15 +221,40 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   s+='<g id="characterRig" data-rig-frame="'+frameIndex+'">';
   s+='<ellipse cx="'+n(p.pelvis.x+12)+'" cy="'+n(floor+5)+'" rx="63" ry="9" fill="#9C988B" opacity=".22"/>';
   s+=legSvg(p.rightLeg,p.rightFoot,scene,false)+legSvg(p.leftLeg,p.leftFoot,scene,true);
-  s+=armSvg(p.farArm,scene,"#2F6D8D",false,mode);
+  s+=armSvg(p.farArm,scene,"#2F6D8D",false,mode,activity,p);
   const pel=p.pelvis,chest=p.chest,near=p.shoulders.near,far=p.shoulders.far;
   const profile=(c.view_mode||"profile-right")==="profile-right";
   if(profile){
     const bodyHalf=c.profile_torso_half_width_px||15,hipHalf=c.profile_hip_half_width_px||10;
-    s+='<path data-anatomy="torso" data-contour="side-profile" d="M '+n(chest.x-bodyHalf*.72)+' '+n(chest.y+5)+' Q '+n(chest.x-bodyHalf*1.08)+' '+n(chest.y+18)+' '+n(chest.x-bodyHalf*.9)+' '+n(chest.y+38)+' L '+n(pel.x-hipHalf)+' '+n(pel.y-7)+' Q '+n(pel.x-hipHalf*.9)+' '+n(pel.y+2)+' '+n(pel.x-hipHalf*.55)+' '+n(pel.y+8)+' Q '+n(pel.x)+' '+n(pel.y+13)+' '+n(pel.x+hipHalf*.75)+' '+n(pel.y+7)+' Q '+n(pel.x+hipHalf)+' '+n(pel.y+2)+' '+n(pel.x+hipHalf*.88)+' '+n(pel.y-7)+' L '+n(chest.x+bodyHalf*.72)+' '+n(chest.y+38)+' Q '+n(chest.x+bodyHalf*1.02)+' '+n(chest.y+18)+' '+n(chest.x+bodyHalf*.72)+' '+n(chest.y+5)+' Q '+n(chest.x)+' '+n(chest.y-4)+' '+n(chest.x-bodyHalf*.72)+' '+n(chest.y+5)+' Z" fill="'+c.shirt+'" stroke="#203348" stroke-width="2.7" stroke-linejoin="round"/>';
-    s+='<path d="M '+n(chest.x-5)+' '+n(chest.y+13)+' Q '+n(chest.x+7)+' '+n(chest.y+20)+' '+n(chest.x+5)+' '+n(chest.y+31)+'" fill="none" stroke="'+c.shirt_shadow+'" stroke-width="2" stroke-linecap="round" opacity=".9"/>';
-    s+='<path d="M '+n(chest.x+2)+' '+n(chest.y+34)+' Q '+n(chest.x+5)+' '+n(chest.y+48)+' '+n(chest.x+3)+' '+n(chest.y+56)+'" fill="none" stroke="#DCE9EC" stroke-width="1.1" opacity=".2"/>';
-    s+='<path data-anatomy="waistband" data-contour="side-profile" d="M '+n(pel.x-hipHalf)+' '+n(pel.y+5)+' Q '+n(pel.x)+' '+n(pel.y+12)+' '+n(pel.x+hipHalf*.88)+' '+n(pel.y+5)+'" fill="none" stroke="#263347" stroke-width="2.2"/>';
+    // Express the contour in the chest-to-pelvis spine frame. This is required for
+    // the shirt silhouette to follow a forward lean rather than staying screen-vertical.
+    const dx=pel.x-chest.x,dy=pel.y-chest.y,bodyLen=Math.max(1e-6,Math.hypot(dx,dy));
+    const nx=dy/bodyLen,ny=-dx/bodyLen;
+    const P=(t,side,width)=>({x:chest.x+dx*t+nx*side*width,y:chest.y+dy*t+ny*side*width});
+    const xy=q=>n(q.x)+' '+n(q.y);
+    const topR=P(.05,1,bodyHalf*.68),upperR=P(.24,1,bodyHalf),midR=P(.51,1,bodyHalf*.86),waistR=P(.78,1,bodyHalf*.66),hipR=P(.94,1,hipHalf),lowR=P(1,1,hipHalf*.60);
+    const topL=P(.05,-1,bodyHalf*.68),upperL=P(.24,-1,bodyHalf),midL=P(.51,-1,bodyHalf*.86),waistL=P(.78,-1,bodyHalf*.66),hipL=P(.94,-1,hipHalf),lowL=P(1,-1,hipHalf*.60);
+    const d=[
+      'M '+xy(topR),
+      'C '+xy(P(.12,1,bodyHalf*.98))+' '+xy(P(.17,1,bodyHalf))+' '+xy(upperR),
+      'C '+xy(P(.37,1,bodyHalf*.96))+' '+xy(P(.43,1,bodyHalf*.89))+' '+xy(midR),
+      'C '+xy(P(.63,1,bodyHalf*.82))+' '+xy(P(.70,1,bodyHalf*.72))+' '+xy(waistR),
+      'L '+xy(hipR),
+      'Q '+xy(P(.985,1,hipHalf*.82))+' '+xy(lowR),
+      'Q '+xy(P(1.045,0,0))+' '+xy(lowL),
+      'Q '+xy(P(.985,-1,hipHalf*.82))+' '+xy(hipL),
+      'L '+xy(waistL),
+      'C '+xy(P(.70,-1,bodyHalf*.72))+' '+xy(P(.63,-1,bodyHalf*.82))+' '+xy(midL),
+      'C '+xy(P(.43,-1,bodyHalf*.89))+' '+xy(P(.37,-1,bodyHalf*.96))+' '+xy(upperL),
+      'C '+xy(P(.17,-1,bodyHalf))+' '+xy(P(.12,-1,bodyHalf*.98))+' '+xy(topL),
+      'Q '+xy(P(0,0,0))+' '+xy(topR)+' Z'
+    ].join(' ');
+    s+='<path data-anatomy="torso" data-contour="spine-aligned" d="'+d+'" fill="'+c.shirt+'" stroke="#203348" stroke-width="2.7" stroke-linejoin="round"/>';
+    const seamA=P(.17,-1,bodyHalf*.28),seamB=P(.46,-1,bodyHalf*.25),seamC=P(.70,-1,bodyHalf*.16);
+    const seamControl=P(.31,-1,bodyHalf*.26);
+    s+='<path data-torso-detail="seam" d="M '+xy(seamA)+' Q '+xy(seamControl)+' '+xy(seamB)+' L '+xy(seamC)+'" fill="none" stroke="'+c.shirt_shadow+'" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>';
+    const wb1=P(.965,-1,hipHalf*.78),wb2=P(.965,1,hipHalf*.78),wbm=P(1,0,0);
+    s+='<path data-anatomy="waistband" data-contour="spine-aligned" d="M '+xy(wb1)+' Q '+xy(wbm)+' '+xy(wb2)+'" fill="none" stroke="#263347" stroke-width="2.2"/>';
   }else{
   const sh=c.shoulder_half_width_px||23,hip=c.pelvis_half_width_px||22;
   s+='<path data-anatomy="torso" d="M '+n(chest.x-sh-8)+' '+n(chest.y+7)+' Q '+n(chest.x-sh-14)+' '+n(chest.y+20)+' '+n(chest.x-22)+' '+n(chest.y+42)+' L '+n(chest.x-17)+' '+n(pel.y-6)+' Q '+n(pel.x-hip*.65)+' '+n(pel.y+6)+' '+n(pel.x-hip)+' '+n(pel.y+5)+' Q '+n(pel.x)+' '+n(pel.y+15)+' '+n(pel.x+hip)+' '+n(pel.y+5)+' Q '+n(pel.x+hip*.65)+' '+n(pel.y+6)+' '+n(chest.x+17)+' '+n(pel.y-6)+' L '+n(chest.x+22)+' '+n(chest.y+42)+' Q '+n(chest.x+sh+14)+' '+n(chest.y+20)+' '+n(chest.x+sh+8)+' '+n(chest.y+7)+' Q '+n(chest.x+sh*.45)+' '+n(chest.y-5)+' '+n(chest.x)+' '+n(chest.y-4)+' Q '+n(chest.x-sh*.45)+' '+n(chest.y-5)+' '+n(chest.x-sh-8)+' '+n(chest.y+7)+' Z" fill="'+c.shirt+'" stroke="#203348" stroke-width="2.7" stroke-linejoin="round"/>';
@@ -210,7 +266,7 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   s+=headSvg(p,scene);
   if (activity === "pick-up") s += pickupItemSvg(p.activityState.pickupItem);
   if(mode==="carry") s+=basketSvg(p,scene);
-  s+=armSvg(p.nearArm,scene,"#3A82A3",true,mode);
+  s+=armSvg(p.nearArm,scene,"#3A82A3",true,mode,activity,p);
   s+='</g><!--CHARACTER-RIG-END-->';
   if (activity !== "walk") s += '</g><!--ACTIVITY-CAMERA-END-->';
   s+='<rect x="34" y="28" width="388" height="82" rx="14" fill="#FFFEFA" opacity=".92" stroke="#DAD5C7"/>';
