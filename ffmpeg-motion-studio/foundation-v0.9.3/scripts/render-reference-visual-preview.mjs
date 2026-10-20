@@ -46,7 +46,7 @@ const GAIT_SCENE = {
     ...baseScene.motion,
     cycle_seconds: 1.33,
     screen_stride_scale: 0.64,
-    root_y: 415,
+    root_y: 411,
     start_ramp_seconds: 0.48,
     stop_ramp_seconds: 2.8
   }
@@ -133,7 +133,7 @@ function drawWorldAndCharacter(seconds, frameIndex, phase = 'walk') {
     const y = 338 + 22 * (1 - u);
     const reveal = smoothstep((seconds - 0.1) / 0.7);
     s += '<g data-visual-element="hook-time" transform="translate(0 ' + fmt(y - 338) + ')">';
-    s += rect(38, 330, 644, 198, 10, C.panel, '#596373', 1.6, 'opacity="0.97"');
+    s += rect(38, 330, 644, 198, 10, C.panel, '#596373', 1.6, '');
     s += rect(38, 330, 8, 198, 2, C.red, C.red, 0);
     s += text(74, 420, '03:04', 106, C.white, 'start', 850, 'letter-spacing="-2.5"');
     s += text(378, 418, 'AM', 32, C.red, 'start', 850, 'letter-spacing="1.5"');
@@ -181,7 +181,7 @@ function drawDeviceImpact(seconds) {
   s += speakerGlyph(360, 590, 1.62, 1 - 0.4 * u);
   s += line(439, 510, 558, 434, C.red, 2.2);
   s += circle(439, 510, 5, C.red, C.red, 1);
-  s += text(564, 430, 'MIKROFON / AKTIF', 17, C.red, 'start', 800, 'letter-spacing="0.45"');
+  s += text(514, 430, 'MIKROFON AKTIF', 14, C.red, 'start', 800, 'letter-spacing="0.3"');
   s += line(416, 653, 548, 714, C.gold, 2);
   s += circle(416, 653, 4, C.gold, C.gold, 1);
   s += text(552, 720, 'LED STATUS', 17, C.gold, 'start', 750, 'letter-spacing="0.7"');
