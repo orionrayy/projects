@@ -10,7 +10,8 @@ export function buildActivityManifest(scene) {
   const activities = [];
   for (const activity of ACTIVITY_NAMES) {
     let maxBoneErrorPx = 0, maxAnkleClampErrorPx = 0, maxArmClampErrorPx = 0, maxKneeStepPx = 0, maxStanceFootDriftPx = 0;
-    let maxPelvisDropPx = 0, maxHeadTurnRadians = 0, maxTorsoLeanRadians = 0, maxReachDisplacementPx = 0, previous = null;
+    let maxPelvisDropPx = 0, maxHeadTurnRadians = 0, maxTorsoLeanRadians = 0, maxReachDisplacementPx = 0;
+    let maxPickupItemStepPx = 0, maxPickupItemContactErrorPx = 0, previous = null;
     for (let frame = 0; frame < scene.duration_frames; frame++) {
       const pose = evaluateActivity(scene, frame, activity, "free");
       maxBoneErrorPx = Math.max(maxBoneErrorPx, pose.diagnostics.boneLengthErrorPx);
@@ -20,7 +21,15 @@ export function buildActivityManifest(scene) {
       maxHeadTurnRadians = Math.max(maxHeadTurnRadians, Math.abs(pose.activityState.headTurnRadians));
       maxTorsoLeanRadians = Math.max(maxTorsoLeanRadians, Math.abs(pose.activityState.torsoLeanRadians));
       maxReachDisplacementPx = Math.max(maxReachDisplacementPx, pose.activityState.reachDisplacementPx);
+      if (pose.activityState.pickupItem?.held) {
+        maxPickupItemContactErrorPx = Math.max(maxPickupItemContactErrorPx,
+          pose.diagnostics.pickupItemContactErrorPx || 0);
+      }
       if (previous) {
+        const oldItem = previous.activityState.pickupItem, newItem = pose.activityState.pickupItem;
+        if (oldItem && newItem) {
+          maxPickupItemStepPx = Math.max(maxPickupItemStepPx, Math.hypot(newItem.x-oldItem.x, newItem.y-oldItem.y));
+        }
         for (const side of ["left", "right"]) {
           const a = previous[side + "Leg"].knee, b = pose[side + "Leg"].knee;
           maxKneeStepPx = Math.max(maxKneeStepPx, Math.hypot(b.x-a.x,b.y-a.y));
@@ -35,11 +44,16 @@ export function buildActivityManifest(scene) {
       frameCount: scene.duration_frames, durationSeconds: scene.duration_frames / scene.fps,
       maxBoneErrorPx, maxAnkleClampErrorPx, maxArmClampErrorPx, maxKneeStepPx, maxStanceFootDriftPx,
       maxPelvisDropPx, maxHeadTurnRadians, maxTorsoLeanRadians, maxReachDisplacementPx,
+      pickupObjectRendered: activity === "pick-up" && renderSvgFrame(scene, scene.duration_frames - 1, "free", activity).includes('data-prop="pickup-item"'),
+      pickupObjectHeldAtEnd: activity === "pick-up" ? Boolean(previous?.activityState.pickupItem?.held) : null,
+      maxPickupItemStepPx: activity === "pick-up" ? maxPickupItemStepPx : null,
+      maxPickupItemContactErrorPx: activity === "pick-up" ? maxPickupItemContactErrorPx : null,
+      chairRendered: activity === "sit-to-stand" && renderSvgFrame(scene, 0, "free", activity).includes('data-environment="chair"'),
       humanVisualAcceptance: "pending"
     });
   }
   return {
-    schemaVersion: "1.0.0", sceneId: "motion-studio-activity-suite-v0.9.5",
+    schemaVersion: "1.1.0", sceneId: "motion-studio-activity-suite-v0.9.5",
     renderer: "procedural SVG + FFmpeg H.264", canvas: scene.canvas, fps: scene.fps,
     activityCount: activities.length, activities,
     limitation: "2D side-profile action proof; turn-in-place is torso/head counter-rotation, not full 3D yaw",

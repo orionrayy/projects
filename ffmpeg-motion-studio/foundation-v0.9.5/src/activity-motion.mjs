@@ -198,12 +198,12 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
 
   if (activity === "pick-up") {
     const tableTopY = scene.background.horizon_y - 144;
-    const origin = { x: base.shoulders.near.x + 48, y: tableTopY - 9 };
-    const held = { x: pose.nearArm.wrist.x + 15, y: pose.nearArm.wrist.y };
+    const origin = { x: base.shoulders.near.x + 50, y: tableTopY - 11 };
+    const held = { x: pose.nearArm.wrist.x + 18, y: pose.nearArm.wrist.y };
     pose.activityState.pickupItem = {
       x: origin.x + (held.x - origin.x) * pickupGrip,
       y: origin.y + (held.y - origin.y) * pickupGrip,
-      width: 24, height: 18, tableX: origin.x, tableTopY,
+      width: 30, height: 22, tableX: origin.x, tableTopY,
       gripWeight: pickupGrip, held: pickupGrip >= 0.98
     };
   }

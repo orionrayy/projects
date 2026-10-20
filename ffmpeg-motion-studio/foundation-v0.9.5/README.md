@@ -25,3 +25,6 @@ CI passing verifies kinematic consistency and reproducible renders, not human-li
 
 ## Action semantics refinement (review-driven)
 The activity proof now renders a chair for the sit-to-stand clip and a table-top parcel for the pick-up clip. The parcel stays on the table before the grasp, then follows a deterministic reach/grasp/lift trajectory and remains in hand at the clip end. New regression tests check those semantic cues, object-to-hand attachment, prop step continuity and chair presence. These remain procedural 2D proofs: they do not establish full-body naturalness or true 3D turning.
+
+## Visual-review follow-up
+The sit-to-stand seat/backrest and pick-up table are now rendered as filled silhouettes instead of thin lines; the parcel has been enlarged while preserving the grasp anchor. The activity manifest now records whether the chair/object actually appears, whether the parcel remains held at the final frame, maximum per-frame parcel displacement, and held-object contact error. Visual acceptance remains pending.

@@ -112,18 +112,18 @@ function activityEnvironmentSvg(p, scene, activity) {
   let s = "";
   if (activity === "sit-to-stand" && p.activityState?.chair) {
     const chair = p.activityState.chair, x = chair.x, y = chair.seatY;
-    s += '<g data-environment="chair" fill="none" stroke="#4A5564" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">';
-    s += '<path d="M '+n(x-25)+' '+n(y-2)+' L '+n(x-25)+' '+n(y-43)+' L '+n(x-15)+' '+n(y-43)+' L '+n(x-15)+' '+n(y-4)+'"/>';
-    s += '<path d="M '+n(x-25)+' '+n(y-3)+' L '+n(x+25)+' '+n(y-3)+'" stroke-width="9"/>';
-    s += '<path d="M '+n(x-17)+' '+n(y+2)+' L '+n(x-20)+' '+n(floor-2)+' M '+n(x+17)+' '+n(y+2)+' L '+n(x+20)+' '+n(floor-2)+'"/>';
-    s += '<path d="M '+n(x-20)+' '+n(floor-2)+' L '+n(x-15)+' '+n(floor-2)+' M '+n(x+15)+' '+n(floor-2)+' L '+n(x+20)+' '+n(floor-2)+'" stroke-width="3"/>';
+    s += '<g data-environment="chair" stroke="#4A5564" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">';
+    s += '<rect x="'+n(x-36)+'" y="'+n(y-53)+'" width="13" height="52" rx="3" fill="#B7C0CA"/>';
+    s += '<rect x="'+n(x-32)+'" y="'+n(y-4)+'" width="68" height="9" rx="3" fill="#9EAAB7"/>';
+    s += '<path d="M '+n(x-24)+' '+n(y+3)+' L '+n(x-27)+' '+n(floor-2)+' M '+n(x+27)+' '+n(y+3)+' L '+n(x+30)+' '+n(floor-2)+'" fill="none" stroke-width="4"/>';
+    s += '<path d="M '+n(x-30)+' '+n(floor-2)+' L '+n(x-23)+' '+n(floor-2)+' M '+n(x+26)+' '+n(floor-2)+' L '+n(x+33)+' '+n(floor-2)+'" fill="none" stroke-width="3"/>';
     s += '</g>';
   }
   if (activity === "pick-up" && p.activityState?.pickupItem) {
     const item = p.activityState.pickupItem;
     s += '<g data-environment="pickup-table" fill="none" stroke="#566273" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">';
-    s += '<path d="M '+n(item.tableX-34)+' '+n(item.tableTopY)+' L '+n(item.tableX+27)+' '+n(item.tableTopY)+'" stroke-width="7"/>';
-    s += '<path d="M '+n(item.tableX-27)+' '+n(item.tableTopY+3)+' L '+n(item.tableX-27)+' '+n(floor-2)+' M '+n(item.tableX+20)+' '+n(item.tableTopY+3)+' L '+n(item.tableX+20)+' '+n(floor-2)+'"/>';
+    s += '<rect x="'+n(item.tableX-37)+'" y="'+n(item.tableTopY-4)+'" width="69" height="8" rx="2" fill="#AEB7C1" stroke="#566273" stroke-width="2"/>';
+    s += '<path d="M '+n(item.tableX-30)+' '+n(item.tableTopY+3)+' L '+n(item.tableX-30)+' '+n(floor-2)+' M '+n(item.tableX+25)+' '+n(item.tableTopY+3)+' L '+n(item.tableX+25)+' '+n(floor-2)+'" fill="none" stroke-width="4"/>';
     s += '</g>';
   }
   return s;
@@ -132,9 +132,9 @@ function pickupItemSvg(item) {
   if (!item) return "";
   const x = item.x, y = item.y;
   return '<g data-prop="pickup-item" data-held="'+String(item.held)+'" transform="translate('+n(x)+' '+n(y)+')">' +
-    '<path d="M -12 -6 L -7 -10 L 11 -8 L 12 5 L 5 9 L -12 6 Z" fill="#C58B51" stroke="#6F492B" stroke-width="1.8" stroke-linejoin="round"/>' +
-    '<path d="M -7 -10 L -5 3 L 12 5 M -5 3 L 5 9" fill="none" stroke="#E5BB83" stroke-width="1.5"/>' +
-    '<path d="M -2 -9 L 1 7" stroke="#8D5E35" stroke-width="2.2" opacity=".72"/>' +
+    '<path d="M -15 -7 L -9 -12 L 13 -10 L 15 6 L 5 11 L -15 7 Z" fill="#C58B51" stroke="#6F492B" stroke-width="1.8" stroke-linejoin="round"/>' +
+    '<path d="M -9 -12 L -7 3 L 15 6 M -7 3 L 5 11" fill="none" stroke="#E5BB83" stroke-width="1.7"/>' +
+    '<path d="M -2 -11 L 1 9" stroke="#8D5E35" stroke-width="2.4" opacity=".72"/>' +
     '</g>';
 }
 function basketSvg(p,scene) {

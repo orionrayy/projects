@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { ACTIVITY_NAMES, evaluateActivity } from "../src/activity-motion.mjs";
 import { renderSvgFrame } from "../scripts/render-preview.mjs";
+import { buildActivityManifest } from "../scripts/render-activity-previews.mjs";
 
 const source = JSON.parse(fs.readFileSync(new URL("../scenes/locomotion-free.json", import.meta.url), "utf8"));
 const scene = { ...source, fps: 24, duration_frames: 72 };
@@ -96,6 +97,19 @@ test("sit-to-stand includes a stable chair behind the character", () => {
   assert.ok(pose.activityState.chair.seatY < pose.activityState.chair.floorY);
   const svg = renderSvgFrame(scene, 0, "free", "sit-to-stand");
   assert.ok(svg.includes('data-environment="chair"'));
+});
+
+test("activity manifest records semantic props and interaction continuity", () => {
+  const manifest = buildActivityManifest(scene);
+  assert.equal(manifest.schemaVersion, "1.1.0");
+  const pickup = manifest.activities.find(item => item.id === "pick-up");
+  const sit = manifest.activities.find(item => item.id === "sit-to-stand");
+  assert.equal(pickup.pickupObjectRendered, true);
+  assert.equal(pickup.pickupObjectHeldAtEnd, true);
+  assert.ok(pickup.maxPickupItemStepPx < 15);
+  assert.ok(pickup.maxPickupItemContactErrorPx < 1e-8);
+  assert.equal(sit.chairRendered, true);
+  assert.equal(manifest.humanFullSpeedAcceptance, "pending");
 });
 
 test("SVG renderer tags and labels every activity preview", () => {
