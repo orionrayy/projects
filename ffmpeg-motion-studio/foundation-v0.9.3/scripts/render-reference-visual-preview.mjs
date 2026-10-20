@@ -44,6 +44,9 @@ const GAIT_SCENE = {
   duration_frames: FRAME_COUNT,
   motion: {
     ...baseScene.motion,
+    cycle_seconds: 1.33,
+    screen_stride_scale: 0.64,
+    root_y: 415,
     start_ramp_seconds: 0.48,
     stop_ramp_seconds: 2.8
   }
@@ -296,6 +299,48 @@ export function renderReferenceVisualFrame(frameIndex) {
   svg += '</svg>';
   return svg;
 }
+function summarizePortraitGait() {
+  let maxKneeStepPx = 0;
+  let maxAnkleClampErrorPx = 0;
+  let maxBoneLengthErrorPx = 0;
+  let maxStanceFootDriftPerFramePx = 0;
+  let minStanceKneeAngleDegrees = Infinity;
+  let previous = null;
+  for (let frame = 0; frame < FRAME_COUNT; frame++) {
+    const pose = evaluateLocomotion(GAIT_SCENE, frame, 'free');
+    maxAnkleClampErrorPx = Math.max(maxAnkleClampErrorPx, pose.diagnostics.ankleClampErrorPx);
+    maxBoneLengthErrorPx = Math.max(maxBoneLengthErrorPx, pose.diagnostics.boneLengthErrorPx);
+    for (const [foot, leg] of [[pose.leftFoot, pose.leftLeg], [pose.rightFoot, pose.rightLeg]]) {
+      if (foot.inStance) minStanceKneeAngleDegrees = Math.min(minStanceKneeAngleDegrees, leg.jointAngleDegrees);
+    }
+    if (previous) {
+      for (const [side, footKey, legKey] of [
+        ['left', 'leftFoot', 'leftLeg'],
+        ['right', 'rightFoot', 'rightLeg']
+      ]) {
+        const oldFoot = previous[footKey], newFoot = pose[footKey];
+        if (oldFoot.inStance && newFoot.inStance) {
+          maxStanceFootDriftPerFramePx = Math.max(maxStanceFootDriftPerFramePx,
+            Math.hypot(newFoot.x - oldFoot.x, newFoot.y - oldFoot.y));
+        }
+        const oldKnee = previous[legKey].knee, newKnee = pose[legKey].knee;
+        maxKneeStepPx = Math.max(maxKneeStepPx, Math.hypot(newKnee.x - oldKnee.x, newKnee.y - oldKnee.y));
+      }
+    }
+    previous = pose;
+  }
+  return {
+    effectiveStridePx: GAIT_SCENE.motion.stride_length_px * GAIT_SCENE.motion.screen_stride_scale,
+    gaitCycleSeconds: GAIT_SCENE.motion.cycle_seconds,
+    cadenceStepsPerMinute: 120 / GAIT_SCENE.motion.cycle_seconds,
+    maxKneeStepPx,
+    minStanceKneeAngleDegrees,
+    maxAnkleClampErrorPx,
+    maxBoneLengthErrorPx,
+    maxStanceFootDriftPerFramePx
+  };
+}
+
 export function summarizeReferenceVisualSequence() {
   return {
     width: W, height: H, fps: FPS, durationSeconds: DURATION, frameCount: FRAME_COUNT,
@@ -306,6 +351,7 @@ export function summarizeReferenceVisualSequence() {
     cameraMode: 'tracking camera with world-space scene parallax',
     motionDesign: ['hook-first typography', 'meaningful camera tracking', 'single prop alert pulse', 'staggered kinetic type', 'motion settles at end', 'stacked cause-evidence reveal'],
     secondaryMotionPolicy: 'reduced and phase-coupled; gait remains the primary motion',
+    portraitGaitDiagnostics: summarizePortraitGait(),
     humanFullSpeedAcceptance: 'pending',
     audioIncluded: false,
     browserFfmpegParity: 'not_verified'
