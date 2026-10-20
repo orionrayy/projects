@@ -3,8 +3,8 @@
 This candidate builds on v0.8.8's narrow side-view projection and calibrates the lower-limb chain to the rendered hip-to-ankle span.
 
 ## Changes
-- Reduce leg chain length from 160px to 158px (upper leg 78px, lower leg 80px) to make the stance leg less crouched without approaching the IK reach singularity.
-- Keep pelvis bob at 0.5px and root baseline at y=410.
+- Reduce leg chain length from 160px to 158px (upper leg 79px, lower leg 81px) to make the stance leg less crouched without approaching the IK reach singularity.
+- Keep pelvis bob at 0.5px and root baseline at y=409.
 - Set the full gait cycle to 1.14s (about 105 steps/minute at two steps per cycle) to retain temporal headroom.
 - Add an explicit heel-strike assertion for knee internal angle >155°, while preserving stance/swing, contact, bone-length, foot-drift, side-view projection and <8 px/frame² acceleration gates.
 
