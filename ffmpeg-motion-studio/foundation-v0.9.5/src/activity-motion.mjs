@@ -175,7 +175,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // This is an explicit 2D weight-shift/foot-pivot cue, not a true 3D turn.
     lean = 0.18 * turnPulse;
     headTurn = -0.38 * turnPulse;
-    forwardShift = 15 * turnPulse;
+    // Turning in place should rotate the upper body over planted support, not drag the pelvis beyond leg reach.
+    forwardShift = 3 * turnPulse;
     armCounterBalance = Math.abs(turnPulse);
   }
 
