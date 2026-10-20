@@ -56,7 +56,7 @@ function handSvg(arm,scene,mode,near,activity,pose) {
   const boundedAngle=(angle,reference,limit)=>reference+Math.max(-limit,Math.min(limit,angleDelta(angle,reference)));
   const gripWeight=state.pickupGripWeight||0;
   let handPose=mode==="carry"?"grip":"relaxed";
-  if(activity==="reach"&&near) handPose=state.reachTarget?.active?"press":"point";
+  if(activity==="reach"&&near) handPose=state.reachTarget?.active?"press":((state.reachWeight||0)>=0.22?"point":"relaxed");
   else if(activity==="pick-up"&&near) handPose=gripWeight>=0.30?"grip":((state.pickupReachWeight||0)>=0.22?"point":"relaxed");
   let preferredAngle=armAngle,angleLimit=0.45,handOrientation="forearm-following";
   if(handPose==="relaxed") {
@@ -72,7 +72,7 @@ function handSvg(arm,scene,mode,near,activity,pose) {
       const anchor=state.pickupItem.graspAnchor||state.pickupItem;
       target={x:anchor.x,y:anchor.y};
     }
-    preferredAngle=target?Math.atan2(target.y-arm.shoulder.y,target.x-arm.shoulder.x):shoulderAngle;
+    preferredAngle=target?Math.atan2(target.y-w.y,target.x-w.x):armAngle;
     angleLimit=0.40;
     handOrientation="target-directed";
   } else {
