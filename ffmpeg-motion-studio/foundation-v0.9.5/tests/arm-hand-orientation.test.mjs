@@ -79,8 +79,11 @@ test("relaxed hands stay gravity-directed and interaction hands align to their t
       assert.equal(hand.orientation,"target-directed");
       const targetAngle=Math.atan2(p.activityState.reachTarget.y-p.nearArm.wrist.y,
         p.activityState.reachTarget.x-p.nearArm.wrist.x);
-      assert.ok(Math.abs(angleDelta(radians(hand.angle),targetAngle))<=0.42,
-        "reach hand must point from the wrist toward the button at frame "+frame);
+      const angularError=Math.abs(angleDelta(radians(hand.angle),targetAngle));
+      const allowedError=Math.abs(angleDelta(Math.PI/2,targetAngle))*(1-weight)+0.015;
+      assert.ok(angularError<=allowedError,
+        "reach hand rotation should progressively align with the button at frame "+frame+
+        " (error="+angularError.toFixed(3)+", allowed="+allowedError.toFixed(3)+")");
     }
     if(p.activityState.reachTarget.active) {
       const tip={x:p.nearArm.wrist.x+17*Math.cos(radians(hand.angle)),

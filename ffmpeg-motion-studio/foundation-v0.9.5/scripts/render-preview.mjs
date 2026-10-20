@@ -85,9 +85,23 @@ function handSvg(arm,scene,mode,near,activity,pose) {
     }
     angleLimit=0.78;
   }
-  const angle=boundedAngle(armAngle,preferredAngle,angleLimit);
+  let orientationBlend=1,angle;
+  if(handOrientation==="target-directed") {
+    // Rotate progressively from a gravity-down rest hand toward the interaction
+    // target. A direct snap to the target angle at the start of reaching looks robotic.
+    if(activity==="reach") orientationBlend=Math.max(0,Math.min(1,state.reachWeight||0));
+    else if(activity==="pick-up"&&handPose==="point") orientationBlend=Math.max(0,Math.min(1,state.pickupReachWeight||0));
+    const restAngle=Math.PI/2;
+    angle=restAngle+angleDelta(preferredAngle,restAngle)*orientationBlend;
+  } else if(handOrientation==="object-directed") {
+    // A grasp must present its fingers/palm to the carried prop, not retain a
+    // wrist-dependent clamp that can make the hand appear folded backwards.
+    angle=preferredAngle;
+  } else {
+    angle=boundedAngle(armAngle,preferredAngle,angleLimit);
+  }
   const handScale=near?1:0.94;
-  let s='<g data-anatomy="hand" data-hand-side="'+(near?"near":"far")+'" data-hand-pose="'+handPose+'" data-hand-orientation="'+handOrientation+'" data-hand-mirror="none" data-hand-angle-degrees="'+n(deg(angle))+'" data-grip="'+(handPose==="grip"?"grip":"relaxed")+'" transform="translate('+n(w.x)+' '+n(w.y)+') rotate('+n(deg(angle))+') scale('+handScale+' '+handScale+')" opacity="'+(near?1:0.88)+'">';
+  let s='<g data-anatomy="hand" data-hand-side="'+(near?"near":"far")+'" data-hand-pose="'+handPose+'" data-hand-orientation="'+handOrientation+'" data-hand-orientation-blend="'+n(orientationBlend)+'" data-hand-mirror="none" data-hand-angle-degrees="'+n(deg(angle))+'" data-grip="'+(handPose==="grip"?"grip":"relaxed")+'" transform="translate('+n(w.x)+' '+n(w.y)+') rotate('+n(deg(angle))+') scale('+handScale+' '+handScale+')" opacity="'+(near?1:0.88)+'">';
   if(handPose==="point"||handPose==="press") {
     const tip=handPose==="point"?23:17;
     s+='<path data-anatomy="palm" d="M -5 -3.8 Q -5 -7 -.5 -7.3 L 4.5 -6.4 Q 7 -5.7 7.8 -4.2 L '+(tip-2)+' -4.1 Q '+tip+' -4.1 '+tip+' -1.8 Q '+tip+' .1 '+(tip-2)+' .1 L 9 .1 Q 12 1.1 10.8 3.4 Q 10 5.5 7.1 4.7 L 3.8 3.4 Q 1.7 6.1 -.5 4.7 L -3 2.7 Q -6 1.4 -5 -3.8 Z" fill="'+c.skin+'" stroke="#7B5544" stroke-width="1.35" stroke-linejoin="round"/>';
