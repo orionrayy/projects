@@ -95,6 +95,10 @@ test("sit-to-stand includes a stable chair behind the character", () => {
   const pose = evaluateActivity(scene, 0, "sit-to-stand", "free");
   assert.ok(pose.activityState.chair, "chair context missing from sit-to-stand");
   assert.ok(pose.activityState.chair.seatY < pose.activityState.chair.floorY);
+  assert.ok(pose.diagnostics.seatContactErrorPx < 1, "initial pose should contact the chair seat");
+  const finalPose = evaluateActivity(scene, scene.duration_frames - 1, "sit-to-stand", "free");
+  assert.ok(finalPose.activityState.pelvisDropPx < 0.1, "final pose should be standing");
+  assert.ok(finalPose.diagnostics.seatContactErrorPx > 20, "final pose must clear the seat");
   const svg = renderSvgFrame(scene, 0, "free", "sit-to-stand");
   assert.ok(svg.includes('data-environment="chair"'));
 });
@@ -109,6 +113,9 @@ test("activity manifest records semantic props and interaction continuity", () =
   assert.ok(pickup.maxPickupItemStepPx < 15);
   assert.ok(pickup.maxPickupItemContactErrorPx < 1e-8);
   assert.equal(sit.chairRendered, true);
+  assert.ok(sit.initialSeatContactErrorPx < 1);
+  assert.ok(sit.finalSeatContactErrorPx > 20);
+  assert.equal(manifest.schemaVersion, "1.2.0");
   assert.equal(manifest.humanFullSpeedAcceptance, "pending");
 });
 

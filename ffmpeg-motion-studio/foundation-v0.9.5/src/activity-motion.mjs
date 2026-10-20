@@ -232,6 +232,11 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       ? Math.hypot(pose.activityState.pickupItem.x - (pose.nearArm.wrist.x + 18),
           pose.activityState.pickupItem.y - pose.nearArm.wrist.y)
       : 0,
+    // Pelvis-to-seat offset is an explicit semantic check, separate from IK.
+    // The intended seated pose places the pelvis center about 10px below the seat top.
+    seatContactErrorPx: pose.activityState.chair
+      ? Math.abs(pose.pelvis.y - (pose.activityState.chair.seatY + 10))
+      : null,
     groundPenetrationPx: Math.max(0, pose.leftFoot.y - scene.background.horizon_y, pose.rightFoot.y - scene.background.horizon_y),
     stance: { left: pose.leftFoot.inStance, right: pose.rightFoot.inStance },
     armMode, activity

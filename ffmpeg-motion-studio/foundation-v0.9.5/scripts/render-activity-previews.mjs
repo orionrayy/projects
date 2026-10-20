@@ -11,7 +11,8 @@ export function buildActivityManifest(scene) {
   for (const activity of ACTIVITY_NAMES) {
     let maxBoneErrorPx = 0, maxAnkleClampErrorPx = 0, maxArmClampErrorPx = 0, maxKneeStepPx = 0, maxStanceFootDriftPx = 0;
     let maxPelvisDropPx = 0, maxHeadTurnRadians = 0, maxTorsoLeanRadians = 0, maxReachDisplacementPx = 0;
-    let maxPickupItemStepPx = 0, maxPickupItemContactErrorPx = 0, previous = null;
+    let maxPickupItemStepPx = 0, maxPickupItemContactErrorPx = 0;
+    let initialSeatContactErrorPx = null, finalSeatContactErrorPx = null, previous = null;
     for (let frame = 0; frame < scene.duration_frames; frame++) {
       const pose = evaluateActivity(scene, frame, activity, "free");
       maxBoneErrorPx = Math.max(maxBoneErrorPx, pose.diagnostics.boneLengthErrorPx);
@@ -21,6 +22,8 @@ export function buildActivityManifest(scene) {
       maxHeadTurnRadians = Math.max(maxHeadTurnRadians, Math.abs(pose.activityState.headTurnRadians));
       maxTorsoLeanRadians = Math.max(maxTorsoLeanRadians, Math.abs(pose.activityState.torsoLeanRadians));
       maxReachDisplacementPx = Math.max(maxReachDisplacementPx, pose.activityState.reachDisplacementPx);
+      if (frame === 0) initialSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
+      if (frame === scene.duration_frames - 1) finalSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
       if (pose.activityState.pickupItem?.held) {
         maxPickupItemContactErrorPx = Math.max(maxPickupItemContactErrorPx,
           pose.diagnostics.pickupItemContactErrorPx || 0);
@@ -49,11 +52,13 @@ export function buildActivityManifest(scene) {
       maxPickupItemStepPx: activity === "pick-up" ? maxPickupItemStepPx : null,
       maxPickupItemContactErrorPx: activity === "pick-up" ? maxPickupItemContactErrorPx : null,
       chairRendered: activity === "sit-to-stand" && renderSvgFrame(scene, 0, "free", activity).includes('data-environment="chair"'),
+      initialSeatContactErrorPx: activity === "sit-to-stand" ? initialSeatContactErrorPx : null,
+      finalSeatContactErrorPx: activity === "sit-to-stand" ? finalSeatContactErrorPx : null,
       humanVisualAcceptance: "pending"
     });
   }
   return {
-    schemaVersion: "1.1.0", sceneId: "motion-studio-activity-suite-v0.9.5",
+    schemaVersion: "1.2.0", sceneId: "motion-studio-activity-suite-v0.9.5",
     renderer: "procedural SVG + FFmpeg H.264", canvas: scene.canvas, fps: scene.fps,
     activityCount: activities.length, activities,
     limitation: "2D side-profile action proof; turn-in-place is torso/head counter-rotation, not full 3D yaw",
