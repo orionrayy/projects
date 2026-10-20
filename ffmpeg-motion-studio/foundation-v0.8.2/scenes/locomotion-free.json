@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "scene_id": "locomotion-lab-free-arms-001",
+  "scene_version": "0.8.2",
+  "title": "Naturalized stance and free-arm anatomy",
+  "fps": 24,
+  "duration_frames": 192,
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "background": {
+    "color": "#F4F2E8",
+    "floor": "#E8E3D4",
+    "horizon_y": 570
+  },
+  "motion": {
+    "cycle_seconds": 1.08,
+    "stride_length_px": 78,
+    "stance_fraction": 0.6,
+    "swing_lift_px": 30,
+    "pelvis_bob_px": 2.4,
+    "torso_sway_radians": 0.045,
+    "basket_vertical_response_px": 0.8,
+    "start_x": 175,
+    "root_y": 418,
+    "basket_offset_x_px": 68,
+    "basket_center_offset_y_px": -6,
+    "arm_mode": "free",
+    "free_arm_swing_px": 22,
+    "free_arm_drop_px": 64,
+    "heel_toe_roll_radians": 0.18,
+    "screen_stride_scale": 0.62
+  },
+  "character": {
+    "upper_leg_px": 77,
+    "lower_leg_px": 77,
+    "upper_arm_px": 54,
+    "forearm_px": 53,
+    "head_radius_px": 29,
+    "skin": "#E6B08A",
+    "hair": "#253127",
+    "shirt": "#347B9E",
+    "shirt_shadow": "#285C78",
+    "pants": "#35465F",
+    "shoe": "#293243",
+    "knee_forward_bias_px": 22,
+    "knee_up_bias_px": 19,
+    "near_leg_projection_px": 0,
+    "leg_depth_projection_px": 20,
+    "shoulder_half_width_px": 34,
+    "waist_half_width_px": 18,
+    "hip_half_width_px": 23,
+    "head_drop_px": 8
+  },
+  "prop": {
+    "basket_width_px": 64,
+    "basket_height_px": 42,
+    "basket_color": "#E9923A",
+    "handle_color": "#8A542C",
+    "handle_spacing_px": 32
+  },
+  "acceptance": {
+    "max_bone_length_error_px": 0.02,
+    "max_stance_foot_drift_px": 0.02,
+    "max_basket_contact_error_px": 0.02,
+    "max_ground_penetration_px": 0.02,
+    "max_arm_elbow_step_px": 12,
+    "max_knee_step_px": 18,
+    "min_head_counter_rotation_correlation": 0.25,
+    "min_left_right_gait_separation": 0.45,
+    "max_contact_error_px": 2,
+    "max_root_step_px": 4,
+    "max_stance_knee_angle_degrees": 145,
+    "max_swing_knee_angle_degrees": 125
+  }
+}
