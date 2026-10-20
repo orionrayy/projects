@@ -19,7 +19,7 @@
     "stride_length_px": 78,
     "stance_fraction": 0.6,
     "swing_lift_px": 24,
-    "pelvis_bob_px": 1.2,
+    "pelvis_bob_px": 0.5,
     "torso_sway_radians": 0.095,
     "basket_vertical_response_px": 1.8,
     "start_x": 175,

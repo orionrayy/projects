@@ -10,7 +10,7 @@ Status: engineering candidate; hosted CI and full-speed visual review required.
 ## Changes
 - Reduce per-leg screen-axis depth projection from 28px to 6px, preventing a false 56px near/far spread in a side-view render.
 - Preserve each foot's fore/aft phase trajectory and the near/far draw-order/color treatment.
-- Reduce pelvis bob to 1.2px and move the pelvis baseline to y=411 to reduce repeated near-singular full extension while preserving a longer stance line than the v0.8.6 baseline.
+- Reduce pelvis bob to 0.5px and move the pelvis baseline to y=411 to reduce repeated near-singular full extension while preserving a longer stance line than the v0.8.6 baseline.
 - Keep the phase-aware knee pole, organic contours, shoe geometry, and contact/ankle/bone-length gates.
 - Add explicit side-view attachment spacing tests and retain the temporal acceleration threshold below 8px/frame².
 
