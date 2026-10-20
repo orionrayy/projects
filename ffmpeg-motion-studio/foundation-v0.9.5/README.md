@@ -56,3 +56,10 @@ This revision makes hand pose semantic (relaxed, point, press, grip), constrains
 The sit-to-stand action should not be judged only by a smooth pelvis trajectory. A 2023 systematic review reports that trunk flexion/momentum, vertical momentum, and postural stabilization are important to sit-to-stand performance and balance regulation ([Sadeh et al., Clinical Biomechanics, 2023](https://pubmed.ncbi.nlm.nih.gov/37639862/)). Animation review also needs clear anticipation, staging, timing, arcs and follow-through rather than mechanically smooth interpolation ([Microsoft Learn: Animation Principles](https://learn.microsoft.com/en-us/windows/win32/lwef/animation-principles); [Disney Animation: Animation Process](https://www.disneyanimation.com/process/animation/)).
 
 Acceptance remains gated by reviewing rendered full-speed clips and their complete frame sheets. Geometry tests are necessary but cannot stand in for human visual acceptance. Audio integration, browser-to-FFmpeg raster parity and long-video integration remain unverified.
+
+
+## Follow-up audit — joint continuity and limb silhouette
+
+The first post-orientation render was checked at enlarged crop scale as well as through the full-frame sheets. The remaining visible defect was not bone length: elbows and knees were being drawn as two outlined segments that met at undersized, screen-aligned caps. That made the limbs read as hinged tubes, especially during the reach and pickup poses.
+
+This revision adds integrated elbow/knee caps sized from the current rig widths, aligns elbow crease marks to the forearm-normal direction rather than a fixed horizontal screen axis, and reduces arm widths relative to the torso. These are visual-continuity changes only; they do not claim 3D anatomy. New regression gates verify that the cap sizes are proportionate to the rig and that crease geometry is present for the tested action families. The six full-speed clips and all-frame contact sheets must be reviewed again before visual acceptance.

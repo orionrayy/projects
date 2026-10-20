@@ -38,7 +38,8 @@ function legSvg(leg,foot,scene,near) {
   const thigh=near?(c.thigh_width_px||27):(c.far_thigh_width_px||18),knee=near?(c.knee_width_px||19):(c.far_knee_width_px||13),ankle=near?(c.ankle_width_px||12):(c.far_ankle_width_px||9);
   let s='<g data-anatomy="leg-chain" data-leg-depth="'+(near?"near":"far")+'">';
   s+=organicLimb(leg.hip,leg.knee,thigh,knee,color,"#263347",{midBulgeFactor:1.1})+organicLimb(leg.knee,leg.ankle,knee,ankle,color,"#263347",{midBulgeFactor:1.11});
-  s+='<ellipse data-anatomy="knee" cx="'+n(leg.knee.x)+'" cy="'+n(leg.knee.y)+'" rx="'+n(knee*.16)+'" ry="'+n(knee*.19)+'" fill="'+color+'" opacity=".86"/>';
+  const kneeCapRx=Math.max(3.8,knee*.24),kneeCapRy=Math.max(4.2,knee*.28);
+  s+='<ellipse data-anatomy="knee" data-joint-cap="integrated" data-cap-width-ratio="'+n(kneeCapRx/knee)+'" cx="'+n(leg.knee.x)+'" cy="'+n(leg.knee.y)+'" rx="'+n(kneeCapRx)+'" ry="'+n(kneeCapRy)+'" fill="'+color+'" stroke="#263347" stroke-width="1.35" opacity=".97"/>';
   s+='<path data-anatomy="knee-fold" d="M '+n(leg.knee.x-knee*.14)+' '+n(leg.knee.y+1)+' Q '+n(leg.knee.x)+' '+n(leg.knee.y+2.8)+' '+n(leg.knee.x+knee*.14)+' '+n(leg.knee.y+1)+'" fill="none" stroke="#222E3E" stroke-width="1" stroke-linecap="round" opacity=".48"/>';
   s+='<path d="M '+n(leg.knee.x-knee*.09)+' '+n(leg.knee.y-2)+' Q '+n(leg.knee.x)+' '+n(leg.knee.y-2.7)+' '+n(leg.knee.x+knee*.08)+' '+n(leg.knee.y-1.9)+'" fill="none" stroke="#D5DCE3" stroke-width=".8" stroke-linecap="round" opacity=".46"/>';
   s+='<path data-anatomy="ankle-cuff" d="M '+n(leg.ankle.x-ankle*.34)+' '+n(leg.ankle.y-4)+' Q '+n(leg.ankle.x)+' '+n(leg.ankle.y-1)+' '+n(leg.ankle.x+ankle*.34)+' '+n(leg.ankle.y-4)+'" fill="none" stroke="#1F2C3B" stroke-width="1.1" stroke-linecap="round" opacity=".7"/>';
@@ -127,8 +128,19 @@ function armSvg(arm,scene,sleeve,near,mode,activity,pose) {
   const cuff={x:arm.shoulder.x+dx*.78,y:arm.shoulder.y+dy*.78},half=(c.upper_arm_width_px||20)*.33;
   s+='<path data-anatomy="sleeve-cuff" d="M '+n(cuff.x+nx*half)+' '+n(cuff.y+ny*half)+' Q '+n(cuff.x)+' '+n(cuff.y)+' '+n(cuff.x-nx*half)+' '+n(cuff.y-ny*half)+'" fill="none" stroke="'+(c.shirt_shadow||"#285C78")+'" stroke-width="1.9" stroke-linecap="round"/>';
   s+=organicLimb(arm.elbow,arm.wrist,c.forearm_width_px||14,c.wrist_width_px||10,c.skin||"#E6B08A","#7B5544",{midBulgeFactor:1.12});
-  s+='<ellipse data-anatomy="elbow" cx="'+n(arm.elbow.x)+'" cy="'+n(arm.elbow.y)+'" rx="2.8" ry="3.1" fill="'+c.skin+'" opacity=".92"/>';
-  s+='<path data-anatomy="elbow-fold" d="M '+n(arm.elbow.x-2.6)+' '+n(arm.elbow.y+1.2)+' Q '+n(arm.elbow.x)+' '+n(arm.elbow.y+2.7)+' '+n(arm.elbow.x+2.6)+' '+n(arm.elbow.y+1.0)+'" fill="none" stroke="#925F49" stroke-width=".95" stroke-linecap="round" opacity=".56"/>';
+  const elbowCapRx=Math.max(5.1,(c.elbow_width_px||15)*0.43);
+  const elbowCapRy=Math.max(5.3,(c.elbow_width_px||15)*0.46);
+  s+='<ellipse data-anatomy="elbow" data-joint-cap="integrated" data-cap-width-ratio="'+n(elbowCapRx/(c.elbow_width_px||15))+'" cx="'+n(arm.elbow.x)+'" cy="'+n(arm.elbow.y)+'" rx="'+n(elbowCapRx)+'" ry="'+n(elbowCapRy)+'" fill="'+c.skin+'" stroke="#7B5544" stroke-width="1.5" opacity=".97"/>';
+  // The flexion crease follows the forearm-normal axis; a fixed screen-horizontal
+  // crease becomes detached or oddly aligned when the elbow angle changes.
+  const foreDx=arm.wrist.x-arm.elbow.x,foreDy=arm.wrist.y-arm.elbow.y;
+  const foreLength=Math.max(1e-6,Math.hypot(foreDx,foreDy));
+  const foreX=foreDx/foreLength,foreY=foreDy/foreLength;
+  const perpX=-foreY,perpY=foreX;
+  const foldA={x:arm.elbow.x+foreX*0.8-perpX*3.0,y:arm.elbow.y+foreY*0.8-perpY*3.0};
+  const foldM={x:arm.elbow.x+foreX*2.5,y:arm.elbow.y+foreY*2.5};
+  const foldB={x:arm.elbow.x+foreX*0.8+perpX*3.0,y:arm.elbow.y+foreY*0.8+perpY*3.0};
+  s+='<path data-anatomy="elbow-fold" data-joint-fold="forearm-normal" d="M '+n(foldA.x)+' '+n(foldA.y)+' Q '+n(foldM.x)+' '+n(foldM.y)+' '+n(foldB.x)+' '+n(foldB.y)+'" fill="none" stroke="#925F49" stroke-width="1.05" stroke-linecap="round" opacity=".65"/>';';
   return s+handSvg(arm,scene,mode,near,activity,pose);
 }
 function frontHeadSvg(p,scene) {
