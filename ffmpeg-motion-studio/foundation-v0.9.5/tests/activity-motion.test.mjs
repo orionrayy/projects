@@ -75,7 +75,9 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   }
 
   const look = summarize("look-around");
-  assert.ok(look.maxHead - look.minHead > 0.45, "profile head scan must contain two readable glances");
+  assert.ok(look.maxHead - look.minHead > 0.80, "profile head scan must contain two visually distinct tilt beats");
+  assert.ok(Math.max(...look.poses.map(p => p.activityState.headTurnRadians)) > 0.45);
+  assert.ok(Math.min(...look.poses.map(p => p.activityState.headTurnRadians)) < -0.45);
 
   const reach = summarize("reach");
   assert.ok(reach.maxReach >= 70);
@@ -90,7 +92,13 @@ test("each non-walk clip visibly changes its intended control channel", () => {
     Math.abs(t.y - targetPositions[0].y) < 1e-8),
     "reach target must be fixed in world space, not follow the moving shoulder");
   const reachSvg = renderSvgFrame(scene, 36, "free", "reach");
+  const reachIdleSvg = renderSvgFrame(scene, 0, "free", "reach");
   assert.ok(reachSvg.includes('data-environment="reach-target"'));
+  assert.ok(reachSvg.includes('data-button-state="pressed"'));
+  assert.ok(reachSvg.includes('data-button-feedback="press-ring"'));
+  assert.ok(reachIdleSvg.includes('data-button-state="idle"'));
+  assert.ok(!reachIdleSvg.includes('data-button-feedback="press-ring"'),
+    "button press feedback must only render while the wrist is in the target contact window");
 
   const pickup = summarize("pick-up");
   assert.ok(pickup.maxDrop >= 25, "pick-up must produce a readable crouch");
