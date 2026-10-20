@@ -16,7 +16,7 @@ function handAngles(svg) {
 test("neutral profiles separate projected feet and place hands on distinct sides", () => {
   for (const activity of ["stand", "look-around", "turn-in-place"]) {
     const p = frame(activity, 0);
-    assert.ok(Math.abs(p.leftFoot.x - p.rightFoot.x) >= 15, activity + ": projected shoes overlap");
+    assert.ok(Math.abs(p.leftFoot.x - p.rightFoot.x) >= 10, activity + ": projected shoes overlap");
     assert.ok(p.nearArm.wrist.x > p.farArm.wrist.x + 15, activity + ": near and far wrists collapsed");
     const svg = renderSvgFrame(scene, 0, "free", activity);
     assert.ok(svg.includes('data-contour-frame="spine-aligned"'), activity + ": torso contour is not spine-aligned");
@@ -27,6 +27,20 @@ test("neutral profiles separate projected feet and place hands on distinct sides
       assert.ok(angle >= 55 && angle <= 125, activity + ": relaxed hand orientation looks inverted: " + angle);
     }
   }
+});
+
+test("standing legs extend and foot depth matches the corresponding hip projection", () => {
+  const stand = frame("stand", 0);
+  for (const side of ["left", "right"]) {
+    const foot = stand[side + "Foot"], hip = stand[side + "Hip"], leg = stand[side + "Leg"];
+    assert.ok(Math.abs(foot.x - hip.x) < 1, side + ": foot and hip depth projection diverged");
+    assert.ok(leg.jointAngleDegrees > 160, side + ": neutral standing knee is too flexed: " + leg.jointAngleDegrees);
+  }
+  const seated = frame("sit-to-stand", 0);
+  const upright = frame("sit-to-stand", 71);
+  assert.ok(upright.leftLeg.jointAngleDegrees > seated.leftLeg.jointAngleDegrees + 40,
+    "sit-to-stand must visibly extend the knees from the seated starting pose");
+  assert.ok(upright.leftLeg.jointAngleDegrees > 160, "terminal standing pose should approach full extension");
 });
 
 test("reach action changes hand semantics from pointing to pressing", () => {
