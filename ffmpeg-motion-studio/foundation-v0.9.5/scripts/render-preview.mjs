@@ -126,7 +126,7 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   s+='<path d="M 0 '+n(floor)+' L '+scene.canvas.width+' '+n(floor)+' L '+scene.canvas.width+' '+scene.canvas.height+' L 0 '+scene.canvas.height+' Z" fill="'+scene.background.floor+'"/>';
   s+='<path d="M 0 '+n(floor)+' L '+scene.canvas.width+' '+n(floor)+'" stroke="#C7C0B0" stroke-width="2"/>';
   for(let i=0;i<11;i++){const x=i*145+22;s+='<path d="M '+x+' '+(floor+24)+' L '+(x+70)+' '+(floor+24)+'" stroke="#D8D2C3" stroke-width="1"/>';}
-  if(activity!=="walk") s+='<g data-activity-overlay="label"><text x="36" y="124" font-family="Inter,Arial,sans-serif" font-size="20" font-weight="750" fill="#203348" letter-spacing="1.1">'+(ACTIVITY_LABELS[activity]||activity.toUpperCase())+'</text></g>';
+  if(activity!=="walk") s+='<g data-activity-overlay="label"><text x="'+(scene.canvas.width-36)+'" y="48" text-anchor="end" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="750" fill="#203348" letter-spacing="0.7">'+(ACTIVITY_LABELS[activity]||activity.toUpperCase())+'</text></g>';
   s+='<g id="characterRig" data-rig-frame="'+frameIndex+'">';
   s+='<ellipse cx="'+n(p.pelvis.x+12)+'" cy="'+n(floor+5)+'" rx="63" ry="9" fill="#9C988B" opacity=".22"/>';
   s+=legSvg(p.rightLeg,p.rightFoot,scene,false)+legSvg(p.leftLeg,p.leftFoot,scene,true);
