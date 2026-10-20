@@ -690,21 +690,24 @@
     }
   },
   "latest_readiness_audit": {
-    "status": "draft_pr_open_latest_hosted_validation_pending",
+    "status": "latest_hosted_benchmark_in_progress",
     "repository": "orionrayy/ai-determinism-engine",
     "branch": "research/serevex-readiness-audit-2026-10-21",
     "pull_request": 173,
     "pull_request_url": "https://github.com/orionrayy/ai-determinism-engine/pull/173",
-    "head_sha": "978c1ec2b8c2bba97e83ffde4cb8f2c56e53c528",
+    "head_sha": "a908629f45a4401ae25d3534b6be197acf5dd0f9",
     "failure_closure_plan": "projects/aurum-intelligence/SEREVEX_FAILURE_CLOSURE_PLAN_2026-10-21.md",
-    "hosted_workflow_run_id": 39476729569,
-    "hosted_workflow_url": "https://github.com/orionrayy/ai-determinism-engine/actions/runs/39476729569",
+    "hosted_workflow_run_id": 39477177824,
+    "hosted_workflow_url": "https://github.com/orionrayy/ai-determinism-engine/actions/runs/39477177824",
     "readiness_audit_regression_tests": 15,
     "validated_claims": {
-      "historical_initial_audit_suite": "PASS in earlier workflow run #39474246762 before latest hardening",
-      "latest_full_benchmark": "PENDING",
+      "historical_initial_audit_suite": "PASS in run #39474246762 before latest hardening",
+      "latest_workflow_setup": "PASS",
+      "temporal_calibration_contracts": "240/240 synthetic scenarios PASS",
+      "latest_full_unit_suite": "IN_PROGRESS",
+      "latest_full_benchmark": "IN_PROGRESS",
       "latest_artifact_upload": "PENDING",
-      "latest_audit_json": "PENDING"
+      "latest_readiness_json": "PENDING"
     },
     "model_selection": {
       "selected_development_candidate": "4.9b",
