@@ -16,14 +16,16 @@ function sceneFrom(src = base) {
       hip_half_width_px: 23,
       upper_arm_px: 54,
       forearm_px: 53,
-      upper_leg_px: 77,
-      lower_leg_px: 77,
+      upper_leg_px: 74,
+      lower_leg_px: 74,
       head_radius_px: 29,
       head_drop_px: 8
     }
   };
 }
 const d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+const orient = (a, b, c) => (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x);
+const properCross = (a,b,c,d) => orient(a,b,c)*orient(a,b,d)<-1e-6 && orient(c,d,a)*orient(c,d,b)<-1e-6;
 
 test("tapered capsules reject invalid input and form rounded, tapered paths", () => {
   const path = taperedCapsulePath({ x: 0, y: 0 }, { x: 0, y: 40 }, 10, 5);
@@ -122,4 +124,34 @@ test("head drop shortens exposed neck while keeping the head attached and finite
   assert.ok(Number.isFinite(p.neck.x) && Number.isFinite(p.neck.y));
   const svg = renderAnatomySvg(scene, p, "carry");
   assert.doesNotMatch(svg, /NaN|Infinity|undefined/);
+});
+
+test("opposite leg centerlines do not cross in any rendered frame", () => {
+  const scene = sceneFrom();
+  let checkedFrames = 0;
+  for (let i=0; i<scene.duration_frames; i++) {
+    const p=evaluateAnatomyPose(scene,i,"carry");
+    const left=[[p.leftLeg.hip,p.leftLeg.knee],[p.leftLeg.knee,p.leftLeg.ankle]];
+    const right=[[p.rightLeg.hip,p.rightLeg.knee],[p.rightLeg.knee,p.rightLeg.ankle]];
+    for (const a of left) for (const b of right) {
+      assert.equal(properCross(a[0],a[1],b[0],b[1]),false,
+        "leg centerline intersection at frame "+i);
+    }
+    checkedFrames++;
+  }
+  assert.equal(checkedFrames,scene.duration_frames);
+});
+
+test("free-arm centerlines do not cross one another during the full cycle", () => {
+  const scene=sceneFrom({...freeBase, character:{...freeBase.character,
+    anatomy_profile:"stylized-natural-v2", shoulder_half_width_px:34, waist_half_width_px:18,
+    hip_half_width_px:23, upper_leg_px:74, lower_leg_px:74, head_drop_px:8}});
+  for(let i=0;i<scene.duration_frames;i++){
+    const p=evaluateAnatomyPose(scene,i,"free");
+    const near=[[p.nearArm.shoulder,p.nearArm.elbow],[p.nearArm.elbow,p.nearArm.wrist]];
+    const far=[[p.farArm.shoulder,p.farArm.elbow],[p.farArm.elbow,p.farArm.wrist]];
+    for(const a of near) for(const b of far){
+      assert.equal(properCross(a[0],a[1],b[0],b[1]),false,"arm centerline intersection at frame "+i);
+    }
+  }
 });
