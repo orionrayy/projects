@@ -21,3 +21,14 @@ This candidate follows v0.9.2 after full-size preview inspection still showed a 
 ## Validation
 
 Run `npm test`. Hosted CI renders complete 1280×720, 24 fps carry and free-arm previews with contact sheets, metrics and SHA-256 checksums. Numerical gates are diagnostic only; continuous full-speed naturalness acceptance remains pending until both videos are watched at actual speed.
+
+
+## Reference-led visual-system prototype
+
+The v0.9.3 candidate now includes a separate, dependency-free 9:16 SVG visual lab based on high-level characteristics observed in the supplied eight-video reference set. It prototypes fixed title/caption safe zones, a dark monochrome environment, restrained red/gold accents, stable line-art props, object close-ups, rule cards, and connected evidence diagrams. It is not a clone of the reference footage and is not yet a full-length video editor.
+
+Run the visual preview from this directory with:
+
+    node scripts/render-reference-visual-preview.mjs .working/reference-visual
+
+The command writes 240 SVG frames (720×1280 at 30 fps over 8 seconds). CI rasterizes these frames, creates artifacts/reference-visual-style-preview.mp4, and uploads a contact sheet. The gait solver's geometric and temporal tests remain independent gates.

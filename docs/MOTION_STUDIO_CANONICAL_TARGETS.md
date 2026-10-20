@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.9.3 longer-stride phase-adaptive gait in `ffmpeg-motion-studio/foundation-v0.9.3/` on branch motion-studio-v0.9.1-damped-human-gait. v0.9.1 and v0.9.2 are retained as comparison baselines. Latest code CI passed on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 (push run 39368994640, PR run 39368999495); full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
+Current engineering candidate: Motion Studio v0.9.3 longer-stride phase-adaptive gait in `ffmpeg-motion-studio/foundation-v0.9.3/` on branch motion-studio-v0.9.1-damped-human-gait. v0.9.1 and v0.9.2 are retained as comparison baselines. Earlier CI success on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 is superseded by the latest-head checkpoint in section 14; full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -152,3 +152,16 @@ Research inputs:
 - Collins et al. (2009), dynamic arm swinging in human walking: https://pmc.ncbi.nlm.nih.gov/articles/PMC2817299/
 
 Validation: CI and full render must pass; continuous full-speed naturalness review remains independent. Do not call this human-like until visual acceptance clears.
+
+
+## 14. Reference-led visual review and gait-branch correction — 2026-10-20
+
+This checkpoint supersedes earlier claims about the latest v0.9.3 head. The uploaded reference set contains eight vertical H.264 videos (720×1280, 30 fps, approximately 157–331 seconds each). An initial evenly spaced contact-sheet inspection identified a consistent visual grammar; the video set has not been accepted as exhaustive full-speed human motion review.
+
+- Audit: MOTION_STUDIO_REFERENCE_VIDEO_AUDIT_2026-10-20.md.
+- The reference visual proof is a separate, dependency-free Node/SVG preview, rendered by CI to a 720×1280, 30 fps, 240-frame MP4 plus a contact sheet. It demonstrates four reusable shot families: room-wide staging, object detail, numbered rule card, and evidence/connection diagram.
+- Visual-system requirements now explicitly include composition-safe zones, fixed hierarchy, restrained alert accents, prop-driven action, camera/cut rhythm, typography legibility, and cross-shot continuity. This is a proof slice, not a finished NLE/editor or a full-length export.
+- The most recent v0.9.3 workflow before this change was run 39374481048 and failed two temporal assertions. The maximum knee step was 20.0466 px/frame and maximum joint acceleration was 17.7348 px/frame². The fixed-X knee-branch choice could swap geometric solutions as candidate ordering crossed.
+- The candidate solver now chooses the knee branch relative to the oriented hip-to-ankle normal, rather than sorting candidates by world-space X. This is intended to preserve one geometric side consistently; it must still pass the new all-frame continuity regression and hosted rendering gates before being called verified.
+- Required evidence: all source tests pass without relaxing thresholds; CI renders carry/free videos and the vertical visual proof; FFprobe confirms resolution, frame rate, frame count and duration; checksums are recorded; the resulting contact sheet and clips still need full-speed visual acceptance.
+- Still open: full-speed naturalness and action readability; broader speed/step-width/starting/stopping coverage; browser-vs-FFmpeg raster parity; audio and full editor/timeline subsystems. Successful CI is not production approval.

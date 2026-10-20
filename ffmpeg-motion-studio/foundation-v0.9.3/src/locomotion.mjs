@@ -88,10 +88,15 @@ export function solveTwoBoneIK(root, target, upperLength, lowerLength, poleTarge
   let joint;
   if (poleTarget && Number.isFinite(poleTarget.x) && Number.isFinite(poleTarget.y)) {
     if (poleTarget.preferForward === true) {
-      // Side-profile legs should keep the knee on the forward-facing IK branch.
-      // Nearest-point pole selection can cross its decision boundary at heel/toe-off
-      // and flip the knee by tens of pixels, producing a robotic snap.
-      joint = candidates[0].x >= candidates[1].x ? candidates[0] : candidates[1];
+      // Keep the knee on a stable, forward-facing side of the hip-to-ankle axis.
+      // Choosing by world-space X can swap branches when the two candidates cross
+      // in horizontal ordering, even though neither candidate is geometrically close.
+      // The oriented normal (sin(theta), -cos(theta)) gives a deterministic branch
+      // across all leg angles and preserves random-access frame evaluation.
+      const forwardNormalX = Math.sin(theta);
+      const forwardNormalY = -Math.cos(theta);
+      const forwardScore = p => (p.x - root.x) * forwardNormalX + (p.y - root.y) * forwardNormalY;
+      joint = forwardScore(candidates[0]) >= forwardScore(candidates[1]) ? candidates[0] : candidates[1];
     } else {
       const score = p => (p.x - poleTarget.x) ** 2 + (p.y - poleTarget.y) ** 2;
       joint = score(candidates[0]) <= score(candidates[1]) ? candidates[0] : candidates[1];
