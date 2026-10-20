@@ -167,6 +167,15 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   s+='<path d="M 0 '+n(floor)+' L '+scene.canvas.width+' '+n(floor)+'" stroke="#C7C0B0" stroke-width="2"/>';
   for(let i=0;i<11;i++){const x=i*145+22;s+='<path d="M '+x+' '+(floor+24)+' L '+(x+70)+' '+(floor+24)+'" stroke="#D8D2C3" stroke-width="1"/>';}
   if(activity!=="walk") s+='<g data-activity-overlay="label"><text x="'+(scene.canvas.width-36)+'" y="48" text-anchor="end" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="750" fill="#203348" letter-spacing="0.7">'+(ACTIVITY_LABELS[activity]||activity.toUpperCase())+'</text></g>';
+  // Activity proof clips use close action framing; keep the floor and HUD stable in screen space.
+  // Center the actor horizontally and anchor the zoom at the floor contact plane so planted feet
+  // remain visually grounded while the pose/prop interaction becomes readable at normal playback size.
+  if (activity !== "walk") {
+    const cameraScale = 1.5;
+    const translateX = scene.canvas.width * 0.42 - cameraScale * p.pelvis.x;
+    const translateY = floor * (1 - cameraScale);
+    s += '<g data-camera-framing="close-action" transform="translate('+n(translateX)+' '+n(translateY)+') scale('+cameraScale+')">';
+  }
   s += activityEnvironmentSvg(p, scene, activity);
   s+='<g id="characterRig" data-rig-frame="'+frameIndex+'">';
   s+='<ellipse cx="'+n(p.pelvis.x+12)+'" cy="'+n(floor+5)+'" rx="63" ry="9" fill="#9C988B" opacity=".22"/>';
@@ -193,7 +202,8 @@ export function renderSvgFrame(scene,frameIndex,armMode,activity="walk") {
   if(mode==="carry") s+=basketSvg(p,scene);
   s+=armSvg(p.nearArm,scene,"#3A82A3",true,mode);
   s+='</g><!--CHARACTER-RIG-END-->';
-  s+='<rect x="34" y="28" width="388" height="82" rx="14" fill="#FFFEFA" opacity=".92" stroke="#DAD5C7"/>';
+  if (activity !== "walk") s += '</g><!--ACTIVITY-CAMERA-END-->';
+  s+='<rect x="34" y="28" width="388" height="82" rx="14" fill="#FFFEFA" opacity=".92" stroke="#DAD5C7"/>
   s+='<text x="54" y="57" font-family="DejaVu Sans,sans-serif" font-size="18" font-weight="700" fill="#243345">MOTION STUDIO / v0.9.5</text>';
   s+='<text x="54" y="82" font-family="DejaVu Sans,sans-serif" font-size="14" fill="#526173">'+(mode==="carry"?"Carry interaction + hand contact":"Free-arm counter-swing")+'</text>';
   s+='<text x="54" y="99" font-family="DejaVu Sans,sans-serif" font-size="11" fill="#697687">FRAME '+String(frameIndex+1).padStart(3,"0")+' / '+scene.duration_frames+' TIME '+n(p.timeSeconds)+' s</text>';
