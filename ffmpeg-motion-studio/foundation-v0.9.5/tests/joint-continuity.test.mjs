@@ -13,7 +13,8 @@ function elementRecords(svg, tag, name) {
   return [...svg.matchAll(re)].map(m => {
     const attrs=m[0], get=k=>attrs.match(new RegExp(k+'=\\\"([^\\\"]+)\\\"'))?.[1];
     return {attrs, rx:Number(get("rx")), ry:Number(get("ry")), cap:get("data-joint-cap"),
-      capWidthRatio:Number(get("data-cap-width-ratio")), fold:get("data-joint-fold")};
+      capWidthRatio:Number(get("data-cap-width-ratio")), capHeightRatio:Number(get("data-cap-height-ratio")),
+      fold:get("data-joint-fold")};
   });
 }
 function allSvgFrames(scene, mode, activity) {
@@ -48,9 +49,10 @@ test("knees have integrated caps that hide the sharp segment junction without ov
     assert.equal(caps.length,2);
     for(const cap of caps) {
       assert.equal(cap.cap,"integrated");
-      assert.ok(cap.rx>=scene.character.knee_width_px*0.22,"knee horizontal cap is too small");
-      assert.ok(cap.ry>=scene.character.knee_width_px*0.25,"knee vertical cap is too small");
-      assert.ok(cap.capWidthRatio<0.36,"knee cap should not become a spherical bulge");
+      assert.ok(cap.capWidthRatio>=0.22,"knee horizontal cap is too small relative to its own near/far leg width");
+      assert.ok(cap.capHeightRatio>=0.27,"knee vertical cap is too small relative to its own near/far leg width");
+      assert.ok(cap.capWidthRatio<0.36 && cap.capHeightRatio<0.36,
+        "knee cap should blend the segment seam without becoming a spherical bulge");
     }
   }
 });

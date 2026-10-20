@@ -39,7 +39,7 @@ function legSvg(leg,foot,scene,near) {
   let s='<g data-anatomy="leg-chain" data-leg-depth="'+(near?"near":"far")+'">';
   s+=organicLimb(leg.hip,leg.knee,thigh,knee,color,"#263347",{midBulgeFactor:1.1})+organicLimb(leg.knee,leg.ankle,knee,ankle,color,"#263347",{midBulgeFactor:1.11});
   const kneeCapRx=Math.max(3.8,knee*.24),kneeCapRy=Math.max(4.2,knee*.28);
-  s+='<ellipse data-anatomy="knee" data-joint-cap="integrated" data-cap-width-ratio="'+n(kneeCapRx/knee)+'" cx="'+n(leg.knee.x)+'" cy="'+n(leg.knee.y)+'" rx="'+n(kneeCapRx)+'" ry="'+n(kneeCapRy)+'" fill="'+color+'" stroke="#263347" stroke-width="1.35" opacity=".97"/>';
+  s+='<ellipse data-anatomy="knee" data-joint-cap="integrated" data-cap-width-ratio="'+n(kneeCapRx/knee)+'" data-cap-height-ratio="'+n(kneeCapRy/knee)+'" cx="'+n(leg.knee.x)+'" cy="'+n(leg.knee.y)+'" rx="'+n(kneeCapRx)+'" ry="'+n(kneeCapRy)+'" fill="'+color+'" stroke="#263347" stroke-width="1.35" opacity=".97"/>';
   s+='<path data-anatomy="knee-fold" d="M '+n(leg.knee.x-knee*.14)+' '+n(leg.knee.y+1)+' Q '+n(leg.knee.x)+' '+n(leg.knee.y+2.8)+' '+n(leg.knee.x+knee*.14)+' '+n(leg.knee.y+1)+'" fill="none" stroke="#222E3E" stroke-width="1" stroke-linecap="round" opacity=".48"/>';
   s+='<path d="M '+n(leg.knee.x-knee*.09)+' '+n(leg.knee.y-2)+' Q '+n(leg.knee.x)+' '+n(leg.knee.y-2.7)+' '+n(leg.knee.x+knee*.08)+' '+n(leg.knee.y-1.9)+'" fill="none" stroke="#D5DCE3" stroke-width=".8" stroke-linecap="round" opacity=".46"/>';
   s+='<path data-anatomy="ankle-cuff" d="M '+n(leg.ankle.x-ankle*.34)+' '+n(leg.ankle.y-4)+' Q '+n(leg.ankle.x)+' '+n(leg.ankle.y-1)+' '+n(leg.ankle.x+ankle*.34)+' '+n(leg.ankle.y-4)+'" fill="none" stroke="#1F2C3B" stroke-width="1.1" stroke-linecap="round" opacity=".7"/>';
