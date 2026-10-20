@@ -109,7 +109,7 @@ test("stance knees stay extended while swing knees visibly flex", () => {
   }
   assert.ok(stanceSamples > 100, "stance coverage must span the full cycle");
   assert.ok(swingSamples >= 12, "peak-swing coverage must be sampled");
-  assert.ok(stanceMinimum >= scene.acceptance.max_stance_knee_angle_degrees,
+  assert.ok(stanceMinimum >= scene.acceptance.min_stance_knee_angle_degrees,
     "stance must be near extension, observed minimum " + stanceMinimum.toFixed(2));
   assert.ok(swingMaximumAtPeak <= scene.acceptance.max_swing_knee_angle_degrees,
     "swing must flex during toe clearance, observed maximum " + swingMaximumAtPeak.toFixed(2));
