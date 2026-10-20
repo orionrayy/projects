@@ -40,6 +40,7 @@ test('hook, character walk, object impact, kinetic type and evidence all render 
     assert.match(svg, /width="720" height="1280"/);
     assert.ok(svg.includes('data-visual-shot="' + shot + '"'), 'missing shot: ' + shot);
     assert.ok(svg.includes(content), 'missing visible content: ' + content);
+    assert.equal((svg.match(/data-safe-zone="caption"/g) || []).length, 1, 'each frame should render one caption track only');
     assert.doesNotMatch(svg, /\b(?:NaN|Infinity|undefined)\b/);
     assert.equal(svg, renderReferenceVisualFrame(frameIndex), 'random-access frame should be deterministic');
   }

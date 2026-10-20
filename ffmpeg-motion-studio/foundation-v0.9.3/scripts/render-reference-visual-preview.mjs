@@ -185,7 +185,6 @@ function drawDeviceImpact(seconds) {
   s += rect(86, 805, 548, 72, 8, C.panel, '#3E4857', 1.5);
   s += text(360, 836, 'STATUS PERANGKAT', 14, C.muted, 'middle', 650, 'letter-spacing="2"');
   s += text(360, 864, 'MENDENGARKAN', 23, C.white, 'middle', 850, 'letter-spacing="1.2"');
-  s += drawCaption('SATU PETUNJUK KECIL.', 'Perhatikan indikatornya, bukan efeknya.', 0.55 + 0.45 * smoothstep(u));
   return s;
 }
 function drawKineticRule(seconds) {
@@ -209,7 +208,6 @@ function drawKineticRule(seconds) {
   s += rect(101, 677, 518, 5, 2, '#333D4A', '#333D4A', 0);
   s += rect(101, 677, 518 * smoothstep((u - 0.22) / 0.68), 5, 2, C.red, C.red, 0);
   s += text(360, 720, 'TENANGKAN VISUAL. TEGASKAN PESAN.', 13, C.muted, 'middle', 650, 'letter-spacing="0.7"');
-  s += drawCaption('JANGAN JAWAB DIA.', 'Teks bergerak hanya saat maknanya berubah.', smoothstep((u - 0.08) / 0.45));
   return s;
 }
 function drawEvidence(seconds) {
@@ -250,7 +248,6 @@ function drawEvidence(seconds) {
   s += text(138, 894, 'KONTEKS', 13, C.muted, 'start', 750, 'letter-spacing="0.9"');
   s += text(360, 894, 'SUMBER', 13, C.muted, 'middle', 750, 'letter-spacing="0.9"');
   s += text(670, 894, 'SINYAL', 13, C.muted, 'end', 750, 'letter-spacing="0.9"');
-  s += drawCaption('TUNJUKKAN SEBAB DAN BUKTI.', 'Satu gagasan utama untuk setiap shot.', smoothstep((u - 0.25) / 0.45));
   return s;
 }
 
@@ -290,7 +287,7 @@ export function renderReferenceVisualFrame(frameIndex) {
   let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Motion Studio kinetic portrait visual and gait proof">';
   svg += stage;
   svg += drawHeader(frameIndex, shot.index);
-  svg += drawCaption(caption[0], caption[1], 1);
+  svg += drawCaption(caption[0], caption[1], smoothstep(shot.localFrame / 8));
   if (shot.index > 0 && shot.localFrame < TRANSITION_FRAMES) {
     const transition = 1 - shot.localFrame / TRANSITION_FRAMES;
     const y = 180 + 750 * (shot.localFrame / (TRANSITION_FRAMES - 1));
