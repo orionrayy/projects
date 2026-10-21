@@ -287,7 +287,7 @@ test("sit-to-stand includes a stable chair behind the character", () => {
 
 test("activity manifest records semantic props and interaction continuity", () => {
   const manifest = buildActivityManifest(scene);
-  assert.equal(manifest.schemaVersion, "1.5.0");
+  assert.equal(manifest.schemaVersion, "1.6.0");
   assert.equal(manifest.cameraFraming.activityClips, "close-action-1.50x");
   assert.match(manifest.cameraFraming.floorAnchor, /screen-space horizon/);
   const pickup = manifest.activities.find(item => item.id === "pick-up");
