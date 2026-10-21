@@ -192,7 +192,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // Let the torso/weight shift anticipate the reach before the wrist commits.
     // This separates intention (small backward preload) from the forward action.
     reachAnticipationWeight = keyCurve(u, [[0,0],[0.07,0],[0.12,0.88],[0.16,1],[0.20,0.25],[0.24,0],[1,0]]);
-    reachWeight = keyCurve(u, [[0,0],[0.13,0],[0.22,0.06],[0.34,0.46],[0.44,0.91],[0.50,1],[0.63,1],[0.76,0.62],[0.79,0.55],[0.82,0.42],[0.835,0.37],[0.85,0.32],[0.90,0.05],[0.95,0],[1,0]]);
+    reachWeight = keyCurve(u, [[0,0],[0.16,0],[0.23,0.12],[0.40,0.90],[0.46,1],[0.62,1],[0.75,0.62],[0.77,0.54],[0.79,0.46],[0.81,0.38],[0.83,0.30],[0.85,0.22],[0.87,0.14],[0.89,0.06],[0.91,0],[0.95,0],[1,0]]);
     lean = 0.105 * reachWeight - 0.035 * reachAnticipationWeight;
     forwardShift = 4.5 * reachWeight - 3.0 * reachAnticipationWeight;
     headTurn = 0.06 * reachWeight;
