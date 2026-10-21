@@ -13,6 +13,9 @@ export function buildActivityManifest(scene) {
     let maxPelvisDropPx = 0, maxHeadTurnRadians = 0, maxTorsoLeanRadians = 0, maxReachDisplacementPx = 0;
     let maxPickupItemStepPx = 0, maxPickupItemStepFrame = 0, maxPickupItemAccelerationPxPerFrame2 = 0;
     let maxPickupItemContactErrorPx = 0, maxReachTargetContactErrorPx = 0;
+    let maxNearArmTargetReachPx = 0, maxFarArmTargetReachPx = 0;
+    let pickupAnticipationFrame = null, pickupDescentFrame = null, pickupReachFrame = null;
+    let pickupGripFrame = null, pickupLiftFrame = null;
     const trackedPointNames = ["pelvis","chest","head","nearElbow","farElbow","nearWrist","farWrist","leftKnee","rightKnee"];
     const maxPoseStepByPointPx = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
     const maxPoseStepFrameByPoint = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
@@ -27,6 +30,10 @@ export function buildActivityManifest(scene) {
       maxBoneErrorPx = Math.max(maxBoneErrorPx, pose.diagnostics.boneLengthErrorPx);
       maxAnkleClampErrorPx = Math.max(maxAnkleClampErrorPx, pose.diagnostics.ankleClampErrorPx);
       maxArmClampErrorPx = Math.max(maxArmClampErrorPx, pose.diagnostics.armClampErrorPx);
+      maxNearArmTargetReachPx = Math.max(maxNearArmTargetReachPx,
+        Math.hypot(pose.nearArm.target.x - pose.nearArm.shoulder.x, pose.nearArm.target.y - pose.nearArm.shoulder.y));
+      maxFarArmTargetReachPx = Math.max(maxFarArmTargetReachPx,
+        Math.hypot(pose.farArm.target.x - pose.farArm.shoulder.x, pose.farArm.target.y - pose.farArm.shoulder.y));
       maxPelvisDropPx = Math.max(maxPelvisDropPx, pose.activityState.pelvisDropPx);
       maxHeadTurnRadians = Math.max(maxHeadTurnRadians, Math.abs(pose.activityState.headTurnRadians));
       maxTorsoLeanRadians = Math.max(maxTorsoLeanRadians, Math.abs(pose.activityState.torsoLeanRadians));
@@ -37,7 +44,16 @@ export function buildActivityManifest(scene) {
         finalSeatContactErrorPx = pose.diagnostics.seatContactErrorPx;
         finalPickupItemChestDistancePx = pose.diagnostics.pickupItemChestDistancePx;
       }
-      if (pose.activityState.pickupItem?.gripWeight >= 0.95) {
+      if (activity === "pick-up") {
+        if (pickupAnticipationFrame === null && pose.activityState.pickupAnticipationWeight > 0.8) pickupAnticipationFrame = frame;
+        if (pickupDescentFrame === null && pose.activityState.pelvisDropPx > 5) pickupDescentFrame = frame;
+        if (pickupReachFrame === null && pose.activityState.pickupReachWeight > 0.8) pickupReachFrame = frame;
+        if (pickupGripFrame === null && pose.activityState.pickupItem?.held) pickupGripFrame = frame;
+        if (pickupLiftFrame === null && pose.activityState.pickupLiftWeight > 0.1) pickupLiftFrame = frame;
+      }
+      // Count real attachment frames only; a nearly closed hand before attachment
+      // is not evidence of object-hand contact.
+      if (pose.activityState.pickupItem?.held && pose.activityState.pickupItem?.gripWeight >= 0.95) {
         const contactError = pose.diagnostics.pickupItemContactErrorPx ?? Infinity;
         pickupGripContactFrames++;
         maxPickupItemContactErrorPx = Math.max(maxPickupItemContactErrorPx, contactError);
@@ -112,6 +128,7 @@ export function buildActivityManifest(scene) {
       maxBoneErrorPx, maxAnkleClampErrorPx, maxArmClampErrorPx, maxKneeStepPx, maxKneeStepFrame, maxStanceFootDriftPx,
       maxPoseStepByPointPx, maxPoseStepFrameByPoint,
       maxJointAccelerationByPointPxPerFrame2, maxJointAccelerationFrameByPoint, maxJointAccelerationPxPerFrame2,
+      maxNearArmTargetReachPx, maxFarArmTargetReachPx,
       maxPickupItemAccelerationPxPerFrame2, maxPickupItemStepFrame,
       temporalMetricsFinite: [...Object.values(maxPoseStepByPointPx), ...Object.values(maxJointAccelerationByPointPxPerFrame2),
         maxJointAccelerationPxPerFrame2, maxPickupItemAccelerationPxPerFrame2].every(Number.isFinite),
@@ -123,6 +140,10 @@ export function buildActivityManifest(scene) {
       pickupObjectContactedWhileGripping: activity === "pick-up"
         ? pickupGripContactFrames >= 20 && !pickupGripContactViolation : null,
       pickupGripContactFrames: activity === "pick-up" ? pickupGripContactFrames : null,
+      pickupPhaseFrames: activity === "pick-up" ? {
+        anticipation: pickupAnticipationFrame, descent: pickupDescentFrame, reach: pickupReachFrame,
+        grip: pickupGripFrame, lift: pickupLiftFrame
+      } : null,
       finalPickupItemChestDistancePx: activity === "pick-up" ? finalPickupItemChestDistancePx : null,
       maxReachWeight: activity === "reach" ? maxReachWeight : null,
       reachReturnsToRest: activity === "reach" ? previous.activityState.reachWeight < 0.1 : null,
