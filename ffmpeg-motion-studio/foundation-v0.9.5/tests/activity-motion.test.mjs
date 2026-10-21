@@ -344,6 +344,43 @@ test("activity manifest records semantic props and interaction continuity", () =
   }
 });
 
+test("reach wrist follows a bounded world-space target trajectory independent of shoulder lean", () => {
+  const poses = Array.from({ length: scene.duration_frames }, (_, frame) =>
+    evaluateActivity(scene, frame, "reach", "free"));
+  const first = poses[0], peak = poses[36], last = poses.at(-1);
+  assert.equal(first.activityState.reachPathMode, "world-space-keyframe-trajectory");
+  assert.equal(peak.activityState.reachPathMode, "world-space-keyframe-trajectory");
+  assert.ok(first.activityState.reachWristTarget && peak.activityState.reachWristTarget,
+    "the desired world-space wrist path must be explicit in activity state");
+  assert.ok(Math.hypot(first.nearArm.target.x-first.activityState.reachWristTarget.x,
+    first.nearArm.target.y-first.activityState.reachWristTarget.y) < 1e-9,
+    "IK must consume the recorded path target, not reconstruct it from a shoulder-local weight");
+  assert.ok(Math.hypot(peak.activityState.reachWristTarget.x-(peak.activityState.reachTarget.x-17),
+    peak.activityState.reachWristTarget.y-peak.activityState.reachTarget.y) < 1e-8,
+    "the world-space wrist target must align the index fingertip with the fixed button at contact");
+  assert.ok(Math.hypot(last.activityState.reachWristTarget.x-first.activityState.reachWristTarget.x,
+    last.activityState.reachWristTarget.y-first.activityState.reachWristTarget.y) < 1e-8,
+    "the wrist path must return to the same rest target");
+  let maxTargetStep = 0, maxTargetAcceleration = 0, maxTargetJerk = 0;
+  for (let i=1; i<poses.length; i++) {
+    const p=poses[i-1].activityState.reachWristTarget, q=poses[i].activityState.reachWristTarget;
+    maxTargetStep = Math.max(maxTargetStep, Math.hypot(q.x-p.x,q.y-p.y));
+    if (i>=2) {
+      const a=poses[i-2].activityState.reachWristTarget;
+      maxTargetAcceleration = Math.max(maxTargetAcceleration,
+        Math.hypot(q.x-2*p.x+a.x,q.y-2*p.y+a.y));
+    }
+    if (i>=3) {
+      const a=poses[i-2].activityState.reachWristTarget, b=poses[i-3].activityState.reachWristTarget;
+      maxTargetJerk = Math.max(maxTargetJerk,
+        Math.hypot(q.x-3*p.x+3*a.x-b.x,q.y-3*p.y+3*a.y-b.y));
+    }
+  }
+  assert.ok(maxTargetStep < 10.5, "target-space step peak: " + maxTargetStep);
+  assert.ok(maxTargetAcceleration < 5, "target-space acceleration peak: " + maxTargetAcceleration);
+  assert.ok(Number.isFinite(maxTargetJerk), "target-space jerk must remain finite: " + maxTargetJerk);
+});
+
 test("SVG renderer tags and labels every activity preview", () => {
   for (const activity of ACTIVITY_NAMES) {
     const svg = renderSvgFrame(scene, 36, "free", activity);
