@@ -1,7 +1,7 @@
 # Motion Studio — Canonical Product Targets
 
 Last reconciled: 2026-10-20 (Asia/Jakarta). Canonical repo: https://github.com/orionrayy/projects.
-Current engineering candidate: Motion Studio v0.9.3 longer-stride phase-adaptive gait in `ffmpeg-motion-studio/foundation-v0.9.3/` on branch motion-studio-v0.9.1-damped-human-gait. v0.9.1 and v0.9.2 are retained as comparison baselines. Earlier CI success on commit 44c08d0ef8ada24b91d5bc43cadcdf1370774678 is superseded by the latest-head checkpoint in section 14; full-size carry/free previews and metrics are available in artifact motion-studio-v0.9.1-damped-human-gait-review. Human visual acceptance at continuous full-speed playback remains pending.
+Current engineering candidate: Motion Studio v0.9.5 face-refinement and activity-suite review on branch `motion-studio-v0.9.5-face-activity-suite`, tracked in [draft PR #24](https://github.com/orionrayy/projects/pull/24). Latest validated head before the current seat-contact QA addition: `840d2f3da30c8f1b252c0f6d25e1269d0ef70a91`; push run [39458413882](https://github.com/orionrayy/projects/actions/runs/39458413882) and PR run [39458423064](https://github.com/orionrayy/projects/actions/runs/39458423064) both passed source tests, rendering, FFprobe checks and artifact upload. Artifact `motion-studio-v0.9.5-gait-and-reference-visual-review` includes carry/free previews, six activity clips, contact sheets and a machine-readable manifest. Current semantic improvements add a visible table and parcel for pick-up, a visible chair for sit-to-stand, exact held-object contact diagnostics and explicit chair-seat interaction gates. Human visual acceptance at continuous full-speed playback remains pending; PR remains draft and unmerged.
 Status rule: prototype presence, passing geometry tests, rendered evidence and human visual acceptance are different states.
 
 ## Mission
@@ -218,3 +218,23 @@ The latest hosted run passed heel-strike extension, stance-foot contact, ankle r
 - Both scene profiles now use cycle_seconds 1.33 and screen_stride_scale 0.568. This gives an effective stride of 85.2 px/cycle and a modeled cadence of about 90.2 steps/minute.
 - Expected effect is a small reduction in swing-phase knee displacement while retaining a longer stride than the 44.64 px/cycle baseline; CI must confirm the actual frame-level maxima.
 - All geometry and temporal assertions remain unchanged. The PR stays draft and unmerged until the new head passes hosted render checks and full-speed human visual acceptance.
+
+
+## Stage 17 — Semantic action context and interaction QA v0.9.5 — 2026-10-20
+
+The six-action suite initially passed geometry tests while the pick-up scene showed no visible object and sit-to-stand had no clear chair context. This demonstrated a gap between kinematic validity and action semantics. The v0.9.5 review candidate now renders a tabletop and parcel, tracks the parcel from table to hand, and keeps it attached through clip end; sit-to-stand renders a chair with visible seat, backrest and legs.
+
+- New regression checks cover object presence, initial table contact, end-of-clip hand attachment, per-frame parcel displacement, chair presence and the seated-to-standing timeline.
+- The activity manifest exposes object-render/held flags, maximum parcel movement/contact error, chair presence, and start/end seat-contact error.
+- Latest completed hosted run for head `840d2f3da30c8f1b252c0f6d25e1269d0ef70a91`: both push and PR workflows passed source tests, scene rendering, encoding, FFprobe checks and artifact upload. The current follow-up adds an explicit pelvis-to-seat contact assertion and is awaiting its own hosted validation.
+- Visual inspection confirms the object is visible at the tabletop and held at the end of pick-up; the chair is visible and the character begins seated and finishes standing. The movement remains schematic, with arms and weight transfer needing further artistic refinement. Six 3-second activity clips are test slices, not a broad activity benchmark.
+- Explicit limitations remain: turn-in-place is a 2D torso/head counter-rotation, not a true 3D turn; no audio is in the action-suite clips; browser/FFmpeg parity, full interactive rig/editor features, and integration into the complete 240-second film are not verified. Human full-speed acceptance remains pending.
+
+
+## Stage 18 — Reach action context and contact verification — 2026-10-20
+
+The v0.9.5 semantic review found that a reach gesture without an object or environmental target was ambiguous even when the arm solver reached the requested coordinates. The current follow-up adds a visible wall-mounted button aligned to the reach target and a bounded target-contact window.
+
+- Regression gates require the target to be present in the rendered SVG and verify wrist-to-target contact at peak extension. Existing IK, foot-planting and temporal checks are unchanged.
+- Activity manifest schema 1.3.0 records target presence, whether peak contact was sampled, and maximum contact error. Hosted rendering remains required before this stage is called validated.
+- Human naturalness remains pending; this is a procedural side-profile action, not mocap-derived performance or a production editor.

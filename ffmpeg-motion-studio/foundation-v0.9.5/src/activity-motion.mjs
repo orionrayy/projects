@@ -1,0 +1,491 @@
+import { evaluateLocomotion, solveTwoBoneIK } from "./locomotion.mjs";
+
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const smoothstep = (t) => { const u = clamp(t, 0, 1); return u * u * (3 - 2 * u); };
+const TAU = Math.PI * 2;
+
+export const ACTIVITY_NAMES = Object.freeze([
+  "stand", "look-around", "reach", "pick-up", "sit-to-stand", "turn-in-place"
+]);
+export const ACTIVITY_LABELS = Object.freeze({
+  "stand": "STAND / BREATH",
+  "look-around": "HEAD TILT + GAZE / 2D PROFILE",
+  "reach": "REACH FORWARD",
+  "pick-up": "CROUCH / PICK UP",
+  "sit-to-stand": "SIT TO STAND",
+  "turn-in-place": "WEIGHT SHIFT / FOOT PIVOT"
+});
+export const ACTIVITY_DESCRIPTIONS = Object.freeze({
+  "stand": "Relaxed stance + subtle breathing",
+  "look-around": "Head tilt + gaze scan (2D profile)",
+  "reach": "Anticipate, reach and press button",
+  "pick-up": "Crouch, grasp parcel and lift",
+  "sit-to-stand": "Forward lean, rise and stabilize",
+  "turn-in-place": "2D weight shift / foot pivot"
+});
+
+function pulse(u, rise = 0.2, fall = 0.78) {
+  return smoothstep(u / rise) * (1 - smoothstep((u - fall) / (1 - fall)));
+}
+
+// Monotone quintic Hermite interpolation for action channels.
+// Shared harmonic tangents retain the authored direction; zero second derivative at
+// every key makes neighboring segments C2-continuous. Timeline endpoints use zero
+// tangents because the pose is held outside the clip, preventing a start/end kick.
+export function keyCurve(u, keys) {
+  if (!Array.isArray(keys) || keys.length < 2) throw new TypeError("keyCurve requires at least two [time,value] keys.");
+  for (let i = 0; i < keys.length; i++) {
+    if (!Array.isArray(keys[i]) || keys[i].length !== 2 ||
+        !Number.isFinite(keys[i][0]) || !Number.isFinite(keys[i][1]) ||
+        (i > 0 && !(keys[i][0] > keys[i-1][0]))) {
+      throw new TypeError("keyCurve keys must have finite values and strictly increasing times.");
+    }
+  }
+  if (u <= keys[0][0]) return keys[0][1];
+  if (u >= keys[keys.length - 1][0]) return keys[keys.length - 1][1];
+
+  const secants = [];
+  for (let i = 0; i < keys.length - 1; i++) {
+    secants.push((keys[i + 1][1] - keys[i][1]) / (keys[i + 1][0] - keys[i][0]));
+  }
+  const tangent = (i) => {
+    // The outer curve is a held pose; zero endpoint tangents make that hold C1.
+    if (i === 0 || i === keys.length - 1) return 0;
+    const a = secants[i - 1], b = secants[i];
+    if (a === 0 || b === 0 || Math.sign(a) !== Math.sign(b)) return 0;
+    const h0 = keys[i][0] - keys[i - 1][0];
+    const h1 = keys[i + 1][0] - keys[i][0];
+    const w1 = 2 * h1 + h0, w2 = h1 + 2 * h0;
+    return (w1 + w2) / (w1 / a + w2 / b);
+  };
+
+  let i = 0;
+  while (i < keys.length - 2 && u > keys[i + 1][0]) i++;
+  const [x0, y0] = keys[i], [x1, y1] = keys[i + 1];
+  const h = x1 - x0, t = (u - x0) / h;
+  const delta = y1 - y0;
+  const d0 = h * tangent(i), d1 = h * tangent(i + 1);
+  // Quintic Hermite basis matches endpoint values and first derivatives while
+  // imposing zero acceleration at both ends. The shared knot therefore has the
+  // same position, velocity and acceleration from either adjacent segment.
+  const a3 = 10 * delta - 6 * d0 - 4 * d1;
+  const a4 = -15 * delta + 8 * d0 + 7 * d1;
+  const a5 = 6 * delta - 3 * d0 - 3 * d1;
+  const t2 = t * t, t3 = t2 * t, t4 = t3 * t, t5 = t4 * t;
+  const value = y0 + d0 * t + a3 * t3 + a4 * t4 + a5 * t5;
+  // Defensive range guard; tests verify authored curves remain monotone without
+  // activating this clamp under ordinary inputs.
+  return clamp(value, Math.min(y0, y1), Math.max(y0, y1));
+}
+function rotatePoint(point, pivot, angle) {
+  const dx = point.x - pivot.x, dy = point.y - pivot.y;
+  const c = Math.cos(angle), s = Math.sin(angle);
+  return { ...point, x: pivot.x + dx * c - dy * s, y: pivot.y + dx * s + dy * c };
+}
+function transformUpper(point, oldPelvis, newPelvis, angle, extraX = 0, extraY = 0) {
+  const moved = rotatePoint(point, oldPelvis, angle);
+  return { ...point, x: moved.x + (newPelvis.x - oldPelvis.x) + extraX,
+    y: moved.y + (newPelvis.y - oldPelvis.y) + extraY };
+}
+function translatePoint(point, dx, dy) {
+  return point && Number.isFinite(point.x) && Number.isFinite(point.y)
+    ? { ...point, x: point.x + dx, y: point.y + dy } : point;
+}
+function limbPack(ik, root, target) {
+  return { ...ik, shoulder: { ...root }, elbow: ik.joint, elbowAngleDegrees: ik.jointAngleDegrees,
+    wrist: ik.end, target: { ...target } };
+}
+function solveLeg(hip, foot, scene) {
+  const c = scene.character, ankle = { x: foot.x, y: foot.y - 3 };
+  const fx = (hip.x + ankle.x) / 2 + (c.knee_forward_bias_px || 14) * (c.stance_knee_forward_ratio ?? 0.42);
+  const fy = (hip.y + ankle.y) / 2 - (c.knee_up_bias_px || 12) * (c.stance_knee_up_ratio ?? 0.25);
+  const ik = solveTwoBoneIK(hip, ankle, c.upper_leg_px, c.lower_leg_px,
+    { x: fx, y: fy, preferForward: true, reachEaseBias: c.knee_reach_ease_bias }, -1);
+  return { ...ik, hip: { ...hip }, knee: ik.joint, ankle: ik.end };
+}
+function solveArm(shoulder, target, scene, counter = -1) {
+  const c = scene.character;
+  const dx = target.x - shoulder.x, dy = target.y - shoulder.y;
+  const dist = Math.hypot(dx, dy);
+  const mid = { x: (shoulder.x + target.x) / 2, y: (shoulder.y + target.y) / 2 };
+  // Use a pole perpendicular to the shoulder-wrist axis. A screen-horizontal
+  // offset plus a constant downward offset can cross the chain's bend plane as
+  // the arm changes direction, creating reversed elbows or forearms across the torso.
+  const side = counter < 0 ? -1 : 1;
+  const offset = Math.min(18, Math.max(9, dist * 0.18));
+  const pole = dist > 1e-6
+    ? { x: mid.x - (dy / dist) * offset * side, y: mid.y + (dx / dist) * offset * side }
+    : { x: mid.x, y: mid.y + offset * side };
+  const ik = solveTwoBoneIK(shoulder, target, c.upper_arm_px, c.forearm_px, pole, -1);
+  return limbPack(ik, shoulder, target);
+}
+function fixedPoseScene(scene, armMode, activity) {
+  return {
+    ...scene,
+    character: { ...scene.character, leg_depth_projection_px: 6 },
+    motion: {
+      ...scene.motion,
+      root_y: (scene.motion.root_y ?? 408) - (activity === "sit-to-stand" ? 0 : 4),
+      cycle_seconds: 1e9, stride_length_px: 0, screen_stride_scale: 0,
+      start_ramp_seconds: 0, stop_ramp_seconds: 0, pelvis_bob_px: 0, pelvis_bob_asymmetry_px: 0,
+      pelvis_lateral_shift_px: 0, torso_forward_lean_radians: 0, torso_sway_radians: 0,
+      secondary_torso_sway_radians: 0, cycle_torso_sway_variation_radians: 0, cycle_torso_shift_variation_px: 0,
+      torso_shift_px: 0, head_follow_x_px: 0, head_follow_radians: 0, head_bob_radians: 0,
+      contact_response_width_cycles: 0, contact_compression_px: 0, contact_torso_reaction_radians: 0,
+      contact_head_counter_radians: 0, contact_chest_shift_px: 0, contact_lateral_shift_px: 0,
+      contact_head_drop_px: 0, contact_basket_response_px: 0, contact_basket_tilt_radians: 0,
+      contact_arm_reaction_px: 0, cycle_lift_variation_fraction: 0, cycle_arm_variation_fraction: 0,
+      arm_lag_cycles: 0, phase_variation_cycles: 0, free_arm_swing_px: 0, free_arm_vertical_swing_px: 0,
+      free_arm_drop_px: 92, basket_vertical_response_px: 0, basket_tilt_radians: 0, arm_mode: armMode
+    }
+  };
+}
+
+/**
+ * Deterministic procedural action overlays for the current 2D side-profile rig.
+ * "turn-in-place" intentionally means torso/head counter-rotation and weight shift;
+ * a true 3D yaw/orientation flip requires a 3D or multi-view character rig.
+ */
+export function evaluateActivity(scene, frameIndex, activity, armMode = "free") {
+  if (!ACTIVITY_NAMES.includes(activity)) throw new RangeError("Unsupported activity: " + activity);
+  if (armMode !== "carry" && armMode !== "free") throw new RangeError("Unsupported arm mode.");
+  if (!Number.isInteger(frameIndex) || frameIndex < 0 || frameIndex >= scene.duration_frames) {
+    throw new RangeError("Frame is outside activity timeline.");
+  }
+  const staticScene = fixedPoseScene(scene, armMode, activity);
+  const base = evaluateLocomotion(staticScene, frameIndex, armMode);
+  // Foot depth is projected by the same near/far offset as the hip joints in
+  // fixedPoseScene; moving only the shoes made the leg chains splay unnaturally.
+  const duration = Math.max(1, scene.duration_frames - 1);
+  const u = frameIndex / duration;
+  // Action timelines are authored as explicit phases. The 3 s clip is a preview
+  // duration, not permission to hold one pose for most of the sequence.
+  const turnPulse = keyCurve(u, [[0,0],[0.12,0],[0.30,1],[0.43,0.82],[0.60,-0.62],[0.72,-0.62],[0.90,0],[1,0]]);
+  const reachTimelineKeys = [[0,0],[0.16,0],[0.23,0.12],[0.40,0.90],[0.46,1],[0.62,1],
+    [0.75,0.62],[0.77,0.54],[0.79,0.46],[0.81,0.38],[0.83,0.30],[0.85,0.22],
+    [0.87,0.14],[0.89,0.06],[0.91,0],[0.95,0],[1,0]];
+  // Wrist path begins only after the anticipation beat and uses sampled quintic
+  // smoothstep progress in both approach and release. It reaches the fixed contact
+  // point before the contact window and eases out of the hold instead of dropping into
+  // a steep retraction segment, distributing acceleration across the entire action.
+  const reachWristPathKeys = [[0,0],[0.12,0],[0.1766666667,0.0354938272],
+    [0.2333333333,0.2098765432],[0.29,0.5],[0.3466666667,0.7901234568],
+    [0.4033333333,0.9645061728],[0.46,1],[0.62,1],
+    [0.67,0.9645061728],[0.72,0.7901234568],[0.77,0.5],
+    [0.82,0.2098765432],[0.87,0.0354938272],[0.92,0],[0.95,0],[1,0]];
+  // Pick-up uses five distinct beats: notice/preload, lower, reach, close the
+  // grip, then lift while the body is still low before recovering to upright.
+  const pickupAnticipation = keyCurve(u, [[0,0],[0.06,0],[0.10,1],[0.15,0.18],[0.21,0],[1,0]]);
+  const pickupCrouch = keyCurve(u, [[0,0],[0.08,0],[0.18,0.25],[0.29,0.78],[0.38,1],[0.46,0.92],[0.52,0.65],[0.61,0.18],[0.70,0],[1,0]]);
+  const pickupReach = keyCurve(u, [[0,0],[0.09,0],[0.20,0.20],[0.33,0.78],[0.42,1],[0.52,1],[0.62,0.62],[0.73,0],[1,0]]);
+  const pickupGrip = keyCurve(u, [[0,0],[0.37,0],[0.42,0.62],[0.46,1],[1,1]]);
+  const pickupLift = keyCurve(u, [[0,0],[0.47,0],[0.52,0.08],[0.59,0.34],[0.69,0.88],[0.75,1],[1,1]]);
+  const pickupTableTopY = scene.background.horizon_y - 144;
+  const pickupOrigin = { x: base.shoulders.near.x + 50, y: pickupTableTopY - 13 };
+  const pickupTarget = { x: pickupOrigin.x - 18, y: pickupOrigin.y };
+  let drop = 0, forwardShift = 0, lean = 0, headTurn = 0, headShift = 0, reachWeight = 0, breath = 0;
+  let gazeOffsetX = 0, gazeOffsetY = 0, armCounterBalance = 0, sitStandRestWeight = 0;
+  let reachAnticipationWeight = 0;
+
+  if (activity === "stand") {
+    breath = 1.7 * Math.sin(TAU * 0.78 * u);
+    lean = 0.012 * Math.sin(TAU * 0.78 * u + 0.4);
+  }
+  if (activity === "look-around") {
+    // A side-profile rig can scan its pitch/tilt and gaze offset; it cannot perform
+    // true horizontal yaw. Keep the label explicit and give each glance a clear beat.
+    headTurn = keyCurve(u, [[0,0],[0.08,0],[0.24,0.58],[0.34,0.64],[0.46,0.50],[0.58,-0.55],[0.69,-0.62],[0.82,0.12],[0.93,0],[1,0]]);
+    headShift = keyCurve(u, [[0,0],[0.20,10],[0.38,11],[0.56,-8],[0.74,-6],[0.90,0],[1,0]]);
+    gazeOffsetX = keyCurve(u, [[0,0],[0.16,0],[0.28,1.8],[0.42,1.8],[0.55,-1.8],[0.67,-1.8],[0.82,1.0],[0.92,0],[1,0]]);
+    gazeOffsetY = keyCurve(u, [[0,0],[0.24,0.4],[0.38,-0.8],[0.60,0.8],[0.75,0],[1,0]]);
+    lean = keyCurve(u, [[0,0],[0.28,0.045],[0.55,-0.035],[0.78,0],[1,0]]);
+  }
+  if (activity === "reach") {
+    // Let the torso/weight shift anticipate the reach before the wrist commits.
+    // This separates intention (small backward preload) from the forward action.
+    reachAnticipationWeight = keyCurve(u, [[0,0],[0.07,0],[0.12,0.88],[0.16,1],[0.20,0.25],[0.24,0],[1,0]]);
+    reachWeight = keyCurve(u, reachTimelineKeys);
+    lean = 0.105 * reachWeight - 0.035 * reachAnticipationWeight;
+    forwardShift = 4.5 * reachWeight - 3.0 * reachAnticipationWeight;
+    headTurn = 0.06 * reachWeight;
+    gazeOffsetX = 0.85 * reachWeight;
+    gazeOffsetY = 0.55 * reachWeight;
+  }
+  if (activity === "pick-up") {
+    // A small body/gaze preload makes the object the cause of the action; it
+    // must finish before the major descent and before the hand commits.
+    drop = 26 * pickupCrouch;
+    forwardShift = 9 * pickupCrouch - 2.5 * pickupAnticipation;
+    lean = 0.27 * pickupCrouch - 0.025 * pickupAnticipation;
+    headTurn = 0.14 * Math.max(pickupReach, pickupAnticipation);
+    gazeOffsetX = 0.60 * Math.max(pickupReach, pickupAnticipation);
+    gazeOffsetY = 0.45 * Math.max(pickupReach, pickupAnticipation);
+    reachWeight = pickupReach;
+  }
+  if (activity === "sit-to-stand") {
+    // Start in a genuinely seated configuration, lean forward before seat-off,
+    // then extend and spend the final portion stabilizing upright.
+    drop = keyCurve(u, [[0,25],[0.12,25],[0.25,25],[0.36,25],[0.44,23],[0.53,14],[0.67,3],[0.78,0],[0.86,0],[1,0]]);
+    forwardShift = keyCurve(u, [[0,0],[0.14,0],[0.27,3],[0.36,8],[0.42,11],[0.49,10],[0.63,5],[0.80,1],[0.88,0],[1,0]]);
+    lean = keyCurve(u, [[0,0.02],[0.14,0.02],[0.28,0.10],[0.36,0.28],[0.42,0.34],[0.47,0.28],[0.60,0.16],[0.75,0.04],[0.84,0],[1,0]]);
+    armCounterBalance = keyCurve(u, [[0,0],[0.16,0],[0.28,0.50],[0.36,0.84],[0.42,1],[0.51,0.78],[0.67,0.28],[0.82,0],[1,0]]);
+    sitStandRestWeight = keyCurve(u, [[0,0],[0.28,0],[0.43,0.02],[0.53,0.22],[0.67,0.66],[0.81,0.96],[0.88,1],[1,1]]);
+  }
+  if (activity === "turn-in-place") {
+    // This is an explicit 2D weight-shift/foot-pivot cue, not a true 3D turn.
+    lean = 0.18 * turnPulse;
+    headTurn = -0.38 * turnPulse;
+    // Turning in place should rotate the upper body over planted support, not drag the pelvis beyond leg reach.
+    forwardShift = 3 * turnPulse;
+    armCounterBalance = Math.abs(turnPulse);
+  }
+
+  const oldPelvis = { ...base.pelvis };
+  // Breathing/settling are upper-body-only secondary motion: root and planted feet
+  // remain stable. Held-prop and post-rise holds should not freeze into a repeated still frame.
+  const pickupCarryBreath = activity === "pick-up" ? pickupLift * 2.0 * Math.sin(TAU * 1.15 * u + 0.2) : 0;
+  const chestBreath = activity === "stand" ? breath : pickupCarryBreath;
+  const respiratorySway = activity === "stand"
+    ? 0.65 * Math.sin(TAU * 0.78 * u + 0.25)
+    : activity === "pick-up"
+      ? 1.1 * pickupLift * Math.sin(TAU * 1.15 * u + 0.6)
+      : activity === "sit-to-stand"
+        ? 0.55 * sitStandRestWeight * Math.sin(TAU * 1.2 * u + 0.3)
+        : 0;
+  const postRiseSettle = activity === "sit-to-stand" && u >= 0.80
+    ? 2.0 * Math.sin(Math.PI * (u - 0.80) / 0.20) * Math.exp(-6 * (u - 0.80))
+    : 0;
+  const pelvisShiftY = drop - 4 * sitStandRestWeight;
+  const newPelvis = { x: oldPelvis.x + forwardShift, y: oldPelvis.y + pelvisShiftY };
+  const transform = (pt, factor = 1, ex = 0, ey = 0) =>
+    transformUpper(pt, oldPelvis, newPelvis, lean * factor, ex, ey);
+  const pose = { ...base,
+    activityName: activity, activityProgress: u,
+    activityState: { pelvisDropPx: drop, torsoLeanRadians: lean, headTurnRadians: headTurn,
+      reachWeight, reachDisplacementPx: 76 * reachWeight,
+      reachAnticipationWeight, breathingOffsetPx: breath,
+      respiratorySwayPx: respiratorySway,
+      gazeOffsetX, gazeOffsetY,
+      pickupAnticipationWeight: activity === "pick-up" ? pickupAnticipation : 0,
+      pickupReachWeight: activity === "pick-up" ? pickupReach : 0,
+      pickupGripWeight: activity === "pick-up" ? pickupGrip : 0,
+      pickupLiftWeight: activity === "pick-up" ? pickupLift : 0,
+      armCounterBalanceWeight: armCounterBalance,
+      sitStandRestWeight,
+      pickupItem: null, chair: null, reachTarget: null },
+    pelvis: newPelvis, rootX: newPelvis.x, torsoAngle: lean,
+    chestLocal: transform(base.chestLocal, 1, respiratorySway, -chestBreath * 0.82 - postRiseSettle * 0.65),
+    chest: transform(base.chest, 1, respiratorySway, -chestBreath * 0.82 - postRiseSettle * 0.65),
+    neck: transform(base.neck, 0.72, respiratorySway * 0.5, -chestBreath * 0.55 - postRiseSettle * 0.35),
+    headLocal: transform(base.headLocal, 0.42, headShift + respiratorySway * 0.25, -chestBreath * 0.35 - postRiseSettle * 0.15),
+    head: transform(base.head, 0.42, headShift + respiratorySway * 0.25, -chestBreath * 0.35 - postRiseSettle * 0.15),
+    headAngle: base.headAngle + headTurn - lean * 0.18,
+    shoulders: {
+      near: transform(base.shoulders.near, 1, respiratorySway, -chestBreath * 0.72 - postRiseSettle * 0.58),
+      far: transform(base.shoulders.far, 1, respiratorySway, -chestBreath * 0.72 - postRiseSettle * 0.58)
+    }
+  };
+
+  const footPivot = activity === "turn-in-place" ? 0.42 * turnPulse : 0;
+  pose.leftFoot = { ...base.leftFoot, angle: (base.leftFoot.angle || 0) + footPivot };
+  pose.rightFoot = { ...base.rightFoot, angle: (base.rightFoot.angle || 0) - footPivot };
+  pose.leftHip = translatePoint(base.leftHip, forwardShift, pelvisShiftY);
+  pose.rightHip = translatePoint(base.rightHip, forwardShift, pelvisShiftY);
+  pose.leftLeg = solveLeg(pose.leftHip, pose.leftFoot, staticScene);
+  pose.rightLeg = solveLeg(pose.rightHip, pose.rightFoot, staticScene);
+
+  let nearTarget = transform(base.nearArm.wrist);
+  let farTarget = transform(base.farArm.wrist);
+  // Neutral projected hands should occupy opposite depth layers instead of collapsing
+  // at the pelvis or meeting in front of the torso due to the base gait's arm swing.
+  if (["stand", "look-around", "turn-in-place"].includes(activity)) {
+    // Hands hang near pelvis height with a small near/far offset and a bend
+    // reserve. The former ~100 px requests nearly locked the 107 px arm chains.
+    nearTarget = { x: pose.shoulders.near.x + 4, y: pose.shoulders.near.y + 92 };
+    farTarget = { x: pose.shoulders.far.x - 4, y: pose.shoulders.far.y + 92 };
+  }
+  // In a side-profile projection the two relaxed hands need a small near/far
+  // separation; otherwise both arms collapse into one wrist at the pelvis.
+  if (["stand", "look-around", "turn-in-place"].includes(activity)) {
+    nearTarget = { ...nearTarget, x: nearTarget.x + 7 };
+    farTarget = { ...farTarget, x: farTarget.x - 7 };
+  }
+  if (armMode === "carry") {
+    const b = base.basket;
+    pose.basket = {
+      ...b, x: b.x + forwardShift, y: b.y + drop,
+      center: translatePoint(b.center, forwardShift, drop),
+      handleLeft: translatePoint(b.handleLeft, forwardShift, drop),
+      handleRight: translatePoint(b.handleRight, forwardShift, drop)
+    };
+    nearTarget = { ...pose.basket.handleRight };
+    farTarget = { ...pose.basket.handleLeft };
+  } else if (activity === "reach") {
+    // Target is fixed in world-space; only the wrist travels. A target parented to
+    // the moving shoulder made the old contact test self-fulfilling.
+    // Build the wrist path directly in world-space X/Y. The former shoulder-relative
+    // rest target plus a sine-of-weight arc added nonlinear acceleration on top of the
+    // scalar easing curve. Coordinate-space quintic curves instead join each authored
+    // path point with a shared zero-acceleration knot while leaving the torso response
+    // and IK/contact constraints independent.
+    const restTarget = { x: base.nearArm.wrist.x, y: base.nearArm.wrist.y };
+    // The press pose is authored for fingertip-to-button contact, not wrist-to-button
+    // contact. The rendered press index finger extends 17 px from the wrist; offset the
+    // IK wrist target by the same distance so the finger lands on the visible button face.
+    const buttonX = base.shoulders.near.x + 76;
+    const buttonY = base.shoulders.near.y + 8;
+    const pressFingerLengthPx = 17;
+    const wristTargetX = buttonX - pressFingerLengthPx;
+    const wristTargetXKeys = reachWristPathKeys.map(([time, weight]) =>
+      [time, restTarget.x + (wristTargetX - restTarget.x) * weight]);
+    const wristTargetYKeys = reachWristPathKeys.map(([time, weight]) =>
+      [time, restTarget.y + (buttonY - restTarget.y) * weight - 12 * Math.sin(Math.PI * weight)]);
+    nearTarget = {
+      x: keyCurve(u, wristTargetXKeys),
+      y: keyCurve(u, wristTargetYKeys)
+    };
+    // The free arm counterbalances the upper-body reach rather than remaining passive.
+    farTarget = { x: farTarget.x - 10 * reachWeight, y: farTarget.y - 4 * reachWeight };
+  } else if (activity === "pick-up") {
+    // The hand meets the parcel's fixed grasp anchor, then the parcel follows the
+    // same wrist-relative offset while the arm lifts toward a carry position.
+    const reachingTarget = {
+      x: base.nearArm.wrist.x + (pickupTarget.x - base.nearArm.wrist.x) * pickupReach,
+      y: base.nearArm.wrist.y + (pickupTarget.y - base.nearArm.wrist.y) * pickupReach
+        - 9 * Math.sin(Math.PI * pickupReach)
+    };
+    // Keep the lifted parcel close to the torso instead of carrying it at arm's length.
+    const holdingTarget = { x: pose.shoulders.near.x + 12, y: pose.shoulders.near.y + 42 };
+    nearTarget = {
+      x: reachingTarget.x + (holdingTarget.x - reachingTarget.x) * pickupLift,
+      y: reachingTarget.y + (holdingTarget.y - reachingTarget.y) * pickupLift
+    };
+    // During the crouch, the non-grasping arm counterbalances behind the hip.
+    // Keeping this wrist only 10px behind the shoulder made the far forearm fold
+    // across the torso in profile and read as a crossed-arm pose.
+    const relaxedFarTarget = { x: pose.shoulders.far.x - 8, y: pose.shoulders.far.y + 80 };
+    // Keep the counterbalancing wrist in shoulder-local reach space. A pelvis-
+    // relative target put the far wrist beyond arm length and made the forearm
+    // look like a backward-pointing lever in the deepest crouch.
+    const counterbalanceFarTarget = {
+      x: pose.shoulders.far.x - 38 - 5 * pickupCrouch + 4 * pickupLift,
+      y: pose.shoulders.far.y + 84 + 3 * pickupLift
+    };
+    farTarget = {
+      x: relaxedFarTarget.x + (counterbalanceFarTarget.x - relaxedFarTarget.x) * pickupCrouch,
+      y: relaxedFarTarget.y + (counterbalanceFarTarget.y - relaxedFarTarget.y) * pickupCrouch
+    };
+  } else if (activity === "sit-to-stand") {
+    // Separate the seated lap pose, forward counterbalance, and relaxed standing
+    // pose. Reusing the generic folded-arm pose made the entire action read as
+    // crossed arms rather than a lower-body transfer.
+    const counter = armCounterBalance, rest = sitStandRestWeight;
+    // All wrist anchors stay inside the arm's comfortable workspace. The older
+    // lap/balance targets were farther than the 107 px chain length, so IK silently
+    // clamped them into stiff, nearly straight arms.
+    const lapNear = { x: pose.shoulders.near.x + 30, y: pose.shoulders.near.y + 90 };
+    const lapFar = { x: pose.shoulders.far.x - 12, y: pose.shoulders.far.y + 91 };
+    const balanceNear = { x: pose.shoulders.near.x + 42, y: pose.shoulders.near.y + 68 };
+    const balanceFar = { x: pose.shoulders.far.x + 2, y: pose.shoulders.far.y + 78 };
+    const standingNear = { x: pose.shoulders.near.x + 4, y: pose.shoulders.near.y + 92 };
+    const standingFar = { x: pose.shoulders.far.x - 8, y: pose.shoulders.far.y + 92 };
+    const actionNear = { x: lapNear.x + (balanceNear.x - lapNear.x) * counter,
+      y: lapNear.y + (balanceNear.y - lapNear.y) * counter };
+    const actionFar = { x: lapFar.x + (balanceFar.x - lapFar.x) * counter,
+      y: lapFar.y + (balanceFar.y - lapFar.y) * counter };
+    nearTarget = { x: actionNear.x + (standingNear.x - actionNear.x) * rest,
+      y: actionNear.y + (standingNear.y - actionNear.y) * rest };
+    farTarget = { x: actionFar.x + (standingFar.x - actionFar.x) * rest,
+      y: actionFar.y + (standingFar.y - actionFar.y) * rest };
+  } else if (activity === "turn-in-place") {
+    nearTarget = { x: nearTarget.x + 8 * turnPulse, y: nearTarget.y + 5 * turnPulse };
+    farTarget = { x: farTarget.x - 6 * turnPulse, y: farTarget.y + 3 * turnPulse };
+  }
+
+  // Keep a stable, opposite elbow branch for the near/far projected chains.
+  // Painter order handles depth; the IK bend side must not depend on armMode or
+  // activity, otherwise the same limb can reverse merely when a prop is toggled.
+  const nearBend = 1;
+  const farBend = -1;
+  pose.nearArm = solveArm(pose.shoulders.near, nearTarget, staticScene, nearBend);
+  pose.farArm = solveArm(pose.shoulders.far, farTarget, staticScene, farBend);
+
+  if (activity === "pick-up") {
+    const held = { x: pose.nearArm.wrist.x + 18, y: pose.nearArm.wrist.y };
+    const isHeld = pickupGrip >= 0.999999;
+    const graspContactErrorPx = Math.hypot(pose.nearArm.wrist.x - pickupTarget.x,
+      pose.nearArm.wrist.y - pickupTarget.y);
+    // The parcel must not slide toward the hand before the grip is established.
+    // At the attach frame, wrist+offset equals the table-resting parcel center,
+    // so attachment is continuous; only then does lift move it with the wrist.
+    pose.activityState.pickupItem = {
+      x: isHeld ? held.x : pickupOrigin.x,
+      y: isHeld ? held.y : pickupOrigin.y,
+      width: 34, height: 26, tableX: pickupOrigin.x, tableTopY: pickupTableTopY,
+      gripWeight: pickupGrip, held: isHeld,
+      graspContactErrorPx,
+      graspAnchor: { ...pickupTarget }, handOffsetPx: { x: 18, y: 0 }
+    };
+  }
+  if (activity === "sit-to-stand") {
+    pose.activityState.chair = {
+      x: base.pelvis.x - 8,
+      seatY: scene.background.horizon_y - 145,
+      floorY: scene.background.horizon_y
+    };
+  }
+  if (activity === "reach") {
+    pose.activityState.reachPathMode = "world-space-keyframe-trajectory";
+    pose.activityState.reachWristTarget = { ...nearTarget };
+    const target = { x: base.shoulders.near.x + 76, y: base.shoulders.near.y + 8 };
+    const dx = target.x - pose.nearArm.wrist.x, dy = target.y - pose.nearArm.wrist.y;
+    const wristToButtonDistance = Math.hypot(dx, dy);
+    const fingertipExtensionPx = 17;
+    // The finger is oriented toward the target. Contact is valid only when the
+    // rendered fingertip extension agrees with the wrist-target distance.
+    const fingertipContactErrorPx = Math.abs(wristToButtonDistance - fingertipExtensionPx);
+    pose.activityState.reachTarget = {
+      ...target,
+      radius: 10,
+      fingertipExtensionPx,
+      contactErrorPx: fingertipContactErrorPx,
+      active: reachWeight >= 0.999999999 && fingertipContactErrorPx < 0.5
+    };
+  }
+  pose.basketCenter = pose.basket?.center || translatePoint(base.basketCenter, forwardShift, drop - breath);
+  const boneErrors = [
+    pose.leftLeg.upperErrorPx, pose.leftLeg.lowerErrorPx, pose.rightLeg.upperErrorPx, pose.rightLeg.lowerErrorPx,
+    pose.nearArm.upperErrorPx, pose.nearArm.lowerErrorPx, pose.farArm.upperErrorPx, pose.farArm.lowerErrorPx
+  ];
+  pose.diagnostics = {
+    ...base.diagnostics,
+    boneLengthErrorPx: Math.max(...boneErrors),
+    ankleClampErrorPx: Math.max(pose.leftLeg.endpointClampErrorPx, pose.rightLeg.endpointClampErrorPx),
+    armClampErrorPx: Math.max(pose.nearArm.endpointClampErrorPx, pose.farArm.endpointClampErrorPx),
+    basketContactErrorPx: armMode === "carry" ? Math.max(
+      Math.hypot(pose.nearArm.wrist.x - pose.basket.handleRight.x, pose.nearArm.wrist.y - pose.basket.handleRight.y),
+      Math.hypot(pose.farArm.wrist.x - pose.basket.handleLeft.x, pose.farArm.wrist.y - pose.basket.handleLeft.y)
+    ) : 0,
+    pickupItemContactErrorPx: pose.activityState.pickupItem?.held
+      ? Math.hypot(pose.activityState.pickupItem.x - (pose.nearArm.wrist.x + 18),
+          pose.activityState.pickupItem.y - pose.nearArm.wrist.y)
+      : 0,
+    pickupGraspContactErrorPx: pose.activityState.pickupItem?.graspContactErrorPx ?? null,
+    pickupItemChestDistancePx: pose.activityState.pickupItem
+      ? Math.hypot(pose.activityState.pickupItem.x - pose.nearArm.shoulder.x,
+          pose.activityState.pickupItem.y - pose.nearArm.shoulder.y)
+      : null,
+    // Pelvis-to-seat offset is an explicit semantic check, separate from IK.
+    // The intended seated pose places the pelvis center about 10px below the seat top.
+    seatContactErrorPx: pose.activityState.chair
+      ? Math.abs(pose.pelvis.y - (pose.activityState.chair.seatY + 8))
+      : null,
+    reachTargetContactErrorPx: pose.activityState.reachTarget?.active
+      ? pose.activityState.reachTarget.contactErrorPx
+      : null,
+    groundPenetrationPx: Math.max(0, pose.leftFoot.y - scene.background.horizon_y, pose.rightFoot.y - scene.background.horizon_y),
+    stance: { left: pose.leftFoot.inStance, right: pose.rightFoot.inStance },
+    armMode, activity
+  };
+  return pose;
+}
