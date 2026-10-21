@@ -77,3 +77,12 @@ Regression tests assert that anticipation peaks while the wrist is still near it
 A rendered close-frame pass showed the non-grasping far forearm folded across the torso, while the parcel eased away from its tabletop origin before the grip was fully established. Both issues could pass the earlier endpoint-only contact metric.
 
 The pickup action now moves the non-grasping hand behind the hip during the deepest part of the crouch, using it as a counterbalance rather than a second reaching arm. The parcel remains exactly on the table until the grip reaches its attachment state; the attach frame is required to place the wrist at the fixed grasp anchor, after which the parcel follows the wrist with a fixed offset. Regression checks cover the entire pre-grip interval, the first attachment frame, continuity of the object-hand offset, and the far hand's position relative to the pelvis. This still remains a procedural 2D profile animation and needs another visual acceptance pass.
+
+## Follow-up audit — action phase separation and elbow-bend reserve
+
+The latest refinement separates pick-up into object-directed anticipation, descent, reach, grip closure, lift, and recovery. The parcel remains table-fixed until the wrist reaches the grasp anchor; lift begins only after attachment and while the character is still crouched. The non-grasping arm now uses a shoulder-local counterbalance target so it cannot be sent beyond the arm chain merely because the pelvis drops.
+
+Sit-to-stand now moves its wrist targets into the reachable lap, momentum-transfer and standing workspaces. Neutral hand targets were also adjusted to retain a small projected bend while staying near pelvis height. The preview manifest reports maximum requested arm reach for each side and the first frame of each pick-up phase; the contact counter only counts frames where the parcel is actually attached.
+
+New tests gate phase order, attachment timing, lift-before-full-recovery, and elbow-bend reserve in neutral and sit-to-stand poses. Passing those tests verifies procedural geometry and timing, not artistic acceptance. Full-speed human review, browser/FFmpeg parity and audio remain pending; the rig is still 2D side-profile and does not perform true 3D turning.
+
