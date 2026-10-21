@@ -69,6 +69,20 @@ test("activity hand targets preserve elbow bend instead of silently locking out"
   }
 });
 
+test("sit-to-stand hands rest at lap height, then return beside the hips", () => {
+  const seated = evaluateActivity(scene, 0, "sit-to-stand", "free");
+  const upright = evaluateActivity(scene, scene.duration_frames - 1, "sit-to-stand", "free");
+  for (const [label, pose] of [["seated", seated], ["standing", upright]]) {
+    assert.ok(Math.abs(pose.nearArm.wrist.y - pose.pelvis.y) < 18,
+      label + " near hand should sit near lap/hip height, not hover at the abdomen");
+    assert.ok(Math.abs(pose.farArm.wrist.y - pose.pelvis.y) < 20,
+      label + " far hand should remain at a comparable natural height");
+    assert.ok(Math.hypot(pose.nearArm.wrist.x - pose.farArm.wrist.x,
+      pose.nearArm.wrist.y - pose.farArm.wrist.y) > 10,
+      label + " hands must remain distinguishable in profile projection");
+  }
+});
+
 test("pick-up separates anticipation, descent, grasp and lift into readable phases", () => {
   const poses = Array.from({ length: scene.duration_frames },
     (_, frame) => evaluateActivity(scene, frame, "pick-up", "free"));
