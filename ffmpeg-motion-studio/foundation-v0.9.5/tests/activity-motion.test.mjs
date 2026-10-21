@@ -44,6 +44,52 @@ test("all activity clips preserve grounded feet, finite poses and solved bone le
   }
 });
 
+test("activity hand targets preserve elbow bend instead of silently locking out", () => {
+  const chainLength = scene.character.upper_arm_px + scene.character.forearm_px;
+  for (const activity of ["stand", "look-around", "sit-to-stand", "turn-in-place"]) {
+    for (let frame = 0; frame < scene.duration_frames; frame++) {
+      const pose = evaluateActivity(scene, frame, activity, "free");
+      for (const [side, arm] of [["near", pose.nearArm], ["far", pose.farArm]]) {
+        const requestedReach = Math.hypot(arm.target.x - arm.shoulder.x, arm.target.y - arm.shoulder.y);
+        assert.ok(requestedReach < chainLength - 8,
+          activity + " " + side + " arm has insufficient elbow-bend reserve at frame " + frame + ": " + requestedReach);
+        assert.ok(requestedReach > 58,
+          activity + " " + side + " wrist target collapsed too close to the shoulder at frame " + frame + ": " + requestedReach);
+      }
+    }
+  }
+  // The non-grasping hand should counterbalance the crouch without reaching beyond
+  // the comfortable arm workspace or folding across the abdomen.
+  for (let frame = 0; frame < scene.duration_frames; frame++) {
+    const pose = evaluateActivity(scene, frame, "pick-up", "free");
+    const arm = pose.farArm;
+    const requestedReach = Math.hypot(arm.target.x - arm.shoulder.x, arm.target.y - arm.shoulder.y);
+    assert.ok(requestedReach < chainLength - 18,
+      "pick-up far arm should stay flexed as a counterbalance at frame " + frame + ": " + requestedReach);
+  }
+});
+
+test("pick-up separates anticipation, descent, grasp and lift into readable phases", () => {
+  const poses = Array.from({ length: scene.duration_frames },
+    (_, frame) => evaluateActivity(scene, frame, "pick-up", "free"));
+  const firstFrame = predicate => poses.findIndex(predicate);
+  const anticipationFrame = firstFrame(p => p.activityState.pickupAnticipationWeight > 0.8);
+  const crouchFrame = firstFrame(p => p.activityState.pelvisDropPx > 5);
+  const reachFrame = firstFrame(p => p.activityState.pickupReachWeight > 0.8);
+  const gripFrame = firstFrame(p => p.activityState.pickupItem?.held === true);
+  const liftFrame = firstFrame(p => p.activityState.pickupLiftWeight > 0.1);
+  assert.ok(anticipationFrame >= 0 && anticipationFrame < crouchFrame,
+    "object-directed anticipation must precede the deep lowering phase");
+  assert.ok(crouchFrame < reachFrame && reachFrame <= gripFrame,
+    "lowering and reach must prepare the wrist before the parcel is attached");
+  assert.ok(gripFrame < liftFrame, "the parcel must not rise before the grip is established");
+  assert.ok(poses[gripFrame].activityState.pickupReachWeight > 0.95);
+  assert.ok(poses[gripFrame].activityState.pickupLiftWeight < 0.05,
+    "the first attached frame should still match the table-resting pose");
+  assert.ok(poses[liftFrame].activityState.pelvisDropPx > 14,
+    "the parcel should begin to lift while the body is still low, not after an abrupt early rise");
+});
+
 test("each non-walk clip visibly changes its intended control channel", () => {
   const summarize = (activity) => {
     const poses = Array.from({ length: scene.duration_frames }, (_, frame) => evaluateActivity(scene, frame, activity, "free"));
@@ -117,7 +163,7 @@ test("each non-walk clip visibly changes its intended control channel", () => {
   assert.ok(pickup.poses.at(-1).activityState.pelvisDropPx < 0.1, "pick-up must recover to a standing hold");
   let pickupContactFrames = 0, maxPickupContactError = 0;
   for (const pose of pickup.poses) {
-    if (pose.activityState.pickupItem?.gripWeight >= 0.95) {
+    if (pose.activityState.pickupItem?.held && pose.activityState.pickupItem?.gripWeight >= 0.95) {
       pickupContactFrames++;
       maxPickupContactError = Math.max(maxPickupContactError, pose.diagnostics.pickupItemContactErrorPx);
     }
