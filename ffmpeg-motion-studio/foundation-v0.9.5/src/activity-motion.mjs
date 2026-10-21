@@ -330,7 +330,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // look like a backward-pointing lever in the deepest crouch.
     const counterbalanceFarTarget = {
       x: pose.shoulders.far.x - 38 - 5 * pickupCrouch + 4 * pickupLift,
-      y: pose.shoulders.far.y + 68 + 3 * pickupLift
+      y: pose.shoulders.far.y + 84 + 3 * pickupLift
     };
     farTarget = {
       x: relaxedFarTarget.x + (counterbalanceFarTarget.x - relaxedFarTarget.x) * pickupCrouch,
