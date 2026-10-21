@@ -279,12 +279,23 @@ test("activity manifest records semantic props and interaction continuity", () =
   const pickup = manifest.activities.find(item => item.id === "pick-up");
   const reach = manifest.activities.find(item => item.id === "reach");
   const sit = manifest.activities.find(item => item.id === "sit-to-stand");
+  const stand = manifest.activities.find(item => item.id === "stand");
   assert.equal(pickup.pickupObjectRendered, true);
   assert.equal(pickup.pickupObjectHeldAtEnd, true);
   assert.ok(pickup.maxPickupItemStepPx < 15);
   assert.ok(pickup.maxPickupItemContactErrorPx < 2);
   assert.equal(pickup.pickupObjectContactedWhileGripping, true);
   assert.ok(pickup.pickupGripContactFrames >= 20);
+  const phases = pickup.pickupPhaseFrames;
+  assert.ok(phases.anticipation < phases.descent && phases.descent < phases.reach &&
+    phases.reach <= phases.grip && phases.grip < phases.lift,
+    "manifest must report ordered anticipation/descent/reach/grip/lift phases: " + JSON.stringify(phases));
+  const armChainLength = scene.character.upper_arm_px + scene.character.forearm_px;
+  assert.ok(stand.maxNearArmTargetReachPx < armChainLength - 8);
+  assert.ok(stand.maxFarArmTargetReachPx < armChainLength - 8);
+  assert.ok(sit.maxNearArmTargetReachPx < armChainLength - 8);
+  assert.ok(sit.maxFarArmTargetReachPx < armChainLength - 8);
+  assert.ok(pickup.maxFarArmTargetReachPx < armChainLength - 18);
   assert.ok(pickup.finalPickupItemChestDistancePx < 55);
   assert.equal(reach.reachTargetRendered, true);
   assert.equal(reach.reachTargetContactedAtPeak, true);
