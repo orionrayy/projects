@@ -31,7 +31,7 @@ function pulse(u, rise = 0.2, fall = 0.78) {
 // Shape-preserving cubic interpolation for action channels. Unlike long pulse holds
 // or independent ease-in/ease-out segments, this preserves velocity continuity at
 // ordinary keys and prevents overshoot at contact/extrema keys.
-function keyCurve(u, keys) {
+export function keyCurve(u, keys) {
   if (u <= keys[0][0]) return keys[0][1];
   if (u >= keys[keys.length - 1][0]) return keys[keys.length - 1][1];
   const slopes = [];
