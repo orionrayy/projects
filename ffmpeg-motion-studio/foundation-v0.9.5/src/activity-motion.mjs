@@ -161,6 +161,9 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   // Action timelines are authored as explicit phases. The 3 s clip is a preview
   // duration, not permission to hold one pose for most of the sequence.
   const turnPulse = keyCurve(u, [[0,0],[0.12,0],[0.30,1],[0.43,0.82],[0.60,-0.62],[0.72,-0.62],[0.90,0],[1,0]]);
+  const reachTimelineKeys = [[0,0],[0.16,0],[0.23,0.12],[0.40,0.90],[0.46,1],[0.62,1],
+    [0.75,0.62],[0.77,0.54],[0.79,0.46],[0.81,0.38],[0.83,0.30],[0.85,0.22],
+    [0.87,0.14],[0.89,0.06],[0.91,0],[0.95,0],[1,0]];
   // Pick-up uses five distinct beats: notice/preload, lower, reach, close the
   // grip, then lift while the body is still low before recovering to upright.
   const pickupAnticipation = keyCurve(u, [[0,0],[0.06,0],[0.10,1],[0.15,0.18],[0.21,0],[1,0]]);
@@ -192,7 +195,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // Let the torso/weight shift anticipate the reach before the wrist commits.
     // This separates intention (small backward preload) from the forward action.
     reachAnticipationWeight = keyCurve(u, [[0,0],[0.07,0],[0.12,0.88],[0.16,1],[0.20,0.25],[0.24,0],[1,0]]);
-    reachWeight = keyCurve(u, [[0,0],[0.16,0],[0.23,0.12],[0.40,0.90],[0.46,1],[0.62,1],[0.75,0.62],[0.77,0.54],[0.79,0.46],[0.81,0.38],[0.83,0.30],[0.85,0.22],[0.87,0.14],[0.89,0.06],[0.91,0],[0.95,0],[1,0]]);
+    reachWeight = keyCurve(u, reachTimelineKeys);
     lean = 0.105 * reachWeight - 0.035 * reachAnticipationWeight;
     forwardShift = 4.5 * reachWeight - 3.0 * reachAnticipationWeight;
     headTurn = 0.06 * reachWeight;
@@ -311,10 +314,12 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   } else if (activity === "reach") {
     // Target is fixed in world-space; only the wrist travels. A target parented to
     // the moving shoulder made the old contact test self-fulfilling.
-    const restTarget = {
-      x: pose.shoulders.near.x + (base.nearArm.wrist.x - base.shoulders.near.x),
-      y: pose.shoulders.near.y + (base.nearArm.wrist.y - base.shoulders.near.y)
-    };
+    // Build the wrist path directly in world-space X/Y. The former shoulder-relative
+    // rest target plus a sine-of-weight arc added nonlinear acceleration on top of the
+    // scalar easing curve. Coordinate-space quintic curves instead join each authored
+    // path point with a shared zero-acceleration knot while leaving the torso response
+    // and IK/contact constraints independent.
+    const restTarget = { x: base.nearArm.wrist.x, y: base.nearArm.wrist.y };
     // The press pose is authored for fingertip-to-button contact, not wrist-to-button
     // contact. The rendered press index finger extends 17 px from the wrist; offset the
     // IK wrist target by the same distance so the finger lands on the visible button face.
@@ -322,9 +327,13 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     const buttonY = base.shoulders.near.y + 8;
     const pressFingerLengthPx = 17;
     const wristTargetX = buttonX - pressFingerLengthPx;
+    const wristTargetXKeys = reachTimelineKeys.map(([time, weight]) =>
+      [time, restTarget.x + (wristTargetX - restTarget.x) * weight]);
+    const wristTargetYKeys = reachTimelineKeys.map(([time, weight]) =>
+      [time, restTarget.y + (buttonY - restTarget.y) * weight - 12 * Math.sin(Math.PI * weight)]);
     nearTarget = {
-      x: restTarget.x + (wristTargetX - restTarget.x) * reachWeight,
-      y: restTarget.y + (buttonY - restTarget.y) * reachWeight - 12 * Math.sin(Math.PI * reachWeight)
+      x: keyCurve(u, wristTargetXKeys),
+      y: keyCurve(u, wristTargetYKeys)
     };
     // The free arm counterbalances the upper-body reach rather than remaining passive.
     farTarget = { x: farTarget.x - 10 * reachWeight, y: farTarget.y - 4 * reachWeight };
@@ -417,6 +426,8 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     };
   }
   if (activity === "reach") {
+    pose.activityState.reachPathMode = "world-space-keyframe-trajectory";
+    pose.activityState.reachWristTarget = { ...nearTarget };
     const target = { x: base.shoulders.near.x + 76, y: base.shoulders.near.y + 8 };
     const dx = target.x - pose.nearArm.wrist.x, dy = target.y - pose.nearArm.wrist.y;
     const wristToButtonDistance = Math.hypot(dx, dy);

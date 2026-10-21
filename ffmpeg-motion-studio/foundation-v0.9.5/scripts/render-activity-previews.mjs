@@ -24,6 +24,9 @@ export function buildActivityManifest(scene) {
     const maxJointJerkByPointPxPerFrame3 = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
     const maxJointJerkFrameByPoint = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
     let maxJointAccelerationPxPerFrame2 = 0, maxJointJerkPxPerFrame3 = 0;
+    let maxReachWristTargetStepPx = 0, maxReachWristTargetStepFrame = 0;
+    let maxReachWristTargetAccelerationPxPerFrame2 = 0, maxReachWristTargetAccelerationFrame = 0;
+    let maxReachWristTargetJerkPxPerFrame3 = 0, maxReachWristTargetJerkFrame = 0;
     let initialSeatContactErrorPx = null, finalSeatContactErrorPx = null, reachTargetContactedAtPeak = false;
     let pickupGripContactFrames = 0, pickupGripContactViolation = false, maxReachWeight = 0;
     let finalPickupItemChestDistancePx = null, previousPreviousPrevious = null, previousPrevious = null, previous = null;
@@ -67,6 +70,38 @@ export function buildActivityManifest(scene) {
           pose.diagnostics.reachTargetContactErrorPx ?? Infinity);
       }
       if (previous) {
+        if (activity === "reach") {
+          const currentTarget = pose.activityState.reachWristTarget;
+          const previousTarget = previous.activityState.reachWristTarget;
+          const targetStep = Math.hypot(currentTarget.x-previousTarget.x,currentTarget.y-previousTarget.y);
+          if (targetStep > maxReachWristTargetStepPx) {
+            maxReachWristTargetStepPx = targetStep;
+            maxReachWristTargetStepFrame = frame;
+          }
+          if (previousPrevious) {
+            const olderTarget = previousPrevious.activityState.reachWristTarget;
+            const targetAcceleration = Math.hypot(
+              currentTarget.x - 2*previousTarget.x + olderTarget.x,
+              currentTarget.y - 2*previousTarget.y + olderTarget.y
+            );
+            if (targetAcceleration > maxReachWristTargetAccelerationPxPerFrame2) {
+              maxReachWristTargetAccelerationPxPerFrame2 = targetAcceleration;
+              maxReachWristTargetAccelerationFrame = frame;
+            }
+          }
+          if (previousPreviousPrevious) {
+            const olderTarget = previousPrevious.activityState.reachWristTarget;
+            const oldestTarget = previousPreviousPrevious.activityState.reachWristTarget;
+            const targetJerk = Math.hypot(
+              currentTarget.x - 3*previousTarget.x + 3*olderTarget.x - oldestTarget.x,
+              currentTarget.y - 3*previousTarget.y + 3*olderTarget.y - oldestTarget.y
+            );
+            if (targetJerk > maxReachWristTargetJerkPxPerFrame3) {
+              maxReachWristTargetJerkPxPerFrame3 = targetJerk;
+              maxReachWristTargetJerkFrame = frame;
+            }
+          }
+        }
         const oldItem = previous.activityState.pickupItem, newItem = pose.activityState.pickupItem;
         if (oldItem && newItem) {
           const itemStep = Math.hypot(newItem.x-oldItem.x,newItem.y-oldItem.y);
@@ -148,6 +183,13 @@ export function buildActivityManifest(scene) {
       maxJointAccelerationByPointPxPerFrame2, maxJointAccelerationFrameByPoint, maxJointAccelerationPxPerFrame2,
       maxJointJerkByPointPxPerFrame3, maxJointJerkFrameByPoint, maxJointJerkPxPerFrame3,
       maxNearArmTargetReachPx, maxFarArmTargetReachPx,
+      reachWristPathMode: activity === "reach" ? "world-space-keyframe-trajectory" : null,
+      maxReachWristTargetStepPx: activity === "reach" ? maxReachWristTargetStepPx : null,
+      maxReachWristTargetStepFrame: activity === "reach" ? maxReachWristTargetStepFrame : null,
+      maxReachWristTargetAccelerationPxPerFrame2: activity === "reach" ? maxReachWristTargetAccelerationPxPerFrame2 : null,
+      maxReachWristTargetAccelerationFrame: activity === "reach" ? maxReachWristTargetAccelerationFrame : null,
+      maxReachWristTargetJerkPxPerFrame3: activity === "reach" ? maxReachWristTargetJerkPxPerFrame3 : null,
+      maxReachWristTargetJerkFrame: activity === "reach" ? maxReachWristTargetJerkFrame : null,
       maxPickupItemAccelerationPxPerFrame2, maxPickupItemStepFrame,
       temporalMetricsFinite: [...Object.values(maxPoseStepByPointPx), ...Object.values(maxJointAccelerationByPointPxPerFrame2),
         ...Object.values(maxJointJerkByPointPxPerFrame3), maxJointAccelerationPxPerFrame2,
@@ -177,7 +219,7 @@ export function buildActivityManifest(scene) {
     });
   }
   return {
-    schemaVersion: "1.6.0", sceneId: "motion-studio-activity-suite-v0.9.5",
+    schemaVersion: "1.7.0", sceneId: "motion-studio-activity-suite-v0.9.5",
     renderer: "procedural SVG + FFmpeg H.264", canvas: scene.canvas, fps: scene.fps,
     actionCurveModel: "quintic-hermite-c2-zero-knot-acceleration",
     cameraFraming: { activityClips: "close-action-1.50x", floorAnchor: "screen-space horizon; planted feet remain grounded" },

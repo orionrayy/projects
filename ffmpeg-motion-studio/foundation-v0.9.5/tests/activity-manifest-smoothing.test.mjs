@@ -8,11 +8,20 @@ const scene = { ...sourceScene, fps: 24, duration_frames: 72 };
 
 test("activity manifest reports the C2 curve contract and jerk cross-checks for every clip", () => {
   const manifest = buildActivityManifest(scene);
+  assert.equal(manifest.schemaVersion, "1.7.0");
   assert.equal(manifest.actionCurveModel, "quintic-hermite-c2-zero-knot-acceleration");
   assert.equal(manifest.activityCount, 6);
   const reach = manifest.activities.find(activity => activity.id === "reach");
+  assert.equal(reach.reachWristPathMode, "world-space-keyframe-trajectory");
+  assert.ok(reach.maxReachWristTargetStepPx < 10.5,
+    "reach target peak step should retain smoothing margin below the 11.5 px regression ceiling: " +
+    reach.maxReachWristTargetStepPx);
+  assert.ok(reach.maxReachWristTargetAccelerationPxPerFrame2 < 5,
+    "reach target-space acceleration peak: " + reach.maxReachWristTargetAccelerationPxPerFrame2);
+  assert.ok(Number.isFinite(reach.maxReachWristTargetJerkPxPerFrame3),
+    "reach target-space jerk must remain finite");
   assert.ok(reach.maxPoseStepByPointPx.nearWrist < 10.5,
-    "reach wrist peak step should retain smoothing margin below the 11.5 px regression ceiling: " +
+    "actual reach wrist peak step should retain smoothing margin below the 11.5 px regression ceiling: " +
     reach.maxPoseStepByPointPx.nearWrist);
   for (const activity of manifest.activities) {
     assert.ok(activity.maxJointJerkPxPerFrame3 >= 0 && Number.isFinite(activity.maxJointJerkPxPerFrame3),
