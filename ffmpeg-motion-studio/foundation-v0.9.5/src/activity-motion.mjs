@@ -143,7 +143,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   // Pick-up uses five distinct beats: notice/preload, lower, reach, close the
   // grip, then lift while the body is still low before recovering to upright.
   const pickupAnticipation = keyCurve(u, [[0,0],[0.06,0],[0.10,1],[0.15,0.18],[0.21,0],[1,0]]);
-  const pickupCrouch = keyCurve(u, [[0,0],[0.08,0],[0.18,0.25],[0.29,0.78],[0.38,1],[0.46,0.92],[0.55,0.62],[0.67,0.18],[0.79,0],[1,0]]);
+  const pickupCrouch = keyCurve(u, [[0,0],[0.08,0],[0.18,0.25],[0.29,0.78],[0.38,1],[0.46,0.92],[0.52,0.65],[0.61,0.18],[0.70,0],[1,0]]);
   const pickupReach = keyCurve(u, [[0,0],[0.09,0],[0.20,0.20],[0.33,0.78],[0.42,1],[0.52,1],[0.62,0.62],[0.73,0],[1,0]]);
   const pickupGrip = keyCurve(u, [[0,0],[0.37,0],[0.42,0.62],[0.46,1],[1,1]]);
   const pickupLift = keyCurve(u, [[0,0],[0.47,0],[0.52,0.08],[0.59,0.34],[0.69,0.88],[0.75,1],[1,1]]);
@@ -329,7 +329,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // relative target put the far wrist beyond arm length and made the forearm
     // look like a backward-pointing lever in the deepest crouch.
     const counterbalanceFarTarget = {
-      x: pose.shoulders.far.x - 24 - 4 * pickupCrouch + 3 * pickupLift,
+      x: pose.shoulders.far.x - 38 - 5 * pickupCrouch + 4 * pickupLift,
       y: pose.shoulders.far.y + 68 + 3 * pickupLift
     };
     farTarget = {
