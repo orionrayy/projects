@@ -15,7 +15,7 @@ test("activity manifest reports the C2 curve contract and jerk cross-checks for 
   assert.equal(reach.reachWristPathMode, "world-space-keyframe-trajectory");
   assert.ok(reach.maxReachWristTargetStepPx < 10.5,
     "reach target peak step should retain smoothing margin below the 11.5 px regression ceiling: " +
-    reach.maxReachWristTargetStepPx);
+    reach.maxReachWristTargetStepPx + " at frame " + reach.maxReachWristTargetStepFrame);
   assert.ok(reach.maxReachWristTargetAccelerationPxPerFrame2 < 5,
     "reach target-space acceleration peak: " + reach.maxReachWristTargetAccelerationPxPerFrame2);
   assert.ok(Number.isFinite(reach.maxReachWristTargetJerkPxPerFrame3),
