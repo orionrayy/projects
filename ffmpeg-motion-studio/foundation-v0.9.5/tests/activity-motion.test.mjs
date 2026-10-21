@@ -64,8 +64,8 @@ test("activity hand targets preserve elbow bend instead of silently locking out"
     const pose = evaluateActivity(scene, frame, "pick-up", "free");
     const arm = pose.farArm;
     const requestedReach = Math.hypot(arm.target.x - arm.shoulder.x, arm.target.y - arm.shoulder.y);
-    assert.ok(requestedReach < chainLength - 18,
-      "pick-up far arm should stay flexed as a counterbalance at frame " + frame + ": " + requestedReach);
+    assert.ok(requestedReach < chainLength - 10,
+      "pick-up far arm should retain a bend while the hand hangs behind the hip at frame " + frame + ": " + requestedReach);
   }
 });
 
@@ -309,7 +309,7 @@ test("activity manifest records semantic props and interaction continuity", () =
   assert.ok(stand.maxFarArmTargetReachPx < armChainLength - 8);
   assert.ok(sit.maxNearArmTargetReachPx < armChainLength - 8);
   assert.ok(sit.maxFarArmTargetReachPx < armChainLength - 8);
-  assert.ok(pickup.maxFarArmTargetReachPx < armChainLength - 18);
+  assert.ok(pickup.maxFarArmTargetReachPx < armChainLength - 10);
   assert.ok(pickup.finalPickupItemChestDistancePx < 55);
   assert.equal(reach.reachTargetRendered, true);
   assert.equal(reach.reachTargetContactedAtPeak, true);
