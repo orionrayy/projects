@@ -115,7 +115,7 @@ function fixedPoseScene(scene, armMode, activity) {
       contact_head_drop_px: 0, contact_basket_response_px: 0, contact_basket_tilt_radians: 0,
       contact_arm_reaction_px: 0, cycle_lift_variation_fraction: 0, cycle_arm_variation_fraction: 0,
       arm_lag_cycles: 0, phase_variation_cycles: 0, free_arm_swing_px: 0, free_arm_vertical_swing_px: 0,
-      free_arm_drop_px: 100, basket_vertical_response_px: 0, basket_tilt_radians: 0, arm_mode: armMode
+      free_arm_drop_px: 92, basket_vertical_response_px: 0, basket_tilt_radians: 0, arm_mode: armMode
     }
   };
 }
@@ -344,12 +344,12 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // All wrist anchors stay inside the arm's comfortable workspace. The older
     // lap/balance targets were farther than the 107 px chain length, so IK silently
     // clamped them into stiff, nearly straight arms.
-    const lapNear = { x: pose.shoulders.near.x + 30, y: pose.shoulders.near.y + 68 };
-    const lapFar = { x: pose.shoulders.far.x - 12, y: pose.shoulders.far.y + 70 };
-    const balanceNear = { x: pose.shoulders.near.x + 42, y: pose.shoulders.near.y + 62 };
-    const balanceFar = { x: pose.shoulders.far.x + 12, y: pose.shoulders.far.y + 70 };
-    const standingNear = { x: pose.shoulders.near.x + 14, y: pose.shoulders.near.y + 82 };
-    const standingFar = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 82 };
+    const lapNear = { x: pose.shoulders.near.x + 30, y: pose.shoulders.near.y + 90 };
+    const lapFar = { x: pose.shoulders.far.x - 12, y: pose.shoulders.far.y + 91 };
+    const balanceNear = { x: pose.shoulders.near.x + 42, y: pose.shoulders.near.y + 68 };
+    const balanceFar = { x: pose.shoulders.far.x + 2, y: pose.shoulders.far.y + 78 };
+    const standingNear = { x: pose.shoulders.near.x + 4, y: pose.shoulders.near.y + 92 };
+    const standingFar = { x: pose.shoulders.far.x - 8, y: pose.shoulders.far.y + 92 };
     const actionNear = { x: lapNear.x + (balanceNear.x - lapNear.x) * counter,
       y: lapNear.y + (balanceNear.y - lapNear.y) * counter };
     const actionFar = { x: lapFar.x + (balanceFar.x - lapFar.x) * counter,
