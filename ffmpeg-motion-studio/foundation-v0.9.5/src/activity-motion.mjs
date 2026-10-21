@@ -140,10 +140,13 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   // Action timelines are authored as explicit phases. The 3 s clip is a preview
   // duration, not permission to hold one pose for most of the sequence.
   const turnPulse = keyCurve(u, [[0,0],[0.12,0],[0.30,1],[0.43,0.82],[0.60,-0.62],[0.72,-0.62],[0.90,0],[1,0]]);
-  const pickupCrouch = keyCurve(u, [[0,0],[0.04,0],[0.14,0.48],[0.28,1],[0.37,1],[0.54,0.28],[0.68,0],[1,0]]);
-  const pickupReach = keyCurve(u, [[0,0],[0.04,0],[0.14,0.45],[0.27,1],[0.36,1],[0.47,0.58],[0.60,0],[1,0]]);
-  const pickupGrip = keyCurve(u, [[0,0],[0.27,0],[0.32,0.90],[0.35,1],[1,1]]);
-  const pickupLift = keyCurve(u, [[0,0],[0.36,0],[0.47,0.22],[0.60,1],[1,1]]);
+  // Pick-up uses five distinct beats: notice/preload, lower, reach, close the
+  // grip, then lift while the body is still low before recovering to upright.
+  const pickupAnticipation = keyCurve(u, [[0,0],[0.06,0],[0.10,1],[0.15,0.18],[0.21,0],[1,0]]);
+  const pickupCrouch = keyCurve(u, [[0,0],[0.08,0],[0.18,0.25],[0.29,0.78],[0.38,1],[0.46,0.92],[0.55,0.62],[0.67,0.18],[0.79,0],[1,0]]);
+  const pickupReach = keyCurve(u, [[0,0],[0.09,0],[0.20,0.20],[0.33,0.78],[0.42,1],[0.52,1],[0.62,0.62],[0.73,0],[1,0]]);
+  const pickupGrip = keyCurve(u, [[0,0],[0.37,0],[0.42,0.62],[0.46,1],[1,1]]);
+  const pickupLift = keyCurve(u, [[0,0],[0.47,0],[0.52,0.08],[0.59,0.34],[0.69,0.88],[0.75,1],[1,1]]);
   const pickupTableTopY = scene.background.horizon_y - 144;
   const pickupOrigin = { x: base.shoulders.near.x + 50, y: pickupTableTopY - 13 };
   const pickupTarget = { x: pickupOrigin.x - 18, y: pickupOrigin.y };
@@ -176,22 +179,24 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     gazeOffsetY = 0.55 * reachWeight;
   }
   if (activity === "pick-up") {
-    drop = 30 * pickupCrouch;
-    forwardShift = 10 * pickupCrouch;
-    lean = 0.34 * pickupCrouch;
-    headTurn = 0.14 * pickupReach;
-    gazeOffsetX = 0.60 * pickupReach;
-    gazeOffsetY = 0.45 * pickupReach;
+    // A small body/gaze preload makes the object the cause of the action; it
+    // must finish before the major descent and before the hand commits.
+    drop = 26 * pickupCrouch;
+    forwardShift = 9 * pickupCrouch - 2.5 * pickupAnticipation;
+    lean = 0.27 * pickupCrouch - 0.025 * pickupAnticipation;
+    headTurn = 0.14 * Math.max(pickupReach, pickupAnticipation);
+    gazeOffsetX = 0.60 * Math.max(pickupReach, pickupAnticipation);
+    gazeOffsetY = 0.45 * Math.max(pickupReach, pickupAnticipation);
     reachWeight = pickupReach;
   }
   if (activity === "sit-to-stand") {
     // Start in a genuinely seated configuration, lean forward before seat-off,
     // then extend and spend the final portion stabilizing upright.
-    drop = keyCurve(u, [[0,25],[0.12,25],[0.25,25],[0.38,24],[0.49,18],[0.66,3],[0.80,0],[0.90,0],[1,0]]);
-    forwardShift = keyCurve(u, [[0,0],[0.14,0],[0.30,7],[0.40,12],[0.52,10],[0.70,4],[0.86,0],[1,0]]);
-    lean = keyCurve(u, [[0,0.02],[0.14,0.02],[0.29,0.20],[0.40,0.34],[0.50,0.28],[0.65,0.12],[0.80,0],[1,0]]);
-    armCounterBalance = keyCurve(u, [[0,0],[0.16,0],[0.30,0.62],[0.42,1],[0.55,0.76],[0.72,0.24],[0.88,0],[1,0]]);
-    sitStandRestWeight = keyCurve(u, [[0,0],[0.28,0],[0.43,0],[0.56,0.16],[0.72,0.72],[0.86,1],[1,1]]);
+    drop = keyCurve(u, [[0,25],[0.12,25],[0.25,25],[0.36,25],[0.44,23],[0.53,14],[0.67,3],[0.78,0],[0.86,0],[1,0]]);
+    forwardShift = keyCurve(u, [[0,0],[0.14,0],[0.27,3],[0.36,8],[0.42,11],[0.49,10],[0.63,5],[0.80,1],[0.88,0],[1,0]]);
+    lean = keyCurve(u, [[0,0.02],[0.14,0.02],[0.28,0.10],[0.36,0.28],[0.42,0.34],[0.47,0.28],[0.60,0.16],[0.75,0.04],[0.84,0],[1,0]]);
+    armCounterBalance = keyCurve(u, [[0,0],[0.16,0],[0.28,0.50],[0.36,0.84],[0.42,1],[0.51,0.78],[0.67,0.28],[0.82,0],[1,0]]);
+    sitStandRestWeight = keyCurve(u, [[0,0],[0.28,0],[0.43,0.02],[0.53,0.22],[0.67,0.66],[0.81,0.96],[0.88,1],[1,1]]);
   }
   if (activity === "turn-in-place") {
     // This is an explicit 2D weight-shift/foot-pivot cue, not a true 3D turn.
@@ -228,6 +233,7 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
       reachAnticipationWeight, breathingOffsetPx: breath,
       respiratorySwayPx: respiratorySway,
       gazeOffsetX, gazeOffsetY,
+      pickupAnticipationWeight: activity === "pick-up" ? pickupAnticipation : 0,
       pickupReachWeight: activity === "pick-up" ? pickupReach : 0,
       pickupGripWeight: activity === "pick-up" ? pickupGrip : 0,
       pickupLiftWeight: activity === "pick-up" ? pickupLift : 0,
@@ -260,8 +266,10 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
   // Neutral projected hands should occupy opposite depth layers instead of collapsing
   // at the pelvis or meeting in front of the torso due to the base gait's arm swing.
   if (["stand", "look-around", "turn-in-place"].includes(activity)) {
-    nearTarget = { x: pose.shoulders.near.x + 12, y: pose.shoulders.near.y + 98 };
-    farTarget = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 98 };
+    // Keep hands close to the hips while reserving elbow bend; the previous
+    // ~100 px shoulder-to-wrist requests nearly locked the 107 px arm chains.
+    nearTarget = { x: pose.shoulders.near.x + 12, y: pose.shoulders.near.y + 88 };
+    farTarget = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 88 };
   }
   // In a side-profile projection the two relaxed hands need a small near/far
   // separation; otherwise both arms collapse into one wrist at the pelvis.
@@ -316,10 +324,13 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // During the crouch, the non-grasping arm counterbalances behind the hip.
     // Keeping this wrist only 10px behind the shoulder made the far forearm fold
     // across the torso in profile and read as a crossed-arm pose.
-    const relaxedFarTarget = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 84 };
+    const relaxedFarTarget = { x: pose.shoulders.far.x - 8, y: pose.shoulders.far.y + 80 };
+    // Keep the counterbalancing wrist in shoulder-local reach space. A pelvis-
+    // relative target put the far wrist beyond arm length and made the forearm
+    // look like a backward-pointing lever in the deepest crouch.
     const counterbalanceFarTarget = {
-      x: pose.pelvis.x - 26 - 8 * pickupCrouch + 4 * pickupLift,
-      y: pose.pelvis.y - 6 + 5 * pickupLift
+      x: pose.shoulders.far.x - 24 - 4 * pickupCrouch + 3 * pickupLift,
+      y: pose.shoulders.far.y + 68 + 3 * pickupLift
     };
     farTarget = {
       x: relaxedFarTarget.x + (counterbalanceFarTarget.x - relaxedFarTarget.x) * pickupCrouch,
@@ -330,11 +341,14 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     // pose. Reusing the generic folded-arm pose made the entire action read as
     // crossed arms rather than a lower-body transfer.
     const counter = armCounterBalance, rest = sitStandRestWeight;
-    const lapNear = { x: pose.shoulders.near.x + 38, y: pose.shoulders.near.y + 86 };
-    const lapFar = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 88 };
-    const balanceNear = { x: pose.shoulders.near.x + 52, y: pose.shoulders.near.y + 87 };
-    const balanceFar = { x: pose.shoulders.far.x - 5, y: pose.shoulders.far.y + 88 };
-    const standingNear = { x: pose.shoulders.near.x + 22, y: pose.shoulders.near.y + 75 };
+    // All wrist anchors stay inside the arm's comfortable workspace. The older
+    // lap/balance targets were farther than the 107 px chain length, so IK silently
+    // clamped them into stiff, nearly straight arms.
+    const lapNear = { x: pose.shoulders.near.x + 30, y: pose.shoulders.near.y + 68 };
+    const lapFar = { x: pose.shoulders.far.x - 12, y: pose.shoulders.far.y + 70 };
+    const balanceNear = { x: pose.shoulders.near.x + 42, y: pose.shoulders.near.y + 62 };
+    const balanceFar = { x: pose.shoulders.far.x + 12, y: pose.shoulders.far.y + 70 };
+    const standingNear = { x: pose.shoulders.near.x + 14, y: pose.shoulders.near.y + 82 };
     const standingFar = { x: pose.shoulders.far.x - 10, y: pose.shoulders.far.y + 82 };
     const actionNear = { x: lapNear.x + (balanceNear.x - lapNear.x) * counter,
       y: lapNear.y + (balanceNear.y - lapNear.y) * counter };
