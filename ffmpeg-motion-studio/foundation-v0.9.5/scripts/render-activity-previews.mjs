@@ -21,10 +21,12 @@ export function buildActivityManifest(scene) {
     const maxPoseStepFrameByPoint = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
     const maxJointAccelerationByPointPxPerFrame2 = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
     const maxJointAccelerationFrameByPoint = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
-    let maxJointAccelerationPxPerFrame2 = 0;
+    const maxJointJerkByPointPxPerFrame3 = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
+    const maxJointJerkFrameByPoint = Object.fromEntries(trackedPointNames.map(name => [name, 0]));
+    let maxJointAccelerationPxPerFrame2 = 0, maxJointJerkPxPerFrame3 = 0;
     let initialSeatContactErrorPx = null, finalSeatContactErrorPx = null, reachTargetContactedAtPeak = false;
     let pickupGripContactFrames = 0, pickupGripContactViolation = false, maxReachWeight = 0;
-    let finalPickupItemChestDistancePx = null, previousPrevious = null, previous = null;
+    let finalPickupItemChestDistancePx = null, previousPreviousPrevious = null, previousPrevious = null, previous = null;
     for (let frame = 0; frame < scene.duration_frames; frame++) {
       const pose = evaluateActivity(scene, frame, activity, "free");
       maxBoneErrorPx = Math.max(maxBoneErrorPx, pose.diagnostics.boneLengthErrorPx);
@@ -93,6 +95,12 @@ export function buildActivityManifest(scene) {
           nearWrist: previousPrevious.nearArm.wrist, farWrist: previousPrevious.farArm.wrist,
           leftKnee: previousPrevious.leftLeg.knee, rightKnee: previousPrevious.rightLeg.knee
         } : null;
+        const oldestPoints = previousPreviousPrevious ? {
+          pelvis: previousPreviousPrevious.pelvis, chest: previousPreviousPrevious.chest, head: previousPreviousPrevious.head,
+          nearElbow: previousPreviousPrevious.nearArm.elbow, farElbow: previousPreviousPrevious.farArm.elbow,
+          nearWrist: previousPreviousPrevious.nearArm.wrist, farWrist: previousPreviousPrevious.farArm.wrist,
+          leftKnee: previousPreviousPrevious.leftLeg.knee, rightKnee: previousPreviousPrevious.rightLeg.knee
+        } : null;
         for (const name of trackedPointNames) {
           const a = previousPoints[name], b = points[name];
           const step = Math.hypot(b.x-a.x,b.y-a.y);
@@ -112,12 +120,22 @@ export function buildActivityManifest(scene) {
             }
             maxJointAccelerationPxPerFrame2 = Math.max(maxJointAccelerationByPointPxPerFrame2[name], maxJointAccelerationPxPerFrame2);
           }
+          if (oldestPoints) {
+            const p2 = olderPoints[name], p3 = oldestPoints[name];
+            const jerk = Math.hypot(b.x - 3*a.x + 3*p2.x - p3.x, b.y - 3*a.y + 3*p2.y - p3.y);
+            if (jerk > maxJointJerkByPointPxPerFrame3[name]) {
+              maxJointJerkByPointPxPerFrame3[name] = jerk;
+              maxJointJerkFrameByPoint[name] = frame;
+            }
+            maxJointJerkPxPerFrame3 = Math.max(maxJointJerkByPointPxPerFrame3[name], maxJointJerkPxPerFrame3);
+          }
         }
         for (const side of ["left", "right"]) {
           const oldFoot = previous[side + "Foot"], newFoot = pose[side + "Foot"];
           maxStanceFootDriftPx = Math.max(maxStanceFootDriftPx, Math.hypot(newFoot.x-oldFoot.x,newFoot.y-oldFoot.y));
         }
       }
+      previousPreviousPrevious = previousPrevious;
       previousPrevious = previous;
       previous = pose;
     }
@@ -128,10 +146,12 @@ export function buildActivityManifest(scene) {
       maxBoneErrorPx, maxAnkleClampErrorPx, maxArmClampErrorPx, maxKneeStepPx, maxKneeStepFrame, maxStanceFootDriftPx,
       maxPoseStepByPointPx, maxPoseStepFrameByPoint,
       maxJointAccelerationByPointPxPerFrame2, maxJointAccelerationFrameByPoint, maxJointAccelerationPxPerFrame2,
+      maxJointJerkByPointPxPerFrame3, maxJointJerkFrameByPoint, maxJointJerkPxPerFrame3,
       maxNearArmTargetReachPx, maxFarArmTargetReachPx,
       maxPickupItemAccelerationPxPerFrame2, maxPickupItemStepFrame,
       temporalMetricsFinite: [...Object.values(maxPoseStepByPointPx), ...Object.values(maxJointAccelerationByPointPxPerFrame2),
-        maxJointAccelerationPxPerFrame2, maxPickupItemAccelerationPxPerFrame2].every(Number.isFinite),
+        ...Object.values(maxJointJerkByPointPxPerFrame3), maxJointAccelerationPxPerFrame2,
+        maxJointJerkPxPerFrame3, maxPickupItemAccelerationPxPerFrame2].every(Number.isFinite),
       maxPelvisDropPx, maxHeadTurnRadians, maxTorsoLeanRadians, maxReachDisplacementPx,
       pickupObjectRendered: activity === "pick-up" && renderSvgFrame(scene, scene.duration_frames - 1, "free", activity).includes('data-prop="pickup-item"'),
       pickupObjectHeldAtEnd: activity === "pick-up" ? Boolean(previous?.activityState.pickupItem?.held) : null,
@@ -157,9 +177,9 @@ export function buildActivityManifest(scene) {
     });
   }
   return {
-    schemaVersion: "1.5.0", sceneId: "motion-studio-activity-suite-v0.9.5",
+    schemaVersion: "1.6.0", sceneId: "motion-studio-activity-suite-v0.9.5",
     renderer: "procedural SVG + FFmpeg H.264", canvas: scene.canvas, fps: scene.fps,
-    actionCurveModel: "shape-preserving-cubic-keyframes",
+    actionCurveModel: "quintic-hermite-c2-zero-knot-acceleration",
     cameraFraming: { activityClips: "close-action-1.50x", floorAnchor: "screen-space horizon; planted feet remain grounded" },
     evaluationPolicy: "geometry, phase timing, semantic contact and all-frame review are separate acceptance gates",
     activityCount: activities.length, activities,

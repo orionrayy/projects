@@ -28,32 +28,53 @@ function pulse(u, rise = 0.2, fall = 0.78) {
   return smoothstep(u / rise) * (1 - smoothstep((u - fall) / (1 - fall)));
 }
 
-// Shape-preserving cubic interpolation for action channels. Unlike long pulse holds
-// or independent ease-in/ease-out segments, this preserves velocity continuity at
-// ordinary keys and prevents overshoot at contact/extrema keys.
+// Monotone quintic Hermite interpolation for action channels.
+// Shared harmonic tangents retain the authored direction; zero second derivative at
+// every key makes neighboring segments C2-continuous. Timeline endpoints use zero
+// tangents because the pose is held outside the clip, preventing a start/end kick.
 export function keyCurve(u, keys) {
+  if (!Array.isArray(keys) || keys.length < 2) throw new TypeError("keyCurve requires at least two [time,value] keys.");
+  for (let i = 0; i < keys.length; i++) {
+    if (!Array.isArray(keys[i]) || keys[i].length !== 2 ||
+        !Number.isFinite(keys[i][0]) || !Number.isFinite(keys[i][1]) ||
+        (i > 0 && !(keys[i][0] > keys[i-1][0]))) {
+      throw new TypeError("keyCurve keys must have finite values and strictly increasing times.");
+    }
+  }
   if (u <= keys[0][0]) return keys[0][1];
   if (u >= keys[keys.length - 1][0]) return keys[keys.length - 1][1];
-  const slopes = [];
+
+  const secants = [];
   for (let i = 0; i < keys.length - 1; i++) {
-    slopes.push((keys[i + 1][1] - keys[i][1]) / (keys[i + 1][0] - keys[i][0]));
+    secants.push((keys[i + 1][1] - keys[i][1]) / (keys[i + 1][0] - keys[i][0]));
   }
   const tangent = (i) => {
-    if (i === 0) return slopes[0];
-    if (i === keys.length - 1) return slopes[slopes.length - 1];
-    const a = slopes[i - 1], b = slopes[i];
+    // The outer curve is a held pose; zero endpoint tangents make that hold C1.
+    if (i === 0 || i === keys.length - 1) return 0;
+    const a = secants[i - 1], b = secants[i];
     if (a === 0 || b === 0 || Math.sign(a) !== Math.sign(b)) return 0;
     const h0 = keys[i][0] - keys[i - 1][0];
     const h1 = keys[i + 1][0] - keys[i][0];
     const w1 = 2 * h1 + h0, w2 = h1 + 2 * h0;
     return (w1 + w2) / (w1 / a + w2 / b);
   };
+
   let i = 0;
   while (i < keys.length - 2 && u > keys[i + 1][0]) i++;
   const [x0, y0] = keys[i], [x1, y1] = keys[i + 1];
-  const h = x1 - x0, t = (u - x0) / h, t2 = t * t, t3 = t2 * t;
-  const value = (2*t3 - 3*t2 + 1)*y0 + (t3 - 2*t2 + t)*h*tangent(i)
-    + (-2*t3 + 3*t2)*y1 + (t3 - t2)*h*tangent(i + 1);
+  const h = x1 - x0, t = (u - x0) / h;
+  const delta = y1 - y0;
+  const d0 = h * tangent(i), d1 = h * tangent(i + 1);
+  // Quintic Hermite basis matches endpoint values and first derivatives while
+  // imposing zero acceleration at both ends. The shared knot therefore has the
+  // same position, velocity and acceleration from either adjacent segment.
+  const a3 = 10 * delta - 6 * d0 - 4 * d1;
+  const a4 = -15 * delta + 8 * d0 + 7 * d1;
+  const a5 = 6 * delta - 3 * d0 - 3 * d1;
+  const t2 = t * t, t3 = t2 * t, t4 = t3 * t, t5 = t4 * t;
+  const value = y0 + d0 * t + a3 * t3 + a4 * t4 + a5 * t5;
+  // Defensive range guard; tests verify authored curves remain monotone without
+  // activating this clamp under ordinary inputs.
   return clamp(value, Math.min(y0, y1), Math.max(y0, y1));
 }
 function rotatePoint(point, pivot, angle) {
