@@ -10,6 +10,10 @@ test("activity manifest reports the C2 curve contract and jerk cross-checks for 
   const manifest = buildActivityManifest(scene);
   assert.equal(manifest.actionCurveModel, "quintic-hermite-c2-zero-knot-acceleration");
   assert.equal(manifest.activityCount, 6);
+  const reach = manifest.activities.find(activity => activity.id === "reach");
+  assert.ok(reach.maxPoseStepByPointPx.nearWrist < 10.5,
+    "reach wrist peak step should retain smoothing margin below the 11.5 px regression ceiling: " +
+    reach.maxPoseStepByPointPx.nearWrist);
   for (const activity of manifest.activities) {
     assert.ok(activity.maxJointJerkPxPerFrame3 >= 0 && Number.isFinite(activity.maxJointJerkPxPerFrame3),
       activity.id + " must report finite peak joint jerk");
