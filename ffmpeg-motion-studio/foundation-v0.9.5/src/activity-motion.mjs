@@ -165,13 +165,14 @@ export function evaluateActivity(scene, frameIndex, activity, armMode = "free") 
     [0.75,0.62],[0.77,0.54],[0.79,0.46],[0.81,0.38],[0.83,0.30],[0.85,0.22],
     [0.87,0.14],[0.89,0.06],[0.91,0],[0.95,0],[1,0]];
   // Wrist path begins only after the anticipation beat and uses sampled quintic
-  // smoothstep progress through the approach. It reaches the fixed contact point
-  // before the existing contact window and distributes acceleration across frames.
-  const reachWristPathKeys = [[0,0],[0.16,0],[0.2133333333,0.0354938272],
-    [0.2666666667,0.2098765432],[0.32,0.5],[0.3733333333,0.7901234568],
-    [0.4266666667,0.9645061728],[0.48,1],[0.62,1],
-    [0.75,0.62],[0.77,0.54],[0.79,0.46],[0.81,0.38],[0.83,0.30],
-    [0.85,0.22],[0.87,0.14],[0.89,0.06],[0.91,0],[0.95,0],[1,0]];
+  // smoothstep progress in both approach and release. It reaches the fixed contact
+  // point before the contact window and eases out of the hold instead of dropping into
+  // a steep retraction segment, distributing acceleration across the entire action.
+  const reachWristPathKeys = [[0,0],[0.16,0],[0.21,0.0354938272],
+    [0.26,0.2098765432],[0.31,0.5],[0.36,0.7901234568],
+    [0.41,0.9645061728],[0.46,1],[0.62,1],
+    [0.67,0.9645061728],[0.72,0.7901234568],[0.77,0.5],
+    [0.82,0.2098765432],[0.87,0.0354938272],[0.92,0],[0.95,0],[1,0]];
   // Pick-up uses five distinct beats: notice/preload, lower, reach, close the
   // grip, then lift while the body is still low before recovering to upright.
   const pickupAnticipation = keyCurve(u, [[0,0],[0.06,0],[0.10,1],[0.15,0.18],[0.21,0],[1,0]]);
