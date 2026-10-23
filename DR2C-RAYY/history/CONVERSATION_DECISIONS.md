@@ -30,3 +30,11 @@ The three original concepts remain deferred:
 ## Non-claims carried forward
 
 The project is not 100% translated yet. Runtime gameplay, save/load and APK rebuild/signing have not been tested. Continue tracking these limits in every release note.
+
+## Checkpoint v2.3 — recruitment localization and slang research
+
+- Scope: contextual presentation-text pass across `camp-recruit.df`, `cyoa-k-recruit.df` and `familiar-recruit.df`.
+- The user explicitly requires the Indonesian text to retain DR2C's blunt, rough, sarcastic comedy and to include researched community slang such as `ragnamok`, `perjomokan` and `cewe standar TikTok` only where context supports it.
+- The voice guide references recent media explainers and community discussions but treats them as examples, not prevalence statistics. `ragnamok` remains niche/low confidence; `jomok/perjomokan` can be derogatory; the TikTok-woman label is contested.
+- v2.3: 410 exact matching rules hit, 432 literal occurrences changed; static integrity and ZIP CRC PASS.
+- Full translation remains incomplete (heuristic inventory delta 35.13%, 6,270 probable unique candidates remain); runtime and save/load tests were not run.

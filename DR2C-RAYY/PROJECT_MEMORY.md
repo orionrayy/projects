@@ -2,33 +2,39 @@
 
 ## Canonical identity
 - Base game: Death Road to Canada. Project name: DR2C VORENYX.
-- Current scope: Indonesian localization + replacement title identity; larger sci-fi/Renaissance/business expansions deferred.
-- Invariant: retain the original Canada-bound journey and do not add a mandatory replacement campaign.
-- Target voice: colloquial Indonesian, blunt, sarcastic, sometimes profane, with distinct NPC personas.
-- 100% player-visible translation is the target, **not yet achieved**.
+- Current scope: Indonesian localization and replacement title identity; larger expansions remain deferred until the localization foundation is substantially complete.
+- Invariant: retain the original Canada-bound journey and campaign flow.
+- Target voice: colloquial Indonesian that is slangy, blunt, sarcastic and occasionally profane, with distinct NPC personas.
+- Target: 100% of player-visible text; **not yet achieved**.
 
-## Current checkpoint — v2.2
-- Patch artifact: `DR2C_VORENYX_ID_v2.2_localization_patch.zip`.
-- Audit baseline: 541 files; 17,329 quoted literal occurrences; 13,038 unique literals.
-- Heuristic player-facing occurrences: 10,844; changed 3,509 (32.36%); probable untranslated unique candidates: 6,531.
-- This batch fixes 15 contextual player-visible English literals in `weapons.df`: seller interruption lines, robbery/choice labels, premium stock prompt, medieval-axe label/description, anime-truck intro and catchphrase.
-- Targeted residue scan: 0 matches. Display markers in `weapons.df`: 157/157. Static report PASS and ZIP CRC PASS.
-- The v2.1 folder report and embedded ZIP report previously disagreed; v2.2 corrects affected visible strings and regenerates/validates the embedded report.
-- Runtime gameplay, save/load, APK rebuild/signing: NOT RUN.
+## Current checkpoint — v2.3 (24 October 2026)
+- Local patch artifact: `DR2C_VORENYX_ID_v2.3_localization_patch.zip` (the full binary patch remains outside public GitHub).
+- Scope: `events/trade/camp-recruit.df`, `events/trade/cyoa-k-recruit.df`, and `events/trade/familiar-recruit.df`.
+- 410 exact mapping rules hit; 432 literal occurrences changed; 427 inventory rows marked in v2.3.
+- Inventory baseline: 541 files, 17,329 quoted occurrences, 13,038 unique literals.
+- Heuristic likely player-facing delta: 3,809 / 10,844 = 35.13%; 6,270 probable unique untranslated candidates remain.
+- Static checks and package CRC: PASS. Patch verifier: PASS.
+- Runtime gameplay/save-load: NOT RUN. APK rebuild/signing: NOT PERFORMED.
+
+## Coverage interpretation
+Inventory percentages are approximate deltas, not semantic-completeness or actual in-game-screen metrics. Continue classifying candidates, reviewing full dynamic display expressions, and validating real gameplay surfaces before claiming 100%.
+
+## Voice and slang policy
+- Use natural gue/lo Indonesian and sentence-level rhythm. Profanity should be pointed and character-specific, not mechanically appended to every line.
+- Localize joke intent and timing, not just individual words. Preserve references/proper names when translation would destroy the joke, while translating surrounding exposition and choices.
+- Current slang changes quickly by platform and community. `ragnamok` remains niche/low-confidence; `jomok/perjomokan` can carry homophobic or sexualized insult; `cewe standar TikTok` is a contested social label and should not be treated as a universal fact.
+- See `docs/VORENYX_VOICE_GUIDE_v2.3.md`, `docs/SLANG_RESEARCH_AND_EVIDENCE.md`, and the source links in the voice guide.
 
 ## Hard invariants
-Preserve all trait/perk/character IDs, stat keys, weapon IDs/constants, food costs, reward operations, CYOA IDs, trader counters, branch conditions, placeholders, newlines, tabs, display delimiters and original campaign flow. Translate presentation text only.
-
-## Slang policy
-Use gue/lo, gak, udah, nih, dong, anjir/bjir when character/context supports it. Keep gamer jargon if natural; avoid forcing memes into every line. “Cewe standar TikTok” is a contested label; “jomok/perjomokan” can carry homophobic/sexualized mockery; “ragnamok” remains low-confidence niche usage. See the style matrix, glossary and research evidence.
+Preserve trait/perk/character IDs, stat keys, weapon IDs/constants, food costs, reward operations, CYOA IDs, trader counters, branch conditions, placeholders, newlines, tabs, display delimiters, and original campaign flow. Translate presentation text only; exact-context edits are preferred over global replacements.
 
 ## Next priorities
-1. Continue remaining player-facing trader, event, NPC and system strings.
-2. Scan full display expressions for residual English; avoid global substring replacement.
-3. Review dynamic pronouns, grammar, persona consistency and UI length manually.
-4. Test menus, events, purchases/robbery, combat, transitions and save/load in runtime.
-5. Rebuild/sign APK only after stability is proven.
-6. Update project memory, changelog, inventory, reports and history diffs per checkpoint.
+1. Continue event/NPC text in impact order, reviewing complete displayed expressions rather than isolated words.
+2. Distinguish player-visible strings from internal/debug strings to improve the coverage denominator.
+3. Run persona/grammar/UI-length QA and look for accidental English/Indonesian fragments.
+4. Test menus, recruitment, trade, combat, transitions and save/load in a compatible runtime.
+5. Rebuild/sign APK only after overlay stability is demonstrated.
+6. Update checkpoint, changelog, inventory, diffs and QA reports for each batch.
 
-## Public repo boundary
-Public GitHub contains authored docs, research and sanitized audit summaries; the original APK and full extracted game scripts are not committed. Full local archive includes user-provided base archive and latest overlay patch.
+## Public-repository boundary
+Keep the user-provided archive and full extracted game scripts local-only. Public GitHub may contain project-authored documentation, research, sanitized summaries, and appropriate verification tools—not the APK, full game source, or binary overlay.

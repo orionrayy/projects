@@ -44,3 +44,11 @@ Bahasa Indonesia harus terdengar seperti percakapan penyintas yang spontan, sark
 - Panjang label masih layak untuk UI.
 - Persona konsisten dari awal sampai akhir event.
 - Teks diterjemahkan hanya pada lapisan presentasi, bukan identifier.
+
+## Evidence-based contemporary slang
+
+- Treat slang as a repertoire that varies by platform, region, age and community; do not assume a media “viral list” is a national frequency survey.
+- Use `ragnamok` only where a niche chaotic-meme reference clearly fits; evidence confirms examples of usage but not broad comprehension.
+- `Jomok/perjomokan` belongs only in clear meme-context jokes, not as a generic personal insult; it can be sexualized or homophobic.
+- `Cewe standar TikTok` is a disputed label with conflicting user interpretations. Keep it satirical and situated, never as a factual generalization about all women or TikTok users.
+- Contemporary references and review date are in [VORENYX Voice Guide v2.3](VORENYX_VOICE_GUIDE_v2.3.md).
