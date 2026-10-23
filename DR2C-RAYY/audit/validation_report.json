@@ -1,25 +1,26 @@
 {
-  "build": "v2.2",
+  "build": "v2.3",
   "static_integrity": "PASS",
   "failures": [],
-  "fixed_player_facing_english_literals": 15,
-  "player_facing_residue_scan": {
-    "file": "assets/deathforth/events/trade/weapons.df",
-    "patterns_checked": 15,
-    "matches_remaining": []
-  },
-  "display_expression_scope": "assets/deathforth/events/trade/weapons.df",
-  "display_expression_open_count": 157,
-  "display_expression_close_count": 157,
   "zip_crc": "PASS",
+  "scope": [
+    "events/trade/camp-recruit.df",
+    "events/trade/cyoa-k-recruit.df",
+    "events/trade/familiar-recruit.df"
+  ],
+  "exact_mapping_rules_hit": 410,
+  "literal_occurrences_changed": 432,
+  "quoted_literal_counts_preserved": true,
+  "line_counts_preserved": true,
+  "display_markers_preserved": true,
   "coverage_heuristic": {
     "player_facing_occurrences": 10844,
-    "changed": 3509,
-    "percent": 32.36,
-    "untranslated_unique_candidates": 6531
+    "changed": 3809,
+    "percent": 35.13,
+    "probable_unique_untranslated_candidates": 6270
   },
   "runtime_gameplay_test": "NOT RUN",
   "save_load_test": "NOT RUN",
   "apk_rebuild": "NOT PERFORMED",
-  "note": "v2.1 working-folder and embedded ZIP validation reports disagreed. v2.2 fixes the visible source residue, embeds the updated report and validates the actual ZIP."
+  "note": "Sanitized public summary only. Detailed per-literal inventory and overlay package remain in the local project archive."
 }
