@@ -76,5 +76,53 @@
     "focus": "exact-literal/tab QA repair",
     "playerFacingHeuristicPct": 29.38,
     "static": "PASS; zero skipped rewrites"
+  },
+  {
+    "version": "v1.4",
+    "focus": "context-reviewed event/training strings and oldtrade baseline",
+    "playerFacingHeuristicPct": 29.77,
+    "static": "PASS; runtime not tested"
+  },
+  {
+    "version": "v1.5",
+    "focus": "oldtrade contextual pass",
+    "playerFacingHeuristicPct": 32.22,
+    "static": "experimental; some previous v1.4 mappings were later found reverted"
+  },
+  {
+    "version": "v1.6",
+    "focus": "oldtrade follow-up",
+    "playerFacingHeuristicPct": 32.22,
+    "static": "experimental; reconciled by v2.1"
+  },
+  {
+    "version": "v1.7",
+    "focus": "shooting and fitness trainer strings",
+    "playerFacingHeuristicPct": 32.22,
+    "static": "PASS"
+  },
+  {
+    "version": "v1.8",
+    "focus": "mechanical trainer and complete-line fixes",
+    "playerFacingHeuristicPct": 32.22,
+    "static": "PASS"
+  },
+  {
+    "version": "v1.9",
+    "focus": "Army Surplus vendor",
+    "playerFacingHeuristicPct": 32.22,
+    "static": "PASS"
+  },
+  {
+    "version": "v2.0",
+    "focus": "Rifle Collector vendor",
+    "playerFacingHeuristicPct": 32.22,
+    "static": "PASS"
+  },
+  {
+    "version": "v2.1",
+    "focus": "reconciled trainer + Army Surplus + Rifle Collector + Blade Master",
+    "playerFacingHeuristicPct": 32.22,
+    "static": "PASS; 187 rewrite hits; zero reported failures"
   }
 ]

@@ -1,36 +1,26 @@
-# Build, Reproducibility, and Validation
+# Build and Validation — v2.1
 
-## Latest checkpoint
+Current patch: DR2C_VORENYX_ID_v2.1_localization_patch.zip (distributed as a separate user artifact, not committed to this public repository).
 
-Build: v1.3 QA repair. Static integrity PASS, skipped exact rewrites 0, static failures 0, ZIP CRC PASS.
-
-Latest local package: DR2C_VORENYX_ID_v1.3_localization_patch.zip. The local project archive also contains versioned diff files, translation inventory, research sources, build generators, generated art and the user-provided base archive.
-
-## Reproducing locally
-
-1. Keep a lawful copy of the original user-provided archive and extract the Deathforth script/assets into a local working directory.
-2. Check every path in the versioned builder; historical scripts use fixed /mnt/data paths and require updating for a different machine.
-3. Preserve the original source directory as read-only baseline.
-4. Generate an overlay rather than modifying the base in place.
-5. Validate exact rewrite counts, display expression open/close counts, sentinel identifiers and ZIP CRC.
-6. Inspect player-visible text manually for mixed-language residue, UI overflow and persona drift.
-7. Runtime-test menus, events, trader choices, combat/flee effects and save/load.
-8. Rebuild/sign an APK only after overlay stability is proven.
-
-## v1.3 static results
-
+## Static results
 - Source files scanned: 541.
-- Quoted literal occurrences: 17,329.
-- Unique literals: 13,038.
-- Changed likely player-facing occurrences (heuristic): 3,186 / 10,843 = 29.38%.
-- Unique probable player-facing untranslated candidates: 6,813.
-- Exact rewrites skipped: 0.
-- Static failures: 0.
-- ZIP test: PASS.
-- Runtime game test: NOT RUN.
-- Save/load test: NOT RUN.
-- APK rebuild/sign: NOT PERFORMED.
+- Literal occurrences: 17,329; unique literal values: 13,038.
+- Heuristic player-facing occurrences: 10,843; changed: 3,494 (32.22%).
+- Probable unique untranslated candidates: 6,545.
+- Latest batch rewrite hits: 187.
+- Scopes: Shooting 15; Fitness 12; Mechanical 4; Army Surplus 45; Rifle Collector 61; Blade Master 50.
+- Display-expression open/close markers: 229/229.
+- Failures: none reported; ZIP CRC PASS.
+- Runtime gameplay: NOT RUN; save/load: NOT RUN; APK rebuild/signing: NOT PERFORMED.
 
-## Limits
+v2.1 reconciles selected previous mappings to the v1.4 baseline because experimental v1.5/v1.6 outputs reverted some earlier translations.
 
-Static checks can detect malformed delimiters or missing sentinels but cannot guarantee every script branch is syntactically or semantically valid in the game engine. The translation percentage is heuristic; it is not full-locale completeness.
+## Reproduction
+1. Keep the user-provided original archive as a read-only local baseline.
+2. Confirm target game-data version/path and back up target data.
+3. Apply only the overlay via a compatible mod workflow.
+4. Use static ZIP CRC checks and inspect complete display expressions.
+5. Runtime-test menus, choices, resource changes, purchases/robbery, transitions and save/load.
+6. Rebuild/sign the APK only after runtime stability is demonstrated.
+
+Static validation is not a substitute for runtime compatibility. This is not a signed APK and not a 100% localization release.

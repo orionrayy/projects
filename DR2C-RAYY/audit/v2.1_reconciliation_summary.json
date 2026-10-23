@@ -1,0 +1,61 @@
+{
+  "build": "v2.1",
+  "base": "v1.4 overlay preserved",
+  "supersedes": [
+    "v1.5 experimental output where some v1.4 mappings were reverted",
+    "v1.6 experimental output where some v1.4 mappings were reverted"
+  ],
+  "preserved": [
+    "CYOA IDs",
+    "food costs",
+    "stat keys",
+    "reward operations",
+    "skill increment logic",
+    "display expression markers",
+    "original Canada-bound campaign flow"
+  ],
+  "validation": {
+    "static_integrity": "PASS",
+    "failures": [],
+    "literal_rewrite_hits": 187,
+    "display_expression_open_count": 229,
+    "display_expression_close_count": 229,
+    "zip_crc": "PASS",
+    "runtime_gameplay_test": "NOT RUN",
+    "save_load_test": "NOT RUN",
+    "apk_rebuild": "NOT PERFORMED"
+  },
+  "coverage_heuristic": {
+    "player_facing_occurrences": 10843,
+    "changed": 3494,
+    "percent": 32.22,
+    "untranslated_unique_candidates": 6545,
+    "full_translation_complete": false
+  },
+  "scopes": [
+    {
+      "scope": "// Shooting",
+      "phrase_hits": 15
+    },
+    {
+      "scope": "// Fitness",
+      "phrase_hits": 12
+    },
+    {
+      "scope": "// Mechanical",
+      "phrase_hits": 4
+    },
+    {
+      "scope": "// Army Surplus",
+      "phrase_hits": 45
+    },
+    {
+      "scope": "// Rifle Collector",
+      "phrase_hits": 61
+    },
+    {
+      "scope": "// Blade Master",
+      "phrase_hits": 50
+    }
+  ]
+}

@@ -1,22 +1,22 @@
 # Changelog — DR2C VORENYX
 
-- **v0.1 — Foundation:** VORENYX identity/title art, logo/splash adaptation, first menu/general text overlay and initial source inventory.
-- **v0.2 — Mapping expansion:** broader exact literal/phrase mapping and explicit protection for internal trait/perk and stat keys.
-- **v0.3 — Contextual style pass:** wider slang source review, persona style matrix, improved QA manifests, fewer risky global substring substitutions.
-- **v0.4 — Event residual pass:** more event text localized; mixed-language sentence fragments identified and tracked.
-- **v0.5 — Sentence-level QA:** repaired high-visibility dialog fragments and expanded labels/item descriptions; prioritized complete natural sentences over raw substitution counts.
-- **v0.6 — Common event batch:** expanded common event pool, including radio, oddities, workshop, challenge and cursed-item encounters.
-- **v0.7 — Common event batch 2:** expanded common event dialog around improvised weapons, bridge guards, chatty NPCs, weather, traps, spooky shops and zombie crowds.
-- **v0.8 — Trader camp shared dialog:** localized shared survivor chatter, campfire conversation, rest choices and camp interactions.
-- **v0.9 — Weapon trader pass:** localized initial vendor dialog and transaction choices.
-- **v1.0 — Vendor expansion:** added more weapon vendors while preserving prices, stock, effects, robbery and flee branches.
-- **v1.1 — Vendor QA:** extended firearm, pipe-bomb and anime-seller dialog; repaired quote-sensitive rewrite and validated the package.
-- **v1.2 — Blunt/polearm/silent traders:** localized dialogue and choices for Blunt Master, Polearm Pal and Silent But Deadly. The initial run exposed duplicate rewrite checks and one tab-indentation mismatch.
-- **v1.3 — QA repair checkpoint:** removed redundant exact-rewrite checks and fixed the sledgehammer display-expression pattern. Result: zero skipped exact rewrites, zero static failures, ZIP CRC pass. Estimated player-facing delta remains 29.38%, not complete.
+- **v0.1:** branding/title art, logo/splash staging and initial UI overlay.
+- **v0.2–v0.3:** literal maps, NPC style matrix, slang research, identifier protections.
+- **v0.4–v0.7:** contextual dialog/event passes, bandits/recruitment/classes, common5/common3 events and sentence-level QA.
+- **v0.8:** trader-camp shared dialogue.
+- **v0.9–v1.2:** weapon trader dialogue for firearms, pipe bombs, anime, blunt weapons, polearms and silent weapons.
+- **v1.3:** QA repair; exact-literal/indentation corrections.
+- **v1.4:** contextual event/training and oldtrade baseline.
+- **v1.5–v1.6:** experimental oldtrade passes; later found to have reverted some v1.4 mappings in selected output.
+- **v1.7:** shooting and fitness trainer text.
+- **v1.8:** mechanical trainer and complete-line grammar fixes.
+- **v1.9:** Army Surplus vendor.
+- **v2.0:** Rifle Collector vendor.
+- **v2.1 — current:** reconciled trainer/vendor output from the v1.4 baseline, including Blade Master. 187 rewrite hits, no static failures, display markers balanced 229/229, ZIP CRC PASS. Heuristic player-facing delta 32.22%.
 
-## Explicit non-claims
-
-- Indonesian translation is not 100% complete.
-- No complete game runtime or every-event test has been performed.
-- Save/load behavior has not been tested.
-- Android APK has not been rebuilt or signed.
+## Release limitations
+- Translation is not 100% complete.
+- 32.22% is a heuristic literal-delta estimate, not semantic/screen coverage.
+- Runtime/gameplay, save/load, and APK rebuild/signing have not been performed.
+- Full-menu title background integration is not runtime-verified.
+- Public repository intentionally excludes original APK and full extracted base-game scripts.

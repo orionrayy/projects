@@ -1,77 +1,34 @@
 # PROJECT_MEMORY — DR2C VORENYX
 
 ## Canonical identity
+- Name: DR2C VORENYX; base game: Death Road to Canada.
+- First scope: Indonesian localization and title identity before large content expansion.
+- Invariant: retain the original journey to Canada and do not create a mandatory replacement campaign.
+- Voice: modern colloquial Indonesian; blunt, sarcastic and sometimes profane, with distinct NPC personas.
+- 100% player-visible translation is the target, **not yet achieved**.
 
-- Project name: DR2C VORENYX.
-- Base game: Death Road to Canada.
-- First scope: Indonesian localization and replacement title identity before any large content expansion.
-- Main invariant: the original trip toward Canada and the existing campaign remain unchanged. New atmosphere, dialog, and optional event variation must not become a mandatory replacement campaign.
-- Current checkpoint: v1.3 QA repair.
-- Translation target: every player-visible menu, event, NPC line, choice, item, trait/perk label, stat description, location and system prompt. This remains incomplete.
+## Latest checkpoint — v2.1
+- Latest patch: local artifact `DR2C_VORENYX_ID_v2.1_localization_patch.zip`.
+- Scan baseline: 541 files; 17,329 literal occurrences; 13,038 unique literals.
+- Heuristic player-facing occurrences: 10,843; changed: 3,494 (32.22%); probable untranslated unique candidates: 6,545.
+- Latest pass: 187 rewrite hits across Shooting, Fitness, Mechanical, Army Surplus, Rifle Collector and Blade Master.
+- Static integrity PASS; failures=[]; display markers balanced 229/229; ZIP CRC PASS.
+- Runtime gameplay, save/load, APK rebuild/signing: NOT RUN / NOT PERFORMED.
+- Reconciliation: v2.1 uses the v1.4 baseline and supersedes experimental v1.5/v1.6 outputs where some v1.4 mappings were reverted.
 
-## Source baseline and audit
+## Hard invariants
+Preserve trait/perk and character IDs, stat keys (strength/fitness/medical/shooting/mechanical/mechanic), weapon IDs, food costs, reward operations, CYOA IDs, trader counters, branch conditions, placeholders, tabs/newlines, display delimiters and original campaign flow. Translate only presentation text.
 
-- User-provided input archive: DR2C-RAYY.zip.
-- Local extracted script root used in the build environment: /mnt/data/vorenyx_work/DR2C-RAYY.
-- Files scanned: 541.
-- Quoted literal occurrences: 17,329.
-- Unique literal values: 13,038.
-- Likely player-facing occurrences (heuristic): 10,843.
-- Likely player-facing occurrences changed (heuristic): 3,186.
-- Current estimated change coverage: 29.38%.
-- Unique probable player-facing candidates still marked untranslated: 6,813.
-- Do not interpret those values as measured runtime coverage. Concatenated strings, code/data keys, image-baked text and engine-native UI need separate review.
+## Style and slang
+Use gue/lo, gak, udah, nih, dong, anjir/bjir where fitting. Gamer jargon such as loot/build/perk/trait/boss/grind may remain when natural. Slang is context- and persona-specific; do not force every meme into every line. “Cewe standar TikTok” is a contested social label. “Jomok/perjomokan” can carry homophobic/sexualized mockery and is not a generic insult. “Ragnamok” is low-confidence niche usage. See the style guide and slang research for evidence/confidence.
 
-## Latest checkpoint — v1.3
+## Next tasks
+1. Continue remaining player-facing dialogue and event options.
+2. Scan whole display expressions for residual English; avoid unsafe global substring replacement.
+3. Manually review grammar, voice fit, dynamic pronouns and UI length.
+4. Test menu/event/trade/combat/save-load in the game runtime.
+5. Rebuild/sign APK only after the overlay is stable.
+6. Update memory, changelog, audits and history at every checkpoint.
 
-- Latest patch package: DR2C_VORENYX_ID_v1.3_localization_patch.zip.
-- Last localized subsystem: weapon traders in assets/deathforth/events/trade/weapons.df — Blunt Master, Polearm Pal and Silent But Deadly.
-- Static integrity: PASS.
-- Skipped exact rewrite guards: 0.
-- Static failures: 0.
-- ZIP CRC: PASS.
-- Runtime gameplay: NOT RUN.
-- Save/load: NOT RUN.
-- APK rebuilt/signed: NOT PERFORMED.
-- New title artwork exists locally, but full-menu background integration has not been runtime-verified.
-
-## Implementation invariants
-
-Never translate or rename internal identifiers just because they resemble English. Preserve:
-- trait/perk identifiers and character IDs;
-- stat keys such as strength, fitness, medical, shooting, mechanical and mechanic;
-- weapon IDs/constants and reward operations;
-- food costs, trader counters and purchase conditions;
-- CYOA identifiers and control flow;
-- placeholders, line breaks, tab-sensitive script layout, display-expression delimiters;
-- original ending and Canada-bound journey logic.
-
-Translate presentation text, not game logic.
-
-## Voice policy
-
-- Default colloquial register: gue/lo, gak, udah, nih, dong; profanity and blunt sarcasm are allowed where the character would use them.
-- Blunt weapons seller: expressive, loud, proud of her stock, self-mocking humor.
-- Polearm seller: DIY/weapons nerd; more technical, but still casual.
-- Silent-weapons seller: concise, controlled, dry confidence.
-- Chatty characters may use “ngoceh/yapping” in fitting contexts.
-- Keep established gameplay jargon like loot, build, perk, trait, boss, and grind when that sounds natural to Indonesian players.
-- Modern slang must support the joke or persona, not replace the whole sentence.
-- “Cewe standar TikTok” is a contested social-media label, not a factual claim about all women.
-- “Jomok/perjomokan” is niche and may carry homophobic/sexualized mockery; do not use it as a generic insult at real-world identities.
-- “Ragnamok” is treated as low-confidence niche meme usage pending stronger cross-community evidence.
-- Keep slang terms contextual and revisable.
-
-## Priority queue
-
-1. Continue the untranslated parts of trade/weapons.df; then prioritize other high-density trade files: oldtrade.df, training.df, supplies.df and rare.df.
-2. Resolve remaining strings by complete display expression, not only by isolated fragments.
-3. Add per-file mixed-language residue scans and human review for grammar, voice fit and UI length.
-4. Retain static checks for display-expression balance, mechanic sentinels and ZIP CRC.
-5. Run runtime menu/event smoke tests and save/load tests if a runnable environment is available.
-6. Only after stability is demonstrated, rebuild and sign the Android APK.
-7. Update this memory, CHANGELOG and audit reports at every new checkpoint.
-
-## Public release policy
-
-Do not claim 100% localization, runtime compatibility, or release readiness until the relevant checks are performed and pass. The public repository should contain project-authored documentation and tools, not the original APK or a complete extraction of the game's scripts.
+## Release boundary
+Do not claim full translation or runtime compatibility until evidence supports it. Public GitHub keeps authored docs and sanitized audits; it does not store the original APK or full extracted game scripts.
