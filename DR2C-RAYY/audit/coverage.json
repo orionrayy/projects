@@ -1,0 +1,24 @@
+{
+  "project": "DR2C VORENYX",
+  "locale": "id-ID",
+  "build": "v1.3 QA repair",
+  "source_script_files_scanned": 541,
+  "source_quoted_literal_occurrences": 17329,
+  "unique_source_literals": 13038,
+  "likely_player_facing_occurrences_heuristic": 10843,
+  "likely_player_facing_occurrences_changed": 3186,
+  "likely_player_facing_change_percent_heuristic": 29.38,
+  "untranslated_unique_candidates_heuristic": 6813,
+  "skipped_exact_rewrites": 0,
+  "static_failures": 0,
+  "zip_crc": "PASS",
+  "full_translation_complete": false,
+  "runtime_gameplay_test": "NOT RUN",
+  "save_load_test": "NOT RUN",
+  "apk_rebuild": "NOT PERFORMED",
+  "notes": [
+    "All percentages are heuristic based on literal inventory, not runtime-visible coverage.",
+    "Current scope includes broad common events/camp dialogue and several weapon trader sections.",
+    "v1.3 repairs the sledgehammer exact-literal mismatch and removes duplicate rewrite checks."
+  ]
+}

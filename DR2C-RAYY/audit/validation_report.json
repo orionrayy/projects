@@ -1,0 +1,27 @@
+{
+  "build": "v1.3",
+  "static_integrity": "PASS",
+  "source_files_scanned": 541,
+  "source_quoted_literal_occurrences": 17329,
+  "source_unique_literals": 13038,
+  "cumulative_changed_literal_occurrences": 3856,
+  "cumulative_changed_literal_percent": 22.25,
+  "likely_player_facing_occurrences_heuristic": 10843,
+  "likely_player_facing_occurrences_changed_heuristic": 3186,
+  "likely_player_facing_change_percent_heuristic": 29.38,
+  "untranslated_unique_candidates_heuristic": 6813,
+  "changed_files": {
+    "assets/deathforth/events/trade/weapons.df": 48
+  },
+  "rewrite_units": 48,
+  "skipped_exact_rewrites": 0,
+  "skipped_rewrite_examples": [],
+  "display_expression_open_count": 157,
+  "display_expression_close_count": 157,
+  "mechanic_sentinels_checked": 13,
+  "failures": [],
+  "zip_crc": "PASS",
+  "runtime_gameplay_test": "NOT RUN",
+  "save_load_test": "NOT RUN",
+  "apk_rebuild": "NOT PERFORMED"
+}
