@@ -1,0 +1,60 @@
+{
+  "reviewed_on": "2026-10-24",
+  "method": "Triangulate contemporary media explainers, a community meme archive and user discussions; examples are not prevalence estimates.",
+  "sources": [
+    {
+      "title": "Bahasa Gen Z dan istilah yang sering dipakai",
+      "publisher": "Telkomsel",
+      "date": "2026-10-20",
+      "url": "https://www.telkomsel.com/jelajah/jelajah-lifestyle/Bahasa-Gen-Z-Istilah-dan-Artinya-yang-Sering-Dipakai",
+      "use": "Recent slang examples; notes rapid changes and platform-dependent usage."
+    },
+    {
+      "title": "15 bahasa gaul terbaru 2026 yang viral di TikTok dan Threads",
+      "publisher": "Akurat.co",
+      "date": "2026-09-25",
+      "url": "https://www.akurat.co/trend/893879/15-bahasa-gaul-terbaru-2026-yang-viral-di-tiktok-dan-threads-apa-artinya",
+      "use": "Examples of code-mixing, parody and contextual meanings."
+    },
+    {
+      "title": "Kamus Bahasa Gen Z",
+      "publisher": "Katadata",
+      "date": "2026-08-31",
+      "url": "https://katadata.co.id/lifestyle/varia/6a93670a8dd1d/kamus-bahasa-gen-z-100-kata-yang-sedang-viral-di-tiktok-dan-artinya",
+      "use": "General glossary, not prevalence data."
+    },
+    {
+      "title": "Mengenal Arti Jomok dalam Bahasa Gaul Media Sosial Viral",
+      "publisher": "Halodoc",
+      "date": "2026-09-10",
+      "url": "https://www.halodoc.com/artikel/mengenal-arti-jomok-dalam-bahasa-gaul-media-sosial-viral",
+      "use": "Context sensitivity and potentially derogatory or sexualized uses."
+    },
+    {
+      "title": "KBBJ — kategori julukan",
+      "publisher": "Kamus Besar Bahasa Jomok",
+      "date": null,
+      "url": "https://kbbj.web.id/?kategori=julukan",
+      "use": "Community meme documentation; unofficial."
+    },
+    {
+      "title": "What does 'cewe standar TikTok' even mean?",
+      "publisher": "Reddit r/pria",
+      "date": "2025-07-21",
+      "url": "https://www.reddit.com/r/pria/comments/1m5s99m/",
+      "use": "Anecdotal disagreement over the label's meaning."
+    },
+    {
+      "title": "How do i respond to this?",
+      "publisher": "Reddit r/indonesia",
+      "date": "2026-10-22",
+      "url": "https://www.reddit.com/r/indonesia/comments/1xced0w/",
+      "use": "One niche context using 'ragnamok'; not broad-prevalence evidence."
+    }
+  ],
+  "confidence_notes": {
+    "ragnamok": "low; observed niche meme/community usage only",
+    "jomok_perjomokan": "context-sensitive; may be derogatory or sexualized and should not be a generic insult",
+    "cewe_standar_tiktok": "contested social label; satire/context-bound only"
+  }
+}
