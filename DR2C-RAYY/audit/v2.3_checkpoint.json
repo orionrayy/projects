@@ -1,0 +1,42 @@
+{
+  "build": "v2.3",
+  "date": "2026-10-24",
+  "base": "v2.2",
+  "static_integrity": "PASS",
+  "zip_crc": "PASS",
+  "patch_verifier": "PASS",
+  "scope": [
+    "events/trade/camp-recruit.df",
+    "events/trade/cyoa-k-recruit.df",
+    "events/trade/familiar-recruit.df"
+  ],
+  "exact_mapping_rules_hit": 410,
+  "literal_occurrences_changed": 432,
+  "inventory_rows_marked": 427,
+  "coverage_heuristic": {
+    "project": "DR2C VORENYX",
+    "locale": "id-ID",
+    "build": "v2.3 — contextual survivor recruitment localization",
+    "source_script_files_scanned": 541,
+    "source_quoted_literal_occurrences": 17329,
+    "unique_source_literals": 13038,
+    "likely_player_facing_occurrences_heuristic": 10844,
+    "likely_player_facing_occurrences_changed": 3809,
+    "likely_player_facing_change_percent_heuristic": 35.13,
+    "untranslated_unique_candidates_heuristic": 6270,
+    "full_translation_complete": false,
+    "v2_3_scope_files": [
+      "events/trade/camp-recruit.df",
+      "events/trade/cyoa-k-recruit.df",
+      "events/trade/familiar-recruit.df"
+    ],
+    "v2_3_exact_context_literal_occurrences_changed": 432,
+    "v2_3_exact_context_rules_hit": 410,
+    "v2_3_inventory_rows_marked": 427,
+    "warning": "Literal-inventory delta is heuristic, not semantic completeness or runtime screen coverage. Only three recruitment/event scripts were included in v2.3."
+  },
+  "runtime_gameplay_test": "NOT RUN",
+  "save_load_test": "NOT RUN",
+  "apk_rebuild": "NOT PERFORMED",
+  "public_report_sanitized": true
+}
