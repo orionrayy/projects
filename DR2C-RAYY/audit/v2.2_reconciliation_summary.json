@@ -1,0 +1,42 @@
+{
+  "build": "v2.2",
+  "base": "v2.1 reconciled overlay",
+  "purpose": "Repair 15 contextual English residue literals in weapon-trader display text and correct the embedded QA report discrepancy.",
+  "supersedes": [
+    "v2.1 package whose embedded validation metadata retained two English residue findings"
+  ],
+  "preserved": [
+    "all CYOA IDs",
+    "weapon constants",
+    "food costs",
+    "reward operations",
+    "branch conditions",
+    "campaign flow",
+    "display markers"
+  ],
+  "static_integrity": "PASS",
+  "failures": [],
+  "player_facing_residue_matches_remaining": 0,
+  "display_expression_scope": "assets/deathforth/events/trade/weapons.df",
+  "display_expression_open_count": 157,
+  "display_expression_close_count": 157,
+  "zip_crc": "PASS",
+  "coverage_heuristic": {
+    "project": "DR2C VORENYX",
+    "locale": "id-ID",
+    "build": "v2.2 — player-visible English residue repair",
+    "source_script_files_scanned": 541,
+    "source_quoted_literal_occurrences": 17329,
+    "unique_source_literals": 13038,
+    "likely_player_facing_occurrences_heuristic": 10844,
+    "likely_player_facing_occurrences_changed": 3509,
+    "likely_player_facing_change_percent_heuristic": 32.36,
+    "untranslated_unique_candidates_heuristic": 6531,
+    "full_translation_complete": false,
+    "added_exact_context_rows": 15,
+    "warning": "Literal-delta heuristic counts full and partial string changes; not semantic completeness or runtime screen coverage."
+  },
+  "runtime_gameplay_test": "NOT RUN",
+  "save_load_test": "NOT RUN",
+  "apk_rebuild": "NOT PERFORMED"
+}

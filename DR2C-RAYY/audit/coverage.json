@@ -1,14 +1,15 @@
 {
   "project": "DR2C VORENYX",
   "locale": "id-ID",
-  "build": "v2.1 — reconciled oldtrade trainers",
+  "build": "v2.2 — player-visible English residue repair",
   "source_script_files_scanned": 541,
   "source_quoted_literal_occurrences": 17329,
   "unique_source_literals": 13038,
-  "likely_player_facing_occurrences_heuristic": 10843,
-  "likely_player_facing_occurrences_changed": 3494,
-  "likely_player_facing_change_percent_heuristic": 32.22,
-  "untranslated_unique_candidates_heuristic": 6545,
+  "likely_player_facing_occurrences_heuristic": 10844,
+  "likely_player_facing_occurrences_changed": 3509,
+  "likely_player_facing_change_percent_heuristic": 32.36,
+  "untranslated_unique_candidates_heuristic": 6531,
   "full_translation_complete": false,
-  "warning": "Literal-delta heuristic counts partial changes too; this is not a semantic completeness score. Game runtime and image-baked/engine-native strings require separate tests."
+  "added_exact_context_rows": 15,
+  "warning": "Literal-delta heuristic counts full and partial string changes; not semantic completeness or runtime screen coverage."
 }

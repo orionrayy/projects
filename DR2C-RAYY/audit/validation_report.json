@@ -1,40 +1,25 @@
 {
-  "build": "v2.1",
+  "build": "v2.2",
   "static_integrity": "PASS",
   "failures": [],
-  "literal_rewrite_hits": 187,
-  "scopes": [
-    {
-      "scope": "// Shooting",
-      "phrase_hits": 15
-    },
-    {
-      "scope": "// Fitness",
-      "phrase_hits": 12
-    },
-    {
-      "scope": "// Mechanical",
-      "phrase_hits": 4
-    },
-    {
-      "scope": "// Army Surplus",
-      "phrase_hits": 45
-    },
-    {
-      "scope": "// Rifle Collector",
-      "phrase_hits": 61
-    },
-    {
-      "scope": "// Blade Master",
-      "phrase_hits": 50
-    }
-  ],
-  "composite_fixes_expected_and_found": "All reported composite fixes are 1/1.",
-  "display_expression_open_count": 229,
-  "display_expression_close_count": 229,
+  "fixed_player_facing_english_literals": 15,
+  "player_facing_residue_scan": {
+    "file": "assets/deathforth/events/trade/weapons.df",
+    "patterns_checked": 15,
+    "matches_remaining": []
+  },
+  "display_expression_scope": "assets/deathforth/events/trade/weapons.df",
+  "display_expression_open_count": 157,
+  "display_expression_close_count": 157,
   "zip_crc": "PASS",
+  "coverage_heuristic": {
+    "player_facing_occurrences": 10844,
+    "changed": 3509,
+    "percent": 32.36,
+    "untranslated_unique_candidates": 6531
+  },
   "runtime_gameplay_test": "NOT RUN",
   "save_load_test": "NOT RUN",
   "apk_rebuild": "NOT PERFORMED",
-  "note": "v2.1 reconciles the v1.4 baseline because experimental v1.5/v1.6 outputs reverted some earlier mappings."
+  "note": "v2.1 working-folder and embedded ZIP validation reports disagreed. v2.2 fixes the visible source residue, embeds the updated report and validates the actual ZIP."
 }

@@ -124,5 +124,11 @@
     "focus": "reconciled trainer + Army Surplus + Rifle Collector + Blade Master",
     "playerFacingHeuristicPct": 32.22,
     "static": "PASS; 187 rewrite hits; zero reported failures"
+  },
+  {
+    "version": "v2.2",
+    "focus": "weapon-trader English residue repair: 15 exact contextual literals",
+    "playerFacingHeuristicPct": 32.36,
+    "static": "PASS; zero target residues; ZIP CRC PASS; runtime not tested"
   }
 ]
