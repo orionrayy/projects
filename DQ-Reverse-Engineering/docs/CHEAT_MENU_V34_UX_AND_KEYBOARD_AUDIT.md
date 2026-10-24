@@ -43,3 +43,12 @@ This workbench corrects the intended interaction pattern but is **not injected i
 5. Expand the in-game menu only through verified groups/pages and a format-preserving serializer. Do not add 222 decorative controls without backing game handlers.
 
 No new XAPK is declared runtime-ready in v34. The next game build will be produced only once the keyboard field → numeric value → balance action path and the non-Gold stepper read-back are internally consistent.
+
+
+## Implementation follow-up — v34 / workbench v35
+
+After the v33 screenshot review, the four tiny Gold steppers were identified as a layout/intent error. The corrected game candidate is documented in [CHEAT_MENU_GOLD_KEYBOARD_PROBE_V34.md](CHEAT_MENU_GOLD_KEYBOARD_PROBE_V34.md). It removes the three surplus Gold steppers and adds one centered, normally sized **Set Gold** button whose action invokes the existing `uai_gp_hud.onSetGold` callback. The callback's keyboard and balance behavior is still **NOT RUNTIME-VERIFIED**.
+
+The separate v35 browser workbench now provides a button-built keypad for custom Gold amounts, while generic numeric draft controls use `−10`, `−1`, `+1`, `+10` steppers. Playwright smoke tests confirmed exact local draft entry and generic step changes. The workbench is explicitly disconnected from the game and is not an APK integration.
+
+v34 XAPK SHA-256: `799577cfe1ed0c910f5b21d5c3df4ab6b6d373fe0d4719244214c05ac6d5b008`. All 20 split signatures and package CRC checks passed a local verifier. The build uses a new local certificate, so it cannot install as an update over v33 without uninstalling the diagnostic `com.shinybox.dqv30` app first. The original `com.shinybox.smash` app must remain installed.
