@@ -126,3 +126,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - The signing certificate `6ea04e10965de1459a7fee845e8ae903bc1535a744f4762c14b2c7bb82eb13f9` is a local key, not the original publisher certificate. PairIP/Play license checks remain and may reject the package; no licensing/anti-tamper bypass attempted.
 - VORENYX splash artwork itself has no APKVISION logo, but APKVISION namespaces remain in `classes3.dex` and `libstub.so` in the supplied repackaged base. The wrapper was not removed; a clean authorized publisher APK is needed for a clean no-APKVISION build.
 - Install/launch/Start taps, layout fit, gameplay, save/load and stability are NOT TESTED. This is a hotfix candidate, not a verified stable release.
+
+
+## Post-install failure report — v2.44 (24 October 2026)
+- User reports all prior symptoms unchanged after attempting the hotfix: Start still does not trigger, UI layout remains incorrect, and APKVISION branding remains.
+- Local APK static check confirms boot marker is canonical and the two main activities declare fixed landscape (0), but there is no proof the device installed this file.
+- v2.44 has package `com.noodlecake.drtc`, versionCode 57, and a local signing certificate, not the existing APKVISION/release signer. Android will refuse an in-place update if the currently installed package is signed by a different certificate; old app may remain active. This is a probable deployment blocker, not a confirmed device diagnosis.
+- APKVISION namespaces remain in `classes3.dex` and `libstub.so`; v2.44 did not remove the wrapper, so the watermark issue is not fixed.
+- Status: hotfix **not verified and user reports no change**. No further blind build. First need the installer result, safe save backup status before any uninstall, and a new recording/log from a confirmed installed candidate.
