@@ -1,0 +1,73 @@
+{
+  "project": "DR2C VORENYX",
+  "candidate": "v2.45 corrective source overlay candidate",
+  "run_date": "2026-10-25",
+  "scope": {
+    "source_df": 509,
+    "overlay_df": 269,
+    "uncovered_source_df": 240,
+    "changed_files_vs_v243": 12,
+    "changed_paths": [
+      "boot.df",
+      "events/4jerksmode.df",
+      "events/common/cyoa-example-7types.df",
+      "events/trade/camp-recruit.df",
+      "events/trade/familiar-recruit.df",
+      "events/trade/oldtrade.df",
+      "events/unlock/perk1.df",
+      "events/unlock/perk2.df",
+      "events/unlock/perk3.df",
+      "events/unlock/perktrait.df",
+      "events/unlock/trait1.df",
+      "perkdef.df"
+    ]
+  },
+  "lexical": {
+    "unclosed_string_or_block_errors_count": 0,
+    "new_normalized_heuristic_warnings_vs_base_count": 0,
+    "note": "Heuristic DSL checker only; not the game's interpreter."
+  },
+  "canonical_trait_perk_ids": {
+    "base_key_count": 60,
+    "overlay_key_count": 60,
+    "same_key_set": true,
+    "confirm_calls_checked": 44,
+    "confirm_call_counts": {
+      "trait-confirm!": 14,
+      "perk-confirm!": 30
+    },
+    "noncanonical_confirm_calls": 0,
+    "perk_view_calls_checked": 44,
+    "noncanonical_perk_view_calls": 0
+  },
+  "route_and_handler_ids": {
+    "cyoa": {"base_count": 820, "overlay_count": 820, "removed": 0, "added": 0},
+    "cyoa-choice": {"base_count": 927, "overlay_count": 927, "removed": 0, "added": 0},
+    "cyoa-bridge": {"base_count": 190, "overlay_count": 190, "removed": 0, "added": 0}
+  },
+  "gameplay_effect_scan": {
+    "tracked_effect_primitive_count_changes": 0,
+    "only_expected_count_differences": "solo narrative branch tokens in five display-text files"
+  },
+  "targeted_fixes": {
+    "boot_marker_restored": true,
+    "trade_medical_multiline_string_scans_clean": true,
+    "jack_of_all_trades_canonical_definition_restored": true,
+    "candy_share_choice_label_corrected": true
+  },
+  "patch_archive": {
+    "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
+    "bytes": 75702,
+    "sha256": "1fdd196c5b0616de82011c7386b435e231191df25e75e65f6a2f4ed7b468c5e3",
+    "zip_entry_count": 17,
+    "zip_crc_test": "PASS",
+    "duplicate_paths": 0
+  },
+  "runtime": {
+    "apk_rebuilt": false,
+    "device_tested": false,
+    "save_load_verified": false,
+    "viewport_touch_mapping_verified": false,
+    "localization_complete": false
+  }
+}
