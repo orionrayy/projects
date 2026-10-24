@@ -1410,10 +1410,11 @@
       "implementation_status": "PARTIAL_NATIVE_CANDIDATE_UNVERIFIED",
       "runtime_verified": false,
       "native_candidates": [
-        "Resources/HUD/hud.hud:onDebugGold -> uai_gp_hud.onDebug(6)",
-        "Resources/HUD/hud.hud:onDebugGoldDown -> uai_gp_hud.onDebug(7)"
+        "Resources/HUD/debug.hud:gold_add_btn -> uai_gp_hud.onDebug(6) (new v32 button; static route suggests +100,000 Gold)",
+        "Resources/HUD/debug.hud:gold_down_btn -> uai_gp_hud.onDebug(7) (new v32 button; exact decrement unknown)"
       ],
-      "limitation": "Existing debug gold actions are present, but exact amount, balance read-back, bounds and persistence are not proven; they do not implement a general currency slider."
+      "limitation": "v32 adds Gold +100K and Gold Down buttons using existing routes. The +100K route was statically mapped; Gold Down exact delta, balance read-back, persistence and rollback are not verified.",
+      "v32_ui_candidate": true
     },
     {
       "id": "economy.adventure_marks",
@@ -1557,9 +1558,11 @@
       "implementation_status": "PARTIAL_NATIVE_CANDIDATE_UNVERIFIED",
       "runtime_verified": false,
       "native_candidates": [
-        "Resources/HUD/debug.hud:onSetLevel -> uai_gp_hud.onDebug(4)"
+        "Resources/HUD/debug.hud:onSetLevel -> uai_gp_hud.onDebug(4) (existing control; value and persistence unverified)",
+        "Resources/HUD/debug.hud:levelup_btn -> uai_gp_hud.onShortcut(\"levelup\", 1) (new v32 button; runtime unverified)"
       ],
-      "limitation": "Existing set-level debug control is present in assets; its input/result/persistence has not been validated for the catalog slider."
+      "limitation": "v32 adds a Level Up shortcut and existing debug HUD has a Set Level command. The shortcut does not implement a numeric player-level slider; value bounds, read-back, persistence and rollback remain unverified.",
+      "v32_ui_candidate": true
     },
     {
       "id": "progression.xp_to_next",
@@ -1792,7 +1795,8 @@
         "Resources/HUD/debug.hud:onCreateCS -> uai_gp_hud.onDebug(10)",
         "Resources/HUD/debug.hud:onCreateFeat -> uai_gp_hud.onDebug(13)"
       ],
-      "limitation": "Only fixed built-in reward/item variants are visible in the existing debug HUD; this is not a general item-ID grant adapter."
+      "limitation": "Existing debug actions expose a fixed set of Legend/MS/CS/Feat rewards; arbitrary item-ID grant and the exact inventory/persistence behavior are not verified.",
+      "v32_ui_candidate": false
     },
     {
       "id": "inventory.clear_bag",
@@ -2838,5 +2842,25 @@
       "native_candidates": [],
       "limitation": "No evidence-backed handler mapping has been integrated and validated for this catalog entry."
     }
-  ]
+  ],
+  "v32_increment": {
+    "artifact": "Dungeon_Quest_3.3.2.0_CheatMenu_ExpandedDebug_v32.xapk",
+    "sha256": "7fdec74ef3d3f1d0b9f506e60f1adfd2f61d5dea821c07c88974ab5584f1cc32",
+    "package_id": "com.shinybox.dqv30",
+    "status": "STATIC_VALIDATION_PASSED_RUNTIME_PENDING",
+    "changes": [
+      "Added a Gold root group to the existing debug HUD",
+      "Added Gold +100K -> uai_gp_hud.onDebug(6)",
+      "Added Gold Down -> uai_gp_hud.onDebug(7)",
+      "Added Level Up -> uai_gp_hud.onShortcut(\"levelup\", 1)"
+    ],
+    "hud": {
+      "elements_before": 71,
+      "elements_after": 75,
+      "actions_before": 13,
+      "actions_after": 16
+    },
+    "runtime_verified": false,
+    "caveat": "Only routes/callbacks are added; effects and persistence must be tested on-device. The 222-cheat concept is not complete."
+  }
 }
