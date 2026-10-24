@@ -1,0 +1,62 @@
+{
+  "project": "DR2C VORENYX",
+  "build": "v2.43 APK candidate",
+  "created_at": "2026-10-24",
+  "artifact": "DR2C_VORENYX_v2.43.apk",
+  "bytes": 39610091,
+  "sha256": "cefe665d0164495248f0d2cc960f54478d60b980ec137c3878181732d0885a90",
+  "base_archive": {
+    "filename": "DR2C-RAYY.zip",
+    "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1"
+  },
+  "patch": {
+    "filename": "DR2C_VORENYX_ID_v2.43_localization_patch.zip",
+    "bytes": 24350974,
+    "sha256": "00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024"
+  },
+  "package": {
+    "id": "com.noodlecake.drtc",
+    "base_version": "1.8.2",
+    "version_code": 57,
+    "min_sdk": 23,
+    "target_sdk": 35
+  },
+  "packaging": {
+    "status": "PASS_STATIC",
+    "zip_entries": 1015,
+    "zip_crc": "PASS",
+    "jar_v1_signature": "PASS",
+    "overlay_payload_count": 272,
+    "overlay_hash_mismatches": 0,
+    "unexpected_outer_path_prefixes": 0,
+    "native_library_alignment": "PASS",
+    "dex_files": 3,
+    "native_abis": [
+      "arm64-v8a",
+      "armeabi-v7a"
+    ]
+  },
+  "signing": {
+    "scheme": "JAR/v1",
+    "algorithm": "SHA256withRSA",
+    "key": "new local key",
+    "original_publisher_key_available": false
+  },
+  "risks": {
+    "pairip_application_present": true,
+    "pairip_license_check_present": true,
+    "may_reject_re_signed_apk": true,
+    "license_or_anti_tamper_bypass_attempted": false
+  },
+  "runtime": {
+    "install": "NOT RUN",
+    "launch": "NOT RUN",
+    "gameplay": "NOT RUN",
+    "ui_fit": "NOT RUN",
+    "save_load": "NOT RUN",
+    "stability": "NOT RUN"
+  },
+  "release_status": "STATICALLY_VALIDATED_APK_CANDIDATE_NOT_CONFIRMED_STABLE",
+  "source_metadata_conflict": "README reports 309 occurrences across 16 files; v2.43 checkpoint/ledger report 159 occurrences across 58 files.",
+  "distribution": "APK and full source remain local only; this JSON is sanitized."
+}
