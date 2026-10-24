@@ -1,32 +1,39 @@
-# Split APK Findings
+# Split APK Findings — v18 correction
 
-## Direct evidence in the decoded manifest
+**Status:** matching XAPK split set recovered from the conversation Library and statically audited on 2026-10-24. This supersedes the historical v10/v11 statement that companion split APKs had not been inspected.
 
-The supplied archive's manifest excerpt includes:
+## Direct evidence
 
-- requiredSplitTypes = base__abi,base__density
-- application isSplitRequired = true
-- extractNativeLibs = false
+XAPK input: Dungeon+Quest_3.3.2.0_APKPure.xapk  
+SHA-256: 3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b
 
-Android's platform manifest schema states that requiredSplitTypes identifies split categories that must be present and that the package manager rejects installation when a required split type is missing. Primary reference:
-https://android.googlesource.com/platform/frameworks/base/+/refs/heads/android14-release/core/res/res/values/attrs_manifest.xml
+Its manifest records package com.shinybox.smash, version 3.3.2.0, version code 1423433200, min SDK 21 and target SDK 34. The archive contains 20 APK splits: base, ARM64 ABI, xxhdpi density, and language configurations.
 
-The Android NDK documentation explains that native shared libraries in an APK normally use paths of the form lib/<abi>/lib<name>.so:
-https://developer.android.com/ndk/guides/abis
+The ARM64 split SHA-256 is 5cb55f369b1ab9af3752595c87fcbc8fafa9ec31cd8870a45645309f8c2a40c2. It contains:
 
-## Interpretation
+- lib/arm64-v8a/libS3DClient.so — 17,029,072 bytes
+- lib/arm64-v8a/libcrypto.so — 1,818,504 bytes
+- lib/arm64-v8a/libopenal.so — 309,704 bytes
+- lib/arm64-v8a/libssl.so — 390,248 bytes
 
-This uploaded artifact is consistent with a base APK generated for split delivery where ABI and density splits are required. That is a more grounded explanation for the absence of lib/<abi>/*.so in this one archive than assuming native libraries never shipped.
+The base APK and sampled ARM64, density, and English language split certificates have the same signer SHA-256 fingerprint:
 
-This is still an inference: the precise companion split files have not been inspected. The next artifact to obtain is the matching ABI split (and density split), or the complete installed split set from a device on which this exact version is installed.
+9A:28:A9:91:71:C8:F6:3F:34:11:E2:91:F6:D9:6F:13:D5:D9:C1:73:62:06:A0:CF:95:EB:EE:99:BC:31:42:1D
 
-## Acquisition and validation checklist
+The standalone base APK and the base embedded in the XAPK have identical uncompressed hashes for AndroidManifest.xml, classes.dex and assets/S3DMain.smf, while the full APK container hashes differ. The XAPK, split, and library hashes are recorded in NATIVE_SPLIT_AUDIT_V18.md.
 
-1. Obtain only authorized split APKs for package com.shinybox.smash, version 3.3.2.0.
-2. Verify package name, version code, signer certificate and ABI compatibility across all parts.
-3. Inventory each APK independently, including lib/<abi>/*.so, resources and split names.
-4. Hash every split and retain a source/chain-of-custody manifest.
-5. Do not mix libraries from a different version or signing lineage.
-6. Re-run the native method inventory only after the matching libraries are available.
+## Technical conclusions
 
-No companion split APK was provided, and no native engine implementation is claimed recovered.
+The absence of lib/<abi>/*.so in a base-only archive was due to split packaging; it does not indicate that the game never shipped native libraries. The matching binary exists, but the native implementation is closed-source and is not a replacement for source/header files or an integration contract.
+
+The ELF export table contains 64 Java_* exports and C exports including S3DClient_CallHUDAction and S3DClient_SetGameOption. Existence and partial static disassembly are not sufficient to call these exports safely from an injected Java adapter.
+
+The remaining integration blockers are the serialized HUD/AIM authoring path, validated event binding to the existing debug model, safe runtime-state accessors, and a compatible ARM64 device/runtime for click-path and gameplay verification. The base app, matching native split, or successful harness build does not itself prove that a modified original APK has been built or installed.
+
+## Validation policy
+
+1. Keep exact input and output hashes and never mix files from other versions/signing lineages.
+2. Require lossless HUD parser/serializer round-trip tests before making a binary UI edit.
+3. Require explicit calling signatures, thread constraints and safe runtime state checks before invoking native APIs.
+4. Keep the cheats sandbox offline and save-isolated; fail closed when any state is unknown.
+5. Do not alter billing callbacks, receipts, purchase entitlements, cloud progression, achievements or leaderboard submissions.
