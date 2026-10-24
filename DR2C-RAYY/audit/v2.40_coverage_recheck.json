@@ -1,0 +1,75 @@
+{
+  "project": "DR2C VORENYX",
+  "locale": "id-ID",
+  "build": "v2.40",
+  "source_script_files_scanned": 541,
+  "active_quoted_literal_tokens": 16834,
+  "inventory_classes": {
+    "likely_player_facing": 7562,
+    "needs_context_review": 8277,
+    "path_or_asset_reference": 994,
+    "debug_or_engine_text": 1
+  },
+  "fresh_scan": {
+    "non_path_non_engine_literal_rows": 15839,
+    "english_likelihood_ge_0_2": {
+      "rows": 1578,
+      "distinct_file_literal_pairs": 1538,
+      "distinct_literal_values": 1524,
+      "files": 188,
+      "percent_of_reviewable_rows": 9.96
+    },
+    "english_likelihood_ge_0_5": {
+      "rows": 598,
+      "distinct_file_literal_pairs": 594,
+      "distinct_literal_values": 586,
+      "files": 116,
+      "percent_of_reviewable_rows": 3.78
+    },
+    "english_likelihood_ge_0_7": {
+      "rows": 91,
+      "distinct_file_literal_pairs": 89,
+      "distinct_literal_values": 85,
+      "files": 42,
+      "percent_of_reviewable_rows": 0.57
+    },
+    "new_or_changed_literals_without_score": 305,
+    "files_with_unscored_literals": 77,
+    "broad_triage_rows_including_unscored": 1883,
+    "broad_triage_files_including_unscored": 196,
+    "strict_triage_rows_including_unscored": 903,
+    "strict_triage_files_including_unscored": 151
+  },
+  "legacy_queue_reconciliation": {
+    "inherited_queue_rows_remaining": 0,
+    "fresh_residual_candidates_file_rows": 0,
+    "legacy_status": "STALE_HEURISTIC_QUEUE_REQUIRES_REBUILD",
+    "clarification": "An empty inherited/residual JSONL is not an exhaustive current scan. Current active-literal inventory yields the fresh triage counts above."
+  },
+  "global_coverage_percent": null,
+  "global_coverage_status": "NOT_COMPUTABLE_FROM_CURRENT_EVIDENCE",
+  "machine_audit_non_flagged_proxy_range_percent": [
+    88.11,
+    94.3
+  ],
+  "proxy_definition": "Fraction of non-path/non-engine literal rows not flagged at English-likelihood thresholds >=0.2 or >=0.5 and not among 305 unscored new/changed literals. This is a triage proxy, not a translation-coverage percentage.",
+  "historical_baseline": {
+    "v2_2": {
+      "numerator": 3509,
+      "denominator": 10844,
+      "heuristic_percent": 32.36
+    },
+    "v2_22": {
+      "numerator": 7490,
+      "denominator": 10844,
+      "heuristic_percent": 69.07,
+      "status": "STALE_NOT_CURRENT"
+    }
+  },
+  "full_translation_complete": false,
+  "runtime_gameplay_test": "NOT RUN",
+  "ui_fit_test": "NOT RUN",
+  "save_load_test": "NOT RUN",
+  "apk_rebuild": "NOT PERFORMED",
+  "note": "Do not use 69.07% as current v2.40 coverage. Current global semantic/player-visible expression coverage requires a current reviewed translation ledger."
+}
