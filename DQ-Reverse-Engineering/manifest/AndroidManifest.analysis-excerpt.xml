@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Analysis excerpt reconstructed from binary AndroidManifest.xml.
+     Resource IDs remain unresolved. Do not use as a replacement manifest for repackaging. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.shinybox.smash"
+    android:versionCode="1423433200"
+    android:versionName="3.3.2.0"
+    android:compileSdkVersion="34"
+    android:compileSdkVersionCodename="14"
+    android:installLocation="0"
+    android:requiredSplitTypes="base__abi,base__density"
+    android:splitTypes="">
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-feature android:glEsVersion="0x00020000" />
+    <application
+        android:name="com.shinybox.smash.S3DEngine"
+        android:label="@0x7f0e001d"
+        android:icon="@0x7f070051"
+        android:logo="@0x7f070052"
+        android:hardwareAccelerated="true"
+        android:extractNativeLibs="false"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:isSplitRequired="true">
+        <meta-data android:name="isGame" android:value="true" />
+        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@0x7f0e001c" />
+        <meta-data android:name="com.google.android.gms.version" android:value="@0x7f090004" />
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-8238281383988359~7284641821" />
+        <service android:name="com.shinybox.iap.IAPService" />
+        <receiver android:name="com.shinybox.iap.IAPReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+                <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <activity android:name="com.google.android.gms.ads.AdActivity" android:exported="false" android:screenOrientation="6" />
+        <activity
+            android:name="com.shinybox.smash.Smash"
+            android:exported="true"
+            android:launchMode="2"
+            android:screenOrientation="6"
+            android:configChanges="0x40002fff">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
