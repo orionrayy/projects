@@ -17,7 +17,7 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Static checks: no unclosed string/block comment; no new normalized heuristic warnings; 60/60 canonical trait/perk keys preserved; 44 confirmation calls and 44 perk-preview calls use canonical IDs; CYOA, CYOA-choice, and CYOA-bridge identifiers match the source in covered files.
 - Overlay scope: 269 of 509 source `.df` files. Full localization is not complete.
 - This is a source-overlay candidate, not an APK. No rebuild, install, target-device gameplay, or save/load validation was performed. The previously reported viewport/touch and runtime symptoms remain unresolved pending actual-package testing.
-- [Deep repair report](docs/DEEP_REPAIR_v2.45.md) · [Machine-readable static validation](audit/static_validation_v2.45.json)
+- [Deep repair report](docs/DEEP_REPAIR_v2.45.md) · [Machine-readable static validation](audit/static_validation_v2.45.json) · [Executable-token audit](audit/executable_token_audit_v2.45.json)
 
 ## v2.44 Start/UI hotfix candidate
 
