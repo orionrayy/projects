@@ -38,3 +38,8 @@ These values are a balance proposal, not original game values. Test gold earning
 ## Explicit limits
 
 This iteration only changes cosmetic data. It does not remove the 104 SKU declarations or 107 IAP rows, patch billing callbacks, decode all bundle contents, change JNI engine implementation, connect the cheat catalog to gameplay, or produce a signed APK. The repository contains partial DEX reconstruction and tools, not a full buildable original project. Do not claim runtime activation until a compatible complete Android project and native library set are available and the build is tested.
+
+
+## SKU reconciliation and broader IAP plan
+
+See [IAP SKU reconciliation JSON](../docs/IAP_SKU_RECONCILIATION_V7.json) and [human-readable reconciliation report](../docs/IAP_SKU_RECONCILIATION_V7.md). The audit records 104 DEX static SKUs, 107 IAP.xml names, 102 shared identifiers, five XML-only names and two DEX-only package IDs. Unknown bundle contents remain blocked from automatic removal or conversion.
