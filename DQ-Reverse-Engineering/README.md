@@ -27,39 +27,43 @@ Earlier notes refer to a separate, broader “full local analysis bundle.” Tha
 - DEX has 10,768 total class definitions; 68 belong to the app-specific `com.shinybox.*` namespace.
 - The wrapper declares 44 native methods; 34 are on `S3DRenderer`.
 - `IAP.xml` has 107 identifiers; the DEX IAP initializer has 104 unique literal SKU identifiers; 102 are shared. XML-only identifiers are `angelicslime`, `demonicslime`, `poisonslime`, `vanity72`, and `vanity73`; DEX-only identifiers are `package20` and `package21`.
-- Same-number `vanityN` to `Vanity.xml` rows are asset-level correlations, not proof of the native grant or entitlement-persistence behavior. Exact package contents, grant values, and native reward writes remain unresolved.
-- `InAppPurchase.aim` exposes purchase/restore callback symbols; `uai_gp_account.aim` exposes `SetIAP` / `GetIAPString`; `uai_gp_hud.aim` exposes purchase-state and callback symbols. The custom model bytecode has not been fully decoded.
+- The exact v15 native audit maps `gold1`–`gold5` to 20M/50M/150M/350M/1B Gold via direct `RewardGold` calls; `gold`, `crystal`, and `mythstone` instead map to boost-state keys. Bundle component vanity flags, pet archetypes/families, slot and map-reveal branches are mapped where direct evidence exists; unresolved values remain explicitly blocked.
+- JNI purchase-success at `0x1e5b68` sends an event to `InAppPurchase::onPurchaseSuccess @ 0x41c254`. The next target uses dynamic `sAIHandler`; the final delivery to `uai_gp_hud::onPurchaseSuccess` is still `INFERRED`, not proven by string presence.
+- `uai_gp_account::GetIAPString` is called during account upload and `SetIAP` during account download; this proves cloud/account serialization call sites, not the local save-file format or local persistence. No SKU reward is runtime-verified.
 
 ## Game-model and debug-screen boundary
 
 `Games/Smash.gam` contains a parsed 30-name model registry, including `InAppPurchase`, `uai_gp_options`, and `uai_gp_debug`. The `debug.hud` asset contains level/CS/MS/Feat/Crystal/Eternal/Boss test controls. The named `uai_gp_debug.aim` callbacks are principally shader/log diagnostics. Static asset presence does not prove the debug screen is reachable in a release build.
 
-## Asset archive — resolved; engine is not
+## Asset archive and native split — recovered; runtime still unverified
 
-The outer `S3DMain.smf` container was parsed and all 5,630 entries passed CRC-32 and decoded-size checks. The decoded payload totals 94,513,994 bytes and includes readable XML tables alongside proprietary `.gam`, `.aim`, `.hud`, model, mesh, skeleton, scene, animation, and texture data. Decoding the outer archive does not recover the native engine.
+The outer `S3DMain.smf` container was parsed and all 5,630 entries passed CRC-32 and decoded-size checks. The decoded payload totals about 94.5 MB and includes XML tables plus proprietary `.gam`, `.aim`, `.hud`, model, mesh, skeleton, scene, animation and texture data.
 
-The supplied base APK contains zero `lib/*.so` entries. DEX records `System.loadLibrary` order `crypto`, `ssl`, `openal`, `S3DClient`. The manifest excerpt declares `requiredSplitTypes="base__abi,base__density"` and `android:isSplitRequired="true"`. A matching ABI/density split set and native library hashes have not been verified locally. A drop-in engine replacement would require reimplementing 44 JNI contracts plus rendering, asset decoding, and runtime behavior; that is a separate high-risk port, not a small modkit patch.
+The newly supplied XAPK contains the matching v3.3.2.0 base APK, `config.arm64_v8a.apk`, and `config.xxhdpi.apk`. All 20 APK members share signer SHA-256 fingerprint `9A:28:A9:91:71:C8:F6:3F:34:11:E2:91:F6:D9:6F:13:D5:D9:C1:73:62:06:A0:CF:95:EB:EE:99:BC:31:42:1D`. The ARM64 split contains four native libraries; `libS3DClient.so` is ELF64 AArch64, SHA-256 `0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083`, with dynamic dependencies inventoried. This resolves the previous missing-native-binary blocker for static analysis.
 
-## Synchronization inventory — v14
+The native binary is now present locally and has been disassembled for IAP branches, but no runtime instrumentation, Android APK build/sign/install, or gameplay test has been performed. The matching binary is not checked into GitHub; only hashes, ELF metadata, call-site notes and evidence ledger are tracked.
 
-- [Latest source-sync, AIM/HUD symbol audit, SKU evidence status, and native split blocker](docs/SYNC_STATUS_AND_NEXT_STEPS_V14.md)
-- [Prior v13 inventory](docs/SYNC_STATUS_AND_NEXT_STEPS_V13.md)
-- [Prior v12 inventory](docs/SYNC_STATUS_AND_NEXT_STEPS_V12.md)
+## Synchronization inventory — v15
+
+- [Latest repository, native trace, economy patch, evidence status and blockers](docs/SYNC_STATUS_AND_NEXT_STEPS_V15.md)
+- [Local/GitHub source artifact manifest](docs/SOURCE_ARTIFACT_MANIFEST_V15.csv)
+- [Prior v14 AIM/HUD inventory and prior v13/v12 sync notes](docs/SYNC_STATUS_AND_NEXT_STEPS_V14.md)
 
 The curated branch currently tracks only two `.smali` files (plus the inventory Markdown) and no generated `reconstruction/java/` scaffolds. It does **not** contain all 68 app-specific disassemblies or 68 Java declaration scaffolds mentioned in earlier local-bundle descriptions. CI checks are tied to the exact commit SHA; see the v14 sync report for latest validation status.
 
-## Latest evidence reports — v14, v13, and v11
+## Latest evidence reports — v15, v14, and v13
 
-- [v14 AIM/HUD symbol inventory with hashes, offsets, and interpretation limits](docs/AIM_HUD_SYMBOL_AUDIT_V14.md)
-- [Machine-readable v14 snapshot: 58 symbol offsets across seven assets](docs/AIM_HUD_SYMBOL_AUDIT_V14.json)
-- [v14 AIM/HUD printable-symbol scanner](tools/audit_aim_hud_symbols.py) and [tests](tests/test_aim_hud_symbols.py)
-- [v13 purchase-to-entitlement evidence boundary and rerun instructions](docs/IAP_RUNTIME_ENTITLEMENT_EVIDENCE_V13.md)
-- [Machine-readable 109-SKU matrix with runtime grant status on every row](docs/IAP_SKU_RUNTIME_EVIDENCE_V13.json)
-- [Fail-closed v13 evidence validator](tools/validate_iap_runtime_evidence_v13.py) and [tests](tests/test_iap_runtime_evidence_v13.py)
-- [Artifact scope, Smash.gam model registry, IAP trace, and native split/engine boundary](docs/ARTIFACT_RECONCILIATION_AND_NATIVE_ENGINE_V11.md)
-- [SKU evidence summary and unresolved reward mapping](docs/IAP_SKU_ASSET_EVIDENCE_SUMMARY_V11.md)
+- [Canonical 109-SKU purchase → grant → state/persistence map](docs/IAP_CANONICAL_MAPPING_V15.json)
+- [Evidence ledger with claims, confidence, impact and next tests](docs/EVIDENCE_LEDGER_V15.json)
+- [Native ARM64 IAP callback and grant trace](docs/NATIVE_IAP_TRACE_V15.md)
+- [Native split hash, ABI and ELF dependency inventory](docs/NATIVE_SPLIT_AUDIT_V15.json)
+- [Economy patch report and exact changed-table hashes](docs/ECONOMY_PATCH_V15.md) and [machine-readable report](docs/ECONOMY_PATCH_V15.json)
+- [Source/patch XML, SKU and Shop reconciliation report](docs/IAP_ASSET_RECONCILIATION_V15.json)
+- [v15 canonical IAP validator](tools/validate_iap_canonical_mapping_v15.py) and [tests](tests/test_iap_canonical_mapping_v15.py)
+- [v15 XML/SKU reconciliation tool](tools/reconcile_iap_asset_tables_v15.py) and [tests](tests/test_iap_asset_reconciliation_v15.py)
+- [v14 AIM/HUD string inventory plus machine-readable 58-symbol snapshot](docs/AIM_HUD_SYMBOL_AUDIT_V14.md) / [JSON](docs/AIM_HUD_SYMBOL_AUDIT_V14.json)
 
-The v13 registry matrix and validator are now tracked in this branch. All 109 SKU grants remain unverified: the native purchase callbacks have no DEX bodies, the matching native split has not been obtained, and the current evidence contains no per-SKU persisted-state transition. The local v10 ZIP's suite reruns as 35 passing tests while its historical validation metadata says 34; see the v13 sync report for that bookkeeping discrepancy.
+The latest verified CI before the v15 sync report/README edits passed the v13, v14, v15 canonical-map and XML/SKU test steps plus manifest boundary checks and Java stub compilation. Check CI against the exact branch HEAD before describing new commits as verified. All 109 product rewards remain not runtime-verified; the direct static findings are not a substitute for a running game state diff.
 
 ## Reproduction and remaining blockers
 
