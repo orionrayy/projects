@@ -61,9 +61,9 @@ jobs:
           disable-animations: true
           script: |
             set -eu
-            cd DQ-Reverse-Engineering/cheats-harness
-            gradle --no-daemon --stacktrace connectedDebugAndroidTest
-            APK="app/build/outputs/apk/debug/app-debug.apk"
+            HARNESS="$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness"
+            gradle -p "$HARNESS" --no-daemon --stacktrace connectedDebugAndroidTest
+            APK="$HARNESS/app/build/outputs/apk/debug/app-debug.apk"
             test -s "$APK"
             adb install -r "$APK"
             adb shell am force-stop dev.dqdebug.sandboxharness
