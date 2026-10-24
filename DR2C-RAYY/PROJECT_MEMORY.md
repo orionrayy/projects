@@ -81,3 +81,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - These candidates are not confirmed untranslated counts; inherited scores are not recalibrated. A further 305 new/changed literal rows have no score. Global semantic coverage remains NOT COMPUTED.
 - Prioritize untouched character banter, ending-bits, partially translated combat barks, CYOA titles/choices, and full-expression review for 89 whitespace-bound fragments.
 - See docs/UNTOUCHED_AMBIGUOUS_AUDIT_v2.40.md and audit/v2.40_source_coverage_review.json.
+
+
+## Active checkpoint — v2.41 (24 October 2026)
+- Latest local patch: `DR2C_VORENYX_ID_v2.41_localization_patch.zip`; local project archive: v2.6. Both remain outside public GitHub.
+- Targeted P1 pass covered 15 previously unoverlaid character-banter files, ending/credits, human combat barks, priority CYOA titles/choices, and a display-only `Shotgunner` → `Ahli Shotgun` correction.
+- 453 literal occurrences changed across 24 files. Static checks preserved line counts, non-string code, and resource paths. Local patch ZIP CRC and manifest hash checks passed.
+- Global semantic coverage remains NOT COMPUTED; 100% localization is not claimed. Gameplay, UI fit/overflow, save/load, and APK rebuild/signing remain NOT RUN / NOT PERFORMED.
+- [v2.41 checkpoint](docs/CHECKPOINT_v2.41.md) and [sanitized validation summary](audit/v2.41_static_validation_summary.json) track this pass.

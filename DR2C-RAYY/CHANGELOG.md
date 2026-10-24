@@ -1,5 +1,7 @@
 # Changelog — DR2C VORENYX
 
+- **v2.41:** localized 15 previously unoverlaid character-banter modules, ending/credits, human combat barks, and priority CYOA headings/choices; corrected the display-only `Shotgunner` label to `Ahli Shotgun` without changing the canonical key. 453 literal occurrences changed across 24 files. Static checks and local patch ZIP integrity passed; global coverage not computed; runtime not tested.
+
 - **v2.40:** repaired 45 canonical trait/perk machine-key mismatches across 13 modules; 0 remain across 195 operand comparisons. Continued contextual Indonesian localization and refreshed the title badge. Static validation PASS; global semantic coverage not computed; runtime/UI/save-load/APK rebuild not tested.
 - **v2.39:** localized 32 complete display expressions and 7 direct literal occurrences across CYOA examples and moment interactions. Static checks passed; runtime not tested.
 - **v2.38:** localized 14 display expressions and 18 direct literal occurrences across 11 actual files. Static checks passed; runtime not tested.
