@@ -22,3 +22,14 @@ Global semantic coverage is **NOT COMPUTED**. The old v2.22 69.07% heuristic is 
 
 ## Distribution
 The public repository contains documentation and sanitized audit summaries only. The patch ZIP and original source archive are local artifacts and are not hosted in the repository.
+
+
+## Coverage recheck addendum — 24 October 2026
+
+- Current global player-visible localization percentage: **NOT COMPUTABLE FROM CURRENT EVIDENCE**.
+- Fresh active-literal inventory: 16,834 rows; 15,839 rows excluding path/engine entries.
+- English-likelihood triage: 1,578 rows at ≥0.2 and 598 at ≥0.5. Another 305 new/changed rows have no score. Broad triage = 1,883 rows across 196 files.
+- The inherited residual queue being empty is not an exhaustive zero-residue result; package metadata marks the inherited queue stale.
+- 88.11%–94.30% is a machine-audit non-flagged proxy only, **not** translation coverage.
+- Historical 69.07% remains the v2.22 heuristic and must not be reported as current v2.40 coverage.
+- Full note: [Coverage recheck](COVERAGE_RECHECK_v2.40.md); machine-readable metrics: [v2.40 coverage JSON](../audit/v2.40_coverage_recheck.json).
