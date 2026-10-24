@@ -1,0 +1,6 @@
+# Do not commit the uploaded app package or credential-bearing assets
+*.apk
+DQ.zip
+api_key.txt
+assets/
+build/
