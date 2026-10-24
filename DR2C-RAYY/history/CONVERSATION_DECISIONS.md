@@ -83,3 +83,11 @@ The project is not 100% translated yet. Runtime gameplay, save/load and APK rebu
 - Removed stale embedded v2.34 archive digest fields in the packaged audit and moved release checksums to an adjacent SHA-256 sidecar to avoid circular hashing.
 - v2.35 covers 32 contextual display expressions plus 9 direct literals over 12 files. Static integrity PASS; no global semantic coverage claim; no runtime or APK build claim.
 - Public GitHub remains documentation and sanitized audit only; the complete overlay ZIP/source is not published in the repository.
+
+
+## Checkpoint v2.36 — 24 October 2026
+- Actual base was the v2.35 packaged ZIP, not a stale extracted working directory.
+- Localized 45 complete display expressions and 12 direct literal occurrences across 31 modules, emphasizing arcade-defense instructions, bandit-raid rewards, route encounters, shop/fairy/park dialogue, character voice, perk/trait guidance and epilogue text.
+- Independent validator passed: ZIP CRC, 375-entry SHA-256 manifest, no duplicate paths, no mismatches, no machine-local path leaks; 31 scoped files preserved line counts, source skeleton, CYOA/choice IDs and route-path literals.
+- Current comment-aware inventory: 541 files / 16,819 active quoted-string tokens; 77 heuristic candidate rows across 36 files remain. This is triage, not coverage. The stale v2.22 heuristic remains 69.07%; current global semantic coverage is not computed.
+- Gameplay/runtime, UI fit, save/load and APK rebuild/signing are not tested. GitHub holds sanitized documentation/audits only, not the archive or overlay.
