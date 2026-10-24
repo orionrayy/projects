@@ -64,3 +64,12 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - The inherited high-likelihood candidate queue now has 0 remaining rows in the merged source; this is not a semantic coverage score and does not prove that every player-visible string is localized.
 - Global semantic coverage is NOT COMPUTED. Gameplay/runtime, UI fit, save/load and APK rebuild/signing remain untested.
 - Public GitHub stores sanitized documentation and audit summaries only; the source archive, full literal inventory and binary overlay are not committed.
+
+
+## Coverage recheck — 24 October 2026
+- Current global player-visible localization coverage is NOT COMPUTABLE from the current artifacts. Do not report the historical v2.22 heuristic (69.07%) as current v2.40.
+- Fresh active-literal scan: 16,834 rows; 15,839 rows excluding path/engine references.
+- English-likelihood queue: 1,578 rows at >=0.2; 598 rows at >=0.5. Another 305 new/changed literals have no score. Broad triage is 1,883 rows across 196 files.
+- Machine-audit non-flagged proxy range 88.11%-94.30% is only a heuristic, not translation coverage.
+- The inherited queue being empty is not an exhaustive zero-residue scan. See docs/COVERAGE_RECHECK_v2.40.md and audit/v2.40_coverage_recheck.json.
+- Runtime gameplay, UI-fit, save/load and APK rebuild/signing remain NOT RUN / NOT PERFORMED.
