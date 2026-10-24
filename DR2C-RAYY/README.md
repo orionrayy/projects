@@ -11,6 +11,14 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
 - [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
 
+## v2.45 Start failure — Deathforth string syntax fix
+
+- The user's runtime console revealed a concrete parse error at `events/common/common4.df:34`: escaped quotes in translated text caused the Deathforth interpreter to parse the string incorrectly and report `Dari` as an unknown token.
+- Replaced all 24 C/JSON-style escaped double-quote sequences in six script files with apostrophes inside the outer display strings. A scan of all 509 scripts embedded in the new APK found zero remaining escaped-quote sequences.
+- New diagnostic APK: `DR2C_VORENYX_v2.45_STARTFIX_TEST.apk`, 112,238,861 bytes, SHA-256 `f3199c9aa28ee49889ba536e0fbbe6cdaa4d37ea9e6db48a2668001896210cc5`. ZIP CRC and local v1/v2 signature checks pass; no Android-device runtime test yet.
+- The new APK retains diagnostic console output to reveal subsequent script errors. It uses the same local test certificate as the previous STARTDIAG candidate, not the publisher certificate.
+- [Quote-parse fix report](docs/DEATHFORTH_QUOTE_FIX_v2.45.md) · [Machine-readable audit](audit/startfix_quote_fix_v2.45.json)
+
 ## v2.45 Start diagnostic APK — isolate tap, dispatch, and boot-state path
 
 - The original `main-event-do-select` / `select-boot` route exists in the package, and the localization overlay did not remove or rewrite the dispatch handler. Static analysis alone cannot determine whether a touch reaches the native callback, whether the deferred script handler is registered at runtime, or whether `select-boot` aborts on state/mode/tutorial loading.
