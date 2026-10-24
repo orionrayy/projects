@@ -44,3 +44,10 @@ python tests/validate_bundle.py
 The manifest's `requiredSplitTypes="base__abi,base__density"` and `isSplitRequired="true"` are consistent with split delivery; exact ABI/density companion APKs have not been obtained. The 44 JNI native implementations are absent from DEX. JADX, Apktool and a Smali assembler have not run in this offline environment; no complete Gradle build, signing, emulator launch or runtime-equivalence test has succeeded.
 
 The uploaded APK contained `assets/api_key.txt` with a credential-shaped token. That file/value is excluded; rotate/revoke the token if active.
+
+## Modkit v7 — safe asset rebuild and cosmetic earnability experiment
+
+The `modkit/` directory now documents the local workflow to rebuild a version-6 STK asset pack and run a narrow `Vanity.xml` price-to-gold conversion experiment. The new packer writes to a separate output and re-validates CRCs, decoded sizes, and unchanged entry contents. Regression tests are in `tests/test_stk_packer.py` and `tests/test_cosmetic_patch.py`.
+
+The experiment maps 16 rows that had a numeric cash price and no Gold price to proposed earnable-gold costs. This is deliberately **not** described as full IAP removal: billing wrappers, IAP.xml, other product families, native engine hooks and APK packaging are unchanged. See [modkit/README.md](modkit/README.md), [STK_PACKER_AND_ECONOMY_PATCH.md](docs/STK_PACKER_AND_ECONOMY_PATCH.md), [COSMETIC_EARNABILITY_PATCH_DRAFT.json](docs/COSMETIC_EARNABILITY_PATCH_DRAFT.json), and [CHEATS_SANDBOX_INTEGRATION_PLAN.md](docs/CHEATS_SANDBOX_INTEGRATION_PLAN.md).
+
