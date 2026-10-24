@@ -80,6 +80,12 @@ The uploaded APK contained a credential-shaped `assets/api_key.txt`; its value i
 
 The source bridge and contract tests are implemented, but the proprietary S3D Options UI hook remains **BLOCKED**: this repository has no validated HUD serializer with lossless round-trip tests and no original game UI source callsite. The bridge does not claim the Cheats entry exists in the running game.
 
+## Existing main-HUD debug route audit — v20
+
+- [Main HUD debug action mapping and next gates](docs/MAIN_HUD_DEBUG_ROUTE_V20.md)
+
+The v20 static audit found existing handlers in the main HUD for `onDebug(0)`, `onDebug(5)`, `onDebug(6)`, `onDebug(7)`, and `onDumpShaderList`, plus debug-related element names. This narrows the engineering question to the visibility and reachability of the existing debug group rather than inventing a new dispatcher. It still does not prove the controls are reachable during gameplay or that a native call is safe. No native callback or asset bytes were patched.
+
 ## HUD binary format and route evidence — v19
 
 - [Read-only HUD binary probe](tools/hud_asset_probe.py)
