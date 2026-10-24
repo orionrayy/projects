@@ -40,6 +40,12 @@ The outer `S3DMain.smf` container was parsed and all 5,630 entries passed CRC-32
 
 The supplied base APK contains zero `lib/*.so` entries. DEX records `System.loadLibrary` order `crypto`, `ssl`, `openal`, `S3DClient`. The manifest excerpt declares `requiredSplitTypes="base__abi,base__density"` and `android:isSplitRequired="true"`. A matching ABI/density split set and native library hashes have not been verified locally. A drop-in engine replacement would require reimplementing 44 JNI contracts plus rendering, asset decoding, and runtime behavior; that is a separate high-risk port, not a small modkit patch.
 
+## Synchronization inventory — v12
+
+- [Current GitHub tree counts, IAP evidence boundary, native split blocker, and next steps](docs/SYNC_STATUS_AND_NEXT_STEPS_V12.md)
+
+The curated branch currently tracks only two `.smali` files (plus the inventory Markdown) and no generated `reconstruction/java/` scaffolds. It does **not** contain all 68 app-specific disassemblies or 68 Java declaration scaffolds mentioned in earlier local-bundle descriptions. No CI run was returned for the latest branch HEAD during this audit.
+
 ## Latest evidence reports — v11
 
 - [Artifact scope, Smash.gam model registry, IAP trace, and native split/engine boundary](docs/ARTIFACT_RECONCILIATION_AND_NATIVE_ENGINE_V11.md)
