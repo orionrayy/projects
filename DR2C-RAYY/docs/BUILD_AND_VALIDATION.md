@@ -23,3 +23,7 @@
 - Android install, launch, tapping Start, UI fit/overflow, gameplay, save/load and stability are NOT RUN; no device/emulator/ADB was available. Do not treat this candidate as confirmed stable until runtime tests pass.
 
 See docs/CHECKPOINT_v2.44.md and audit/v2.44_start_ui_hotfix.json.
+
+## Post-install regression report — v2.44
+
+The user reports no observable change in Start handling, UI layout or APKVISION branding. Reclassify v2.44 as **NOT FIXED / NOT VERIFIED** despite passing static checks. The APK's package ID is unchanged but its signer is local, so Android may reject it as an update to a differently signed APKVISION installation; the old app could remain active. The APKVISION namespace also remains in `classes3.dex` and `libstub.so`. Do not make further speculative APK variants until install success is confirmed and a post-install recording/runtime log is available. See [post-install diagnosis](POST_INSTALL_DIAGNOSIS_v2.44.md).
