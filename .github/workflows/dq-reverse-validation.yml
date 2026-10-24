@@ -43,6 +43,15 @@ jobs:
         run: |
           cd DQ-Reverse-Engineering
           python -m unittest discover -s tests -p 'test_aim_hud_symbols.py' -v
+      - name: Validate v15 canonical native IAP mapping
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_iap_canonical_mapping_v15.py
+          python -m unittest discover -s tests -p 'test_iap_canonical_mapping_v15.py' -v
+      - name: Run v15 XML/SKU/earnability reconciliation tests
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_iap_asset_reconciliation_v15.py' -v
       - name: Validate manifest, source boundaries, and secret exclusion
         run: |
           python - <<'PY'
