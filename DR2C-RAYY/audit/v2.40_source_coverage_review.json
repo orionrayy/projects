@@ -1,0 +1,78 @@
+{
+  "project": "DR2C VORENYX",
+  "build": "v2.40",
+  "audit_date": "2026-10-24",
+  "source_inventory": {
+    "source_df_files": 509,
+    "source_df_txt_files": 541,
+    "overlay_df_files": 244,
+    "source_df_files_without_overlay": 265,
+    "source_df_files_without_overlay_pct": 52.06,
+    "v2_40_changed_script_files": 78,
+    "active_literal_records": 16834
+  },
+  "candidate_review": {
+    "inherited_score_threshold": 0.5,
+    "min_english_word_tokens": 4,
+    "candidate_rows": 598,
+    "candidate_files": 116,
+    "score_ge_0_7_rows": 91,
+    "outside_test_or_cyoatest_rows": 507,
+    "rows_in_files_without_overlay": 183,
+    "rows_in_overlay_files_not_changed_v2_40": 163,
+    "rows_in_files_changed_v2_40": 252,
+    "rows_matching_literal_in_original_source": 583,
+    "whitespace_bound_fragments": 89,
+    "new_or_changed_unscored_literals": 305,
+    "unscored_literals_flagged_by_simple_lexicon": 16,
+    "interpretation": "Triage candidates only; inherited scores are not recalibrated and are not proof of untranslated display text."
+  },
+  "high_priority_untouched_modules": [
+    "blurb/sc/anime.df",
+    "blurb/sc/catlady.df",
+    "blurb/sc/fireproof.df",
+    "blurb/sc/madsci.df",
+    "blurb/sc/gnomey.df",
+    "blurb/sc/mandible.df",
+    "blurb/sc/skelknight.df",
+    "blurb/sc/woodwoman.df",
+    "events/finale/ending-bits.df"
+  ],
+  "high_priority_partially_localized_modules": [
+    "mission-events-human.df",
+    "events/finale/epilogue-check.df",
+    "blurb/sc/omentum.df",
+    "events/common/DRTC_Q_UPDATE.df",
+    "events/common/PANCREAS.df"
+  ],
+  "ambiguous_terms": [
+    {
+      "term": "Shotgunner",
+      "current_display_translation": "Ahli Senapan Gentel",
+      "issue": "The word gentel is defined as pellet/granule rather than a shotgun type; standardize the glossary.",
+      "references": [
+        "https://kbbi.web.id/gentel",
+        "https://kbbi.web.id/senapan"
+      ]
+    },
+    {
+      "term": "ATTACK",
+      "issue": "May be a fixed UI control label; verify in runtime before translating."
+    },
+    {
+      "term": "Stamp User",
+      "issue": "Likely an intentionally mysterious label; preserve only by explicit glossary decision."
+    },
+    {
+      "term": "Death Road to Canada",
+      "issue": "Game title; likely intentionally preserved, do not auto-translate."
+    }
+  ],
+  "global_semantic_coverage_percent": null,
+  "global_semantic_coverage_status": "NOT_COMPUTED",
+  "runtime_gameplay_test": "NOT RUN",
+  "ui_fit_test": "NOT RUN",
+  "save_load_test": "NOT RUN",
+  "apk_rebuild": "NOT PERFORMED",
+  "source_modified_by_this_review": false
+}
