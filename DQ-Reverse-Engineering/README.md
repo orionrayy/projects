@@ -78,4 +78,18 @@ The uploaded APK contained a credential-shaped `assets/api_key.txt`; its value i
 - [Fail-closed Java route bridge](runtime-adapter/src/main/java/dev/dqdebug/runtime/PauseOptionsCheatsBridge.java)
 - [Java bridge contract tests](runtime-adapter/src/test/java/dev/dqdebug/runtime/PauseOptionsCheatsBridgeSelfTest.java)
 
-The source bridge and CI tests are implemented. The real proprietary S3D Options UI hook remains **BLOCKED**: no validated HUD serializer or original game UI source callsite is present in the repository. The bridge does not claim the Cheats entry exists in the running game; no APK was built or runtime-tested.
+The source bridge and contract tests are implemented, but the proprietary S3D Options UI hook remains **BLOCKED**: this repository has no validated HUD serializer with lossless round-trip tests and no original game UI source callsite. The bridge does not claim the Cheats entry exists in the running game.
+
+## Native split recovery and Android harness verification — v18
+
+- [Recovered ARM64 split/native export audit](docs/NATIVE_SPLIT_AUDIT_V18.md)
+- [Updated native engine boundary](docs/NATIVE_ENGINE_BOUNDARY.md)
+- [Corrected split APK findings](docs/SPLIT_APK_FINDINGS.md)
+- [Android harness smoke test](cheats-harness/app/src/androidTest/java/dev/dqdebug/sandboxharness/MainActivitySmokeTest.java)
+- [Android build + emulator workflow](../.github/workflows/dq-cheats-harness-android.yml)
+
+The supplied v3.3.2.0 XAPK has been recovered and statically audited. Its ARM64 split contains libS3DClient.so, libcrypto.so, libssl.so and libopenal.so; sampled split signer fingerprints match. The native binary exposes JNI and S3DClient APIs, including HUD-action and options calls, but their authoritative call signatures, thread contract and safe player-state accessors are not established. Binary exports are not proof that a cheat controller can safely mutate game state.
+
+The standalone **DQ Cheats Sandbox Harness** is a separate app, not a repackaged Dungeon Quest APK. A prior CI run did build its debug APK and pass JVM unit tests. The updated workflow now also attempts instrumentation/navigation checks and installation/launch on an Android API 35 x86_64 emulator; see the exact current [GitHub Actions run](https://github.com/orionrayy/projects/actions/runs/40098230343) and verify its conclusion before treating emulator checks as passed. This does not test the original ARM64 game engine.
+
+**Original-game integration remains NOT VERIFIED:** no format-correct HUD edit has been validated, no Pause → Options → Cheats click path has been exercised in Dungeon Quest, no reversible game-state adapter has been runtime-verified, and no modified original-game APK has been built/installed/launched. Purchase receipts/entitlements and online progression are not modified.
