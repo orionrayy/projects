@@ -1,0 +1,32 @@
+name: Export official apksigner tool
+on:
+  push:
+    paths:
+      - ".github/workflows/export-apksigner.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download official Android SDK Build Tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3             https://dl.google.com/android/repository/build-tools_r35.0.1_linux.zip             --output build-tools.zip
+          echo "5993499f3229a021b89f87088c57242aeefaa62316bf3d69da7de40bfd5350f1  build-tools.zip" | sha256sum --check
+          mkdir extracted
+          unzip -q build-tools.zip 'build-tools/35.0.1/apksigner' 'build-tools/35.0.1/lib/*' -d extracted
+          test -x extracted/build-tools/35.0.1/apksigner
+          mkdir -p apksigner-bundle/build-tools/35.0.1
+          cp -a extracted/build-tools/35.0.1/apksigner extracted/build-tools/35.0.1/lib apksigner-bundle/build-tools/35.0.1/
+          printf '%s\n' 'Android SDK Build Tools 35.0.1 apksigner only; downloaded from dl.google.com and SHA-256-verified.' > apksigner-bundle/NOTICE.txt
+      - name: Upload signer tool bundle (no game files)
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-apksigner-r35.0.1
+          path: apksigner-bundle/
+          if-no-files-found: error
+          retention-days: 1
