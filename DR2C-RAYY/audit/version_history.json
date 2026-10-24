@@ -143,5 +143,12 @@
     "playerFacingHeuristicPct": null,
     "coverageMeasurementBaselinePct": 69.07,
     "static": "PASS; 51 distinct literals/52 occurrences changed; 47 camp3 misses repaired; two non-actionable rules reconciled; heuristic not remeasured; runtime not tested"
+  },
+  {
+    "version": "v2.24",
+    "focus": "character personality banter, shared road-trip blurbs, and special-character responses",
+    "playerFacingHeuristicPct": null,
+    "coverageMeasurementBaselinePct": 69.07,
+    "static": "PASS; 277 mapping rules and 279 occurrences changed across seven files; token/line counts preserved; package CRC and hashes pass; coverage not remeasured; runtime not tested"
   }
 ]
