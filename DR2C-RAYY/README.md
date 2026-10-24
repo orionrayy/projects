@@ -11,6 +11,14 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
 - [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
 
+## v2.45 APK package-parse error correction — page-aligned test build
+
+- Follow-up analysis of the user-observed Android “Ada masalah saat mengurai paket” error found a concrete packaging defect: seven uncompressed native `.so` payloads were only 4-byte aligned even though the manifest declares `extractNativeLibs=false`. The original base has those payloads aligned to 4,096-byte boundaries.
+- A replacement local candidate now aligns all seven native library payloads to 4,096-byte boundaries, then verifies ZIP CRC, JAR/v1 signature, APK v2 signature and content digest, and binary manifest chunk structure.
+- Local artifact: `DR2C_VORENYX_v2.45_PAGEALIGNED_TEST.apk`; 112,237,647 bytes; SHA-256 `adbe5fff97ba43c670c640e648b4ccc9a9f55996840559665a791d16d06267e7`.
+- **Not device-tested:** this fixes a confirmed packaging defect, but does not prove it was the only cause of the parse message. Local test signer differs from publisher key, and original license checks remain.
+- [APK parse-error triage](docs/APK_PARSE_ERROR_TRIAGE_v2.45.md)
+
 ## v2.45 deep source repair candidate — static only
 
 - A corrective source overlay was prepared for 12 scripts, addressing canonical trait/perk IDs, the `Jack of All Trades` definition key, a malformed translated trade-event string, recruit-screen perk labels, a candy-sharing choice label, and confirmation wording.
