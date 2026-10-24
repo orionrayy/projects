@@ -7,14 +7,15 @@
 - Target voice: natural colloquial Indonesian, blunt and sarcastic with occasional profanity, distinct NPC personas, and context-sensitive community slang.
 - Target: 100% of player-visible text reviewed and localized; **not achieved yet**.
 
-## Current checkpoint — v2.24 (24 October 2026)
-- Local patch artifact: `DR2C_VORENYX_ID_v2.24_localization_patch.zip`. The binary overlay and original archive remain outside public GitHub.
-- Scope: personality blurbs, general road-trip chatter, and special-character replies in seven files: aggressive, passive, pessimist, dull, sharp, shared blurb deck, and special-character replies.
-- 277 contextual mapping rules applied; 279 literal occurrences changed.
-- Two dynamic father-topic expressions were reordered to natural Indonesian word order. Identifiers, branches, stats, reward logic, item constants, and deck structure were not intentionally modified.
-- Static validation: PASS. All seven touched files preserve quoted-token counts and source line counts; independent non-string source skeleton checks passed.
-- Package validation: 301 ZIP entries, CRC PASS, no duplicate paths, and 300 manifest-listed file hashes verified with zero failures.
-- Coverage: 69.07% is the last measured heuristic from v2.22. No new global coverage measurement has been made for v2.24; do not report it as current coverage or semantic completeness.
+## Current checkpoint — v2.25 (24 October 2026)
+- Local patch artifact: `DR2C_VORENYX_ID_v2.25_localization_patch.zip`. The binary overlay and original archive remain outside public GitHub.
+- Scope: two active dialogue files: `assets/deathforth/blurb/optimist.df` and `assets/deathforth/blurb/sc/wrestler.df`.
+- 63 contextual mapping rules applied; 63 literal occurrences changed.
+- The optimistic survivor's dialogue now uses conversational Indonesian; wrestler quips and dynamic description fragments use an irreverent character voice. Proper names, wrestling move names, censor-mask placeholders, and non-dialogue structure were preserved where required.
+- Static structure: PASS. `optimist.df`: 29 quote tokens and 114 lines preserved; `sc/wrestler.df`: 34 quote tokens and 137 lines preserved. All mapped English source residues in these batches are absent from the target.
+- Package: 305 ZIP entries; CRC PASS; no duplicate paths; 304 manifest-listed file hashes verified with zero mismatches; no machine-local path leaks.
+- Artifact SHA-256: `693714b5f2a1e79f0e8b5c9749f7f4dfe1c6ffaa4dc891d0ee689549f82f7fe5`.
+- Coverage: 69.07% is the last measured heuristic from v2.22. No current global coverage measurement has been made for v2.25; do not report it as current coverage or semantic completeness.
 - Runtime gameplay, UI fit, save/load, and APK rebuild/signing: NOT RUN / NOT PERFORMED.
 
 ## Coverage interpretation
