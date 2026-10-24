@@ -70,3 +70,12 @@ The latest verified CI before the v15 sync report/README edits passed the v13, v
 The source tools support offline metadata extraction, DEX inventory/disassembly, Java declaration scaffolds, STK extraction/rebuild, and narrow asset patching. The repository does **not** claim complete original Java source, JNI implementations, bundle reward mapping, a full Gradle build, signing, emulator launch, or runtime equivalence.
 
 The uploaded APK contained a credential-shaped `assets/api_key.txt`; its value is excluded from the repository and reports. Rotate/revoke it if it is active.
+
+## Pause → Options → Cheats route bridge — v16
+
+- [Route evidence and integration status](docs/PAUSE_OPTIONS_CHEATS_ROUTE_V16.md)
+- [Machine-readable route evidence/status](docs/PAUSE_OPTIONS_CHEATS_ROUTE_V16.json)
+- [Fail-closed Java route bridge](runtime-adapter/src/main/java/dev/dqdebug/runtime/PauseOptionsCheatsBridge.java)
+- [Java bridge contract tests](runtime-adapter/src/test/java/dev/dqdebug/runtime/PauseOptionsCheatsBridgeSelfTest.java)
+
+The source bridge and CI tests are implemented. The real proprietary S3D Options UI hook remains **BLOCKED**: no validated HUD serializer or original game UI source callsite is present in the repository. The bridge does not claim the Cheats entry exists in the running game; no APK was built or runtime-tested.
