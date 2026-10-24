@@ -1,0 +1,55 @@
+{
+  "project": "DR2C VORENYX",
+  "build": "v2.25",
+  "base_checkpoint": "v2.24",
+  "locale": "id-ID",
+  "scope_files": [
+    "assets/deathforth/blurb/optimist.df",
+    "assets/deathforth/blurb/sc/wrestler.df"
+  ],
+  "mapping_rules": 63,
+  "literal_occurrences_changed": 63,
+  "contextual_residue_scan_remaining": 0,
+  "static_validation": "PASS",
+  "files": [
+    {
+      "path": "assets/deathforth/blurb/optimist.df",
+      "quoted_literal_tokens_before": 29,
+      "quoted_literal_tokens_after": 29,
+      "lines_before": 114,
+      "lines_after": 114,
+      "structure": "PASS"
+    },
+    {
+      "path": "assets/deathforth/blurb/sc/wrestler.df",
+      "quoted_literal_tokens_before": 34,
+      "quoted_literal_tokens_after": 34,
+      "lines_before": 137,
+      "lines_after": 137,
+      "structure": "PASS"
+    }
+  ],
+  "package": {
+    "zip_entries": 305,
+    "duplicate_paths": 0,
+    "crc": "PASS",
+    "manifest_entries": 304,
+    "manifest_hash_failures": 0,
+    "machine_local_path_leaks": 0,
+    "bytes": 11265213,
+    "sha256": "693714b5f2a1e79f0e8b5c9749f7f4dfe1c6ffaa4dc891d0ee689549f82f7fe5"
+  },
+  "coverage": {
+    "measurement_build": "v2.22",
+    "percent": 69.07,
+    "status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_25",
+    "full_translation_complete": false
+  },
+  "tests": {
+    "runtime_gameplay": "NOT RUN",
+    "ui_fit": "NOT RUN",
+    "save_load": "NOT RUN",
+    "apk_rebuild_signing": "NOT PERFORMED"
+  },
+  "distribution_boundary": "Sanitized audit only. No original archive, extracted game scripts or binary overlay committed."
+}
