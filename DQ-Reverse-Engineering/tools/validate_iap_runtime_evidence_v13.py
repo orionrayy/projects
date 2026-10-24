@@ -55,6 +55,11 @@ def audit_matrix(path: Path) -> dict[str, Any]:
         errors.append(f"DEX-only identifiers mismatch: {sorted(dex_only)}")
     if len(vanity) != 46:
         errors.append(f"expected 46 vanity asset correlations; found {len(vanity)}")
+    reported_counts = data.get("evidence_counts", {})
+    if set(reported_counts.get("xml_only_identifiers", [])) != xml_only:
+        errors.append("reported XML-only list does not match the record-level source flags")
+    if set(reported_counts.get("dex_only_identifiers", [])) != dex_only:
+        errors.append("reported DEX-only list does not match the record-level source flags")
 
     verified = 0
     for record in records:
@@ -80,6 +85,15 @@ def audit_matrix(path: Path) -> dict[str, Any]:
         elif status == "UNVERIFIED":
             if evidence.get("runtime_test_status") == "PASS":
                 errors.append(f"{sku}: PASS runtime test cannot coexist with UNVERIFIED status")
+    unverified = sum(
+        r.get("runtime_evidence", {}).get("reward_status") == "UNVERIFIED"
+        for r in records if isinstance(r.get("runtime_evidence"), dict)
+    )
+    if data.get("evidence_counts", {}).get("runtime_reward_verified") != verified:
+        errors.append("runtime_reward_verified summary does not match per-record statuses")
+    if data.get("evidence_counts", {}).get("runtime_reward_unverified") != unverified:
+        errors.append("runtime_reward_unverified summary does not match per-record statuses")
+
     flow = data.get("observed_purchase_flow", {})
     if flow.get("handler_routes") != EXPECTED_ROUTES:
         errors.append("handler_routes differ from statically verified route map")
@@ -95,9 +109,7 @@ def audit_matrix(path: Path) -> dict[str, Any]:
         "records": len(records),
         "registry_counts": expected_counts,
         "runtime_reward_verified": verified,
-        "runtime_reward_unverified": sum(
-            r.get("runtime_evidence", {}).get("reward_status") == "UNVERIFIED" for r in records
-        ),
+        "runtime_reward_unverified": unverified,
         "errors": errors,
     }
 
