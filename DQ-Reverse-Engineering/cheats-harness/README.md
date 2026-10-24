@@ -22,3 +22,10 @@ The app does not attach to or patch another Android application. Android's app s
 Latest recorded successful build: [GitHub Actions run 40096718673](https://github.com/orionrayy/projects/actions/runs/40096718673/job/120880408274). The `testDebugUnitTest` and `assembleDebug` tasks passed. [Download the APK artifact](https://github.com/orionrayy/projects/actions/runs/40096718673/artifacts/12560834028) (extract `app-debug.apk` from the downloaded ZIP).
 
 Recorded APK SHA-256: `99be5a030ed10f72e7d0796425260303a760fe451d520d50d473e57759d2b00d`; size 19,766 bytes. This is the standalone harness, not a modified Dungeon Quest APK. Device launch and the original in-game Pause -> Options route remain unverified.
+
+
+## Emulator validation
+
+The Android API 35 CI job runs JVM unit tests and packages the debug APK, then runs the instrumentation test in an x86_64 emulator and checks installation, launcher startup, and the visible disconnected status. This is a harness-only smoke test; it does not test the ARM64 Dungeon Quest engine or gameplay effects.
+
+The emulator action executes script lines in separate shell invocations, so the workflow deliberately uses environment paths directly rather than relying on shell-local variables. Check the current PR workflow result before treating the emulator step as passing.
