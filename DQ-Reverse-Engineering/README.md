@@ -40,15 +40,18 @@ The outer `S3DMain.smf` container was parsed and all 5,630 entries passed CRC-32
 
 The supplied base APK contains zero `lib/*.so` entries. DEX records `System.loadLibrary` order `crypto`, `ssl`, `openal`, `S3DClient`. The manifest excerpt declares `requiredSplitTypes="base__abi,base__density"` and `android:isSplitRequired="true"`. A matching ABI/density split set and native library hashes have not been verified locally. A drop-in engine replacement would require reimplementing 44 JNI contracts plus rendering, asset decoding, and runtime behavior; that is a separate high-risk port, not a small modkit patch.
 
-## Synchronization inventory — v13
+## Synchronization inventory — v14
 
-- [Latest source-sync, test-bookkeeping, SKU evidence status, and native split blocker](docs/SYNC_STATUS_AND_NEXT_STEPS_V13.md)
+- [Latest source-sync, AIM/HUD symbol audit, SKU evidence status, and native split blocker](docs/SYNC_STATUS_AND_NEXT_STEPS_V14.md)
+- [Prior v13 inventory](docs/SYNC_STATUS_AND_NEXT_STEPS_V13.md)
 - [Prior v12 inventory](docs/SYNC_STATUS_AND_NEXT_STEPS_V12.md)
 
-The curated branch currently tracks only two `.smali` files (plus the inventory Markdown) and no generated `reconstruction/java/` scaffolds. It does **not** contain all 68 app-specific disassemblies or 68 Java declaration scaffolds mentioned in earlier local-bundle descriptions. No CI run was returned for the latest branch HEAD during this audit.
+The curated branch currently tracks only two `.smali` files (plus the inventory Markdown) and no generated `reconstruction/java/` scaffolds. It does **not** contain all 68 app-specific disassemblies or 68 Java declaration scaffolds mentioned in earlier local-bundle descriptions. CI checks are tied to the exact commit SHA; see the v14 sync report for latest validation status.
 
-## Latest evidence reports — v13 and v11
+## Latest evidence reports — v14, v13, and v11
 
+- [v14 AIM/HUD symbol inventory with hashes, offsets, and interpretation limits](docs/AIM_HUD_SYMBOL_AUDIT_V14.md)
+- [v14 AIM/HUD printable-symbol scanner](tools/audit_aim_hud_symbols.py) and [tests](tests/test_aim_hud_symbols.py)
 - [v13 purchase-to-entitlement evidence boundary and rerun instructions](docs/IAP_RUNTIME_ENTITLEMENT_EVIDENCE_V13.md)
 - [Machine-readable 109-SKU matrix with runtime grant status on every row](docs/IAP_SKU_RUNTIME_EVIDENCE_V13.json)
 - [Fail-closed v13 evidence validator](tools/validate_iap_runtime_evidence_v13.py) and [tests](tests/test_iap_runtime_evidence_v13.py)
