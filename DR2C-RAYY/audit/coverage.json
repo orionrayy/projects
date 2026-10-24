@@ -46,11 +46,24 @@
   },
   "v2_43_apk_candidate": {
     "local_artifact": "DR2C_VORENYX_v2.43.apk",
-    "bytes": 39610091,
-    "sha256": "cefe665d0164495248f0d2cc960f54478d60b980ec137c3878181732d0885a90",
+    "bytes": 39748335,
+    "sha256": "3019dd04098e9e8fef01045a2e391d9525bf87ef6874b0d0049c5a073a052f25",
     "static_packaging": "PASS",
-    "signing": "JAR/v1 with local key; not publisher-signed",
-    "runtime": "NOT TESTED",
+    "signature_schemes": {
+      "v1": "PASS",
+      "v2": "PASS",
+      "v3": "PASS",
+      "tool": "Android SDK Build Tools 35.0.1 apksigner 0.9"
+    },
+    "signer": "local certificate; not original publisher",
+    "runtime": {
+      "install": "NOT RUN",
+      "launch": "NOT RUN",
+      "gameplay": "NOT RUN",
+      "ui_fit": "NOT RUN",
+      "save_load": "NOT RUN",
+      "stability": "NOT RUN"
+    },
     "pairip_license_check_risk": true,
     "not_publicly_hosted": true
   },
