@@ -265,5 +265,18 @@
       "proxy_is_not_translation_coverage": true,
       "note": "Empty inherited residual queue is not exhaustive."
     }
+  },
+  {
+    "version": "v2.44",
+    "focus": "Start/UI hotfix: restore canonical boot marker and force fixed landscape; inspect APKVISION wrapper provenance",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; canonical marker restored; Start route components found; activity orientation set to landscape; APK ZIP/payload/hash/alignment checks and v1/v2/v3 signature verification pass; Start/UI/runtime not tested",
+    "apk_candidate": {
+      "name": "DR2C_VORENYX_v2.44_START_UI_HOTFIX.apk",
+      "bytes": 39748341,
+      "sha256": "e28314611411aeba2fdd6bf2cee918fa64ddecac159536e4a39918e7af81f8a6"
+    },
+    "runtime": "NOT TESTED",
+    "limitations": "PairIP/Play license checks may reject local signature; APKVISION wrapper remains. Clean authorized base APK needed to remove third-party wrapper branding."
   }
 ]
