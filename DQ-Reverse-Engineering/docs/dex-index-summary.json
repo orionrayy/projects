@@ -1,0 +1,19 @@
+{
+  "source": "classes.dex",
+  "sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+  "size_bytes": 6996484,
+  "counts": {
+    "strings": 37620,
+    "types": 12348,
+    "prototypes": 14055,
+    "fields": 30461,
+    "method_ids": 59460,
+    "class_definitions": 10768,
+    "emitted_app_classes": 68,
+    "emitted_methods": 405,
+    "decoded_instructions": 5187,
+    "payloads": 50,
+    "native_method_declarations": 44
+  },
+  "note": "Summary only; original DEX binary intentionally not committed."
+}
