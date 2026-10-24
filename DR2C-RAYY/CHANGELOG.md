@@ -1,5 +1,7 @@
 # Changelog — DR2C VORENYX
 
+- **v2.43 APK candidate build:** assembled the v2.43 overlay into the supplied extracted Android package and applied a local JAR/v1 signature. Static package/manifest/hash/signature/ZIP/ABI checks PASS. Android install, launch, gameplay, UI fit, save/load and stability remain NOT TESTED; PairIP/Play license checks may reject re-signed package. APK remains local-only; see [APK build report](docs/APK_BUILD_v2.43.md).
+
 - **v2.43:** localized 159 quoted-string occurrences across 58 files, including 9 newly overlaid modules. Static string/code/path checks passed, zero unmatched rules, local ZIP manifests validated. Recheck of the inherited 598-row heuristic queue shows 131 active candidate rows (down from 241 after v2.42); not a semantic coverage metric. Runtime not tested.
 
 - **v2.42:** localized 309 quoted-string occurrences across 16 overlay files. Targeted residual cleanup covers selected character banter, epilogue/finale text, NPC dialogue, encounter choices, and mission labels. Line/string-token counts, non-string code, and resource paths preserved; zero unmatched rules; ZIP and manifest checks PASS. Global coverage not computed; runtime not tested.
