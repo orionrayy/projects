@@ -1,13 +1,17 @@
-# Validation Record
+# Validation Record — Iteration 3
 
-The corrected 68-class Smali-like reconstruction passed static consistency checks:
+Static integrity results from the local analysis environment:
 
-- 68 class files
-- 405 method bodies
-- 5,187 decoded instructions
-- 50 switch/array payloads
-- Zero structural validation errors
+- 68 app-specific class disassembly files.
+- 405 decoded methods, 5,187 instruction boundaries, and 50 switch/array payload directives.
+- Zero structural consistency errors reported by the local Smali-like validator.
+- DEX index JSON parses and records 68 app-specific classes.
+- Decoded manifest XML parses as well-formed XML.
+- SMF probe size and SHA-256 match the measured asset (33,978,539 bytes; 340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3).
+- Python helper scripts pass py_compile.
+- BuildConfig.java, Globals.java, and S3DEngine.java compile using javac against minimal temporary stubs for Android Configuration, Application, and dependency superclass q0.b.
+- Sensitive-token file and original APK are excluded from the generated analysis bundle.
 
-The static validator checks method boundaries, instruction/payload code-unit coverage, branch label references, register bounds, and unresolved placeholders. The decoded manifest XML is well formed, and Python helper files pass syntax compilation. The source bundle excludes the original APK, raw `classes.dex`, `S3DMain.smf`, and `api_key.txt`.
+The manifest's requiredSplitTypes value (base__abi,base__density) and isSplitRequired flag indicate that this archive may be a base APK from a split delivery. See SPLIT_APK_FINDINGS.md.
 
-Not validated: Smali assembler acceptance, Java decompilation, Gradle build, APK signing, emulator launch, runtime equivalence, or SMF decoding. Treat the output as reverse-engineering source material, not a ready-to-install rebuild.
+These checks do not establish Smali assembler acceptance, successful JADX output, Android Gradle buildability, APK signing, emulator launch, runtime equivalence, retrieval of companion splits, or SMF decoding. Treat this as reverse-engineering source material, not a ready-to-install rebuild.
