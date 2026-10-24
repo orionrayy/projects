@@ -2,52 +2,49 @@
 
 ## Artifact identity
 
-- Input: uploaded DQ.zip, an Android APK container.
-- Size: 37,200,621 bytes; SHA-256: 1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9.
-- Package: com.shinybox.smash; version 3.3.2.0; version code 1423433200.
+- Input: uploaded `DQ.zip`, an Android APK container.
+- Size: 37,200,621 bytes; SHA-256: `1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9`.
+- Package: `com.shinybox.smash`; version `3.3.2.0`; version code `1423433200`.
 - Min SDK 21; target SDK 34; compile SDK 34.
-- Main Activity: com.shinybox.smash.Smash; Application class: com.shinybox.smash.S3DEngine.
-- Main game pack: assets/S3DMain.smf; no lib/<abi>/*.so files appear in the uploaded APK archive.
+- Main Activity: `com.shinybox.smash.Smash`; Application class: `com.shinybox.smash.S3DEngine`.
+- Main pack: `assets/S3DMain.smf`.
 
 ## Recorded hashes
 
 | Entry | Size (bytes) | SHA-256 |
 |---|---:|---|
-| Uploaded APK | 37,200,621 | 1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9 |
-| classes.dex | 6,996,484 | bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b |
-| assets/S3DMain.smf | 33,978,539 | 340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3 |
+| Uploaded APK | 37,200,621 | `1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9` |
+| `classes.dex` | 6,996,484 | `bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b` |
+| `assets/S3DMain.smf` | 33,978,539 | `340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3` |
 
-## DEX reconstruction
+## DEX results
 
-- 37,620 strings; 12,348 type IDs; 14,055 prototypes; 30,461 field IDs; 59,460 method IDs; 10,768 total class definitions.
-- 68 app-specific com.shinybox.* classes emitted as Smali-like source.
-- Corrected output: 405 methods, 5,187 decoded instructions, 50 payload directives, 44 native method declarations.
-- Static validation reports zero structural errors.
+- 37,620 strings; 12,348 types; 14,055 prototypes; 30,461 field IDs; 59,460 method IDs; 10,768 class definitions.
+- 68 app-specific `com.shinybox.*` classes emitted in the full local snapshot: 405 methods, 5,187 instruction boundaries, 50 payload directives, and 44 native declarations.
+- 10,768 is the full DEX class-table count, including dependencies, not a count of game-authored classes.
+- Three higher-confidence Java files compile against temporary minimal stubs. That is only syntax-level validation, not an Android project build.
 
-The full DEX also includes platform and third-party dependencies; 10,768 is the DEX class table count, not the number of game-authored classes.
+## Asset container — verified extraction
 
-## Manifest and split status
+The outer `S3DMain.smf` pack was decoded as an STK-style version-6 archive. Signature `0x00000008`, XOR key `0x4c4060e8`, 5,630 entries and metadata-end offset 335,530 were recovered from the header. All 5,630 payloads passed CRC-32 and decoded-size validation: 5,619 zlib+XOR entries and 11 raw+XOR entries, totalling 94,513,994 bytes.
 
-The decoded manifest declares requiredSplitTypes="base__abi,base__density", android:isSplitRequired="true", com.android.vending.splits.required=true, and android:extractNativeLibs=false. Therefore, this uploaded APK is consistent with a base APK expecting ABI and density split APKs. The absence of native libraries inside this individual archive does not prove they were never distributed. The matching splits have not yet been found or validated. See NATIVE_ENGINE_BOUNDARY.md.
+The 17 `Resources/XML/*.xml` tables parse as XML and contain 2,623 `Row` records for game data such as skills, items, affixes, legends, talents, stats, IAP identifiers and localization/dictionary entries. See `STK_FORMAT_FINDINGS.md` and `ASSET_CATALOG.md`. The outer container is resolved; inner `.gam`, `.mdo`, `.msh`, `.ske`, `.scn` and related engine-specific records remain binary formats rather than original source.
 
-## Architecture and asset flow
+## Architecture and native boundary
 
-- Smash is the main Activity wrapper, with lifecycle, asset/file handling, audio, camera, sensors, input, and purchase integration.
-- S3DSurfaceView derives from GLSurfaceView.
-- S3DRenderer declares native entry points for initialize/shutdown, frame updates, surface callbacks, pack descriptor handoff, and input forwarding.
-- Smash.extractMainPack() opens S3DMain.smf using AssetManager.openFd(), gets file descriptor/start offset/length, and passes them to the native renderer. The ZIP entry is STORED (not compressed by the APK container).
-- extractAdditionalFiles() appears to extract other root assets; see ASSET_LOAD_TRACE.md and SECRETS_REDACTED.md.
+- `Smash` is the main Activity wrapper; methods cover lifecycle, asset/file handling, audio, camera, sensors, input and purchase integration.
+- `S3DSurfaceView` derives from Android `GLSurfaceView`.
+- `S3DRenderer` declares native entry points for initialization/shutdown, rendering, surface callbacks, pack descriptor handoff and input forwarding.
+- Forty-four native declarations span four wrapper classes; the required implementations are not in DEX.
 
-## Correction and validation
+The manifest contains `requiredSplitTypes="base__abi,base__density"` and `isSplitRequired="true"`, consistent with a base APK delivered alongside ABI/density splits. The exact companion APKs have not been obtained, so shared libraries may be absent from this uploaded base artifact rather than never having shipped. See `SPLIT_APK_FINDINGS.md` and `NATIVE_ENGINE_BOUNDARY.md`.
 
-The first disassembly pass had incorrect opcode widths causing subsequent instructions to drift. Opcode widths and operands were corrected and all 68 output files regenerated. The validator checks method boundaries, instruction/payload code-unit coverage, labels, register bounds, and unresolved placeholders. All 68 files pass the current structural validator.
+## Validation and limits
 
-This remains a Smali-like reconstruction, not original Java source and not proof of assembler acceptance. JADX, Apktool, and a Smali assembler could not run in the offline runtime. No Gradle build, APK signing, emulator launch, or runtime-equivalence test has been performed.
+The corrected disassembler's static checker reports zero structural consistency errors across the 68-class local snapshot. The decoded manifest XML parses, the asset pack verifies in full, Python helper scripts compile, and the three higher-confidence Java files compile against temporary stubs.
 
-## SMF status
-
-The SMF remains unresolved. It is stored uncompressed in the APK ZIP container; GZIP candidates: zero valid streams; zlib-like candidates: 3,952, zero validated streams. High entropy alone does not prove encryption. See SMF_FORMAT_STATUS.md.
+JADX, Apktool and a Smali assembler have not run in this offline runtime. No complete Gradle build, APK signing, emulator launch or runtime-equivalence test has been performed. Decompiled sources cannot recover original comments, local names, formatting, absent native implementations or all resource symbols.
 
 ## Sensitive data
 
-The APK contains assets/api_key.txt with a credential-shaped Amazon token. The file and value are excluded. A static code path may extract non-main-pack root assets into a writable application directory. Rotate/revoke the credential if active.
+The uploaded APK contains `assets/api_key.txt` with a credential-shaped Amazon token. The file and token value are excluded from repository outputs; rotate/revoke the token if active.
