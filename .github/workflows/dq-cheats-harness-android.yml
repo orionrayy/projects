@@ -36,7 +36,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: "8.9"
-      - name: Run tests and build APK
+      - name: Run unit tests and assemble APK
         working-directory: DQ-Reverse-Engineering/cheats-harness
         run: gradle --no-daemon --stacktrace testDebugUnitTest assembleDebug
       - name: Verify APK exists and calculate hash
@@ -48,6 +48,27 @@ jobs:
           test -s "$APK"
           echo "sha256=$(sha256sum "$APK" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
           echo "size=$(stat -c%s "$APK")" >> "$GITHUB_OUTPUT"
+      - name: Exercise APK on Android API 35 emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          script: |
+            set -euo pipefail
+            cd DQ-Reverse-Engineering/cheats-harness
+            gradle --no-daemon --stacktrace connectedDebugAndroidTest
+            APK="app/build/outputs/apk/debug/app-debug.apk"
+            test -s "$APK"
+            adb install -r "$APK"
+            adb shell am force-stop dev.dqdebug.sandboxharness
+            adb shell am start -W -n dev.dqdebug.sandboxharness/.MainActivity
+            adb shell uiautomator dump /sdcard/dq-harness-window.xml >/dev/null
+            adb shell cat /sdcard/dq-harness-window.xml > "$RUNNER_TEMP/dq-harness-window.xml"
+            grep -q "Cheats Sandbox" "$RUNNER_TEMP/dq-harness-window.xml"
+            grep -q "GAME LINK" "$RUNNER_TEMP/dq-harness-window.xml"
+            echo "PASS: APK installed, launcher Activity started, and disconnected-state UI appeared."
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -64,5 +85,6 @@ jobs:
             echo "- SHA-256: ${{ steps.apk.outputs.sha256 }}"
             echo "- Size: ${{ steps.apk.outputs.size }} bytes"
             echo "- Build: Android API 35 / AGP 8.7.3 / Gradle 8.9 / JDK 17"
+            echo "- Validation: JVM unit tests + Android instrumentation test + emulator install/launch/UI smoke check"
             echo "- Boundary: standalone UI harness; not patched into Dungeon Quest."
           } >> "$GITHUB_STEP_SUMMARY"
