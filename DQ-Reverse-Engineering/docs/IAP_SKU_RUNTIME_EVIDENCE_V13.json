@@ -1,0 +1,2877 @@
+{
+  "schema_version": 1,
+  "title": "Dungeon Quest 3.3.2.0 — Per-SKU runtime reward evidence matrix v13",
+  "generated_date": "2026-10-24",
+  "artifact_identity": {
+    "package": "com.shinybox.smash",
+    "version": "3.3.2.0",
+    "source_pack_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3"
+  },
+  "provenance": {
+    "derived_from": "DQ-Reverse-Engineering/docs/IAP_SKU_RECONCILIATION_V7.json",
+    "source_matrix_blob_sha": "7c8fbcf3d185080f82485b3515640c039d7b0e92",
+    "dex_sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "source_apk_sha256": "1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9",
+    "source_smf_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "classification_rule": "Static identifier and asset correlations are not proof of a runtime grant, persisted entitlement, or purchase verification."
+  },
+  "evidence_counts": {
+    "iap_xml_unique_identifiers": 107,
+    "dex_static_sku_identifiers": 104,
+    "shared_identifiers": 102,
+    "xml_only_identifiers": [
+      "angelicslime",
+      "demonicslime",
+      "poisonslime",
+      "vanity72",
+      "vanity73"
+    ],
+    "dex_only_identifiers": [
+      "package20",
+      "package21"
+    ],
+    "union_identifiers": 109,
+    "vanity_sku_asset_correlations": 46,
+    "runtime_reward_verified": 0,
+    "runtime_reward_unverified": 109
+  },
+  "observed_purchase_flow": {
+    "purchase_request_message_ids": [
+      600,
+      602
+    ],
+    "restore_message_id": 601,
+    "handler_routes": {
+      "600": "IAPWrapper.l(String)",
+      "601": "IAPWrapper.n()",
+      "602": "IAPWrapper.m(String, boolean)"
+    },
+    "purchase_result_boundary": {
+      "success_callback": "onPurchaseSuccess(String)",
+      "failure_callback": "onPurchaseFailed(String)",
+      "implementation": "native declaration; no body in supplied DEX",
+      "per_sku_grant_mapping": "not verified",
+      "persisted_entitlement_write": "not verified"
+    },
+    "runtime_test": "not run"
+  },
+  "migration_status_semantics": "The inherited migration_status and proposed_route fields describe analysis/design recommendations only. They do not mean that the behavior is implemented or runtime-tested.",
+  "records": [
+    {
+      "sku": "com.shinybox.dq.angelicslime",
+      "legacy_id": "angelicslime",
+      "family": "pet_random_or_special",
+      "sources": {
+        "dex_static_sku": false,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED or replace with deterministic choice after actual grant table is verified; avoid paid random acquisition.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.autoreveal",
+      "legacy_id": "autoreveal",
+      "family": "map_reveal_convenience",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent Cartographer challenge unlock, with feature behavior verified.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.crystal",
+      "legacy_id": "crystal",
+      "family": "crafting_resource_candidate",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Use normal drop, crafting, salvage and bounty loops only after grant amounts are identified.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.demonicslime",
+      "legacy_id": "demonicslime",
+      "family": "pet_random_or_special",
+      "sources": {
+        "dex_static_sku": false,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED or replace with deterministic choice after actual grant table is verified; avoid paid random acquisition.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.exp",
+      "legacy_id": "exp",
+      "family": "boost_candidate",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Earned/craftable consumables; exact effect and stack rules require method-level verification.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.gold",
+      "legacy_id": "gold",
+      "family": "gold_currency_pack",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Remove the paid gold-pack route only after normal gold income, first-clear rewards, contracts and shop balance are tested.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.gold1",
+      "legacy_id": "gold1",
+      "family": "gold_currency_pack",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Remove the paid gold-pack route only after normal gold income, first-clear rewards, contracts and shop balance are tested.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.gold2",
+      "legacy_id": "gold2",
+      "family": "gold_currency_pack",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Remove the paid gold-pack route only after normal gold income, first-clear rewards, contracts and shop balance are tested.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.gold3",
+      "legacy_id": "gold3",
+      "family": "gold_currency_pack",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Remove the paid gold-pack route only after normal gold income, first-clear rewards, contracts and shop balance are tested.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.gold4",
+      "legacy_id": "gold4",
+      "family": "gold_currency_pack",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Remove the paid gold-pack route only after normal gold income, first-clear rewards, contracts and shop balance are tested.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.gold5",
+      "legacy_id": "gold5",
+      "family": "gold_currency_pack",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Remove the paid gold-pack route only after normal gold income, first-clear rewards, contracts and shop balance are tested.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.hires",
+      "legacy_id": "hires",
+      "family": "unknown_quality_or_content",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: investigate whether this is a graphics option or content entitlement; name alone is insufficient.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.hunter",
+      "legacy_id": "hunter",
+      "family": "boost_candidate",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Earned/craftable consumables; exact effect and stack rules require method-level verification.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.luck",
+      "legacy_id": "luck",
+      "family": "boost_candidate",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Earned/craftable consumables; exact effect and stack rules require method-level verification.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.multi",
+      "legacy_id": "multi",
+      "family": "boost_candidate",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Earned/craftable consumables; exact effect and stack rules require method-level verification.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.multiboost",
+      "legacy_id": "multiboost",
+      "family": "boost_candidate",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Earned/craftable consumables; exact effect and stack rules require method-level verification.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.mythstone",
+      "legacy_id": "mythstone",
+      "family": "crafting_resource_candidate",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Use normal drop, crafting, salvage and bounty loops only after grant amounts are identified.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package1",
+      "legacy_id": "package1",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package2",
+      "legacy_id": "package2",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package3",
+      "legacy_id": "package3",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package4",
+      "legacy_id": "package4",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package5",
+      "legacy_id": "package5",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package6",
+      "legacy_id": "package6",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package7",
+      "legacy_id": "package7",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package8",
+      "legacy_id": "package8",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package9",
+      "legacy_id": "package9",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package10",
+      "legacy_id": "package10",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package11",
+      "legacy_id": "package11",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package12",
+      "legacy_id": "package12",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package13",
+      "legacy_id": "package13",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package14",
+      "legacy_id": "package14",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package15",
+      "legacy_id": "package15",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package16",
+      "legacy_id": "package16",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package17",
+      "legacy_id": "package17",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package18",
+      "legacy_id": "package18",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package19",
+      "legacy_id": "package19",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package20",
+      "legacy_id": "package20",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": false
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "evidence_note": "DEX static SKU exists but IAP.xml has no matching row; investigate legacy/store mapping.",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.package21",
+      "legacy_id": "package21",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": false
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "evidence_note": "DEX static SKU exists but IAP.xml has no matching row; investigate legacy/store mapping.",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.pet1",
+      "legacy_id": "pet1",
+      "family": "pet_unlock",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Deterministic pet unlock via boss, collection, quest or crafting milestones. Verify exact roster and mechanics.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.pet2",
+      "legacy_id": "pet2",
+      "family": "pet_unlock",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Deterministic pet unlock via boss, collection, quest or crafting milestones. Verify exact roster and mechanics.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.pet3",
+      "legacy_id": "pet3",
+      "family": "pet_unlock",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Deterministic pet unlock via boss, collection, quest or crafting milestones. Verify exact roster and mechanics.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.pet4",
+      "legacy_id": "pet4",
+      "family": "pet_unlock",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Deterministic pet unlock via boss, collection, quest or crafting milestones. Verify exact roster and mechanics.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.pet5",
+      "legacy_id": "pet5",
+      "family": "pet_unlock",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Deterministic pet unlock via boss, collection, quest or crafting milestones. Verify exact roster and mechanics.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.pet6",
+      "legacy_id": "pet6",
+      "family": "pet_unlock",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Deterministic pet unlock via boss, collection, quest or crafting milestones. Verify exact roster and mechanics.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.petboost",
+      "legacy_id": "petboost",
+      "family": "pet_boost",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Earned/craftable consumables; verify actual effect/duration before conversion.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.pickup",
+      "legacy_id": "pickup",
+      "family": "pickup_convenience_candidate",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Free permanent convenience unlock or accessibility/gameplay setting after actual effect is verified.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.poisonslime",
+      "legacy_id": "poisonslime",
+      "family": "pet_random_or_special",
+      "sources": {
+        "dex_static_sku": false,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED or replace with deterministic choice after actual grant table is verified; avoid paid random acquisition.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.pstash",
+      "legacy_id": "pstash",
+      "family": "storage_capacity",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Earned, permanent vault upgrades using gold/materials, with at least one campaign milestone upgrade.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.randomdog",
+      "legacy_id": "randomdog",
+      "family": "pet_random_or_special",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED or replace with deterministic choice after actual grant table is verified; avoid paid random acquisition.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.randomfairy",
+      "legacy_id": "randomfairy",
+      "family": "pet_random_or_special",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED or replace with deterministic choice after actual grant table is verified; avoid paid random acquisition.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.randomimp",
+      "legacy_id": "randomimp",
+      "family": "pet_random_or_special",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED or replace with deterministic choice after actual grant table is verified; avoid paid random acquisition.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.randomslime",
+      "legacy_id": "randomslime",
+      "family": "pet_random_or_special",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED or replace with deterministic choice after actual grant table is verified; avoid paid random acquisition.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.slot",
+      "legacy_id": "slot",
+      "family": "character_slot",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent slot unlock from campaign/achievement milestones; never require a consumable token after unlock.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.slot1",
+      "legacy_id": "slot1",
+      "family": "character_slot",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent slot unlock from campaign/achievement milestones; never require a consumable token after unlock.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.slot2",
+      "legacy_id": "slot2",
+      "family": "character_slot",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent slot unlock from campaign/achievement milestones; never require a consumable token after unlock.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.slot3",
+      "legacy_id": "slot3",
+      "family": "character_slot",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent slot unlock from campaign/achievement milestones; never require a consumable token after unlock.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.slot4",
+      "legacy_id": "slot4",
+      "family": "character_slot",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent slot unlock from campaign/achievement milestones; never require a consumable token after unlock.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.slot5",
+      "legacy_id": "slot5",
+      "family": "character_slot",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent slot unlock from campaign/achievement milestones; never require a consumable token after unlock.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.slot6",
+      "legacy_id": "slot6",
+      "family": "character_slot",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent slot unlock from campaign/achievement milestones; never require a consumable token after unlock.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.special",
+      "legacy_id": "special",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.special2",
+      "legacy_id": "special2",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.special3",
+      "legacy_id": "special3",
+      "family": "bundle_contents_unresolved",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "BLOCKED: resolve every component/grant and migration behavior before changing/removing SKU.",
+      "migration_status": "blocked_contents_unknown",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.stash",
+      "legacy_id": "stash",
+      "family": "storage_capacity",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Earned, permanent vault upgrades using gold/materials, with at least one campaign milestone upgrade.",
+      "migration_status": "needs_grant_mapping",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity1",
+      "legacy_id": "vanity1",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 1,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "2.99",
+      "proposed_gold_cost": 750000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity2",
+      "legacy_id": "vanity2",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 2,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "2.99",
+      "proposed_gold_cost": 750000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity3",
+      "legacy_id": "vanity3",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 3,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity4",
+      "legacy_id": "vanity4",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 4,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity5",
+      "legacy_id": "vanity5",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 5,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity6",
+      "legacy_id": "vanity6",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 6,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity7",
+      "legacy_id": "vanity7",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 7,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity8",
+      "legacy_id": "vanity8",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 8,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity9",
+      "legacy_id": "vanity9",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 9,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 100000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity10",
+      "legacy_id": "vanity10",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 10,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 100000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity11",
+      "legacy_id": "vanity11",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 11,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 100000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity12",
+      "legacy_id": "vanity12",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 12,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 100000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity13",
+      "legacy_id": "vanity13",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 13,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 100000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity14",
+      "legacy_id": "vanity14",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 14,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 300000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity15",
+      "legacy_id": "vanity15",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 15,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity16",
+      "legacy_id": "vanity16",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 16,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity17",
+      "legacy_id": "vanity17",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 17,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 1000000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity18",
+      "legacy_id": "vanity18",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 18,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 150000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity19",
+      "legacy_id": "vanity19",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 19,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 150000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity20",
+      "legacy_id": "vanity20",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 20,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 150000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity21",
+      "legacy_id": "vanity21",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 21,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 150000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity22",
+      "legacy_id": "vanity22",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 22,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 150000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity24",
+      "legacy_id": "vanity24",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 24,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 50000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity25",
+      "legacy_id": "vanity25",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 25,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 25000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity26",
+      "legacy_id": "vanity26",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 26,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 25000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity27",
+      "legacy_id": "vanity27",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 27,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 25000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity28",
+      "legacy_id": "vanity28",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 28,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 25000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity29",
+      "legacy_id": "vanity29",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 29,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 25000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity30",
+      "legacy_id": "vanity30",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 30,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 25000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity31",
+      "legacy_id": "vanity31",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "already_earned_gold",
+      "vanity_row_index_inferred": 31,
+      "shop_xml_tab3_referenced": true,
+      "observed_existing_gold_cost": 25000,
+      "price_source": "Vanity.xml Gold",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity32",
+      "legacy_id": "vanity32",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 32,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "0.99",
+      "proposed_gold_cost": 250000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity33",
+      "legacy_id": "vanity33",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 33,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "0.99",
+      "proposed_gold_cost": 250000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity56",
+      "legacy_id": "vanity56",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 56,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "3.99",
+      "proposed_gold_cost": 1000000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity57",
+      "legacy_id": "vanity57",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 57,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "3.99",
+      "proposed_gold_cost": 1000000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity58",
+      "legacy_id": "vanity58",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 58,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "0.99",
+      "proposed_gold_cost": 250000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity64",
+      "legacy_id": "vanity64",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 64,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "5.99",
+      "proposed_gold_cost": 1500000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity65",
+      "legacy_id": "vanity65",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 65,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "1.99",
+      "proposed_gold_cost": 500000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity66",
+      "legacy_id": "vanity66",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 66,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "2.99",
+      "proposed_gold_cost": 750000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity67",
+      "legacy_id": "vanity67",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 67,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "1.99",
+      "proposed_gold_cost": 500000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity68",
+      "legacy_id": "vanity68",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 68,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "5.99",
+      "proposed_gold_cost": 1500000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity69",
+      "legacy_id": "vanity69",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 69,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "1.99",
+      "proposed_gold_cost": 500000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity70",
+      "legacy_id": "vanity70",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 70,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "2.99",
+      "proposed_gold_cost": 750000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity71",
+      "legacy_id": "vanity71",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 71,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "1.99",
+      "proposed_gold_cost": 500000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity72",
+      "legacy_id": "vanity72",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": false,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "asset_only_unpriced_unreferenced_review",
+      "vanity_row_index_inferred": 72,
+      "shop_xml_tab3_referenced": false,
+      "evidence_note": "IAP.xml contains identifier but no DEX static SKU match; Vanity.xml row has no Price or Gold and Shop.xml Tab3 does not reference row; investigate before removal or activation.",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity73",
+      "legacy_id": "vanity73",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": false,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "asset_only_unpriced_unreferenced_review",
+      "vanity_row_index_inferred": 73,
+      "shop_xml_tab3_referenced": false,
+      "evidence_note": "IAP.xml contains identifier but no DEX static SKU match; Vanity.xml row has no Price or Gold and Shop.xml Tab3 does not reference row; investigate before removal or activation.",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    },
+    {
+      "sku": "com.shinybox.dq.vanity74",
+      "legacy_id": "vanity74",
+      "family": "vanity_cosmetic",
+      "sources": {
+        "dex_static_sku": true,
+        "iap_xml_name": true
+      },
+      "proposed_route": "Permanent deterministic vanity collection. Keep existing Gold prices; assign earned Gold to cash-only vanity rows. Resolve unpriced legacy rows before enabling them.",
+      "migration_status": "draft_converted_to_gold",
+      "vanity_row_index_inferred": 74,
+      "shop_xml_tab3_referenced": true,
+      "observed_price_usd_string": "0.99",
+      "proposed_gold_cost": 250000,
+      "price_source": "Vanity.xml Price; proposed gold cost, not original value",
+      "runtime_evidence": {
+        "reward_status": "UNVERIFIED",
+        "reward_payload": null,
+        "persisted_entitlement_write": "NOT_OBSERVED",
+        "runtime_test_status": "NOT_RUN",
+        "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
+        "next_required_evidence": [
+          "matching native library/split or equivalent native source/disassembly",
+          "decoded model callback edge where relevant",
+          "controlled runtime state diff for this SKU"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "title": "Dungeon Quest v3.3.2.0 Evidence Ledger v15",
+  "generated_date": "2026-10-24",
+  "source_identity": {
+    "package": "com.shinybox.smash",
+    "version": "3.3.2.0",
+    "version_code": 1423433200,
+    "xapk_sha256": "3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "base_dex_sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "source_stk_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "native_engine_sha256": "0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083"
+  },
+  "status_vocabulary": [
+    "STATIC-DIRECT",
+    "INFERRED",
+    "IMPLEMENTED",
+    "UNIT-VERIFIED",
+    "RUNTIME-VERIFIED",
+    "BLOCKED"
+  ],
+  "entries": [
+    {
+      "id": "NATIVE-001",
+      "claim": "Matching ARM64 native split is present in the uploaded v3.3.2.0 XAPK; signatures match across all 20 contained APKs.",
+      "source_file": "config.arm64_v8a.apk; all 20 APKs",
+      "symbol_or_offset": "ELF64 AArch64; signing certificate SHA256 9A:28:A9:91:71:C8:F6:3F:34:11:E2:91:F6:D9:6F:13:D5:D9:C1:73:62:06:A0:CF:95:EB:EE:99:BC:31:42:1D",
+      "evidence_type": "archive/hash/certificate + ELF metadata",
+      "confidence": "high",
+      "impact": "unblocks native static analysis",
+      "next_test": "install/signature/ABI compatibility launch test",
+      "status": "STATIC-DIRECT"
+    },
+    {
+      "id": "IAP-001",
+      "claim": "DEX message 600 routes to IAPWrapper.l(String), 602 to IAPWrapper.m(String, boolean), and restore message 601 to IAPWrapper.n().",
+      "source_file": "classes.dex; reports/purchase_message_routes_v10.json",
+      "symbol_or_offset": "Message IDs 600/601/602",
+      "evidence_type": "DEX control-flow/disassembly",
+      "confidence": "high",
+      "impact": "purchase request and restore dependency",
+      "next_test": "instrument or runtime trace one SKU request",
+      "status": "STATIC-DIRECT"
+    },
+    {
+      "id": "IAP-002",
+      "claim": "JNI purchase-success export sends an engine event to InAppPurchase.onPurchaseSuccess.",
+      "source_file": "libS3DClient.so",
+      "symbol_or_offset": "Java_com_shinybox_iap_IAPWrapper_onPurchaseSuccess@0x1e5b68 -> S3DClient_SendEventToCurrentUser@0x7aea00; model method @0x41c254",
+      "evidence_type": "ARM64 direct-call and native event strings",
+      "confidence": "high",
+      "impact": "bridges billing wrapper to native game-model layer",
+      "next_test": "runtime event trace",
+      "status": "STATIC-DIRECT"
+    },
+    {
+      "id": "IAP-003",
+      "claim": "InAppPurchase reads sAIHandler and dispatches the success notification through the engine; exact runtime destination is dynamic.",
+      "source_file": "libS3DClient.so; Resources/AIModels/InAppPurchase.aim",
+      "symbol_or_offset": "InAppPurchase::onPurchaseSuccess@0x41c254; AIM byte offset 24",
+      "evidence_type": "native variable lookup and indirect dispatch",
+      "confidence": "high for dynamic dispatch; medium for destination",
+      "impact": "key remaining call-graph dependency",
+      "next_test": "decode AIM binding and observe sAIHandler value in game",
+      "status": "INFERRED"
+    },
+    {
+      "id": "IAP-004",
+      "claim": "gold1–gold5 branches call RewardGold with exact constants 20M, 50M, 150M, 350M, and 1B Gold.",
+      "source_file": "libS3DClient.so",
+      "symbol_or_offset": "branches 0x737070/0x7371b8/0x737300/0x737448/0x737594; calls 0x7370d0/0x737218/0x737360/0x7374ac/0x7375f4",
+      "evidence_type": "ARM64 call-site and double-constant decoding",
+      "confidence": "high",
+      "impact": "allows exact replacement reward model",
+      "next_test": "controlled in-game balance diff for each pack before replacing product UI",
+      "status": "STATIC-DIRECT"
+    },
+    {
+      "id": "IAP-005",
+      "claim": "SKU gold refers to boostGold state, crystal to boostCS, and mythstone to boostMS; they are not proven direct currency grants.",
+      "source_file": "libS3DClient.so",
+      "symbol_or_offset": "0x7382a4 -> iap.boostGold/nGoldBoost; 0x7386e0 -> iap.boostCS/nCSBoost; 0x738b18 -> iap.boostMS/nMSBoost",
+      "evidence_type": "direct product/state string refs in success handler",
+      "confidence": "high",
+      "impact": "prevents incorrect economy replacement",
+      "next_test": "trace duration/stack values and active gameplay effect",
+      "status": "STATIC-DIRECT"
+    },
+    {
+      "id": "IAP-006",
+      "claim": "package1–package21 and special bundles map to named vanity flags in native success handler; package20/21 are native/DEX SKU strings without IAP.xml rows.",
+      "source_file": "libS3DClient.so; Resources/XML/IAP.xml",
+      "symbol_or_offset": "0x73b050–0x73dd34; see IAP_CANONICAL_MAPPING_V15.json",
+      "evidence_type": "product branch strings and iap.vanity references",
+      "confidence": "high for referenced flag sets",
+      "impact": "can replace bundle contents deterministically instead of random-only acquisition",
+      "next_test": "runtime per-product ownership state diff and reload",
+      "status": "STATIC-DIRECT"
+    },
+    {
+      "id": "IAP-007",
+      "claim": "uai_gp_account::GetIAPString is called by onUpload and SetIAP is called by onDownloadResult; this is account upload/download serialization, not proven local save persistence.",
+      "source_file": "libS3DClient.so",
+      "symbol_or_offset": "GetIAPString@0x4edff8; callsite 0x535028 from onUpload@0x5346c0; SetIAP@0x4faa2c; callsite 0x50b0a8 from onDownloadResult@0x509670",
+      "evidence_type": "direct ARM64 branch-call scan",
+      "confidence": "high",
+      "impact": "locates entitlement synchronization boundary",
+      "next_test": "trace local account save/load path separately and compare a live field",
+      "status": "STATIC-DIRECT"
+    },
+    {
+      "id": "IAP-008",
+      "claim": "Generic vanity handler plus account keys iap.vanity1–iap.vanity74 support SKU suffix to Vanity.xml row mapping, but live entitlement mutation has not been observed.",
+      "source_file": "libS3DClient.so; Resources/XML/Vanity.xml; IAP_CANONICAL_MAPPING_V15.json",
+      "symbol_or_offset": "generic handler @0x73aa0c; SetIAP/GetIAPString; rows 1–74",
+      "evidence_type": "native key correlation + asset row match",
+      "confidence": "medium",
+      "impact": "key mapping for 46 direct IAP vanity SKUs",
+      "next_test": "purchase/equip/reload state diff for representative vanity IDs",
+      "status": "INFERRED"
+    },
+    {
+      "id": "ECON-001",
+      "claim": "Data-only patch gives all 46 IAP-linked vanity SKU rows a Gold route, assigns proposed Gold to vanity72/73, and adds the missing Shop Tab3 listings.",
+      "source_file": "S3DMain_v15_vanity_earnability.smf; v15_vanity_patch_report.json",
+      "symbol_or_offset": "Vanity.xml + Shop.xml only; output SHA256 3c2d16566458009f0fa5eb4350b606a50e66b9542974b5d1b781f742c33b2d4d",
+      "evidence_type": "decoded STK diff and full output verification",
+      "confidence": "high for pack data",
+      "impact": "first complete IAP-vanity earnability batch",
+      "next_test": "game runtime shop/purchase/equip/save test",
+      "status": "UNIT-VERIFIED"
+    },
+    {
+      "id": "ECON-002",
+      "claim": "Patched STK has 5,630 entries passing CRC32 and decoded-size validation; 5,628 decoded entries unchanged and the two changed entries are Vanity.xml and Shop.xml.",
+      "source_file": "v15_verify_economy.json; local STK source and output",
+      "symbol_or_offset": "source 340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3 -> output 3c2d16566458009f0fa5eb4350b606a50e66b9542974b5d1b781f742c33b2d4d",
+      "evidence_type": "full decoded round-trip/CRC validation",
+      "confidence": "high",
+      "impact": "ensures immutable source and minimal data diff",
+      "next_test": "re-run validator from clean branch using source pack supplied by user",
+      "status": "UNIT-VERIFIED"
+    },
+    {
+      "id": "ECON-003",
+      "claim": "The cosmetic data patch does not disable billing/purchase code and is not full IAP replacement.",
+      "source_file": "v15_verify_economy.json; XAPK/base DEX/native binary",
+      "symbol_or_offset": "billing_code_changed=false; apk_build_performed=false",
+      "evidence_type": "validation report",
+      "confidence": "high",
+      "impact": "sets honest scope of current deliverable",
+      "next_test": "patch billing entry points only after rebuildable APK tooling/path is established",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "UI-001",
+      "claim": "debug.hud contains level/feat/CS/MS/Boss test labels; no direct Pause/Options-to-debug.hud open edge has been established yet.",
+      "source_file": "Resources/HUD/debug.hud; Games/Smash.gam; libS3DClient.so",
+      "symbol_or_offset": "uai_gp_debug.aim; debug.hud; model registry",
+      "evidence_type": "static symbol/model inventory",
+      "confidence": "high for labels; low for reachability",
+      "impact": "sandbox integration entry point",
+      "next_test": "parse model registry + AIM event/parent references; confirm a real open/show call edge",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "UI-002",
+      "claim": "A fully integrated Cheat/Sandbox page has not been added to native Pause → Options; there is no verified handler/state adapter or reversible state mutation.",
+      "source_file": "branch tree and pause/options AIM/HUD evidence",
+      "symbol_or_offset": "pause.hud; uai_gp_options.aim; uai_gp_debug.aim",
+      "evidence_type": "repo diff and call-graph inventory",
+      "confidence": "high",
+      "impact": "required core target",
+      "next_test": "establish one reversible diagnostics/state adapter and an Android-rebuildable patch path",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "NATIVE-002",
+      "claim": "Native libraries are now recovered, but the available environment has no apktool/aapt2/apksigner/zipalign and no device/emulator runtime.",
+      "source_file": "toolchain inventory; XAPK split set",
+      "symbol_or_offset": "libS3DClient.so is available locally; build tools absent",
+      "evidence_type": "toolchain check",
+      "confidence": "high",
+      "impact": "prevents verified installable mod APK in this run",
+      "next_test": "obtain supported Android build/repack toolchain and device/emulator",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "REPO-001",
+      "claim": "Feature branch is open draft and the branch history diverges from main; repo remains curated rather than containing all 68 app-specific disassemblies and 68 Java scaffolds.",
+      "source_file": "GitHub PR #26 and recursive Git tree",
+      "symbol_or_offset": "historical audit head 8bd0f536a6ec6cef3d0b2a47a173a5810fed28d3; tree 246 entries; 2 .smali; 0 reconstruction/java scaffolds",
+      "evidence_type": "GitHub API metadata/tree",
+      "confidence": "high",
+      "impact": "synchronization and reviewability",
+      "next_test": "update exact head and rerun tree inventory after commits",
+      "status": "BLOCKED"
+    }
+  ]
+}

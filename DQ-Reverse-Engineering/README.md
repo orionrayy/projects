@@ -1,46 +1,109 @@
 # Dungeon Quest — Reverse-Engineering Workspace
 
-**Status: partial source reconstruction from DEX plus verified extraction of the outer game-asset archive. This is not a complete/build-verified Android project.**
+**Status: curated, partial source reconstruction from DEX plus verified extraction of the outer game-asset archive. This is not a complete/build-verified Android project.**
 
-Analyzed APK: package `com.shinybox.smash`, version `3.3.2.0`. Original APK, raw DEX, pack container, and credential-bearing asset are excluded from this code repository.
+Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
-## Included
+## Artifact scope — read this before comparing ZIPs
 
-- `disassembly/`: representative Dalvik-level output and class/method inventory for the 68 app-specific classes.
-- `reconstruction/verified/java/`: higher-confidence `BuildConfig`, `Globals`, and `S3DEngine` source excerpts; compiled against temporary Java stubs only.
-- `reconstruction/fragments/`: reconstructed methods from `ShinyActivity`, `Smash` pack I/O, native-library load order and the JNI renderer boundary.
-- `tools/`: offline Python helpers for AXML, DEX inventory/disassembly, Java declaration scaffolds, reachability heuristics, SMF reconnaissance, and safe STK extraction.
-- `docs/`: evidence report, IAP identifier catalog, native method index, split-APK findings, STK format findings, extracted-asset catalog and validation details.
+| Artifact | Scope | Explicit exclusions |
+|---|---|---|
+| This GitHub directory (`DQ-Reverse-Engineering/`) | Curated, reviewable source workspace: selected disassembly fragments, higher-confidence Java excerpts, tools, tests, a manifest analysis excerpt, and selected text reports | Not a byte-for-byte mirror of local generated artifacts; not a full Android Studio/Gradle project |
+| Local `DQ_Modkit_v10_IAP_Flow_Trace.zip` | 60-file delivery package under `package/`, about 35.8 MB uncompressed; includes patched asset pack, IAP analysis reports, patch/packer tools, tests, and standalone sandbox files | Does **not** contain original APK, original `S3DMain.smf`, `classes.dex`, all 68 app-specific disassemblies, 68 Java declaration scaffolds, the full decoded asset tree, or the manifest analysis excerpt |
+| Local v11 audit package | Adds a symbol-level `Smash.gam`/IAP/Options/Debug/HUD audit, a per-SKU evidence matrix, tests, and native/split analysis | It remains a local delivery artifact unless its text reports/tools are committed separately; it is not an installable APK |
 
-The full local analysis bundle contains 68 generated Dalvik class files, 68 Java declaration scaffolds, complete per-asset hashes/sizes, and the remaining scripts. This curated public directory does not include all 68 generated files or publish the extracted binary assets.
+Earlier notes refer to a separate, broader “full local analysis bundle.” That phrase does **not** describe the v10 IAP Flow Trace ZIP. Compare actual archive manifests rather than assuming that either ZIP or this repository contains every file generated during analysis.
 
-## DEX evidence
+## Included in this curated repository
 
-- 10,768 total DEX class definitions and 59,460 method IDs; these include platform/dependency classes.
-- 68 app-specific `com.shinybox.*` classes, 405 method declarations, 361 code-bearing methods in the reachability scan.
-- 5,187 decoded instruction boundaries, 50 payload directives and 44 native declarations.
-- 104 distinct static IAP SKU identifiers; these do not establish current store prices or entitlements.
+- `disassembly/`: representative Dalvik output and a method/class inventory; not all 68 app-specific classes.
+- `reconstruction/verified/java/`: higher-confidence `BuildConfig`, `Globals`, and `S3DEngine` excerpts, compiled only against temporary Java stubs.
+- `reconstruction/fragments/`: selected `ShinyActivity` / `Smash` excerpts and the JNI/native boundary.
+- `manifest/`: analysis excerpt only; resource IDs remain unresolved, and it must not replace the real binary manifest.
+- `tools/`, `tests/`, `docs/`: offline parsers, packer/patcher, regression tests, and evidence reports.
 
-## Asset archive — resolved
+## DEX and IAP evidence
 
-The `S3DMain.smf` container was parsed successfully: signature `0x00000008`, version 6, 5,630 entries, all payload CRC-32 and decoded-size checks passing. It yielded 94,513,994 bytes across 5,619 zlib+XOR and 11 raw+XOR entries. Seventeen readable `Resources/XML/*.xml` tables contain 2,623 row records. See `docs/STK_FORMAT_FINDINGS.md` and `docs/ASSET_CATALOG.md`.
+- DEX has 10,768 total class definitions; 68 belong to the app-specific `com.shinybox.*` namespace.
+- The wrapper declares 44 native methods; 34 are on `S3DRenderer`.
+- `IAP.xml` has 107 identifiers; the DEX IAP initializer has 104 unique literal SKU identifiers; 102 are shared. XML-only identifiers are `angelicslime`, `demonicslime`, `poisonslime`, `vanity72`, and `vanity73`; DEX-only identifiers are `package20` and `package21`.
+- The exact v15 native audit maps `gold1`–`gold5` to 20M/50M/150M/350M/1B Gold via direct `RewardGold` calls; `gold`, `crystal`, and `mythstone` instead map to boost-state keys. Bundle component vanity flags, pet archetypes/families, slot and map-reveal branches are mapped where direct evidence exists; unresolved values remain explicitly blocked.
+- JNI purchase-success at `0x1e5b68` sends an event to `InAppPurchase::onPurchaseSuccess @ 0x41c254`. The next target uses dynamic `sAIHandler`; the final delivery to `uai_gp_hud::onPurchaseSuccess` is still `INFERRED`, not proven by string presence.
+- `uai_gp_account::GetIAPString` is called during account upload and `SetIAP` during account download; this proves cloud/account serialization call sites, not the local save-file format or local persistence. No SKU reward is runtime-verified.
 
-The outer container is decoded; inner `.gam`, `.mdo`, `.msh`, `.ske`, `.scn` and related engine-specific formats remain binary data, not decompiled native source.
+## Game-model and debug-screen boundary
 
-## Reproduction
+`Games/Smash.gam` contains a parsed 30-name model registry, including `InAppPurchase`, `uai_gp_options`, and `uai_gp_debug`. The `debug.hud` asset contains level/CS/MS/Feat/Crystal/Eternal/Boss test controls. The named `uai_gp_debug.aim` callbacks are principally shader/log diagnostics. Static asset presence does not prove the debug screen is reachable in a release build.
 
-```bash
-python tools/dex_inventory.py /path/to/classes.dex --output docs/dex-index.json
-python tools/dex_disasm.py /path/to/classes.dex --out disassembly
-python tools/generate_java_stubs.py /path/to/classes.dex --out reconstruction/java --include-safe-constants
-python tools/analyze_dex_reachability.py /path/to/classes.dex --output docs/dex-reachability.json
-python tools/stk_unpacker.py /path/to/S3DMain.smf --inventory-json docs/asset-inventory.json --inventory-csv docs/asset-inventory.csv
-python tools/stk_unpacker.py /path/to/S3DMain.smf --extract /path/to/new-empty-directory
-python tests/validate_bundle.py
-```
+## Asset archive and native split — recovered; runtime still unverified
 
-## Remaining blockers
+The outer `S3DMain.smf` container was parsed and all 5,630 entries passed CRC-32 and decoded-size checks. The decoded payload totals about 94.5 MB and includes XML tables plus proprietary `.gam`, `.aim`, `.hud`, model, mesh, skeleton, scene, animation and texture data.
 
-The manifest's `requiredSplitTypes="base__abi,base__density"` and `isSplitRequired="true"` are consistent with split delivery; exact ABI/density companion APKs have not been obtained. The 44 JNI native implementations are absent from DEX. JADX, Apktool and a Smali assembler have not run in this offline environment; no complete Gradle build, signing, emulator launch or runtime-equivalence test has succeeded.
+The newly supplied XAPK contains the matching v3.3.2.0 base APK, `config.arm64_v8a.apk`, and `config.xxhdpi.apk`. All 20 APK members share signer SHA-256 fingerprint `9A:28:A9:91:71:C8:F6:3F:34:11:E2:91:F6:D9:6F:13:D5:D9:C1:73:62:06:A0:CF:95:EB:EE:99:BC:31:42:1D`. The ARM64 split contains four native libraries; `libS3DClient.so` is ELF64 AArch64, SHA-256 `0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083`, with dynamic dependencies inventoried. This resolves the previous missing-native-binary blocker for static analysis.
 
-The uploaded APK contained `assets/api_key.txt` with a credential-shaped token. That file/value is excluded; rotate/revoke the token if active.
+The native binary is now present locally and has been disassembled for IAP branches, but no runtime instrumentation, Android APK build/sign/install, or gameplay test has been performed. The matching binary is not checked into GitHub; only hashes, ELF metadata, call-site notes and evidence ledger are tracked.
+
+## Synchronization inventory — v15
+
+- [Latest repository, native trace, economy patch, evidence status and blockers](docs/SYNC_STATUS_AND_NEXT_STEPS_V15.md)
+- [Local/GitHub source artifact manifest](docs/SOURCE_ARTIFACT_MANIFEST_V15.csv)
+- [Prior v14 AIM/HUD inventory and prior v13/v12 sync notes](docs/SYNC_STATUS_AND_NEXT_STEPS_V14.md)
+
+The curated branch currently tracks only two `.smali` files (plus the inventory Markdown) and no generated `reconstruction/java/` scaffolds. It does **not** contain all 68 app-specific disassemblies or 68 Java declaration scaffolds mentioned in earlier local-bundle descriptions. CI checks are tied to the exact commit SHA; see the v14 sync report for latest validation status.
+
+## Latest evidence reports — v15, v14, and v13
+
+- [Canonical 109-SKU purchase → grant → state/persistence map](docs/IAP_CANONICAL_MAPPING_V15.json)
+- [Evidence ledger with claims, confidence, impact and next tests](docs/EVIDENCE_LEDGER_V15.json)
+- [Native ARM64 IAP callback and grant trace](docs/NATIVE_IAP_TRACE_V15.md)
+- [Native split hash, ABI and ELF dependency inventory](docs/NATIVE_SPLIT_AUDIT_V15.json)
+- [Economy patch report and exact changed-table hashes](docs/ECONOMY_PATCH_V15.md) and [machine-readable report](docs/ECONOMY_PATCH_V15.json)
+- [Source/patch XML, SKU and Shop reconciliation report](docs/IAP_ASSET_RECONCILIATION_V15.json)
+- [v15 canonical IAP validator](tools/validate_iap_canonical_mapping_v15.py) and [tests](tests/test_iap_canonical_mapping_v15.py)
+- [v15 XML/SKU reconciliation tool](tools/reconcile_iap_asset_tables_v15.py) and [tests](tests/test_iap_asset_reconciliation_v15.py)
+- [v14 AIM/HUD string inventory plus machine-readable 58-symbol snapshot](docs/AIM_HUD_SYMBOL_AUDIT_V14.md) / [JSON](docs/AIM_HUD_SYMBOL_AUDIT_V14.json)
+
+The latest verified CI before the v15 sync report/README edits passed the v13, v14, v15 canonical-map and XML/SKU test steps plus manifest boundary checks and Java stub compilation. Check CI against the exact branch HEAD before describing new commits as verified. All 109 product rewards remain not runtime-verified; the direct static findings are not a substitute for a running game state diff.
+
+## Reproduction and remaining blockers
+
+The source tools support offline metadata extraction, DEX inventory/disassembly, Java declaration scaffolds, STK extraction/rebuild, and narrow asset patching. The repository does **not** claim complete original Java source, JNI implementations, bundle reward mapping, a full Gradle build, signing, emulator launch, or runtime equivalence.
+
+The uploaded APK contained a credential-shaped `assets/api_key.txt`; its value is excluded from the repository and reports. Rotate/revoke it if it is active.
+
+## Pause → Options → Cheats route bridge — v16
+
+- [Route evidence and integration status](docs/PAUSE_OPTIONS_CHEATS_ROUTE_V16.md)
+- [Machine-readable route evidence/status](docs/PAUSE_OPTIONS_CHEATS_ROUTE_V16.json)
+- [Fail-closed Java route bridge](runtime-adapter/src/main/java/dev/dqdebug/runtime/PauseOptionsCheatsBridge.java)
+- [Java bridge contract tests](runtime-adapter/src/test/java/dev/dqdebug/runtime/PauseOptionsCheatsBridgeSelfTest.java)
+
+The source bridge and contract tests are implemented, but the proprietary S3D Options UI hook remains **BLOCKED**: this repository has no validated HUD serializer with lossless round-trip tests and no original game UI source callsite. The bridge does not claim the Cheats entry exists in the running game.
+
+## Existing main-HUD debug route audit — v20
+
+- [Main HUD debug action mapping and next gates](docs/MAIN_HUD_DEBUG_ROUTE_V20.md)
+
+The v20 static audit found existing handlers in the main HUD for `onDebug(0)`, `onDebug(5)`, `onDebug(6)`, `onDebug(7)`, and `onDumpShaderList`, plus debug-related element names. This narrows the engineering question to the visibility and reachability of the existing debug group rather than inventing a new dispatcher. It still does not prove the controls are reachable during gameplay or that a native call is safe. No native callback or asset bytes were patched.
+
+## HUD binary format and route evidence — v19
+
+- [Read-only HUD binary probe](tools/hud_asset_probe.py)
+- [Synthetic HUD parser regression tests](tests/test_hud_asset_probe.py)
+- [Verified HUD section/action findings](docs/HUD_BINARY_FORMAT_V19.md)
+
+The v19 audit parsed the original Pause and Debug HUD headers and section boundaries, confirming 64 Pause actions and 13 Debug actions. The existing `onShowOptions` action toggles the existing Options model, but the Pause action table has no explicit Debug route. A read-only parser and regression tests are now included in static CI. Element records remain opaque and no original HUD resource was rewritten; the live click path remains blocked pending a lossless serializer and in-game runtime verification.
+
+## Native split recovery and Android harness verification — v18
+
+- [Recovered ARM64 split/native export audit](docs/NATIVE_SPLIT_AUDIT_V18.md)
+- [Updated native engine boundary](docs/NATIVE_ENGINE_BOUNDARY.md)
+- [Corrected split APK findings](docs/SPLIT_APK_FINDINGS.md)
+- [Android harness smoke test](cheats-harness/app/src/androidTest/java/dev/dqdebug/sandboxharness/MainActivitySmokeTest.java)
+- [Android build + emulator workflow](../.github/workflows/dq-cheats-harness-android.yml)
+
+The supplied v3.3.2.0 XAPK has been recovered and statically audited. Its ARM64 split contains libS3DClient.so, libcrypto.so, libssl.so and libopenal.so; sampled split signer fingerprints match. The native binary exposes JNI and S3DClient APIs, including HUD-action and options calls, but their authoritative call signatures, thread contract and safe player-state accessors are not established. Binary exports are not proof that a cheat controller can safely mutate game state.
+
+The standalone **DQ Cheats Sandbox Harness** is a separate app, not a repackaged Dungeon Quest APK. A prior CI run did build its debug APK and pass JVM unit tests. The updated workflow now also attempts instrumentation/navigation checks and installation/launch on an Android API 35 x86_64 emulator; see the [current PR checks](https://github.com/orionrayy/projects/pull/26/checks) and verify the newest run's conclusion before treating emulator checks as passed. This does not test the original ARM64 game engine.
+
+**Original-game integration remains NOT VERIFIED:** no format-correct HUD edit has been validated, no Pause → Options → Cheats click path has been exercised in Dungeon Quest, no reversible game-state adapter has been runtime-verified, and no modified original-game APK has been built/installed/launched. Purchase receipts/entitlements and online progression are not modified.

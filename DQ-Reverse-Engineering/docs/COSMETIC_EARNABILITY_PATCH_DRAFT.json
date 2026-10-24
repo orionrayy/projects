@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "source_pack_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+  "container_validation": {
+    "format": "STK-style version 6",
+    "entries": 5630,
+    "crc32_and_decoded_size_checks": "5630/5630 passed",
+    "decoded_bytes_before_patch": 94513994
+  },
+  "target": "Resources/XML/Vanity.xml",
+  "total_rows": 74,
+  "converted_rows": [
+    {"id":"1","name":"Angelic Wings","old_price":"2.99","new_gold":750000},
+    {"id":"2","name":"Demonic Wings","old_price":"2.99","new_gold":750000},
+    {"id":"32","name":"Angelic Eyes","old_price":"0.99","new_gold":250000},
+    {"id":"33","name":"Demonic Eyes","old_price":"0.99","new_gold":250000},
+    {"id":"56","name":"Nightblade Armor Skin","old_price":"3.99","new_gold":1000000},
+    {"id":"57","name":"Nightblade Weapons","old_price":"3.99","new_gold":1000000},
+    {"id":"58","name":"Nightblade Shoulders","old_price":"0.99","new_gold":250000},
+    {"id":"64","name":"Ascendant Armor","old_price":"5.99","new_gold":1500000},
+    {"id":"65","name":"Ascendant Shoulders","old_price":"1.99","new_gold":500000},
+    {"id":"66","name":"Ascendant Wings","old_price":"2.99","new_gold":750000},
+    {"id":"67","name":"Ascendant Head","old_price":"1.99","new_gold":500000},
+    {"id":"68","name":"Fallen Armor","old_price":"5.99","new_gold":1500000},
+    {"id":"69","name":"Fallen Shoulders","old_price":"1.99","new_gold":500000},
+    {"id":"70","name":"Fallen Wings","old_price":"2.99","new_gold":750000},
+    {"id":"71","name":"Fallen Head","old_price":"1.99","new_gold":500000},
+    {"id":"74","name":"Revenant Skull Skin","old_price":"0.99","new_gold":250000}
+  ],
+  "price_tiers": {
+    "0.99":250000,
+    "1.99":500000,
+    "2.99":750000,
+    "3.99":1000000,
+    "5.99":1500000
+  },
+  "status": "asset-level patch validated; gameplay runtime and APK rebuild not verified",
+  "scope_warning": "Cosmetics-only data patch. Other IAP product families, the IAP registry, billing wrappers, receipt state, native engine and Android packaging are unchanged."
+}
