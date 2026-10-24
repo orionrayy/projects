@@ -1,8 +1,17 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint: v2.41 · Static integrity PASS for the targeted pass · Full localization NOT COMPLETE**
+**Latest checkpoint: v2.42 · Static integrity PASS for targeted residual cleanup · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
+
+## v2.42 targeted residual pass
+
+- Extended the localization overlay across 16 files covering selected character banter, epilogue outcomes, finale mode/credits, ringmaster/healer dialogue, Canada-crossing NPC chatter, Santa/Evil Santa, gnome trader, farm/car encounters, and mission text.
+- **309 literal occurrences changed**; zero unmatched mapping rules. Line counts, string-token counts, non-string code, and resource paths were preserved.
+- Patch ZIP: 431 entries / 430 manifest records; CRC PASS, zero hash failures, zero unmanifested paths, zero duplicates. SHA-256: `e47f397d9c3908a9e370ef98aeb21bf091d66af7eb839a0fb022a9350cb4f4cd`.
+- Local archive v2.7: 459 entries / 458 checksum records; CRC PASS and no checksum failures. SHA-256: `cb372f6cacce151a0f1eec545d1a29ef2a523cb92fa7d4f7e40b9157468ebcfb`.
+- Global semantic/player-visible coverage remains **NOT COMPUTED**. Gameplay/runtime, UI fit/overflow, save/load, and device tests were not run; APK rebuild/signing was not performed.
+- Binary patch, full archive, and detailed string ledger stay local. Public GitHub contains documentation and sanitized audit metadata only.
 
 ## v2.41 targeted remediation pass
 
@@ -37,7 +46,10 @@ Runtime gameplay/event-path testing, actual UI fit/overflow testing, save/load r
 
 - [Canonical project memory](PROJECT_MEMORY.md)
 - [Version changelog](CHANGELOG.md)
+- [v2.42 checkpoint](docs/CHECKPOINT_v2.42.md)
+- [v2.42 sanitized static-validation summary](audit/v2.42_static_validation_summary.json)
 - [v2.41 checkpoint](docs/CHECKPOINT_v2.41.md)
+- [v2.42 sanitized static-validation summary](audit/v2.42_static_validation_summary.json)
 - [v2.41 sanitized static-validation summary](audit/v2.41_static_validation_summary.json)
 - [v2.40 checkpoint](docs/CHECKPOINT_v2.40.md)
 - [Build and validation details](docs/BUILD_AND_VALIDATION.md)
