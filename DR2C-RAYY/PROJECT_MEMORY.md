@@ -116,3 +116,13 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - **Not runtime-verified:** no device/emulator/ADB was available for install, launch, gameplay, UI fit, save/load or stability tests. The app has PairIP/Play license-check components and may reject the local signature. No licensing or anti-tamper bypass was attempted.
 - Binary APK and extracted game source remain local-only; GitHub stores a sanitized build report.
 - Source patch README conflicts with checkpoint/ledger on changed-string metrics (309/16 vs 159/58); remain documented as unresolved.
+
+
+## Active hotfix checkpoint — v2.44 Start/UI (24 October 2026)
+- Local APK candidate: `DR2C_VORENYX_v2.44_START_UI_HOTFIX.apk`; 39748341 bytes; SHA-256 `e28314611411aeba2fdd6bf2cee918fa64ddecac159536e4a39918e7af81f8a6`. Binary remains local-only.
+- Inspected the uploaded recording: START remained on screen after taps; game view occupied a narrow horizontal band; settings controls clipped at the right edge; APKVISION graphic appeared behind Android's Open With chooser.
+- Restored the internal marker in `assets/deathforth/boot.df` from `PENANDA-GAME` to canonical `GAME-MARKER`; statically verified. Fixed `SplashActivity` and `DrtcGameActivity` to fixed landscape. Static Start route components exist, but actual Start behavior remains untested on device.
+- APK ZIP CRC PASS, 1,015 entries, 272 overlay payloads checked, 0 payload mismatches, 3 DEX files, 16 native libs for arm64-v8a/armeabi-v7a, native alignment PASS. Android signature schemes v1/v2/v3 verify using official Build Tools 35.0.1 apksigner.
+- The signing certificate `6ea04e10965de1459a7fee845e8ae903bc1535a744f4762c14b2c7bb82eb13f9` is a local key, not the original publisher certificate. PairIP/Play license checks remain and may reject the package; no licensing/anti-tamper bypass attempted.
+- VORENYX splash artwork itself has no APKVISION logo, but APKVISION namespaces remain in `classes3.dex` and `libstub.so` in the supplied repackaged base. The wrapper was not removed; a clean authorized publisher APK is needed for a clean no-APKVISION build.
+- Install/launch/Start taps, layout fit, gameplay, save/load and stability are NOT TESTED. This is a hotfix candidate, not a verified stable release.
