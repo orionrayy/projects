@@ -9,8 +9,8 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Added localized strings for 15 previously unoverlaid character-banter modules, ending/credits, human combat barks, and high-priority CYOA headings/choices.
 - Corrected the displayed perk label `Shotgunner` to `Ahli Shotgun`; the canonical game-state key is unchanged.
 - Static pass: **453 literal occurrences across 24 files**. Line counts, non-string code, and resource path literals were preserved.
-- The local v2.41 patch ZIP has 429 entries / 428 manifest entries; CRC PASS, zero manifest hash failures, zero duplicate paths. SHA-256: `7561fd67cb89ef970529566f18460f84c881c7e76f24dbda1f8bb512777a0e77`.
-- Local project archive v2.6: 457 entries; checksum manifest verifies all 456 other files. SHA-256: `d3203f7ce7025d1fe3bac4947694260e33d3a1feda09c61d52f7eb00fe4fad0c`.
+- The local v2.41 patch ZIP has 429 entries / 428 manifest entries; CRC PASS, zero manifest hash failures, zero duplicate paths. SHA-256: `e2d965d64d566c2f5eb516b2e2b6500c472ba354b4534d95a7fc488bcbdc4bf1`.
+- Local project archive v2.6: 457 entries; checksum manifest verifies all 456 other files. SHA-256: `20be915f19c9d3b7d800e1e179c1430f067bb72a6d194d0a3a5344ec64282f9f`.
 - Global semantic/player-visible coverage remains **NOT COMPUTED**. Runtime gameplay, UI fit/overflow, save/load, and APK rebuild/signing were not performed.
 - Public GitHub contains docs and sanitized audit metadata only; patch ZIP and project archive remain local-only artifacts.
 
