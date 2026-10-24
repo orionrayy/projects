@@ -20,3 +20,8 @@ The crashed v21/v22 candidates renamed the callback and reduced its parameter li
 ## Limits
 
 This package has not been installed/launched in the Android runtime by the build environment. CI tests operate on synthetic HUD fixtures, not on the user's device. Test offline with a disposable profile. Do not label the mod stable until it reaches the title screen, opens the route, and demonstrates the intended debug effect without regression.
+
+
+## Regression CI receipt
+
+GitHub Actions v23 schema-preservation workflow completed successfully: [run 40110265079](https://github.com/orionrayy/projects/actions/runs/40110265079). The job compiled the patcher and ran the synthetic regression tests. This confirms the patcher contract only; it does not establish runtime success on Android.
