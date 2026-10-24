@@ -43,3 +43,10 @@ The user reports that the problem reappeared after testing v26. In context, this
 Assuming v26 again closes at the Shinybox splash while the stock-pack control launches, the evidence now points to a raw packed-asset/container dependency or a parser constraint triggered by changing the stored stream, even when decoded HUD bytes are identical. This is **not proof of anti-tamper**: malformed or unsupported pack encoding and unchecked parser assumptions remain plausible.
 
 **Stop making further blind pack variants.** The next required evidence is Android `logcat` captured across a fresh launch. See [CRASH_LOGCAT_CAPTURE_V28.md](CRASH_LOGCAT_CAPTURE_V28.md). Do not claim cheat functionality is implemented; v26 is diagnostic-only.
+
+
+## Experimental correction — 2026-10-25
+
+A deeper cross-analysis identified a confounder in the earlier v26 comparison: the previously working stock control and v26 used different locally generated signing certificates. Their different runtime outcomes cannot yet be attributed exclusively to the raw S3DMain.smf bytes.
+
+A matched pair was built as v28 under the already-tested package ID com.shinybox.dqv25, using the exact same signer certificate for both variants. The 19 non-base split APKs are byte-identical; the only differing non-signature member in the base APK is assets/S3DMain.smf. Use this pair before concluding pack-integrity or anti-tamper. See CRASH_ROOT_CAUSE_ANALYSIS_V29.md and CRASH_LOGCAT_CAPTURE_V28.md.
