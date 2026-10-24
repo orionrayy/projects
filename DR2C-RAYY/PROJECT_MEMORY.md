@@ -98,3 +98,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - Global semantic/player-visible coverage remains NOT COMPUTED. Gameplay/runtime, UI fit/overflow, save/load, device testing, and APK rebuild/signing have not been performed.
 - Local patch SHA-256: `e47f397d9c3908a9e370ef98aeb21bf091d66af7eb839a0fb022a9350cb4f4cd`. Full archive remains local-only.
 - See [v2.42 checkpoint](docs/CHECKPOINT_v2.42.md) and [sanitized validation summary](audit/v2.42_static_validation_summary.json).
+
+
+## Active checkpoint — v2.43 (24 October 2026)
+- Targeted residual cleanup: 159 quoted-string occurrences changed across 58 overlay files; 9 previously unoverlaid modules added for selected visible strings.
+- Static checks passed: line/token counts preserved, non-string code skeleton and resource paths unchanged, zero unmatched rules.
+- Inherited 598-row heuristic queue now has 131 active candidate rows after v2.43, down from 241 after v2.42; this is a triage delta, not a confirmed untranslated-string count. Global semantic coverage remains NOT COMPUTED.
+- Patch SHA-256: `00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024`; local project archive v2.8 SHA-256: `417d8256a74ad6ed64072c93fd1e9b9f255cdb7bca41c49c96333fba6a569cd5`. These binaries and the detailed ledger are not hosted publicly.
+- See [v2.43 checkpoint](docs/CHECKPOINT_v2.43.md), [sanitized validation summary](audit/v2.43_static_validation_summary.json), and [residual recheck](audit/v2.43_residual_recheck.json).
