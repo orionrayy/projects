@@ -1,89 +1,50 @@
 {
-  "build": "v2.24",
-  "base_checkpoint": "v2.23",
+  "build": "v2.25",
+  "base_checkpoint": "v2.24",
   "static_integrity": "PASS",
   "failures": [],
   "scope_files": [
-    "assets/deathforth/blurb/aggressive.df",
-    "assets/deathforth/blurb/passive.df",
-    "assets/deathforth/blurb/pessimist.df",
-    "assets/deathforth/blurb/dull.df",
-    "assets/deathforth/blurb/sharp.df",
-    "assets/deathforth/blurb/blurbdeck.df",
-    "assets/deathforth/blurb/screply.df"
+    "assets/deathforth/blurb/optimist.df",
+    "assets/deathforth/blurb/sc/wrestler.df"
   ],
-  "literal_mapping_rules": 277,
-  "literal_occurrences_changed": 279,
-  "contextual_word_order_fixes": 2,
-  "file_structure_checks": [
+  "literal_mapping_rules": 63,
+  "literal_occurrences_changed": 63,
+  "source_structure_checks": [
     {
-      "file": "assets/deathforth/blurb/aggressive.df",
-      "quoted_literal_tokens_before": 58,
-      "quoted_literal_tokens_after": 58,
-      "line_count_before": 178,
-      "line_count_after": 178,
+      "file": "assets/deathforth/blurb/optimist.df",
+      "quoted_literal_tokens_before": 29,
+      "quoted_literal_tokens_after": 29,
+      "line_count_before": 114,
+      "line_count_after": 114,
+      "token_count_and_lines_preserved": true,
+      "mapped_source_residues_remaining": 0,
       "status": "PASS"
     },
     {
-      "file": "assets/deathforth/blurb/passive.df",
+      "file": "assets/deathforth/blurb/sc/wrestler.df",
       "quoted_literal_tokens_before": 34,
       "quoted_literal_tokens_after": 34,
-      "line_count_before": 130,
-      "line_count_after": 130,
-      "status": "PASS"
-    },
-    {
-      "file": "assets/deathforth/blurb/pessimist.df",
-      "quoted_literal_tokens_before": 47,
-      "quoted_literal_tokens_after": 47,
-      "line_count_before": 146,
-      "line_count_after": 146,
-      "status": "PASS"
-    },
-    {
-      "file": "assets/deathforth/blurb/dull.df",
-      "quoted_literal_tokens_before": 39,
-      "quoted_literal_tokens_after": 39,
-      "line_count_before": 140,
-      "line_count_after": 140,
-      "status": "PASS"
-    },
-    {
-      "file": "assets/deathforth/blurb/sharp.df",
-      "quoted_literal_tokens_before": 56,
-      "quoted_literal_tokens_after": 56,
-      "line_count_before": 197,
-      "line_count_after": 197,
-      "status": "PASS"
-    },
-    {
-      "file": "assets/deathforth/blurb/blurbdeck.df",
-      "quoted_literal_tokens_before": 79,
-      "quoted_literal_tokens_after": 79,
-      "line_count_before": 227,
-      "line_count_after": 227,
-      "status": "PASS"
-    },
-    {
-      "file": "assets/deathforth/blurb/screply.df",
-      "quoted_literal_tokens_before": 23,
-      "quoted_literal_tokens_after": 23,
-      "line_count_before": 125,
-      "line_count_after": 125,
+      "line_count_before": 137,
+      "line_count_after": 137,
+      "token_count_and_lines_preserved": true,
+      "mapped_source_residues_remaining": 0,
       "status": "PASS"
     }
   ],
-  "zip_entries": 301,
+  "zip_entries": 305,
   "duplicate_paths": 0,
   "zip_crc": "PASS",
-  "manifest_entries": 300,
+  "manifest_entries": 304,
   "manifest_hash_failures": 0,
+  "runner_local_path_leaks": 0,
+  "package_sha256": "693714b5f2a1e79f0e8b5c9749f7f4dfe1c6ffaa4dc891d0ee689549f82f7fe5",
+  "package_bytes": 11265213,
   "coverage_heuristic": {
     "measurement_build": "v2.22",
     "player_facing_occurrences": 10844,
     "marked_localized": 7490,
     "percent": 69.07,
-    "status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_24",
+    "status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_25",
     "full_translation_complete": false
   },
   "candidate_inventory_status": "HISTORICAL_V2_22_QUEUE_NOT_RECOMPUTED",
