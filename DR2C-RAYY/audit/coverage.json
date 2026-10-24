@@ -1,11 +1,11 @@
 {
   "project": "DR2C VORENYX",
   "locale": "id-ID",
-  "build": "v2.35",
+  "build": "v2.36",
   "source_script_files_scanned": 541,
-  "active_quoted_literal_tokens": 16827,
-  "candidate_residue_rows_for_manual_review": 129,
-  "candidate_files_for_manual_review": 67,
+  "active_quoted_literal_tokens": 16819,
+  "candidate_residue_rows_for_manual_review": 77,
+  "candidate_files_for_manual_review": 36,
   "candidate_method": "Comment-aware lexical extraction plus contextual English-likelihood heuristic; candidate counts are triage only.",
   "global_coverage_percent": null,
   "global_coverage_status": "NOT_COMPUTED",
@@ -14,10 +14,10 @@
     "heuristic_percent": 69.07,
     "status": "STALE_NOT_CURRENT"
   },
-  "v2_35_batch": {
-    "display_expressions_rewritten": 32,
-    "direct_literal_rules_applied": 9,
-    "direct_literal_occurrences_changed": 9,
+  "v2_36_batch": {
+    "display_expressions_rewritten": 45,
+    "direct_literal_rules_applied": 12,
+    "direct_literal_occurrences_changed": 12,
     "scope_files": [
       "mission.df",
       "locplan.df",
@@ -34,5 +34,5 @@
     ]
   },
   "full_translation_complete": false,
-  "warning": "Do not use the historical 69.07% as v2.35 coverage. Heuristic candidate counts do not prove semantic or runtime screen coverage."
+  "warning": "Do not use the historical 69.07% as v2.36 coverage. Heuristic candidate counts do not prove semantic or runtime screen coverage."
 }
