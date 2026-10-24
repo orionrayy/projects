@@ -1,12 +1,6 @@
 name: Build DQ Cheats Sandbox Harness APK
 
 on:
-  push:
-    branches:
-      - feat/dq-iap-debug-cheats-modkit-v7
-    paths:
-      - "DQ-Reverse-Engineering/cheats-harness/**"
-      - ".github/workflows/dq-cheats-harness-android.yml"
   pull_request:
     paths:
       - "DQ-Reverse-Engineering/cheats-harness/**"
@@ -14,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: dq-cheats-harness-${{ github.event.pull_request.head.ref || github.ref_name }}
+  group: dq-cheats-harness-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: true
 
 permissions:
