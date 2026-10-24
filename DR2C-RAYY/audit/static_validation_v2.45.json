@@ -72,9 +72,9 @@
   },
   "patch_archive": {
     "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
-    "bytes": 79036,
-    "sha256": "09ea2b684ce124778322a16464fb17fbaccceb0cdc9f307dcf94d72e96d6b14f",
-    "zip_entry_count": 18,
+    "bytes": 82349,
+    "sha256": "782ced605419b4819552c649c60c31d6bb0bf0fb9e542d26718c543eb1f28066",
+    "zip_entry_count": 19,
     "zip_crc_test": "PASS",
     "duplicate_paths": 0
   },
@@ -118,5 +118,13 @@
     ],
     "android11_signing_requirement": "Apps targeting API 30+ must have APK Signature Scheme v2 or higher; v1-only is insufficient on Android 11.",
     "source": "https://developer.android.com/about/versions/11/behavior-changes-11?hl=id"
+  },
+  "choice_handler_audit": {
+    "source_static_pairs": 1295,
+    "overlay_static_pairs": 1295,
+    "handler_sequence_mismatches": 0,
+    "changed_choice_labels": 1115,
+    "heuristic_semantic_conflict_candidates": 0,
+    "note": "Regex-based literal-label/handler triage only. Dynamic labels are excluded; zero heuristic candidates is not proof of semantic correctness."
   }
 }
