@@ -31,7 +31,8 @@ class IAPRuntimeEvidenceV13Tests(unittest.TestCase):
 
     def test_registry_mismatch_fails_closed(self):
         data = json.loads(MATRIX.read_text(encoding="utf-8"))
-        data["records"][0]["sources"]["dex_static_sku"] = False
+        target_record = next(record for record in data["records"] if record["sources"]["dex_static_sku"])
+        target_record["sources"]["dex_static_sku"] = False
         with tempfile.TemporaryDirectory() as td:
             target = Path(td) / "matrix.json"
             target.write_text(json.dumps(data), encoding="utf-8")
