@@ -1,6 +1,6 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint: v2.44 hotfix failed to verify · user reports symptoms unchanged · Full localization NOT COMPLETE**
+**Latest candidate: v2.45 corrective source overlay · static checks PASS · APK/runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
@@ -10,6 +10,14 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Static file inspection confirms the boot marker and landscape manifest edits exist in the v2.44 APK, but the phone may still be running the old APKVISION package: v2.44 uses the same package ID but a different local signing certificate, so Android cannot update an install signed by another key.
 - Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
 - [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
+
+## v2.45 deep source repair candidate — static only
+
+- A corrective source overlay was prepared for 12 scripts, addressing canonical trait/perk IDs, the `Jack of All Trades` definition key, a malformed translated trade-event string, recruit-screen perk labels, a candy-sharing choice label, and confirmation wording.
+- Static checks: no unclosed string/block comment; no new normalized heuristic warnings; 60/60 canonical trait/perk keys preserved; 44 confirmation calls and 44 perk-preview calls use canonical IDs; CYOA, CYOA-choice, and CYOA-bridge identifiers match the source in covered files.
+- Overlay scope: 269 of 509 source `.df` files. Full localization is not complete.
+- This is a source-overlay candidate, not an APK. No rebuild, install, target-device gameplay, or save/load validation was performed. The previously reported viewport/touch and runtime symptoms remain unresolved pending actual-package testing.
+- [Deep repair report](docs/DEEP_REPAIR_v2.45.md) · [Machine-readable static validation](audit/static_validation_v2.45.json)
 
 ## v2.44 Start/UI hotfix candidate
 
