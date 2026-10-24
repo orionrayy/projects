@@ -164,5 +164,59 @@
     "playerFacingHeuristicPct": null,
     "coverageMeasurementBaselinePct": 69.07,
     "static": "PASS; 66 exact-context mappings and 66 literal occurrences across five character files; source skeleton, token and line counts preserved; ZIP CRC and manifest hashes pass; global coverage not remeasured; runtime not tested"
+  },
+  {
+    "version": "v2.27",
+    "focus": "road-trip trade narrative, siege encounters, city encounters and road-loot events",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 37 display expressions and 23 direct literal occurrences; runtime not tested"
+  },
+  {
+    "version": "v2.28",
+    "focus": "car repair, car scavenging, camping and night-watch events",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 47 display expressions; 2 direct literal occurrences; runtime not tested"
+  },
+  {
+    "version": "v2.29",
+    "focus": "car repair, car scavenging, camping and night-watch events",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 51 display expressions; runtime not tested"
+  },
+  {
+    "version": "v2.30",
+    "focus": "car repair, car scavenging, camping and night-watch events",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 20 display expressions and 4 direct literal occurrences; runtime not tested"
+  },
+  {
+    "version": "v2.31",
+    "focus": "car repair, car scavenging, camping and night-watch events",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 27 display expressions; runtime not tested"
+  },
+  {
+    "version": "v2.32",
+    "focus": "car repair, car scavenging, camping and night-watch events",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 17 display expressions and 7 direct literal occurrences; runtime not tested"
+  },
+  {
+    "version": "v2.33",
+    "focus": "trader, DMV, junk-maker, special-character banter and graves encounter files",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 31 display expressions and 9 direct literal occurrences; runtime not tested"
+  },
+  {
+    "version": "v2.34",
+    "focus": "sewer/tutorial, Canada crossing, hazmat, Santa/Billy, Bogan, daily medical and trader-camp localization",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 25 display expressions and 3 direct literal occurrences; metadata reconciled in v2.35"
+  },
+  {
+    "version": "v2.35",
+    "focus": "game modes, journey planning, mission/reward text, gym/coffee/factory encounters, generator puzzle, broom/portal characters, Mountie Alpha-end",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 32 display expressions and 9 direct literal occurrences; global coverage not computed; runtime not tested"
   }
 ]
