@@ -1,9 +1,18 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint: v2.43 · Targeted static validation PASS · Full localization NOT COMPLETE**
+**Latest checkpoint: v2.44 Start/UI hotfix candidate · Static packaging PASS · Runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
+## v2.44 Start/UI hotfix candidate
+
+- Restored the canonical Forth module marker in assets/deathforth/boot.df: "PENANDA-GAME" $anew → "GAME-MARKER" $anew. This is an internal marker, not UI copy; its rename was a genuine identifier mismatch. The correction is static-verified, but whether it caused the Start failure still requires device testing.
+- Forced SplashActivity and DrtcGameActivity to fixed landscape (manifest value 0) to address the recording’s portrait letterboxing and clipped right-side settings controls.
+- Static Start-path checks pass: main-event select defer, handler registration, select-start registration, tutorial file existence, and menu/tutorial routing.
+- Local APK candidate: DR2C_VORENYX_v2.44_START_UI_HOTFIX.apk, 39,748,341 bytes, SHA-256 e28314611411aeba2fdd6bf2cee918fa64ddecac159536e4a39918e7af81f8a6. ZIP CRC PASS, 1,015 entries, 272 overlay payloads verified, no duplicate paths, v1/v2/v3 signature checks PASS.
+- Runtime Start behavior, layout fit, save/load, installation and stability are NOT TESTED. This is a hotfix candidate, not a verified stable release.
+- The VORENYX splash artwork itself has no APKVISION logo, but APKVISION namespaces remain in classes3.dex and libstub.so from the supplied repackaged base. This hotfix does not remove the third-party wrapper/provenance layer; an authorized clean base APK is needed for a clean no-APKVISION build.
+- Original publisher signing key is unavailable; the local key certificate SHA-256 is 6ea04e10965de1459a7fee845e8ae903bc1535a744f4762c14b2c7bb82eb13f9. PairIP/Play checks may reject the local signing certificate.
 ## v2.43 targeted residual pass
 
 - Changed **159 quoted-string occurrences across 58 overlay files**, including **9 files newly added to the overlay** for selected visible character emotes, event instructions, trade/mall signs, and dialogue.
@@ -49,12 +58,15 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 
 ## Tests not performed
 
-Runtime gameplay/event-path, actual UI fit/overflow, save/load, Android install and launch tests are **NOT RUN**. A v2.43 APK candidate was assembled and signed with Android SDK Build Tools 35.0.1 `apksigner`; schemes v1/v2/v3 all verify. It is **not a verified stable release**: the original publisher key is not present, and PairIP/Play license checks may reject a locally re-signed APK. Static package integrity does not prove runtime stability.
+Runtime gameplay/event-path, actual UI fit/overflow, save/load, Android install and launch tests are **NOT RUN**. The v2.44 candidate has static marker/orientation and v1/v2/v3 signature checks, but Start behavior has not been tested on-device and PairIP/Play checks may reject its local certificate. Static package integrity does not prove runtime stability.
 
 ## Project records
 
 - [Canonical project memory](PROJECT_MEMORY.md)
 - [Version changelog](CHANGELOG.md)
+- [v2.44 hotfix checkpoint](docs/CHECKPOINT_v2.44.md)
+- [v2.44 APK hotfix report](docs/APK_BUILD_v2.44.md)
+- [v2.44 sanitized hotfix audit](audit/v2.44_start_ui_hotfix.json)
 - [v2.43 checkpoint](docs/CHECKPOINT_v2.43.md)
 - [v2.43 APK build report](docs/APK_BUILD_v2.43.md)
 - [v2.43 sanitized static-validation summary](audit/v2.43_static_validation_summary.json)
