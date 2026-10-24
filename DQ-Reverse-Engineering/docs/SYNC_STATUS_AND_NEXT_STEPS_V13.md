@@ -9,7 +9,7 @@ PR: [#26](https://github.com/orionrayy/projects/pull/26) — open draft at audit
 - `docs/IAP_SKU_RUNTIME_EVIDENCE_V13.json`: machine-readable 109-SKU matrix with explicit runtime evidence on every row.
 - `docs/IAP_RUNTIME_ENTITLEMENT_EVIDENCE_V13.md`: human-readable account of the purchase-result boundary and unresolved grant semantics.
 - `tools/validate_iap_runtime_evidence_v13.py`: fail-closed consistency and evidence-contract validator.
-- `tests/test_iap_runtime_evidence_v13.py`: tests for the current evidence matrix, invalidly asserting a SKU as verified, and corrupted registry counts.
+- `tests/test_iap_runtime_evidence_v13.py`: tests for the current evidence matrix, invalidly asserting a SKU as verified, corrupted registry counts, and tampered runtime summary counts.
 
 The matrix is derived from the existing `IAP_SKU_RECONCILIATION_V7.json`. Its inherited `migration_status` and proposed replacement route remain migration/design classifications, not runtime findings.
 
