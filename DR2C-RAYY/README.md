@@ -10,7 +10,7 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Routed trait/perk labels through the display localization helper and added missing display mappings.
 - Continued localization across CYOA guidance, journey/camp text, NPC banter, reward text, comic/magazine choices, medical feedback, event narration, and combat tutorials. Updated the title-art badge to V2.40.
 - Static control-flow checks: CYOA/choice IDs preserved; route/resource path literals preserved.
-- A fresh comment-aware inventory scanned **541 .df/.txt files** and indexed **16,834 active quoted literals**. None of the inherited high-likelihood candidate rows remain in the current merged source. This queue is heuristic; its zero count **does not prove semantic or runtime completeness**.
+- A fresh comment-aware inventory scanned **541 .df/.txt files** and indexed **16,834 active quoted literals**. The inherited queue is stale/non-exhaustive: the fresh scan flags **1,578 English-likelihood rows** at threshold ≥0.2 plus **305 new/changed unscored literals** for triage (**1,883 rows across 196 files**). These are review candidates, not confirmed untranslated expressions.
 - A machine-audit non-flagged proxy of **88.11%–94.30%** is available for triage only; it is **not** a localization-coverage percentage. Global semantic/player-visible coverage is **NOT COMPUTED**. The historical v2.22 figure of 69.07% is stale and must not be used as v2.40 coverage.
 
 ## Build integrity
