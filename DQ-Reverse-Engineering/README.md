@@ -2,40 +2,37 @@
 
 **Status: partial source reconstruction from DEX; not a complete or build-verified Android project.**
 
-Analyzed APK: package com.shinybox.smash, version 3.3.2.0. The original APK, raw DEX, proprietary game pack, and credential-bearing asset are excluded from this repository.
+Analyzed APK: package com.shinybox.smash, version 3.3.2.0. Original APK binaries, proprietary asset pack, raw DEX, and credential-bearing asset are excluded.
 
-## Current reconstruction
+## Available
 
-- 68 app-specific com.shinybox.* classes emitted as Smali-like source in the local analysis archive.
-- Local snapshot totals: 405 methods, 5,187 decoded instructions, 50 payload directives, and 44 native method declarations.
-- The high-confidence Java layer includes BuildConfig.java, Globals.java, and S3DEngine.java; these three files compiled with javac against temporary minimal API/dependency stubs.
-- Method-level source excerpts now cover selected ShinyActivity behavior, Smash pack I/O, the Smash native-library load order, and the S3DRenderer JNI boundary.
-- The DEX-to-Java stub generator emits declaration scaffolds for authorized locally extracted DEX files. Nontrivial method bodies are not fabricated.
-- Static validation reports zero structural errors across the locally generated 68-class Smali-like snapshot.
-- The complete 68-class snapshot and full local analysis tools are supplied in the companion ZIP artifact. This GitHub folder remains a curated source workspace and does not yet contain every generated class file.
+- Decoded Android manifest and selected reconstructed Smali-like class snapshots.
+- DEX inventory, 68-class class/method metadata and a corrected 68-class source bundle attached to the task ZIP.
+- Standard-library Python helpers: DEX inventory/disassembly, AXML decoder, SMF probe and APK split/asset audit.
+- Static validation scripts and reports for source reconstruction, asset loading, native boundary, and security findings.
 
-## Split-package finding
+Corrected metrics: 68 app-specific classes, 405 methods, 5,187 decoded instructions, 50 payload directives, and 44 native declarations. Static validation is not proof of Smali assembler acceptance or runtime equivalence.
 
-The decoded manifest lists requiredSplitTypes="base__abi,base__density" and application isSplitRequired="true". This is consistent with a base APK whose ABI and density companion splits are required. Missing native libraries in this one archive therefore do not prove those libraries were never shipped. See docs/SPLIT_APK_FINDINGS.md and docs/NATIVE_ENGINE_BOUNDARY.md.
+## Main finding: required split APKs
 
-## Native engine and asset boundaries
+The manifest declares required split types for ABI and display density, `android:isSplitRequired=true`, and `android:extractNativeLibs=false`. This upload contains no native `lib/<abi>/*.so` entries, so the missing binary engine may be in a matching ABI split rather than absent from the distribution. Matching splits have not yet been acquired or validated.
 
-The DEX declares 44 native methods across four wrapper classes. The main game pack S3DMain.smf remains unresolved. The matching ABI/density splits have not been provided or inspected. These gaps prevent a complete rebuild from the supplied artifact alone.
+The asset `S3DMain.smf` is stored without ZIP compression and passed to native methods using its file descriptor, offset and length. Its internal format remains unresolved. Do not infer encryption from high entropy alone.
 
-## Tools and reproduction
+## Reproduce locally
 
-The committed helpers use Python's standard library. Extract classes.dex and assets from a copy you are authorized to analyze, then run:
+Extract the corresponding artifacts from an APK you are authorized to analyze:
 
 ```bash
+python tools/axml_decode.py AndroidManifest.xml manifest/AndroidManifest.xml
 python tools/dex_inventory.py classes.dex --output docs/dex-index.json
-python tools/generate_java_stubs.py classes.dex --out reconstruction/java
+python tools/dex_disasm.py classes.dex --out disassembly
 python tools/smf_probe.py assets/S3DMain.smf --output docs/smf-probe.json
+python tools/apk_split_audit.py DQ.apk manifest/AndroidManifest.xml --output docs/apk-split-audit.json
+python tests/validate_bundle.py
+python tests/validate_smali.py --root disassembly
 ```
 
-The manifest-analysis excerpt in manifest/ is for inspection, not direct APK repackaging. The local ZIP also includes the corrected custom disassembler and static validator for the complete 68-class snapshot.
+JADX, Apktool, a Smali assembler, the matching split APKs and a runtime build have not yet been run/verified in this environment. Original Java comments/formatting/locals, native implementations and SMF internals are not recovered.
 
-JADX/Apktool/Smali assembler tools could not be run in the offline analysis environment. Decompilation cannot restore original comments, Java formatting, local-variable names, or native implementations. No Android Gradle build, signing, emulator launch, runtime equivalence test, or SMF decoding has been completed.
-
-## Credential handling
-
-The APK included assets/api_key.txt with a credential-shaped Amazon token. It is deliberately excluded. If active, revoke/rotate the token with the owning service.
+The uploaded APK contains `assets/api_key.txt` with a credential-shaped token. That file and its value are excluded. Rotate/revoke the credential if active.
