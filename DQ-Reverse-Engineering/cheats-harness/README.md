@@ -16,3 +16,9 @@ Push changes under this folder or run the workflow manually. The workflow compil
 ## Important boundary
 
 The app does not attach to or patch another Android application. Android's app sandbox prevents a separate app from directly writing Dungeon Quest's process memory/state. The actual in-game Cheats row still requires the authorized original UI source/authoring pipeline and verified runtime-state APIs. Do not call this APK a Dungeon Quest mod or claim its toggles change gameplay.
+
+## Build result — 2026-10-24
+
+Latest recorded successful build: [GitHub Actions run 40096718673](https://github.com/orionrayy/projects/actions/runs/40096718673/job/120880408274). The `testDebugUnitTest` and `assembleDebug` tasks passed. [Download the APK artifact](https://github.com/orionrayy/projects/actions/runs/40096718673/artifacts/12560834028) (extract `app-debug.apk` from the downloaded ZIP).
+
+Recorded APK SHA-256: `99be5a030ed10f72e7d0796425260303a760fe451d520d50d473e57759d2b00d`; size 19,766 bytes. This is the standalone harness, not a modified Dungeon Quest APK. Device launch and the original in-game Pause -> Options route remain unverified.
