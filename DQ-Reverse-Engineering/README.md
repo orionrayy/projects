@@ -51,6 +51,7 @@ The curated branch currently tracks only two `.smali` files (plus the inventory 
 ## Latest evidence reports — v14, v13, and v11
 
 - [v14 AIM/HUD symbol inventory with hashes, offsets, and interpretation limits](docs/AIM_HUD_SYMBOL_AUDIT_V14.md)
+- [Machine-readable v14 snapshot: 58 symbol offsets across seven assets](docs/AIM_HUD_SYMBOL_AUDIT_V14.json)
 - [v14 AIM/HUD printable-symbol scanner](tools/audit_aim_hud_symbols.py) and [tests](tests/test_aim_hud_symbols.py)
 - [v13 purchase-to-entitlement evidence boundary and rerun instructions](docs/IAP_RUNTIME_ENTITLEMENT_EVIDENCE_V13.md)
 - [Machine-readable 109-SKU matrix with runtime grant status on every row](docs/IAP_SKU_RUNTIME_EVIDENCE_V13.json)
