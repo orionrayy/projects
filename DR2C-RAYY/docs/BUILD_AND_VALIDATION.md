@@ -1,19 +1,16 @@
-# Build and Validation — v2.25
+# Build and Validation — v2.26
 
 ## Static verification evidence
-- Local patch artifact: `DR2C_VORENYX_ID_v2.25_localization_patch.zip`.
-- ZIP package: 305 entries; CRC scan PASS; zero duplicate paths.
-- SHA-256 manifest: 304 listed files, all hashes verified with zero mismatches; no runner-local path leaks.
-- Scope: two active dialogue files: `assets/deathforth/blurb/optimist.df` and `assets/deathforth/blurb/sc/wrestler.df`.
-- 63 contextual mapping rules; 63 literal occurrences changed.
-- `optimist.df`: 29 quoted tokens and 114 lines before/after.
-- `sc/wrestler.df`: 34 quoted tokens and 137 lines before/after.
-- Mapped source residue scan: zero mapped English source literals remain in the two edited files.
-- Proper names, wrestling move names, censor-mask placeholders and non-dialogue structure were preserved where required.
-- Artifact SHA-256: `693714b5f2a1e79f0e8b5c9749f7f4dfe1c6ffaa4dc891d0ee689549f82f7fe5`.
+- Local patch artifact: `DR2C_VORENYX_ID_v2.26_localization_patch.zip`.
+- ZIP package: 312 entries; CRC scan PASS; zero duplicate paths.
+- SHA-256 manifest: 311 listed files, all hashes verified with zero mismatches; no machine-local path leaks.
+- Scope: five special-character profiles: `sc/beeman.df`, `sc/boxer.df`, `sc/caveman.df`, `sc/knight.df`, and `sc/ninja.df`.
+- 66 exact-context mappings; 66 literal occurrences changed.
+- All five files preserve quoted-token counts, source line counts, and non-string source skeletons; all mapped source residues are absent.
+- Artifact SHA-256: `edda11648c4f7ed32d1413b154fd70e65943edfb367f18c6bffa0b5119a3f02c` (11,275,547 bytes).
 
 ## Coverage status
-The last available heuristic measurement is v2.22: 7,490/10,844 = 69.07%. It has not been recomputed for v2.25 and is not a current coverage score, semantic completeness estimate, or runtime screen-coverage measure. The historical untranslated-candidate queue must be rebuilt with a comment-aware parser before broad triage.
+The last available heuristic measurement is v2.22: 7,490/10,844 = 69.07%. It has not been recomputed for v2.26 and is not a current coverage score, semantic completeness estimate, or runtime screen-coverage measure. The historical untranslated-candidate queue must be rebuilt with a comment-aware parser before broad triage.
 
 ## Not tested
 - Runtime gameplay and actual UI layout/fit: NOT RUN.
