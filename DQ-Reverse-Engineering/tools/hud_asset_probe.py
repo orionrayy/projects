@@ -12,6 +12,7 @@ import struct
 from pathlib import Path
 
 SECTION_NAMES = ("general_attributes", "elements", "actions", "timers")
+KNOWN_MARKERS = {b"NcP", b"NcX", b"NcI"}
 
 
 class HudFormatError(ValueError):
@@ -44,8 +45,10 @@ def inspect_hud(data: bytes, source: str = "<memory>") -> dict:
     if len(data) < 8:
         raise HudFormatError("file is shorter than the 8-byte resource header")
     marker_len, _ = _uint(data, 0, 4, "header marker length")
-    if marker_len != 3 or data[4:7] != b"NcP":
-        raise HudFormatError("expected length-prefixed 'NcP' resource marker")
+    marker = _read(data, 4, 3, "header marker")
+    if marker_len != 3 or marker not in KNOWN_MARKERS:
+        allowed = ", ".join(sorted(item.decode("ascii") for item in KNOWN_MARKERS))
+        raise HudFormatError(f"expected a length-prefixed known HUD marker ({allowed})")
     version = data[7]
     if version == 0:
         raise HudFormatError("format version 0 is invalid")
@@ -98,10 +101,10 @@ def inspect_hud(data: bytes, source: str = "<memory>") -> dict:
         raise HudFormatError("empty timer table has unexpected payload bytes")
 
     return {
-        "schema": "pandora-hud-ncp-probe-v1",
+        "schema": "pandora-hud-section-probe-v1",
         "source": source,
         "file_size": len(data),
-        "header": {"marker": "NcP", "format_version": version},
+        "header": {"marker": marker.decode("ascii"), "format_version": version},
         "sections": sections,
         "general_attributes": {"initial_action": general},
         "elements": {
@@ -133,7 +136,8 @@ def main() -> int:
             f"{item['name']}={item['payload_size']}B" for item in report["sections"]
         )
         print(
-            f"{args.hud}: version={report['header']['format_version']} "
+            f"{args.hud}: marker={report['header']['marker']} "
+            f"version={report['header']['format_version']} "
             f"elements={report['elements']['count']} actions={report['actions']['count']} "
             f"timers={report['timers']['count']} | {section_text}"
         )
