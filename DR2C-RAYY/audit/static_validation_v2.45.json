@@ -72,8 +72,8 @@
   },
   "patch_archive": {
     "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
-    "bytes": 82349,
-    "sha256": "782ced605419b4819552c649c60c31d6bb0bf0fb9e542d26718c543eb1f28066",
+    "bytes": 82435,
+    "sha256": "b2cc843325ede21d00cb91dad4a4ff68fa8c3c0e629d6910860727a4db4cf88d",
     "zip_entry_count": 19,
     "zip_crc_test": "PASS",
     "duplicate_paths": 0
