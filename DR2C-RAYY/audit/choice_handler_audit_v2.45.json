@@ -1,0 +1,17 @@
+{
+  "scope": {
+    "source_script_files": 509,
+    "overlay_script_files": 269,
+    "files_compared": 269
+  },
+  "static_literal_choice_handler_pairs": {
+    "source_count": 1295,
+    "overlay_count": 1295,
+    "handler_sequence_mismatches": 0,
+    "handler_sequence_mismatch_examples": []
+  },
+  "changed_static_choice_labels": 1115,
+  "heuristic_semantic_conflict_candidates": 0,
+  "candidate_examples": [],
+  "note": "Regex-based triage only: dynamic labels are excluded and text semantics are not fully understood. Matching static handler sequence is a source-integrity check, not proof that every translated label accurately describes its action or that runtime behavior is correct."
+}
