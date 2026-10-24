@@ -1,0 +1,13 @@
+{
+  "file": "S3DMain.smf",
+  "size_bytes": 33978539,
+  "sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+  "header_hex": "06 08 00 00 00 20 20 20 20 20 20 20 20 e8 60 40 4c fe 15 00 00 aa 1e 05 00 ca 60 40 4c ...",
+  "entropy_bits_per_byte": 7.989512,
+  "byte_values_present": 256,
+  "gzip_candidate_headers": 0,
+  "gzip_validated_complete_streams": 0,
+  "zlib_candidate_headers": 3952,
+  "zlib_validated_complete_streams": 0,
+  "interpretation": "No common compression stream validated. Results do not prove encryption or identify the proprietary format."
+}
