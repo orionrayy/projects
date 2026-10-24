@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "title": "Economy data patch v15",
+  "generated_date": "2026-10-24",
+  "source": {
+    "path": "assets/S3DMain.smf inside supplied XAPK/base",
+    "sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "size_bytes": 33978539
+  },
+  "output": {
+    "local_path": "/mnt/data/dq_v15_audit/patch/S3DMain_v15_vanity_earnability.smf",
+    "sha256": "3c2d16566458009f0fa5eb4350b606a50e66b9542974b5d1b781f742c33b2d4d",
+    "size_bytes": 34011490,
+    "format": "STK v6"
+  },
+  "invariants": {
+    "entry_count": 5630,
+    "crc_and_decoded_size_pass": 5630,
+    "changed_entries": [
+      "Resources/XML/Vanity.xml",
+      "Resources/XML/Shop.xml"
+    ],
+    "unchanged_entries": 5628,
+    "billing_code_changed": false,
+    "source_modified": false,
+    "apk_built": false,
+    "runtime_tested": false
+  },
+  "economy": {
+    "iap_xml_rows": 107,
+    "vanity_rows": 74,
+    "iap_linked_vanity": 46,
+    "converted_cash_rows": 16,
+    "preserved_gold_rows": 28,
+    "previously_unpriced_rows_resolved": 2,
+    "remaining_iap_vanity_without_gold_route": 0,
+    "shop_rows_before": 51,
+    "shop_rows_after": 53,
+    "proposed_gold_tiers": {
+      "0.99": 250000,
+      "1.99": 500000,
+      "2.99": 750000,
+      "3.99": 1000000,
+      "5.99": 1500000
+    },
+    "new_rows": [
+      {
+        "id": 72,
+        "sku": "vanity72",
+        "name": "Spooky Jack Skin",
+        "gold": 500000
+      },
+      {
+        "id": 73,
+        "sku": "vanity73",
+        "name": "Creepy Eye",
+        "gold": 250000
+      }
+    ]
+  },
+  "validation": {
+    "status": "PASS",
+    "local_unittest_count": 35,
+    "local_unittest_passed": 35,
+    "validation_report_sha256": "99850b2020c3fecd512447f6cb8e3f27ca848672f968ddde6c48504b33b00e0b",
+    "scope": "static/data-only; no runtime assertions"
+  }
+}
