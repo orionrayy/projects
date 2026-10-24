@@ -34,6 +34,8 @@ Runtime gameplay/event-path testing, actual UI fit/overflow testing, save/load r
 - [Coverage summary](audit/coverage.json)
 - [Static validation report](audit/validation_report.json)
 - [v2.40 coverage recheck](docs/COVERAGE_RECHECK_v2.40.md)
+- [Untouched and ambiguous surface audit](docs/UNTOUCHED_AMBIGUOUS_AUDIT_v2.40.md)
+- [Untouched surface review metrics](audit/v2.40_source_coverage_review.json)
 - [v2.40 fresh coverage metrics](audit/v2.40_coverage_recheck.json)
 - [v2.40 sanitized integrity summary](audit/v2.40_integrity_summary.json)
 - [v2.40 localization summary](audit/v2.40_localization_summary.json)
