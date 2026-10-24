@@ -29,6 +29,10 @@ jobs:
         run: python -m py_compile DQ-Reverse-Engineering/tools/*.py DQ-Reverse-Engineering/tests/*.py
       - name: Run synthetic STK parser safety tests
         run: python DQ-Reverse-Engineering/tests/test_stk_unpacker.py
+      - name: Run STK packer and cosmetic patch regression tests
+        run: |
+          python DQ-Reverse-Engineering/tests/test_stk_packer.py
+          python DQ-Reverse-Engineering/tests/test_cosmetic_patch.py
       - name: Validate manifest, source boundaries, and secret exclusion
         run: |
           python - <<'PY'
