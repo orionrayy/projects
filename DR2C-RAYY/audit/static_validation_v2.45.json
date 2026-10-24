@@ -41,9 +41,24 @@
     "noncanonical_perk_view_calls": 0
   },
   "route_and_handler_ids": {
-    "cyoa": {"base_count": 820, "overlay_count": 820, "removed": 0, "added": 0},
-    "cyoa-choice": {"base_count": 927, "overlay_count": 927, "removed": 0, "added": 0},
-    "cyoa-bridge": {"base_count": 190, "overlay_count": 190, "removed": 0, "added": 0}
+    "cyoa": {
+      "base_count": 820,
+      "overlay_count": 820,
+      "removed": 0,
+      "added": 0
+    },
+    "cyoa-choice": {
+      "base_count": 927,
+      "overlay_count": 927,
+      "removed": 0,
+      "added": 0
+    },
+    "cyoa-bridge": {
+      "base_count": 190,
+      "overlay_count": 190,
+      "removed": 0,
+      "added": 0
+    }
   },
   "gameplay_effect_scan": {
     "tracked_effect_primitive_count_changes": 0,
@@ -57,9 +72,9 @@
   },
   "patch_archive": {
     "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
-    "bytes": 75702,
-    "sha256": "1fdd196c5b0616de82011c7386b435e231191df25e75e65f6a2f4ed7b468c5e3",
-    "zip_entry_count": 17,
+    "bytes": 77671,
+    "sha256": "c41085ba38d8d05ec7e1493148cd8bd75837f4ee2b783367575b74d5730e49bf",
+    "zip_entry_count": 18,
     "zip_crc_test": "PASS",
     "duplicate_paths": 0
   },
@@ -69,5 +84,37 @@
     "save_load_verified": false,
     "viewport_touch_mapping_verified": false,
     "localization_complete": false
+  },
+  "display_name_localization": {
+    "canonical_names": 60,
+    "mapped_names": 60,
+    "missing_names": [],
+    "full_coverage": true
+  },
+  "executable_structure_audit": {
+    "files_with_nontextblock_token_changes": 6,
+    "changed_files": [
+      "boot.df",
+      "charstats-textfill.df",
+      "cyoa-charstats.df",
+      "doglogic.df",
+      "events/common/cyoa-example-7types.df",
+      "events/unlock/perktrait.df"
+    ],
+    "token_change_kinds": [
+      "insert"
+    ],
+    "non_insertion_change_ops": 0,
+    "interpretation": "Compared after masking comments, normalizing ordinary string literals, and replacing complete ($ ... $) display blocks with a sentinel. Detected additions are helper definitions/calls for player-facing localization. This heuristic is not a complete Deathforth parser and cannot establish runtime behavior."
+  },
+  "package_build_gate": {
+    "apk_built": false,
+    "reasons": [
+      "The supplied raw APK ZIP has a CRC mismatch at classes3.dex.",
+      "The supplied source ZIP is not a matching full APK baseline: 163 of 883 common files differ outside the identically matching asset set.",
+      "Android signing/alignment/build tools apksigner, zipalign, adb, apktool, and d8 are unavailable in this environment.",
+      "The v2.44 local signing keystore was not found; the bundled Google client keystore is not an app signing key."
+    ],
+    "security_note": "Do not use a v1-only signature for a target-35 APK on Android 11; do not sign with the unrelated bundled keystore."
   }
 }
