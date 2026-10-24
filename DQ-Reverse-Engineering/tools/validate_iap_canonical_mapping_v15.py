@@ -129,12 +129,16 @@ def audit_mapping(path: Path) -> dict[str, Any]:
             errors.append(f"summary {key}: expected {value}, got {actual}")
 
     flow = data.get("flow", {})
-    if "IAPWrapper_onPurchaseSuccess" not in flow.get("native_success", "") and "onPurchaseSuccess" not in flow.get("native_success", ""):
+    if "onPurchaseSuccess" not in flow.get("native_success", ""):
         errors.append("native success chain is missing")
-    if "sAIHandler" not in flow.get("model_event", {}).get("dynamic_forward_variable", ""):
-        errors.append("dynamic sAIHandler boundary must be documented")
-    if "runtime value" not in flow.get("model_event", {}).get("dynamic_target_runtime_value", "").lower() and "unknown" not in flow.get("model_event", {}).get("dynamic_target_runtime_value", "").lower():
-        errors.append("dynamic model target must not be overstated")
+    if "sAIHandler" not in flow.get("success_handler", ""):
+        errors.append("dynamic sAIHandler boundary must be documented in flow.success_handler")
+    callback_paths = [r.get("callback_path", {}) for r in records]
+    dynamic_values = [str(c.get("dynamic_ai_handler_value", "")) for c in callback_paths]
+    if not any("UNKNOWN" in value.upper() or "not established" in value.lower() for value in dynamic_values):
+        errors.append("dynamic model target must remain explicitly UNKNOWN/INFERRED in callback_path")
+    if not any("INFERRED" in str(c.get("status", "")) for c in callback_paths):
+        errors.append("dynamic callback edge must remain INFERRED, not runtime-verified")
 
     return {
         "status": "PASS" if not errors else "FAIL",
