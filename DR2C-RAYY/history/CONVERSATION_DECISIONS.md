@@ -75,3 +75,11 @@ The project is not 100% translated yet. Runtime gameplay, save/load and APK rebu
 - Last measured coverage remains the v2.22 heuristic baseline of 69.07%. It has not been recalculated for v2.26 and does not mean semantic completeness.
 - Runtime gameplay, UI fit, save/load and APK rebuild/signing remain untested. Public GitHub stores sanitized documentation/audit records only, not the original archive, full scripts or binary overlay.
 
+
+
+## v2.35 continuation and v2.34 integrity correction — 24 October 2026
+- Continue by treating the ZIP archive itself as the source of truth whenever an extracted working folder differs.
+- Corrected v2.34's stale checkpoint scope: actual batch scope is nine modules (sewer/tutorial, Canada crossing, hazmat, Santa/Billy, common4, Bogan, daily medical CYOA, and special trader-camp region inventory), not carlogic/car1/camp2.
+- Removed stale embedded v2.34 archive digest fields in the packaged audit and moved release checksums to an adjacent SHA-256 sidecar to avoid circular hashing.
+- v2.35 covers 32 contextual display expressions plus 9 direct literals over 12 files. Static integrity PASS; no global semantic coverage claim; no runtime or APK build claim.
+- Public GitHub remains documentation and sanitized audit only; the complete overlay ZIP/source is not published in the repository.
