@@ -1,5 +1,7 @@
 # Changelog — DR2C VORENYX
 
+- **v2.44 Start/UI hotfix candidate:** restored the internal boot marker GAME-MARKER (previously renamed PENANDA-GAME) and forced SplashActivity/DrtcGameActivity to fixed landscape. Static event/start-path checks and APK CRC/hash/alignment/signature validation PASS; Android Start behavior, UI layout, install, launch, save/load and stability NOT TESTED. APKVISION wrapper remains; an authorized clean base APK is required for a clean build. SHA-256: e28314611411aeba2fdd6bf2cee918fa64ddecac159536e4a39918e7af81f8a6.
+
 - **v2.43 APK candidate (updated signing):** APK assembled locally, then verified using Android SDK Build Tools 35.0.1 apksigner; signature schemes v1/v2/v3 PASS. SHA-256 `3019dd04098e9e8fef01045a2e391d9525bf87ef6874b0d0049c5a073a052f25`. Static packaging PASS; Android install/launch/gameplay/UI/save-load/stability tests NOT RUN. Original publisher key absent and PairIP/Play license checks may reject the locally signed package. APK remains local-only. See [APK build report](docs/APK_BUILD_v2.43.md).
 
 - **v2.43 APK candidate build:** assembled the v2.43 overlay into the supplied extracted Android package and applied a local JAR/v1 signature. Static package/manifest/hash/signature/ZIP/ABI checks PASS. Android install, launch, gameplay, UI fit, save/load and stability remain NOT TESTED; PairIP/Play license checks may reject re-signed package. APK remains local-only; see [APK build report](docs/APK_BUILD_v2.43.md).
