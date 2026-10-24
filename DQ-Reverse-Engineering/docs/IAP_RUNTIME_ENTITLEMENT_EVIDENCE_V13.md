@@ -26,8 +26,9 @@ The matrix currently reports **0 runtime-reward-verified SKUs and 109 unverified
 Run:
 
 ```bash
-python DQ-Reverse-Engineering/tools/validate_iap_runtime_evidence_v13.py
-python -m unittest DQ-Reverse-Engineering/tests/test_iap_runtime_evidence_v13.py
+cd DQ-Reverse-Engineering
+python tools/validate_iap_runtime_evidence_v13.py
+python -m unittest discover -s tests -p 'test_iap_runtime_evidence_v13.py' -v
 ```
 
 The validator checks the 107/104/102 registry counts, exact mismatch sets, 46 vanity correlations, message routes, and the evidence contract. It fails closed if a SKU is marked `VERIFIED` without a concrete payload, observed persisted entitlement write, passing runtime test, and evidence references.
