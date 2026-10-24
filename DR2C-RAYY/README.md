@@ -11,6 +11,15 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
 - [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
 
+## v2.47 localization batches A–F — source patch
+
+- Applied 38 initial static choice/location labels and 275 additional operations covering trade narratives, weapon/item descriptions, forecast vocabulary, character/weapon hints and selected encounters. Total: **313 operations / 325 literal occurrences** across eight scripts.
+- Static validation: non-string token streams and choice-handler sequences match v2.46 baseline in all eight files; no unclosed strings in the lightweight lexer; no escaped double quotes remain. Patch ZIP CRC PASS; no duplicate paths.
+- Patch SHA-256: `08731efd0d451332a7d0af5f4587d7bc524f291d4700c720cf483d230a0158cc` (69,656 bytes).
+- Residual scan covered all 509 scripts and returned 397 heuristic candidates / 159 P1 review candidates. These are not confirmed untranslated UI strings or a localization percentage.
+- **No APK rebuilt**: matching v2.46 test signing key is absent; a new key would conflict with in-place update. Device runtime and the actual Deathforth interpreter are not tested.
+- [Full v2.47 batch report](docs/LOCALIZATION_BATCH_ABCDEF_v2.47.md) · [Machine-readable audit](audit/localization_batch_abcdef_v2.47.json)
+
 ## v2.46 English residual multi-analysis
 
 - Baseline: `DR2C_VORENYX_v2.46_UI_LOCALIZED_TEST.apk`, SHA-256 `6d4e2f3df07d199807c08418ae5d30b9927e5b2e36c780a51858045336b29313`. Static scan covers all 509 packaged `.df` scripts.
