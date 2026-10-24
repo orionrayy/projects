@@ -89,3 +89,12 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - 453 literal occurrences changed across 24 files. Static checks preserved line counts, non-string code, and resource paths. Local patch ZIP CRC and manifest hash checks passed.
 - Global semantic coverage remains NOT COMPUTED; 100% localization is not claimed. Gameplay, UI fit/overflow, save/load, and APK rebuild/signing remain NOT RUN / NOT PERFORMED.
 - [v2.41 checkpoint](docs/CHECKPOINT_v2.41.md) and [sanitized validation summary](audit/v2.41_static_validation_summary.json) track this pass.
+
+
+## Active checkpoint — v2.42 (24 October 2026)
+- Targeted residual cleanup: 309 quoted-string occurrences changed across 16 overlay files.
+- Scope includes selected character banter/emotes, epilogue outcomes, finale mode/credits, ringmaster/healer dialogue, Canada-crossing NPC chatter, Santa/Evil Santa, gnome trader, farm/car encounters, and mission text.
+- Static integrity PASS: line counts, string-token counts, non-string code, and resource path literals preserved; zero unmatched mapping rules. Patch and local project archive checksum validation passed.
+- Global semantic/player-visible coverage remains NOT COMPUTED. Gameplay/runtime, UI fit/overflow, save/load, device testing, and APK rebuild/signing have not been performed.
+- Local patch SHA-256: `e47f397d9c3908a9e370ef98aeb21bf091d66af7eb839a0fb022a9350cb4f4cd`. Full archive remains local-only.
+- See [v2.42 checkpoint](docs/CHECKPOINT_v2.42.md) and [sanitized validation summary](audit/v2.42_static_validation_summary.json).

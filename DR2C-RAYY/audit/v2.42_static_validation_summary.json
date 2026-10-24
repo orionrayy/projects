@@ -1,0 +1,40 @@
+{
+  "project": "DR2C VORENYX",
+  "build": "v2.42",
+  "base_build": "v2.41",
+  "date": "2026-10-24",
+  "files_touched": 16,
+  "literal_occurrences_changed": 309,
+  "static_validation": {
+    "line_counts_preserved": true,
+    "string_token_counts_preserved": true,
+    "non_string_code_identical": true,
+    "resource_path_literals_preserved": true,
+    "unmatched_mapping_rules": 0,
+    "patch_zip_crc": "PASS",
+    "patch_manifest_entries": 430,
+    "patch_manifest_hash_failures": 0,
+    "patch_unmanifested_entries": 0,
+    "patch_duplicate_paths": 0,
+    "project_archive_crc": "PASS",
+    "project_archive_manifest_entries": 458,
+    "project_archive_hash_failures": 0,
+    "project_archive_unmanifested_entries": 0,
+    "project_archive_duplicate_paths": 0
+  },
+  "local_artifacts": {
+    "patch_filename": "DR2C_VORENYX_ID_v2.42_localization_patch.zip",
+    "patch_bytes": 24319289,
+    "patch_sha256": "e47f397d9c3908a9e370ef98aeb21bf091d66af7eb839a0fb022a9350cb4f4cd",
+    "project_archive_filename": "DR2C_VORENYX_Project_Archive_v2.7.zip",
+    "project_archive_bytes": 137013476,
+    "project_archive_sha256": "cb372f6cacce151a0f1eec545d1a29ef2a523cb92fa7d4f7e40b9157468ebcfb"
+  },
+  "semantic_player_visible_coverage": "NOT COMPUTED",
+  "runtime_gameplay_event_path": "NOT RUN",
+  "ui_fit_overflow": "NOT RUN",
+  "save_load": "NOT RUN",
+  "device_testing": "NOT RUN",
+  "apk_rebuild_signing": "NOT PERFORMED",
+  "distribution_boundary": "This public record contains sanitized build metadata only; the binary patch, full source archive, and detailed per-string ledger remain local-only."
+}
