@@ -9,6 +9,7 @@ PR: [#26](https://github.com/orionrayy/projects/pull/26), open draft at time of 
 - `tools/audit_aim_hud_symbols.py` scans seven selected extracted AIM/HUD files for expected printable ASCII symbol/label strings.
 - `tests/test_aim_hud_symbols.py` tests byte offsets, run-length validation, missing-file reporting, missing-symbol reporting, and a complete synthetic fixture tree.
 - `docs/AIM_HUD_SYMBOL_AUDIT_V14.md` records evidence, hashes, limitations, and reproduction steps.
+- `docs/AIM_HUD_SYMBOL_AUDIT_V14.json` stores a machine-readable snapshot of all 58 expected symbols and their byte offsets in the seven local decoded assets.
 - `.github/workflows/dq-reverse-validation.yml` now executes the v14 focused test suite.
 
 The tool intentionally does not claim to disassemble proprietary bytecode. It reports only the first printable-byte offset for each requested symbol and fails non-zero if a target asset or expected symbol is missing.
