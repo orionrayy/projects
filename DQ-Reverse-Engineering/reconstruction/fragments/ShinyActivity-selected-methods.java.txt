@@ -1,0 +1,99 @@
+/*
+ * Source-style reconstruction of selected methods from
+ * com.shinybox.base.ShinyActivity in classes.dex.
+ * This is an excerpt, not a standalone class or original developer source.
+ * Obfuscated types and call names are preserved as observed.
+ */
+
+public ShinyActivity() {
+    super();
+    this.UIHandler = new ShinyActivity$a(this);
+    ShinyActivity.instance = this;
+}
+
+public static ShinyActivity getInstance() {
+    return instance;
+}
+
+public String getDeviceName() {
+    String manufacturer = android.os.Build.MANUFACTURER;
+    String model = android.os.Build.MODEL;
+    if (model.startsWith(manufacturer)) {
+        return model;
+    }
+    return manufacturer + " " + model;
+}
+
+public void hideSystemUI() {
+    final int systemUiFlags = 7942;
+    android.view.View decor = getWindow().getDecorView();
+    decor.setSystemUiVisibility(systemUiFlags);
+    decor.setOnSystemUiVisibilityChangeListener(
+        new ShinyActivity$b(this, decor, systemUiFlags)
+    );
+}
+
+public boolean isSetTopBox() {
+    android.content.pm.PackageManager pm = getPackageManager();
+    boolean television = pm.hasSystemFeature("android.hardware.type.television");
+    boolean touchscreen = pm.hasSystemFeature("android.hardware.touchscreen");
+    return television || !touchscreen;
+}
+
+public void onActivityResult(int requestCode, int resultCode,
+                             android.content.Intent data) {
+    boolean handled = com.shinybox.googleplayservices.GooglePlayServicesWrapper
+        .getInstance().m(requestCode, resultCode);
+    if (!handled) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+}
+
+public void onBackPressed() {
+    super.onBackPressed();
+}
+
+public void onConfigurationChanged(android.content.res.Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+}
+
+public boolean onGenericMotionEvent(android.view.MotionEvent event) {
+    return s2.a.b().d(event);
+}
+
+public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+    return s2.a.b().e(keyCode, event);
+}
+
+public boolean onKeyUp(int keyCode, android.view.KeyEvent event) {
+    return s2.a.b().f(keyCode, event);
+}
+
+public void onCreate(android.os.Bundle state) {
+    super.onCreate(state);
+    this.vWrappers = new java.util.Vector();
+    this.vWrappers.add(com.modernalchemists.maad.android.AdMobWrapper.getInstance());
+    this.vWrappers.add(com.shinybox.amazoniap.AmazonIAPWrapper.getInstance());
+    this.vWrappers.add(com.shinybox.googleplayservices.GooglePlayServicesWrapper.getInstance());
+    for (Object wrapper : this.vWrappers) {
+        ((s2.c) wrapper).b(this);
+    }
+    android.content.BroadcastReceiver receiver = new ShinyActivity$c(this);
+    android.content.IntentFilter filter =
+        new android.content.IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+    registerReceiver(receiver, filter);
+}
+
+public void onDestroy() {
+    for (Object wrapper : this.vWrappers) {
+        ((s2.c) wrapper).a();
+    }
+    super.onDestroy();
+}
+
+public void onPause() {
+    super.onPause();
+    for (Object wrapper : this.vWrappers) {
+        ((s2.c) wrapper).onPause();
+    }
+}
