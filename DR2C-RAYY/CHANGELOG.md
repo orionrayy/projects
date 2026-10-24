@@ -1,5 +1,11 @@
 # Changelog — DR2C VORENYX
 
+- **v2.40:** repaired 45 canonical trait/perk machine-key mismatches across 13 modules; 0 remain across 195 operand comparisons. Continued contextual Indonesian localization and refreshed the title badge. Static validation PASS; global semantic coverage not computed; runtime/UI/save-load/APK rebuild not tested.
+- **v2.39:** localized 32 complete display expressions and 7 direct literal occurrences across CYOA examples and moment interactions. Static checks passed; runtime not tested.
+- **v2.38:** localized 14 display expressions and 18 direct literal occurrences across 11 actual files. Static checks passed; runtime not tested.
+- **v2.37:** localized 25 display expressions and 6 direct literal occurrences. Static checks passed; runtime not tested.
+
+
 - **v2.36:** localized 45 complete display expressions and 12 direct literal occurrences across 31 modules. Focus: arcade-defense tutorial, bandit-defense rewards, bodybuilder/hero and siege encounters, shops/fairies/parks, city rangers and pandas, character blurbs, perk/trait help, and epilogue fragments. Static validation and package integrity PASS; triage queue now 77 rows in 36 files; global coverage not computed; runtime not tested.
 - **v2.35:** 32 complete display expressions and 9 direct literal occurrences across 12 files; game modes, route planning, missions/rewards, gym/coffee/factory encounters, generator puzzle, broom/portal interactions, and Mountie Alpha-end text. Metadata reconciled for v2.34; static validation PASS; global coverage not computed; runtime not tested.
 - **v2.34:** 25 complete display expressions and 3 direct literal occurrences across nine files: sewer/tutorial, Canada crossing, hazmat, Santa/Billy, common encounter, Bogan, daily medical CYOA, and special trader-camp items. Checkpoint/ZIP metadata reconciled in v2.35.
