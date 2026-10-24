@@ -34,6 +34,11 @@ jobs:
           python DQ-Reverse-Engineering/tests/test_stk_packer.py
           python DQ-Reverse-Engineering/tests/test_cosmetic_patch.py
           python DQ-Reverse-Engineering/tests/test_iap_sku_reconciliation.py
+      - name: Validate v13 IAP runtime evidence and run focused tests
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_iap_runtime_evidence_v13.py
+          python -m unittest discover -s tests -p 'test_iap_runtime_evidence_v13.py' -v
       - name: Validate manifest, source boundaries, and secret exclusion
         run: |
           python - <<'PY'
