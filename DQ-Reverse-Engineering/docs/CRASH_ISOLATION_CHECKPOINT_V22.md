@@ -6,7 +6,7 @@ Date: 2026-10-24. User-reported symptom: the v2-signed v21 XAPK installs success
 
 - The original and modded STK packs were decoded and compared entry-by-entry. Exactly one decoded entry differs in v21: `Resources/HUD/pause.hud`. All other 5,629 decoded entries are identical.
 - The v21 patch changed the Pause menu label from `Social/IAP` (10 UTF-8 bytes) to `Cheats Sandbox` (14 UTF-8 bytes), and changed the callback route. The parser/packer round-trip is not equivalent to a real-engine runtime test.
-- v22 preserves the label byte count using `Cheats/IAP` (10 UTF-8 bytes) and preserves the callback-name byte count. New patcher: `tools/patch_pause_cheats_sandbox_v22.py`; tests fail closed on unknown schema/version.
+- v22 preserves the label byte count using `Cheats/IAP` (10 UTF-8 bytes) and preserves the callback-name byte count. New patcher: `tools/patch_pause_cheats_sandbox_v22.py`; the local regression suite passed 3/3 tests, including fail-closed checks for unknown schema/version. The patcher does not establish that the native engine accepts the callback at runtime.
 - Two v2-signature diagnostic packages were generated to isolate the package/repack path from the HUD change. Their APK split signatures were checked with a local verifier and archive CRC checks passed. They were not installed/launched on Android here.
 
 ## Diagnostic artifacts
