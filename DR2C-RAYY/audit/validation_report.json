@@ -49,35 +49,52 @@
   },
   "apk_candidate_build": {
     "artifact": "DR2C_VORENYX_v2.43.apk",
-    "status": "ASSEMBLED_AND_SIGNED; RUNTIME NOT VERIFIED",
-    "bytes": 39610091,
-    "sha256": "cefe665d0164495248f0d2cc960f54478d60b980ec137c3878181732d0885a90",
+    "bytes": 39748335,
+    "sha256": "3019dd04098e9e8fef01045a2e391d9525bf87ef6874b0d0049c5a073a052f25",
+    "status": "ASSEMBLED; STATIC PACKAGING AND SIGNATURE VALIDATION PASS; RUNTIME NOT VERIFIED",
     "package": "com.noodlecake.drtc",
-    "base_version": "1.8.2",
+    "game_version": "1.8.2",
     "version_code": 57,
     "min_sdk": 23,
     "target_sdk": 35,
-    "signed_by": "new local JAR/v1 SHA-256/RSA key; not original publisher",
-    "jar_signature_verification": "PASS",
-    "apk_zip_crc": "PASS",
-    "overlay_payloads_verified": 272,
-    "overlay_hash_mismatches": 0,
-    "native_library_alignment": "PASS",
+    "signature": {
+      "tool": "Android SDK Build Tools 35.0.1 apksigner 0.9",
+      "v1": "PASS",
+      "v2": "PASS",
+      "v3": "PASS",
+      "certificate_sha256": "6ea04e10965de1459a7fee845e8ae903bc1535a744f4762c14b2c7bb82eb13f9",
+      "certificate_is_publisher": false
+    },
+    "zip": {
+      "entries": 1015,
+      "crc": "PASS",
+      "duplicate_paths": 0
+    },
+    "overlay": {
+      "payload_count": 272,
+      "hash_mismatches": 0,
+      "missing": 0,
+      "unchanged_vs_base": 0
+    },
+    "dex_files": 3,
+    "native_libraries": 16,
     "native_abis": [
       "arm64-v8a",
       "armeabi-v7a"
     ],
-    "dex_files": 3,
-    "pairip_license_check_components_detected": true,
-    "original_publisher_private_key_available": false,
-    "license_or_anti_tamper_bypass_attempted": false,
-    "install_test": "NOT RUN",
-    "launch_test": "NOT RUN",
-    "gameplay_test": "NOT RUN",
-    "ui_fit_test": "NOT RUN",
-    "save_load_test": "NOT RUN",
-    "stability_test": "NOT RUN",
-    "release_status": "STATICALLY_VALIDATED_CANDIDATE_NOT_RUNTIME_STABLE"
+    "native_lib_alignment": "PASS",
+    "pairip_license_check_present": true,
+    "original_publisher_key_available": false,
+    "license_bypass_attempted": false,
+    "runtime": {
+      "install": "NOT RUN",
+      "launch": "NOT RUN",
+      "gameplay": "NOT RUN",
+      "ui_fit": "NOT RUN",
+      "save_load": "NOT RUN",
+      "stability": "NOT RUN"
+    },
+    "risk": "PairIP/Play license checks may reject a re-signed APK. Not a verified stable release."
   },
   "metadata_conflict": "README.txt says 309 changed occurrences across 16 files; v2.43 checkpoint and translation ledger say 159 across 58 files. Reported batch metric follows the checkpoint/ledger and retains the discrepancy.",
   "distribution": "The APK, base APK contents, full source scripts, and binary overlay are local-only. GitHub contains sanitized reports.",
