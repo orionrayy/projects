@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "title": "Dungeon Quest 3.3.2.0 — Source and Patched XML Reconciliation v15",
+  "generated_date": "2026-10-24",
+  "status": "PASS",
+  "evidence_type": "STATIC-DIRECT + UNIT-VERIFIED data-table invariants",
+  "source": {
+    "package": "com.shinybox.smash",
+    "version": "3.3.2.0",
+    "version_code": 1423433200,
+    "xapk_sha256": "3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "stk_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "stk_size_bytes": 33978539,
+    "tables": {
+      "IAP.xml": {
+        "sha256": "9edc476d095673d223f32b8878e048eaeb029643fb67277ad133160996a56763",
+        "rows": 107
+      },
+      "Vanity.xml": {
+        "sha256": "4163fd3f5f1890ac5af612b13d2bac872fdecf7ef85ae86d0fea4e27e6762c59",
+        "rows": 74
+      },
+      "Shop.xml": {
+        "sha256": "34e68b0c36c1b4491fb66c9280d4f958dc12371ae02d3517af713900e4b2ebdf",
+        "rows": 51
+      },
+      "Items.xml": {
+        "sha256": "4ce47636e5b945b2f622d27054009a03324b6460880b35c17f6c3e626691c94e",
+        "rows": 163
+      },
+      "Dictionary.xml": {
+        "sha256": "0c0adb90b3123a3085e6762945626d21231fd8fb6eb6a7cd3af848d69782ccc3",
+        "rows": 516
+      }
+    }
+  },
+  "sku_reconciliation": {
+    "iap_xml_ids": 107,
+    "dex_static_sku_ids": 104,
+    "shared": 102,
+    "union": 109,
+    "xml_only": [
+      "angelicslime",
+      "demonicslime",
+      "poisonslime",
+      "vanity72",
+      "vanity73"
+    ],
+    "dex_only": [
+      "package20",
+      "package21"
+    ],
+    "vanity_skus_with_numeric_row_correspondence": 46,
+    "iap_xml_row_id_source": "Resources/XML/IAP.xml Row/@id keyed by Name; row IDs 1..107 unique and checked against canonical mapping",
+    "vanilla_row_correspondence": "SKU vanityN corresponds to Vanity.xml row id N; all 46 linked ids have an exact row"
+  },
+  "patch": {
+    "output_file_local_only": "S3DMain_v15_vanity_earnability.smf",
+    "sha256": "3c2d16566458009f0fa5eb4350b606a50e66b9542974b5d1b781f742c33b2d4d",
+    "size_bytes": 34011490,
+    "format": "STK v6",
+    "entry_count": 5630,
+    "decoded_bytes": 94510627,
+    "crc_and_decoded_size_pass": 5630,
+    "changed_decoded_entries": [
+      "Resources/XML/Shop.xml",
+      "Resources/XML/Vanity.xml"
+    ],
+    "unchanged_decoded_entries": 5628,
+    "changed_table_hashes": {
+      "Vanity.xml": {
+        "before": "4163fd3f5f1890ac5af612b13d2bac872fdecf7ef85ae86d0fea4e27e6762c59",
+        "after": "9d66d05874f36c1f20456fea923560c96760bd22849c228356378b9af7648bea"
+      },
+      "Shop.xml": {
+        "before": "34e68b0c36c1b4491fb66c9280d4f958dc12371ae02d3517af713900e4b2ebdf",
+        "after": "52a5e1e0a7b6e11b92328d54b203d2e991c6c2e876a01e5c1f81823798ebbc46"
+      }
+    },
+    "unchanged_table_hashes": {
+      "IAP.xml": "9edc476d095673d223f32b8878e048eaeb029643fb67277ad133160996a56763",
+      "Items.xml": "4ce47636e5b945b2f622d27054009a03324b6460880b35c17f6c3e626691c94e",
+      "Dictionary.xml": "0c0adb90b3123a3085e6762945626d21231fd8fb6eb6a7cd3af848d69782ccc3"
+    },
+    "economy": {
+      "linked_vanity": 46,
+      "converted_cash_price_to_proposed_gold": 16,
+      "existing_gold_prices_preserved": 28,
+      "formerly_unpriced_rows_given_gold": 2,
+      "shop_rows_before": 51,
+      "shop_rows_after": 53,
+      "remaining_iap_linked_vanity_without_gold_or_shop_route": 0,
+      "price_tiers_are_proposals": true
+    }
+  },
+  "status_by_scope": {
+    "source_table_reconciliation": "STATIC-DIRECT",
+    "output_stk_roundtrip_and_crc_validation": "UNIT-VERIFIED",
+    "vanity_price_and_shop_route_data": "UNIT-VERIFIED",
+    "running_game_shop_purchase_and_equip": "BLOCKED",
+    "local_save_reload": "BLOCKED",
+    "billing_entry_points_removed": "BLOCKED",
+    "complete_iap_replacement": "BLOCKED",
+    "installable_apk_build": "BLOCKED"
+  },
+  "limits": [
+    "The patch changes only Vanity.xml and Shop.xml; it does not remove IAP.xml IDs, DEX purchase routing, JNI/native billing callbacks or ad behavior.",
+    "Gold tiers are balancing proposals, not gameplay-verified economy values.",
+    "The patched STK is a local asset pack, not an installable APK.",
+    "No RUNTIME-VERIFIED result is claimed."
+  ]
+}
