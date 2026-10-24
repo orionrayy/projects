@@ -1,12 +1,13 @@
 {
   "project": "DR2C VORENYX",
   "locale": "id-ID",
-  "build": "v2.36",
+  "build": "v2.40",
   "source_script_files_scanned": 541,
-  "active_quoted_literal_tokens": 16819,
-  "candidate_residue_rows_for_manual_review": 77,
-  "candidate_files_for_manual_review": 36,
-  "candidate_method": "Comment-aware lexical extraction plus contextual English-likelihood heuristic; candidate counts are triage only.",
+  "files_with_active_quoted_literals": 434,
+  "active_quoted_literal_tokens": 16834,
+  "candidate_residue_rows_for_manual_review": 0,
+  "candidate_files_for_manual_review": 0,
+  "candidate_method": "Inherited high-likelihood rows retained only if the exact literal remains in the current merged source. Zero remaining rows is a triage result, not an exhaustive scan of semantic or runtime coverage.",
   "global_coverage_percent": null,
   "global_coverage_status": "NOT_COMPUTED",
   "historical_baseline": {
@@ -14,44 +15,16 @@
     "heuristic_percent": 69.07,
     "status": "STALE_NOT_CURRENT"
   },
-  "v2_36_batch": {
-    "display_expressions_rewritten": 45,
-    "direct_literal_rules_applied": 12,
-    "direct_literal_occurrences_changed": 12,
-    "scope_files": [
-      "events/inner/arcadeloc.df",
-      "events/common/common2.df",
-      "events/trade/trader-camp-region-special3.df",
-      "events/despair/sort.df",
-      "events/sc/jerk.df",
-      "events/rareloc/region/alien.df",
-      "events/sc/tlb.df",
-      "events/rareloc/heman.df",
-      "events/siege/siege1.df",
-      "events/inner/shoploc.df",
-      "events/rareloc/fairy.df",
-      "events/exterior/park.df",
-      "events/rareloc/rare1.df",
-      "events/rareloc/rare2.df",
-      "events/rareloc/arq.df",
-      "events/common/MANDIBLE.df",
-      "events/inner/region/swarmarcade.df",
-      "events/sc/alvis.df",
-      "events/sc/turkey.df",
-      "events/finale/epilogue-check.df",
-      "don/events/common/007-wings.df",
-      "events/rareloc/region/city-rangers.df",
-      "events/despair/argue.df",
-      "events/unlock/ztown-npc.df",
-      "events/rareloc/panda.df",
-      "blurb/sc/omentum.df",
-      "blurb/sc/grf.df",
-      "events/rareloc/wyk.df",
-      "events/unlock/perktrait.df",
-      "blurb/sc/evilsanta.df",
-      "blurb/sc/lnk.df"
-    ]
+  "v2_40_batch": {
+    "canonical_key_mismatches_repaired": 45,
+    "canonical_key_mismatches_remaining": 0,
+    "key_operands_compared": 195,
+    "affected_script_files": 78
   },
   "full_translation_complete": false,
-  "warning": "Do not use the historical 69.07% as v2.36 coverage. Heuristic candidate counts do not prove semantic or runtime screen coverage."
+  "runtime_gameplay_test": "NOT RUN",
+  "ui_fit_test": "NOT RUN",
+  "save_load_test": "NOT RUN",
+  "apk_rebuild": "NOT PERFORMED",
+  "note": "Do not use the historical 69.07% as v2.40 coverage. Candidate queues and token counts do not prove semantic or runtime screen completeness."
 }
