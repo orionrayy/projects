@@ -73,3 +73,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - Machine-audit non-flagged proxy range 88.11%-94.30% is only a heuristic, not translation coverage.
 - The inherited queue being empty is not an exhaustive zero-residue scan. See docs/COVERAGE_RECHECK_v2.40.md and audit/v2.40_coverage_recheck.json.
 - Runtime gameplay, UI-fit, save/load and APK rebuild/signing remain NOT RUN / NOT PERFORMED.
+
+
+## Untouched and ambiguous surface audit — 24 October 2026
+- v2.40 source audit: 265 of 509 Deathforth .df files have no overlay file (52.06%); this does not mean all such files contain player-visible text.
+- A fresh review queue flagged 598 inherited English-likelihood candidates across 116 files (scores >=0.5 and at least 4 English-word tokens), including 183 rows in files without overlay and 252 in files changed by v2.40 where the candidate literal remains.
+- These candidates are not confirmed untranslated counts; inherited scores are not recalibrated. A further 305 new/changed literal rows have no score. Global semantic coverage remains NOT COMPUTED.
+- Prioritize untouched character banter, ending-bits, partially translated combat barks, CYOA titles/choices, and full-expression review for 89 whitespace-bound fragments.
+- See docs/UNTOUCHED_AMBIGUOUS_AUDIT_v2.40.md and audit/v2.40_source_coverage_review.json.
