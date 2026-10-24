@@ -30,3 +30,13 @@ The three original concepts remain deferred:
 ## Non-claims carried forward
 
 The project is not 100% translated yet. Runtime gameplay, save/load and APK rebuild/signing have not been tested. Continue tracking these limits in every release note.
+
+
+## Checkpoint v2.22 — 24 October 2026
+
+- Confirmed local artifact: `DR2C_VORENYX_ID_v2.22_localization_patch.zip`; ZIP has 292 entries and `ZipFile.testzip()` reports no CRC errors.
+- Inventory heuristic: 7,490/10,844 = 69.07%; 138 rows newly marked, 94 display expressions rewritten, 183 existing literal tokens changed.
+- Static structural report: zero structural failures. The four expression-only files preserve line and literal-token counts; the helper file intentionally adds two group-label helper literals and two lines.
+- The validation report lists 49 exact mapping rules whose original source literals were not found after contextual rewrites. Treat these as QA debt, not successful exact matches; reconcile whether each was superseded by a full-expression rewrite or still needs translation.
+- User requested continued localization to 100%, with quality prioritized over the percentage. Avoid global pronoun/verb substitutions; inspect complete display expressions and preserve dynamic placeholders and game logic.
+- Public GitHub is used for project memory, authored documentation and sanitized audit reports. Keep the binary overlay and source archive out of the public repo.
