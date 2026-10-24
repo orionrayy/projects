@@ -112,3 +112,9 @@ jobs:
           JAVA
           javac -d "$TMP_DIR/classes"             "$TMP_DIR/android/content/res/Configuration.java"             "$TMP_DIR/android/app/Application.java"             "$TMP_DIR/q0/b.java"             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/BuildConfig.java             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/Globals.java             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/S3DEngine.java
           echo "PASS: three high-confidence Java files compile against minimal temporary stubs"
+
+      - name: Validate full 222-entry cheat catalog and implementation matrix
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_cheat_catalog_v32.py --catalog cheats-sandbox/debug_cheats_catalog_v32.json --matrix docs/CHEAT_CATALOG_IMPLEMENTATION_MATRIX_V32.json
+          python -m unittest discover -s tests -p 'test_cheat_catalog_matrix_v32.py' -v
