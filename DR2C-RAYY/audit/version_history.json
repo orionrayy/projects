@@ -248,6 +248,22 @@
     "focus": "45 canonical trait/perk key repairs plus continued Indonesian localization across 78 changed script files",
     "playerFacingHeuristicPct": null,
     "coverageMeasurementBaselinePct": 69.07,
-    "static": "PASS; 0 key mismatches remain across 195 operand comparisons; inherited candidate queue is empty but global semantic coverage is NOT COMPUTED; runtime/UI/save-load not tested"
+    "static": "PASS; 0 key mismatches remain across 195 operand comparisons; inherited candidate queue is empty but global semantic coverage is NOT COMPUTED; runtime/UI/save-load not tested",
+    "coverage_recheck": {
+      "global_player_visible_coverage_percent": null,
+      "status": "NOT_COMPUTABLE_FROM_CURRENT_EVIDENCE",
+      "historical_v2_22_heuristic_pct": 69.07,
+      "fresh_english_likelihood_ge_0_2_rows": 1578,
+      "fresh_english_likelihood_ge_0_5_rows": 598,
+      "new_or_changed_unscored_rows": 305,
+      "broad_triage_rows_including_unscored": 1883,
+      "broad_triage_files_including_unscored": 196,
+      "machine_audit_non_flagged_proxy_range_pct": [
+        88.11,
+        94.3
+      ],
+      "proxy_is_not_translation_coverage": true,
+      "note": "Empty inherited residual queue is not exhaustive."
+    }
   }
 ]
