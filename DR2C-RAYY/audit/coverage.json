@@ -1,7 +1,7 @@
 {
   "project": "DR2C VORENYX",
   "locale": "id-ID",
-  "build": "v2.43",
+  "build": "v2.44 Start/UI hotfix candidate",
   "source_inventory": {
     "last_full_scan_build": "v2.40",
     "source_script_files_scanned": 541,
@@ -69,5 +69,51 @@
   },
   "full_translation_complete": false,
   "metadata_conflict": "Patch README.txt reports 309 occurrences across 16 files; checkpoint and translation ledger report 159 across 58 files. This is an open source-metadata discrepancy.",
-  "warning": "The v2.22 69.07% number is stale and not a v2.43 coverage score. No global semantic coverage percentage is computed."
+  "warning": "Global semantic localization coverage remains NOT COMPUTED. v2.44 is a statically validated hotfix candidate, not runtime-verified stable. The v2.22 69.07% number is stale.",
+  "v2_44_hotfix": {
+    "artifact": "DR2C_VORENYX_v2.44_START_UI_HOTFIX.apk",
+    "bytes": 39748341,
+    "sha256": "e28314611411aeba2fdd6bf2cee918fa64ddecac159536e4a39918e7af81f8a6",
+    "changes": {
+      "canonical_boot_marker": {
+        "file": "assets/deathforth/boot.df",
+        "from": "PENANDA-GAME",
+        "to": "GAME-MARKER",
+        "static": "PASS"
+      },
+      "activity_orientation": [
+        {
+          "activity": "com.noodlecake.drtc.SplashActivity",
+          "from": 6,
+          "to": 0
+        },
+        {
+          "activity": "com.noodlecake.drtc.DrtcGameActivity",
+          "from": 6,
+          "to": 0
+        }
+      ],
+      "start_path_static_checks": "PASS"
+    },
+    "package_static_validation": "PASS",
+    "signature_schemes": {
+      "v1": "PASS",
+      "v2": "PASS",
+      "v3": "PASS"
+    },
+    "apkvision": {
+      "splash_asset_logo": false,
+      "wrapper_namespace_present": true,
+      "wrapper_removed": false,
+      "clean_authorized_base_needed": true
+    },
+    "runtime": {
+      "start_button": "NOT TESTED",
+      "ui_fit": "NOT TESTED",
+      "install": "NOT TESTED",
+      "launch": "NOT TESTED",
+      "save_load": "NOT TESTED",
+      "stability": "NOT VERIFIED"
+    }
+  }
 }
