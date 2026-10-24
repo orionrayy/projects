@@ -1,33 +1,33 @@
-# Build and Validation — v2.35
+# Build and Validation — v2.36
 
 ## Release artifact
-- Local artifact: `DR2C_VORENYX_ID_v2.35_localization_patch.zip`
-- Size: 19828207 bytes
-- SHA-256: `df3cd3840b3a6f32e5861b976045112ee790db6e472ae512ebac8d2e1b4fcee1`
-- ZIP entries: 362
-- SHA-256 manifest entries: 361
+- Local artifact: `DR2C_VORENYX_ID_v2.36_localization_patch.zip`
+- Size: 20771028 bytes
+- SHA-256: `fa76da687ce7d8ea5b1e2fafa165b40c31829248fadb5e8c9c6b1ebec3dd5608`
+- ZIP entries: 376
+- SHA-256 manifest entries: 375
 - ZIP CRC: PASS
 - Duplicate paths: 0
 - Manifest hash failures: 0
 - Machine-local path leaks: 0
 
-The checksum is recorded outside the ZIP to avoid embedding a self-referential archive digest. The public GitHub repository contains sanitized documentation and audit summaries, not the local source overlay.
+The release checksum is kept in an adjacent SHA-256 sidecar, outside the ZIP. The public GitHub repository contains sanitized documentation/audits, not the local source overlay.
 
-## v2.35 scope and static checks
-- 32 full display expressions rewritten across 12 source modules.
-- 9 direct literal mapping rules matched; 9 occurrences changed.
-- File line counts remain equal before/after for every scoped file.
-- Non-display source skeletons preserved.
+## v2.36 scope and static checks
+- 45 complete display expressions rewritten.
+- 12 direct literal mapping rules matched; 12 occurrences changed.
+- 31 scoped modules; source line counts and non-display skeletons preserved.
 - CYOA IDs, choice IDs, and route-path literals preserved.
 - Direct mapping residues: 0 for targeted literals.
-- Current comment-aware scan: 541 source files, 16,827 active quoted-string tokens.
-- Residual triage queue: 129 rows across 67 files; queue count is not a coverage score.
+- Independent ZIP/manifest validation: PASS.
+- Comment-aware scan: 541 source files, 16,819 active quoted-string tokens.
+- Residual triage queue: 77 candidate rows across 36 files; candidate counts are not a coverage score.
 
-## v2.34 reconciliation
-The v2.34 ZIP's checkpoint text described a stale three-file batch, while its actual audit/ledger scope and overlay changes cover nine different files. Its embedded ZIP digest and byte count were stale as well. The v2.35 package corrects the v2.34 checkpoint and audit metadata using the actual v2.34 ZIP contents. See [v2.34 reconciliation](CHECKPOINT_v2.34.md).
+## Metadata reconciliation
+The v2.34 archive had a mismatch between checkpoint scope and actual archive contents, with stale embedded ZIP digest metadata. v2.35 reconciled it to the actual nine-file v2.34 scope; v2.36 carries that correction forward. See [v2.34 reconciliation](CHECKPOINT_v2.34.md).
 
 ## Coverage status
-The old 69.07% figure belongs to a v2.22 heuristic and is stale. Current global semantic coverage is not computed; the inventory's English-likelihood queue is for triage only. Full localization is incomplete.
+The 69.07% figure belongs to the v2.22 heuristic and is stale. Current global semantic coverage is not computed. Full localization is incomplete.
 
 ## Not executed
 - Runtime gameplay test
@@ -35,4 +35,4 @@ The old 69.07% figure belongs to a v2.22 heuristic and is stale. Current global 
 - Save/load test
 - APK rebuild and signing
 
-Static token, line-count, source-skeleton, identifier and ZIP checks do not establish runtime compatibility or complete localization.
+Static structure and archive integrity do not prove runtime compatibility or semantic completeness.
