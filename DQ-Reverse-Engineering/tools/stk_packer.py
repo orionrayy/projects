@@ -26,9 +26,9 @@ def xor_bytes(data: bytes, key: int) -> bytes:
     return bytes(b ^ k[i & 3] for i, b in enumerate(data))
 
 def safe_path(value: str) -> str:
-    normalized = value.replace("\\\\", "/")
+    normalized = value.replace("\\", "/")
     p = pathlib.PurePosixPath(normalized)
-    if (not normalized or p.is_absolute() or "\\x00" in normalized
+    if (not normalized or p.is_absolute() or "\x00" in normalized
             or any(part in ("", ".", "..") for part in p.parts)
             or (p.parts and ":" in p.parts[0])):
         raise ValueError("unsafe archive path: %r" % value)
