@@ -1,17 +1,15 @@
 # Changelog — DR2C VORENYX
 
-- **v0.1:** VORENYX title identity/artwork and initial UI overlay.
+- **v0.1:** VORENYX title identity/artwork and initial UI/general text.
 - **v0.2–v0.3:** literal maps, NPC style matrix, slang research and identifier protections.
 - **v0.4–v0.7:** contextual event passes, bandits/recruitment/classes, common events and sentence-level QA.
-- **v0.8:** trader-camp and campfire dialog.
-- **v0.9–v1.2:** weapon vendors: firearms, pipe bombs, anime, blunt weapons, polearms and silent weapons.
-- **v1.3:** exact-literal/indentation QA repair.
-- **v1.4:** contextual events/training and oldtrade baseline.
-- **v1.5–v1.6:** experimental oldtrade passes; some mappings reverted and later reconciled.
-- **v1.7–v1.8:** shooting, fitness and mechanical trainer strings.
-- **v1.9–v2.0:** Army Surplus and Rifle Collector.
-- **v2.1:** reconciled trainer/vendor baseline including Blade Master; embedded ZIP report was subsequently found to retain two residue warnings that the working-folder report missed.
-- **v2.2 — current:** fixes 15 player-visible English literals in weapon traders; targeted residue scan 0 matches; display markers 157/157; embedded static PASS and ZIP CRC PASS. Coverage estimate: 32.36% (heuristic).
+- **v0.8–v1.8:** trader-camp, weapons vendors, trainers, contextual event and exact-literal/tab QA passes.
+- **v1.9–v2.1:** Army Surplus, Rifle Collector, Blade Master and reconciled trainer/vendor localization.
+- **v2.2:** fixes 15 player-visible English literals in weapon traders; targeted residue scan 0 matches; embedded static report and ZIP CRC PASS.
+- **v2.3:** contextual survivor recruitment dialogue and sourced Indonesian voice/slang guide; static QA/ZIP CRC PASS.
+- **v2.4–v2.20:** progressive contextual localization across events, characters, routes, traders, tutorial, camping, encounters, traits/perks and item text. Coverage values are heuristic inventory deltas.
+- **v2.21:** quality-focused exact-context pass for UI, vehicle, city, vendor and perk/trait text; 92 rules and occurrences reported matched.
+- **v2.22 — current local checkpoint:** rewrites 94 complete display expressions in camp survival choices, character bio and selected encounters; 183 existing literal tokens changed and 138 inventory rows newly marked. Inventory heuristic is 69.07%. Static structure and ZIP CRC PASS; 49 exact mapping rules are recorded as missed after contextual rewrites and require reconciliation. Runtime/save-load/APK rebuild not tested.
 
-## Limits
-Full Indonesian translation is incomplete. Coverage is a literal-delta heuristic. Runtime/gameplay, save/load, APK rebuild/signing and full title-menu integration are not yet tested. Public GitHub does not contain the original APK/full extracted game scripts.
+## Status limits
+Full Indonesian localization is incomplete. Inventory percentages are not semantic or runtime screen coverage. The public repository contains documentation and sanitized audit summaries, not the original APK, extracted game scripts or binary overlay.
