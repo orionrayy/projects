@@ -16,7 +16,7 @@ v34 removes the three surplus mini Gold controls. It restores the 71 original De
 - SHA-256: `799577cfe1ed0c910f5b21d5c3df4ab6b6d373fe0d4719244214c05ac6d5b008`
 - Size: 20 APK splits; approximately 55 MB
 - Package ID: `com.shinybox.dqv30`
-- Local signer certificate SHA-256: `6ba5a7ebddfc4fca4a6a9c5e69f1c0c76c48a0c9466a7dd63b6701a8e8a58d63`
+- Local signer certificate SHA-256: `6ba5a7ebddfccc1fde12c0b7538bd390dad51bc3b963d03c68e7545b961917b0`
 - Runtime status: **NOT TESTED ON DEVICE**
 
 The signer is new because the previous local v33 private signing key was not available in this workspace. The probe must therefore be installed after uninstalling the diagnostic package signed with the old key. Do not uninstall the original store package `com.shinybox.smash`.
