@@ -80,6 +80,14 @@ The uploaded APK contained a credential-shaped `assets/api_key.txt`; its value i
 
 The source bridge and contract tests are implemented, but the proprietary S3D Options UI hook remains **BLOCKED**: this repository has no validated HUD serializer with lossless round-trip tests and no original game UI source callsite. The bridge does not claim the Cheats entry exists in the running game.
 
+## HUD binary format and route evidence — v19
+
+- [Read-only HUD binary probe](tools/hud_asset_probe.py)
+- [Synthetic HUD parser regression tests](tests/test_hud_asset_probe.py)
+- [Verified HUD section/action findings](docs/HUD_BINARY_FORMAT_V19.md)
+
+The v19 audit parsed the original Pause and Debug HUD headers and section boundaries, confirming 64 Pause actions and 13 Debug actions. The existing `onShowOptions` action toggles the existing Options model, but the Pause action table has no explicit Debug route. A read-only parser and regression tests are now included in static CI. Element records remain opaque and no original HUD resource was rewritten; the live click path remains blocked pending a lossless serializer and in-game runtime verification.
+
 ## Native split recovery and Android harness verification — v18
 
 - [Recovered ARM64 split/native export audit](docs/NATIVE_SPLIT_AUDIT_V18.md)
@@ -90,6 +98,6 @@ The source bridge and contract tests are implemented, but the proprietary S3D Op
 
 The supplied v3.3.2.0 XAPK has been recovered and statically audited. Its ARM64 split contains libS3DClient.so, libcrypto.so, libssl.so and libopenal.so; sampled split signer fingerprints match. The native binary exposes JNI and S3DClient APIs, including HUD-action and options calls, but their authoritative call signatures, thread contract and safe player-state accessors are not established. Binary exports are not proof that a cheat controller can safely mutate game state.
 
-The standalone **DQ Cheats Sandbox Harness** is a separate app, not a repackaged Dungeon Quest APK. A prior CI run did build its debug APK and pass JVM unit tests. The updated workflow now also attempts instrumentation/navigation checks and installation/launch on an Android API 35 x86_64 emulator; see the exact current [GitHub Actions run](https://github.com/orionrayy/projects/actions/runs/40098230343) and verify its conclusion before treating emulator checks as passed. This does not test the original ARM64 game engine.
+The standalone **DQ Cheats Sandbox Harness** is a separate app, not a repackaged Dungeon Quest APK. A prior CI run did build its debug APK and pass JVM unit tests. The updated workflow now also attempts instrumentation/navigation checks and installation/launch on an Android API 35 x86_64 emulator; see the [current PR checks](https://github.com/orionrayy/projects/pull/26/checks) and verify the newest run's conclusion before treating emulator checks as passed. This does not test the original ARM64 game engine.
 
 **Original-game integration remains NOT VERIFIED:** no format-correct HUD edit has been validated, no Pause → Options → Cheats click path has been exercised in Dungeon Quest, no reversible game-state adapter has been runtime-verified, and no modified original-game APK has been built/installed/launched. Purchase receipts/entitlements and online progression are not modified.
