@@ -224,5 +224,30 @@
     "focus": "arcade-defense tutorial, bandit-defense rewards, siege route, park/shop/fairy, city-ranger/panda events, character blurbs, perk/trait help and epilogue fragments",
     "playerFacingHeuristicPct": null,
     "static": "PASS; 45 complete display expressions and 12 direct literal occurrences across 31 modules; 541 files inventoried; triage queue 77 rows across 36 files; global coverage not computed; runtime not tested"
+  },
+  {
+    "version": "v2.37",
+    "focus": "25 display expressions and 6 direct literal occurrences; static checks only",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; global coverage not recomputed; runtime not tested"
+  },
+  {
+    "version": "v2.38",
+    "focus": "14 display expressions and 18 direct literal occurrences across 11 files",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; global coverage not computed; runtime not tested"
+  },
+  {
+    "version": "v2.39",
+    "focus": "32 display expressions and 7 direct literal occurrences across CYOA examples and moment interactions",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; global coverage not computed; runtime not tested"
+  },
+  {
+    "version": "v2.40",
+    "focus": "45 canonical trait/perk key repairs plus continued Indonesian localization across 78 changed script files",
+    "playerFacingHeuristicPct": null,
+    "coverageMeasurementBaselinePct": 69.07,
+    "static": "PASS; 0 key mismatches remain across 195 operand comparisons; inherited candidate queue is empty but global semantic coverage is NOT COMPUTED; runtime/UI/save-load not tested"
   }
 ]
