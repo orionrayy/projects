@@ -16,6 +16,14 @@
       "adler32_checksum_matches": true,
       "sha1_header_digest_matches": true,
       "interpretation": "ZIP entry CRC is inconsistent, but the extracted DEX's own header checksums validate; this is an outer ZIP-integrity defect, not proof of corrupted DEX code bytes."
+    },
+    "signing_certificate": {
+      "owner": "CN=np, OU=np, O=np, L=??, ST=??, C=??",
+      "sha1": "26:B0:2D:23:35:09:F4:AE:CF:56:98:00:32:34:34:56:CE:AB:72:2A",
+      "sha256": "49:26:82:F8:77:60:7E:E9:9D:F2:DD:D2:BD:59:53:FD:72:7B:DF:6E:19:D3:97:DE:9D:BB:AF:D5:82:BC:AD:75",
+      "local_v2_44_test_certificate_sha256": "6e:a0:4e:10:96:5d:e1:45:9a:7f:ee:84:5e:8a:e9:03:bc:15:35:a7:44:f4:76:2c:14:b2:c7:bb:82:eb:13:f9",
+      "raw_vs_v2_44_certificate_match": false,
+      "caution": "This is the supplied raw APK's certificate, not a verified certificate from the user's currently installed app. A different cert prevents an in-place Android update; this alone does not identify which package is installed."
     }
   },
   "source_archive": {
