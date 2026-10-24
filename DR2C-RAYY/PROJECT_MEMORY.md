@@ -108,9 +108,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - See [v2.43 checkpoint](docs/CHECKPOINT_v2.43.md), [sanitized validation summary](audit/v2.43_static_validation_summary.json), and [residual recheck](audit/v2.43_residual_recheck.json).
 
 
-## APK candidate build — 24 October 2026
-- Rebuilt a local Android APK candidate from the provided extracted base package plus the v2.43 overlay: `DR2C_VORENYX_v2.43.apk` (39,610,091 bytes; SHA-256 `cefe665d0164495248f0d2cc960f54478d60b980ec137c3878181732d0885a90`).
-- Static checks PASS: ZIP CRC, JAR/v1 signature verification, all 272 overlay payload hashes, 4-byte alignment of stored native libraries, 3 DEX files, and arm64-v8a/armeabi-v7a libraries.
-- The APK was signed with a new local key because the original publisher private key is unavailable. The manifest includes `com.pairip.application.Application` and PairIP/Play license-check components; the candidate may be rejected at install/launch. No licensing or anti-tamper bypass was attempted.
-- Android runtime install, launch, gameplay/event paths, UI fit, save/load and stability remain NOT TESTED. It is a statically validated APK candidate, not a verified stable release. The APK and extracted game content remain local-only; GitHub stores sanitized reports only.
-- v2.43 patch metadata contains a conflict: README.txt states 309 changed occurrences across 16 files, while checkpoint/ledger state 159 across 58 files. The discrepancy is documented rather than silently reconciled to an unsupported number.
+
+## APK candidate build — 24 October 2026 (updated)
+- Local artifact: `DR2C_VORENYX_v2.43.apk`; size 39748335 bytes; SHA-256 `3019dd04098e9e8fef01045a2e391d9525bf87ef6874b0d0049c5a073a052f25`.
+- Packaging: 272 overlay payloads hash-matched, ZIP CRC PASS, 1,015 entries, no duplicate paths; 3 DEX files and 16 stored native libraries for arm64-v8a/armeabi-v7a; all native libraries 4-byte aligned.
+- Android SDK Build Tools 35.0.1 `apksigner` 0.9 verified APK Signature Schemes v1, v2 and v3. SHA-256 certificate fingerprint: `6ea04e10965de1459a7fee845e8ae903bc1535a744f4762c14b2c7bb82eb13f9` (new local key, not publisher key).
+- **Not runtime-verified:** no device/emulator/ADB was available for install, launch, gameplay, UI fit, save/load or stability tests. The app has PairIP/Play license-check components and may reject the local signature. No licensing or anti-tamper bypass was attempted.
+- Binary APK and extracted game source remain local-only; GitHub stores a sanitized build report.
+- Source patch README conflicts with checkpoint/ledger on changed-string metrics (309/16 vs 159/58); remain documented as unresolved.
