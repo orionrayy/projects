@@ -1,25 +1,38 @@
 {
-  "build": "v2.2",
+  "build": "v2.22",
+  "base_checkpoint": "v2.21",
   "static_integrity": "PASS",
   "failures": [],
-  "fixed_player_facing_english_literals": 15,
-  "player_facing_residue_scan": {
-    "file": "assets/deathforth/events/trade/weapons.df",
-    "patterns_checked": 15,
-    "matches_remaining": []
+  "scope_files": [
+    "assets/deathforth/charstats-textfill.df",
+    "assets/deathforth/cyoa-charstats.df",
+    "assets/deathforth/events/camp/camp3.df",
+    "assets/deathforth/events/common/common4.df",
+    "assets/deathforth/events/rareloc/rare1.df"
+  ],
+  "contextual_expression_rules": 94,
+  "changed_existing_literal_tokens": 183,
+  "new_group_helper_literals": 2,
+  "exact_mapping_rules_missed_after_contextual_rewrites": 49,
+  "inventory_mapping_warning_count": 0,
+  "file_structure_checks": {
+    "expression_only_files": 4,
+    "expression_only_files_literal_and_line_counts_preserved": true,
+    "helper_macro_file": "cyoa-charstats.df",
+    "helper_file_literal_delta": 2,
+    "line_delta": 2,
+    "status": "PASS"
   },
-  "display_expression_scope": "assets/deathforth/events/trade/weapons.df",
-  "display_expression_open_count": 157,
-  "display_expression_close_count": 157,
-  "zip_crc": "PASS",
   "coverage_heuristic": {
     "player_facing_occurrences": 10844,
-    "changed": 3509,
-    "percent": 32.36,
-    "untranslated_unique_candidates": 6531
+    "marked_localized": 7490,
+    "percent": 69.07,
+    "unmarked_unique_literal_candidates": 2822,
+    "full_translation_complete": false
   },
+  "zip_crc": "PASS",
   "runtime_gameplay_test": "NOT RUN",
   "save_load_test": "NOT RUN",
   "apk_rebuild": "NOT PERFORMED",
-  "note": "v2.1 working-folder and embedded ZIP validation reports disagreed. v2.2 fixes the visible source residue, embeds the updated report and validates the actual ZIP."
+  "note": "The bundled local report contains 49 exact mapping rules whose source literals were not found after contextual rewrites. They may be superseded by complete-expression replacements; each must be reconciled before release. Static checks do not prove runtime compatibility."
 }
