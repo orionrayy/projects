@@ -67,3 +67,11 @@ The project is not 100% translated yet. Runtime gameplay, save/load and APK rebu
 - Current global coverage was not recomputed. The last measured heuristic remains the v2.22 baseline of 69.07%, not a v2.25 score and not semantic completeness.
 - Runtime gameplay, UI fit, save/load and APK rebuild/signing remain untested. Public GitHub stores sanitized records only, not original archive, extracted scripts or binary overlay.
 
+## Checkpoint v2.26 — 24 October 2026
+
+- Local patch: `DR2C_VORENYX_ID_v2.26_localization_patch.zip`; 312 ZIP entries, CRC PASS, zero duplicate paths, 311 manifest entries verified, zero hash mismatches, and no local-path leaks.
+- Localized Beeman, Boxer, Caveman, Knight and Ninja dialogue/emotes in five special-character scripts; 66 exact-context mappings and 66 literal occurrences changed.
+- Each touched file preserves its quoted-literal count, line count and non-string source skeleton; all mapped English source residues are absent.
+- Last measured coverage remains the v2.22 heuristic baseline of 69.07%. It has not been recalculated for v2.26 and does not mean semantic completeness.
+- Runtime gameplay, UI fit, save/load and APK rebuild/signing remain untested. Public GitHub stores sanitized documentation/audit records only, not the original archive, full scripts or binary overlay.
+
