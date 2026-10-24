@@ -1,36 +1,32 @@
-# Source Reconstruction Status — Iteration 3
+# Source Reconstruction Status — Iteration 4
 
-## Confidence tiers
+## Higher-confidence Java
 
-### Direct / high-confidence source recovered from short DEX bodies
+- `verified/java/com/shinybox/smash/BuildConfig.java`: static values from DEX metadata and a trivial constructor.
+- `verified/java/com/shinybox/smash/Globals.java`: field declarations and constructor.
+- `verified/java/com/shinybox/smash/S3DEngine.java`: constructor and three lifecycle bodies. These files compile against temporary minimal stubs, not a full Android SDK/dependency graph.
 
-- verified/java/com/shinybox/smash/BuildConfig.java: six values decoded from DEX static encoded values and a trivial constructor.
-- verified/java/com/shinybox/smash/Globals.java: four field declarations and trivial constructor.
-- verified/java/com/shinybox/smash/S3DEngine.java: constructor and three lifecycle bodies. onConfigurationChanged returns without a super call; onCreate and onTerminate delegate to the superclass.
+## Method-level reconstruction excerpts
 
-### Method-level semantic reconstruction
+- `fragments/ShinyActivity-selected-methods.java.txt`: selected lifecycle, device-name, immersive-mode, input and wrapper-registration methods.
+- `fragments/Smash-pack-io.java.txt`: directory creation, APK asset-copying method and control-flow reconstruction of `extractMainPack`.
+- `fragments/Smash-static-initializer.java.txt`: observed native library load order.
+- `fragments/S3DRenderer-native-boundary.java.txt`: JNI method declaration excerpt; native bodies are absent.
 
-- fragments/ShinyActivity-selected-methods.java.txt: selected methods for device name, system UI flags, TV/touchscreen identification, lifecycle wrapper registration, and input routing. Obfuscated types/method names remain as seen in DEX.
-- fragments/Smash-pack-io.java.txt: directory creation, asset-copying method, and documented control-flow reconstruction of extractMainPack.
-- fragments/Smash-static-initializer.java.txt: native-library load names and sequence.
+These are source-style excerpts, not complete original source files. The 68 files in `reconstruction/java/` are declaration scaffolds with placeholder method bodies, not a working game.
 
-These excerpts are not complete original source files. They contain reconstruction choices and/or deliberately omit obfuscation artefacts; compare them against the associated disassembly before using them as executable source.
+## New asset result
 
-## Declaration scaffolds only
+The outer `S3DMain.smf` format is now identified and decoded. The parser verifies all 5,630 entries against CRC-32 and uncompressed sizes, yielding 94,513,994 bytes. The decoded set contains 17 XML gameplay-data tables and thousands of binary assets. See `docs/STK_FORMAT_FINDINGS.md` and `docs/ASSET_CATALOG.md`.
 
-reconstruction/java/ contains 68 generated Java declaration stubs. These preserve types, signatures, inheritance/interfaces, field declarations, and safe constants from the DEX. Nontrivial method bodies throw UnsupportedOperationException or contain explanatory comments. They are not a working game and must not be shipped as such.
+Readable XML data includes skills, items, affixes, legends, talents, stats, shop/IAP names and dictionary/localization keys. Inner `.gam`, `.mdo`, `.msh`, `.ske`, `.scn` and related file internals remain to be reverse engineered; they are not source code merely because they are extracted.
 
-## Static behavior recovered
+## JNI and split-APK blocker
 
-- Smash loads crypto, ssl, openal, S3DClient in that order.
-- It uses S3DMain.smf as primary pack, tries an asset-copy fallback output name S3DMain.stk, and stores descriptor, start offset and length for the engine surface bridge.
-- extractAssetFromAPK allocates a 512 KiB buffer and loops on InputStream.available(). The observed bytecode writes the requested chunk length rather than the read() return value; the illustrative excerpt preserves this potentially unsafe behavior.
-- IAP wrapper static constants contain 104 distinct SKU identifiers, listed in docs/IAP_PRODUCT_CATALOG.md. This catalog identifies strings, not current prices/storefront state or entitlement validation.
+The wrapper declares 44 native methods and requests `crypto`, `ssl`, `openal`, and `S3DClient` in that order. The manifest's required ABI/density split metadata suggests the supplied archive may be a base APK; the matching companion splits have not been provided or verified. Native implementations remain missing.
 
-## Remaining blockers
+## Validation boundary
 
-- The proprietary 33,978,539-byte S3DMain.smf format remains unresolved. No extraction, decryption, or decoding is claimed.
-- classes.dex contains 10,768 class definitions, including large dependency/platform sets. Only 68 classes under com.shinybox.* were emitted to the current class-specific disassembly.
-- The custom disassembler still reports reserved/unknown opcode positions; CFG-based inspection flagged two in CameraPreview.surfaceChanged. These are reported rather than guessed into Java.
-- The three verified Java files were compiled with javac against minimal temporary Android/dependency stubs. This proves Java syntax for those files only; it is not an Android Gradle build or runtime test.
-- No complete Android Studio build or runtime launch has been produced. The required Android SDK, proprietary engine assets/implementation, and native engine libraries/dependencies are not established by this input.
+The local static validator reports zero structural errors across the 68-class Dalvik snapshot. The full and excerpt manifests parse, the entire STK pack verifies, helper scripts pass `py_compile`, and the three high-confidence Java files compile against minimal temporary stubs.
+
+JADX, Apktool and a Smali assembler have not run. No full Android Studio/Gradle build, signing, emulator launch or runtime-equivalence test is claimed. Two suspicious/reserved opcode positions in `CameraPreview.surfaceChanged` remain flagged rather than guessed into Java.
