@@ -54,3 +54,8 @@ The single-file HTML catalog workbench is a separate design/test artifact. It re
 Browser tests passed for entering `123` in the custom keypad, applying exactly `123` to the local draft, and incrementing the Player Max Health draft from 1 to 3.5 to 3.75 using the +10/+1 steppers. The workbench explicitly remains `GAME LINK: DISCONNECTED`; it does not apply settings to Dungeon Quest.
 
 No billing receipt, paid entitlement, cloud-save, achievement, or leaderboard logic was modified. The complete 222-cheat game integration remains incomplete.
+
+
+## Workbench source in the repository
+
+The corrected, single-file catalog workbench is committed at [cheats_options_workbench_v35.html](../cheats-sandbox/cheats_options_workbench_v35.html). It contains all 222 catalog entries, button-only steppers for ordinary numeric settings, and the custom button-built Gold keypad. It remains an offline/local staging tool, not a game adapter or an in-game APK feature.
