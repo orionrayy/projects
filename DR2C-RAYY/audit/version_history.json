@@ -211,12 +211,18 @@
     "version": "v2.34",
     "focus": "sewer/tutorial, Canada crossing, hazmat, Santa/Billy, Bogan, daily medical and trader-camp localization",
     "playerFacingHeuristicPct": null,
-    "static": "PASS; 25 display expressions and 3 direct literal occurrences; metadata reconciled in v2.35"
+    "static": "PASS; 25 display expressions and 3 direct literal occurrences across nine files; checkpoint/hash metadata reconciled in v2.35; global coverage not computed; runtime not tested"
   },
   {
     "version": "v2.35",
     "focus": "game modes, journey planning, mission/reward text, gym/coffee/factory encounters, generator puzzle, broom/portal characters, Mountie Alpha-end",
     "playerFacingHeuristicPct": null,
-    "static": "PASS; 32 display expressions and 9 direct literal occurrences; global coverage not computed; runtime not tested"
+    "static": "PASS; 32 display expressions and 9 direct literal occurrences across 12 files; v2.34 metadata reconciled; global coverage not computed; runtime not tested"
+  },
+  {
+    "version": "v2.36",
+    "focus": "arcade-defense tutorial, bandit-defense rewards, siege route, park/shop/fairy, city-ranger/panda events, character blurbs, perk/trait help and epilogue fragments",
+    "playerFacingHeuristicPct": null,
+    "static": "PASS; 45 complete display expressions and 12 direct literal occurrences across 31 modules; 541 files inventoried; triage queue 77 rows across 36 files; global coverage not computed; runtime not tested"
   }
 ]
