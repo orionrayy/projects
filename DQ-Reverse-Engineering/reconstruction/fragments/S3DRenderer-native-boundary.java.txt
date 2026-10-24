@@ -1,0 +1,47 @@
+/*
+ * Exact native method declarations observed in com.shinybox.smash.S3DRenderer.
+ * This fragment declares the Java/JNI boundary only. Native implementations
+ * are not embedded in the supplied DEX and are not reconstructed here.
+ */
+
+public native boolean engineDidPassFirstFrame();
+public native boolean engineGetCameraDeviceState();
+public native String engineGetOverlayMovie();
+public native boolean engineGetOverlayMovieHasChanged();
+public native boolean engineGetWantSwapBuffers();
+public native boolean engineInitialize();
+public native void engineOnCameraDeviceFrame(byte[] frame, int width, int height);
+public native void engineOnDeviceMove(float x, float y, float z);
+public native void engineOnHeadingChanged(float heading);
+public native void engineOnKeyboardKeyDown(int keyCode, int modifiers);
+public native void engineOnKeyboardKeyUp(int keyCode, int modifiers);
+public native void engineOnLocationChanged(float latitude, float longitude, float altitude);
+public native void engineOnMouseButtonDown(float x, float y);
+public native void engineOnMouseButtonUp(float x, float y);
+public native void engineOnMouseMove(float x, float y);
+public native void engineOnOverlayMovieStopped();
+public native void engineOnSurfaceChanged(int width, int height);
+public native void engineOnSurfaceCreated();
+// DEX descriptor contains five int/float/float groups (15 parameters total).
+public native void engineOnTouchesChange(
+    int action0, float x0, float y0,
+    int action1, float x1, float y1,
+    int action2, float x2, float y2,
+    int action3, float x3, float y3,
+    int action4, float x4, float y4
+);
+public native void enginePause(boolean paused);
+public native boolean engineRunOneFrame();
+public native void engineSetCameraDeviceCount(int count);
+public native void engineSetCameraDeviceName(int index, String name);
+public native void engineSetDeviceIPAddress(String ipAddress);
+public native void engineSetDeviceModel(String model);
+public native void engineSetDeviceName(String deviceName);
+public native void engineSetDeviceUUID(String uuid);
+public native void engineSetDirectories(String homeDirectory, String cacheDirectory, String packDirectory);
+public native void engineSetHeadingSupport(boolean supported);
+public native void engineSetLocationSupport(boolean supported);
+public native void engineSetPackFileDescriptor(java.io.FileDescriptor descriptor, long startOffset, long length);
+public native void engineSetSystemLanguage(String language);
+public native void engineSetSystemVersion(String version);
+public native void engineShutdown();
