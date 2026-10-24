@@ -59,3 +59,11 @@ The project is not 100% translated yet. Runtime gameplay, save/load and APK rebu
 - Last measured coverage remains the v2.22 heuristic baseline (69.07%); it has not been recomputed for v2.24. Full localization is not complete.
 - Runtime gameplay, UI fit, save/load and APK rebuild/signing remain untested. Public GitHub stores sanitized records only, not the original archive or binary overlay.
 
+## Checkpoint v2.25 — 24 October 2026
+
+- Local artifact: `DR2C_VORENYX_ID_v2.25_localization_patch.zip`; 305 ZIP entries, CRC PASS, no duplicate paths, 304 manifest files verified, zero hash mismatches, no local-path leaks.
+- Localized active optimistic-survivor and wrestler dialogue in `optimist.df` and `sc/wrestler.df`; 63 mapping rules, 63 literal occurrences changed.
+- Both files passed source-structure checks: 29/29 quoted tokens and 114/114 lines in `optimist.df`; 34/34 tokens and 137/137 lines in `sc/wrestler.df`.
+- Current global coverage was not recomputed. The last measured heuristic remains the v2.22 baseline of 69.07%, not a v2.25 score and not semantic completeness.
+- Runtime gameplay, UI fit, save/load and APK rebuild/signing remain untested. Public GitHub stores sanitized records only, not original archive, extracted scripts or binary overlay.
+
