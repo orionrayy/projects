@@ -7,7 +7,7 @@
 - Target voice: natural colloquial Indonesian, blunt and sarcastic with occasional profanity, distinct NPC personas, and context-sensitive community slang.
 - Target: 100% of player-visible text reviewed and localized; **not achieved yet**.
 
-## Current checkpoint — v2.26 (24 October 2026)
+## Historical checkpoint — v2.26 (24 October 2026)
 - Local patch artifact: `DR2C_VORENYX_ID_v2.26_localization_patch.zip`. The binary overlay and original archive remain outside public GitHub.
 - Scope: five special-character dialogue/emote profiles: `sc/beeman.df`, `sc/boxer.df`, `sc/caveman.df`, `sc/knight.df`, and `sc/ninja.df`.
 - 66 exact-context mappings applied; 66 literal occurrences changed.
@@ -44,10 +44,11 @@ Preserve trait/perk/character IDs, stat keys, weapon IDs/constants, food costs, 
 Public GitHub stores project-authored documentation, research and sanitized audit summaries only. Do not commit the user-provided archive, full extracted game scripts, original APK or binary overlay.
 
 
-## Active checkpoint — 24 October 2026, v2.35
-- Canonical latest artifact: `DR2C_VORENYX_ID_v2.35_localization_patch.zip` (local release, not committed to the public repository).
-- Batch: 32 complete display expressions and 9 direct literal occurrences across 12 files, including game-mode explainers, journey planning, mission/reward dialogue, gym/coffee/factory encounters, the generator puzzle, broom/portal characters and Mountie Alpha-end text.
-- Static source/ZIP integrity: PASS; archive 362 entries, 361 manifest entries, no duplicate paths, no manifest digest mismatches, no local path leaks. SHA-256: `df3cd3840b3a6f32e5861b976045112ee790db6e472ae512ebac8d2e1b4fcee1`.
-- Comment-aware inventory: 541 source files, 16,827 active string tokens. Residual queue: 129 candidate rows / 67 files; it is for triage, not a coverage score.
-- Historical 69.07% figure is v2.22-only and stale. Global semantic coverage, runtime/UI fit/save-load tests, and APK rebuild/signing remain unverified.
-- Metadata correction: the v2.34 checkpoint and embedded ZIP hash/size were inconsistent with its actual archived contents. v2.35 reconciles the v2.34 checkpoint and audit to the actual nine-file scope before proceeding.
+
+## Active checkpoint — 24 October 2026, v2.36
+- Canonical latest local artifact: `DR2C_VORENYX_ID_v2.36_localization_patch.zip`; it is not committed to the public repository.
+- v2.36 localizes 45 complete display expressions and changes 12 direct literal occurrences across 31 modules, including arcade-defense and bandit-raid text, siege route encounters, park/shop/fairy events, city rangers/pandas, character blurbs, and perk/trait guidance.
+- Static validation: PASS. Archive 376 entries, 375 manifest entries, zero duplicate paths, manifest hash failures or machine-local path leaks. SHA-256: `fa76da687ce7d8ea5b1e2fafa165b40c31829248fadb5e8c9c6b1ebec3dd5608`.
+- Comment-aware inventory: 541 source files, 16,819 active quoted-string tokens; 77 heuristic candidate rows across 36 files remain. These are triage rows, not coverage.
+- The 69.07% metric is the stale v2.22 heuristic baseline. Current global semantic coverage is not computed. Gameplay, UI fit, save/load and APK rebuild/signing remain untested.
+- The v2.34 checkpoint/hash discrepancy remains documented as reconciled in v2.35; v2.36 builds from the actual v2.35 ZIP.
