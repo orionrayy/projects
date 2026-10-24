@@ -27,6 +27,8 @@ jobs:
           java-version: "21"
       - name: Compile Python helpers
         run: python -m py_compile DQ-Reverse-Engineering/tools/*.py DQ-Reverse-Engineering/tests/*.py
+      - name: Run synthetic STK parser safety tests
+        run: python DQ-Reverse-Engineering/tests/test_stk_unpacker.py
       - name: Validate manifest, source boundaries, and secret exclusion
         run: |
           python - <<'PY'
@@ -45,6 +47,7 @@ jobs:
           assert not forbidden, forbidden
           assert (root / "reconstruction" / "fragments" / "S3DRenderer-native-boundary.java.txt").exists()
           assert (root / "tools" / "generate_java_stubs.py").exists()
+          assert (root / "tools" / "stk_unpacker.py").exists()
           print("PASS: XML, split metadata, Java source count, source fragments, secret/binary exclusion")
           PY
       - name: Compile high-confidence Java reconstructions against temporary stubs
@@ -70,5 +73,11 @@ jobs:
           package q0;
           public class b extends android.app.Application { public b() { super(); } }
           JAVA
-          javac -d "$TMP_DIR/classes"             "$TMP_DIR/android/content/res/Configuration.java"             "$TMP_DIR/android/app/Application.java"             "$TMP_DIR/q0/b.java"             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/BuildConfig.java             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/Globals.java             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/S3DEngine.java
+          javac -d "$TMP_DIR/classes" \
+            "$TMP_DIR/android/content/res/Configuration.java" \
+            "$TMP_DIR/android/app/Application.java" \
+            "$TMP_DIR/q0/b.java" \
+            DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/BuildConfig.java \
+            DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/Globals.java \
+            DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/S3DEngine.java
           echo "PASS: three high-confidence Java files compile against minimal temporary stubs"
