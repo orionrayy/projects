@@ -33,6 +33,7 @@ jobs:
         run: |
           python DQ-Reverse-Engineering/tests/test_stk_packer.py
           python DQ-Reverse-Engineering/tests/test_cosmetic_patch.py
+          python DQ-Reverse-Engineering/tests/test_iap_sku_reconciliation.py
       - name: Validate manifest, source boundaries, and secret exclusion
         run: |
           python - <<'PY'
