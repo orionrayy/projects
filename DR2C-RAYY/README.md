@@ -11,6 +11,15 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
 - [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
 
+## v2.46 screenshot-driven UI localization
+
+- Targets the English/mixed-language text seen in the user's latest screenshots: tutorial CYOA choices and prose, plus Team, Swap Meet, Choose UR Fate, and 10 character-stat labels in native `libmain.so`.
+- Tutorial choices are now Indonesian and use the dynamic character name. Existing `tutorchat-1/-2/-3` handlers remain intact.
+- Native labels are patched in-place, preserving string offsets and native library size. Static checks cover 13 standalone string slots.
+- APK: `DR2C_VORENYX_v2.46_UI_LOCALIZED_TEST.apk`, 112,238,801 bytes, SHA-256 `6d4e2f3df07d199807c08418ae5d30b9927e5b2e36c780a51858045336b29313`.
+- ZIP CRC, v1 signature check, local v2 verification, resource table alignment, stored-entry alignment, and native library page alignment pass. No device-side runtime test yet; localization remains incomplete and native stat behavior needs regression check.
+- [UI localization report](docs/UI_LOCALIZATION_v2.46.md) · [Machine-readable validation](audit/ui_localization_v2.46.json)
+
 ## v2.45 Start failure — Deathforth string syntax fix
 
 - The user's runtime console revealed a concrete parse error at `events/common/common4.df:34`: escaped quotes in translated text caused the Deathforth interpreter to parse the string incorrectly and report `Dari` as an unknown token.
