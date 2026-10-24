@@ -1,0 +1,74 @@
+name: DQ reverse-engineering static validation
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/**"
+      - ".github/workflows/dq-reverse-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Compile Python helpers
+        run: python -m py_compile DQ-Reverse-Engineering/tools/*.py DQ-Reverse-Engineering/tests/*.py
+      - name: Validate manifest, source boundaries, and secret exclusion
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          root = Path("DQ-Reverse-Engineering")
+          manifest = root / "manifest" / "AndroidManifest.analysis-excerpt.xml"
+          node = ET.parse(manifest).getroot()
+          assert node.attrib["package"] == "com.shinybox.smash"
+          assert node.attrib["{http://schemas.android.com/apk/res/android}requiredSplitTypes"] == "base__abi,base__density"
+          app = node.find("application")
+          assert app is not None and app.attrib["{http://schemas.android.com/apk/res/android}isSplitRequired"] == "true"
+          verified = list((root / "reconstruction" / "verified" / "java").rglob("*.java"))
+          assert len(verified) == 3, len(verified)
+          forbidden = [p for p in root.rglob("*") if p.is_file() and (p.name == "api_key.txt" or p.suffix.lower() == ".apk" or p.name in {"classes.dex", "S3DMain.smf"})]
+          assert not forbidden, forbidden
+          assert (root / "reconstruction" / "fragments" / "S3DRenderer-native-boundary.java.txt").exists()
+          assert (root / "tools" / "generate_java_stubs.py").exists()
+          print("PASS: XML, split metadata, Java source count, source fragments, secret/binary exclusion")
+          PY
+      - name: Compile high-confidence Java reconstructions against temporary stubs
+        run: |
+          set -eu
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          mkdir -p "$TMP_DIR/android/content/res" "$TMP_DIR/android/app" "$TMP_DIR/q0" "$TMP_DIR/classes"
+          cat > "$TMP_DIR/android/content/res/Configuration.java" <<'JAVA'
+          package android.content.res;
+          public class Configuration {}
+          JAVA
+          cat > "$TMP_DIR/android/app/Application.java" <<'JAVA'
+          package android.app;
+          import android.content.res.Configuration;
+          public class Application {
+            public void onCreate() {}
+            public void onTerminate() {}
+            public void onConfigurationChanged(Configuration config) {}
+          }
+          JAVA
+          cat > "$TMP_DIR/q0/b.java" <<'JAVA'
+          package q0;
+          public class b extends android.app.Application { public b() { super(); } }
+          JAVA
+          javac -d "$TMP_DIR/classes"             "$TMP_DIR/android/content/res/Configuration.java"             "$TMP_DIR/android/app/Application.java"             "$TMP_DIR/q0/b.java"             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/BuildConfig.java             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/Globals.java             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/S3DEngine.java
+          echo "PASS: three high-confidence Java files compile against minimal temporary stubs"
