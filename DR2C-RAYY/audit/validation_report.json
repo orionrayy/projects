@@ -1,13 +1,11 @@
 {
   "project": "DR2C VORENYX",
   "build": "v2.40",
-  "base_checkpoint": "v2.39",
   "static_integrity": "PASS",
-  "failures": [],
+  "static_failures": [],
   "canonical_key_integrity": {
-    "v2_39_mismatches": 45,
-    "v2_40_repairs": 45,
-    "v2_40_remaining_mismatches": 0,
+    "mismatches_repaired": 45,
+    "mismatches_remaining": 0,
     "operands_compared": 195,
     "affected_modules": 13
   },
@@ -15,39 +13,40 @@
     "cyoa_choice_ids_preserved": true,
     "route_resource_paths_preserved": true
   },
-  "source_inventory": {
-    "text_files_scanned": 541,
-    "files_with_active_quoted_literals": 434,
-    "active_quoted_literal_tokens": 16834,
-    "inherited_candidate_rows": 0,
-    "semantic_coverage": "NOT COMPUTED"
-  },
-  "patch_integrity": {
+  "package_integrity": {
     "zip_crc": "PASS",
     "zip_entries": 411,
     "manifest_entries": 410,
     "manifest_hash_failures": 0,
     "duplicate_paths": 0,
-    "machine_local_path_leaks": 0,
-    "title_art_copies_match": true,
-    "patch_bytes": 24380609,
-    "patch_sha256": "a863cadfda4d99ef14c9199e255cbfc8e687c1d05a1853b8f461f096870b26eb"
+    "patch_sha256": "a863cadfda4d99ef14c9199e255cbfc8e687c1d05a1853b8f461f096870b26eb",
+    "patch_bytes": 24380609
   },
-  "full_project_archive_integrity": {
-    "archive_version": "v2.5",
-    "zip_crc": "PASS",
-    "zip_entries": 185,
-    "manifest_entries": 184,
-    "manifest_hash_failures": 0,
-    "unmanifested_files": 0,
-    "duplicate_paths": 0,
-    "archive_bytes": 105064456,
-    "archive_sha256": "cc0e7818dd87f0fe508692ae0545343ad89c727c401c81ad00f703377962fa97"
+  "fresh_coverage_recheck": {
+    "inventory_tokens": 16834,
+    "reviewable_non_path_non_engine_rows": 15839,
+    "english_likelihood_ge_0_2_rows": 1578,
+    "english_likelihood_ge_0_5_rows": 598,
+    "unscored_new_or_changed_rows": 305,
+    "broad_triage_rows_including_unscored": 1883,
+    "broad_triage_files_including_unscored": 196,
+    "machine_audit_non_flagged_proxy_range_percent": [
+      88.11,
+      94.3
+    ],
+    "proxy_is_not_translation_coverage": true,
+    "official_global_coverage_percent": null,
+    "inherited_residual_queue_empty_but_not_exhaustive": true
+  },
+  "historical_coverage": {
+    "v2_2_percent": 32.36,
+    "v2_22_percent": 69.07,
+    "current_v2_40_percent": "NOT COMPUTABLE"
   },
   "full_translation_complete": false,
   "runtime_gameplay_test": "NOT RUN",
   "ui_fit_test": "NOT RUN",
   "save_load_test": "NOT RUN",
   "apk_rebuild": "NOT PERFORMED",
-  "note": "Static validation does not establish semantic completeness, runtime compatibility, UI fit, or 100% localization. The binary overlay and source archive are not included in this public repository."
+  "note": "Static integrity does not prove localization completeness or runtime compatibility."
 }
