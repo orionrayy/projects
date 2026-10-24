@@ -1,0 +1,57 @@
+{
+  "project": "DR2C VORENYX",
+  "artifact": "DR2C_VORENYX_v2.45_STARTFIX_TEST.apk",
+  "sha256": "f3199c9aa28ee49889ba536e0fbbe6cdaa4d37ea9e6db48a2668001896210cc5",
+  "observed_error": {
+    "file": "assets/deathforth/events/common/common4.df",
+    "line": 34,
+    "text": "ERROR: not found at \" \" \"Dari \" in INTERPRET on line 34"
+  },
+  "root_cause": "C/JSON-style escaped internal double quotes were introduced into Deathforth source strings, which terminate at raw double quotes. The parser's string boundaries therefore broke and the text was interpreted incorrectly.",
+  "fix": {
+    "occurrences_before": 24,
+    "occurrences_replaced": 24,
+    "files_changed": 6,
+    "files": [
+      {
+        "path": "events/common/common4.df",
+        "count": 2
+      },
+      {
+        "path": "events/trade/trader-camp-region-special7.df",
+        "count": 4
+      },
+      {
+        "path": "events/trade/trader-camp-region-special8.df",
+        "count": 4
+      },
+      {
+        "path": "events/unlock/gnome.df",
+        "count": 4
+      },
+      {
+        "path": "events/unlock/perk1.df",
+        "count": 2
+      },
+      {
+        "path": "events/unlock/trait1.df",
+        "count": 8
+      }
+    ],
+    "remaining_in_509_df_files": 0
+  },
+  "package_validation": {
+    "bytes": 112238861,
+    "zip_entries": 1005,
+    "duplicate_entries": 0,
+    "zip_crc": "PASS",
+    "jarsigner_v1": "PASS",
+    "apk_v2": "PASS_BY_LOCAL_VERIFIER",
+    "official_apksigner": "UNAVAILABLE",
+    "resources_arsc_offset_mod4": 0,
+    "stored_entry_alignment_errors": 0,
+    "native_libs_4k_aligned": 7,
+    "runtime_device_test": "NOT_TESTED"
+  },
+  "signing": "Same local test certificate as prior STARTDIAG candidate; not publisher certificate."
+}
