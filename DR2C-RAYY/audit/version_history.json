@@ -157,5 +157,12 @@
     "playerFacingHeuristicPct": null,
     "coverageMeasurementBaselinePct": 69.07,
     "static": "PASS; 63 mapping rules and 63 literal occurrences changed in two files; token/line counts preserved; ZIP CRC and manifest hashes pass; coverage not remeasured; runtime not tested"
+  },
+  {
+    "version": "v2.26",
+    "focus": "Beeman, Boxer, Caveman, Knight and Ninja dialogue/emote localization",
+    "playerFacingHeuristicPct": null,
+    "coverageMeasurementBaselinePct": 69.07,
+    "static": "PASS; 66 exact-context mappings and 66 literal occurrences across five character files; source skeleton, token and line counts preserved; ZIP CRC and manifest hashes pass; global coverage not remeasured; runtime not tested"
   }
 ]
