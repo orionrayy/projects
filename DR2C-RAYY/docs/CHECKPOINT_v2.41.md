@@ -10,7 +10,7 @@ v2.41 menindaklanjuti temuan P1 dari audit v2.40. Pass ini menerjemahkan permuka
 - Jumlah baris tetap, token kode non-string identik dengan baseline, dan literal path resource `.df` tetap.
 - Pemeriksaan string prioritas tinggi: PASS.
 - Paket patch lokal: 429 entri ZIP, 428 entri manifest, CRC PASS, 0 kegagalan hash, 0 path duplikat.
-- SHA-256 ZIP patch lokal: `7561fd67cb89ef970529566f18460f84c881c7e76f24dbda1f8bb512777a0e77`.
+- SHA-256 ZIP patch lokal: `e2d965d64d566c2f5eb516b2e2b6500c472ba354b4534d95a7fc488bcbdc4bf1`.
 
 ## Batas validasi
 
