@@ -1,8 +1,18 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint: v2.40 · Static integrity PASS · Full localization NOT COMPLETE**
+**Latest checkpoint: v2.41 · Static integrity PASS for the targeted pass · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
+
+## v2.41 targeted remediation pass
+
+- Added localized strings for 15 previously unoverlaid character-banter modules, ending/credits, human combat barks, and high-priority CYOA headings/choices.
+- Corrected the displayed perk label `Shotgunner` to `Ahli Shotgun`; the canonical game-state key is unchanged.
+- Static pass: **453 literal occurrences across 24 files**. Line counts, non-string code, and resource path literals were preserved.
+- The local v2.41 patch ZIP has 429 entries / 428 manifest entries; CRC PASS, zero manifest hash failures, zero duplicate paths. SHA-256: `7561fd67cb89ef970529566f18460f84c881c7e76f24dbda1f8bb512777a0e77`.
+- Local project archive v2.6: 457 entries; checksum manifest verifies all 456 other files. SHA-256: `d3203f7ce7025d1fe3bac4947694260e33d3a1feda09c61d52f7eb00fe4fad0c`.
+- Global semantic/player-visible coverage remains **NOT COMPUTED**. Runtime gameplay, UI fit/overflow, save/load, and APK rebuild/signing were not performed.
+- Public GitHub contains docs and sanitized audit metadata only; patch ZIP and project archive remain local-only artifacts.
 
 ## v2.40 checkpoint
 
@@ -13,7 +23,7 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - A fresh comment-aware inventory scanned **541 .df/.txt files** and indexed **16,834 active quoted literals**. The inherited queue is stale/non-exhaustive: the fresh scan flags **1,578 English-likelihood rows** at threshold ≥0.2 plus **305 new/changed unscored literals** for triage (**1,883 rows across 196 files**). These are review candidates, not confirmed untranslated expressions.
 - A machine-audit non-flagged proxy of **88.11%–94.30%** is available for triage only; it is **not** a localization-coverage percentage. Global semantic/player-visible coverage is **NOT COMPUTED**. The historical v2.22 figure of 69.07% is stale and must not be used as v2.40 coverage.
 
-## Build integrity
+## Historical v2.40 build integrity
 
 - Patch ZIP: **24,380,609 bytes**; SHA-256 `a863cadfda4d99ef14c9199e255cbfc8e687c1d05a1853b8f461f096870b26eb`; 411 entries; 410 manifest entries; CRC PASS; zero manifest hash failures; zero duplicate paths; zero machine-local path leaks.
 - Full project archive v2.5: **105,064,456 bytes**; SHA-256 `cc0e7818dd87f0fe508692ae0545343ad89c727c401c81ad00f703377962fa97`; 185 entries; 184 manifest entries; CRC PASS; zero manifest hash failures; zero unmanifested files; zero duplicate paths.
@@ -27,6 +37,8 @@ Runtime gameplay/event-path testing, actual UI fit/overflow testing, save/load r
 
 - [Canonical project memory](PROJECT_MEMORY.md)
 - [Version changelog](CHANGELOG.md)
+- [v2.41 checkpoint](docs/CHECKPOINT_v2.41.md)
+- [v2.41 sanitized static-validation summary](audit/v2.41_static_validation_summary.json)
 - [v2.40 checkpoint](docs/CHECKPOINT_v2.40.md)
 - [Build and validation details](docs/BUILD_AND_VALIDATION.md)
 - [Indonesian localization guide](docs/LOKALISASI_ID.md)
@@ -37,6 +49,7 @@ Runtime gameplay/event-path testing, actual UI fit/overflow testing, save/load r
 - [Untouched and ambiguous surface audit](docs/UNTOUCHED_AMBIGUOUS_AUDIT_v2.40.md)
 - [Untouched surface review metrics](audit/v2.40_source_coverage_review.json)
 - [v2.40 fresh coverage metrics](audit/v2.40_coverage_recheck.json)
+- [v2.41 sanitized static-validation summary](audit/v2.41_static_validation_summary.json)
 - [v2.40 sanitized integrity summary](audit/v2.40_integrity_summary.json)
 - [v2.40 localization summary](audit/v2.40_localization_summary.json)
 - [Version history](audit/version_history.json)
