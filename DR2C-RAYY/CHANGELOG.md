@@ -1,5 +1,7 @@
 # Changelog — DR2C VORENYX
 
+- **v2.43:** localized 159 quoted-string occurrences across 58 files, including 9 newly overlaid modules. Static string/code/path checks passed, zero unmatched rules, local ZIP manifests validated. Recheck of the inherited 598-row heuristic queue shows 131 active candidate rows (down from 241 after v2.42); not a semantic coverage metric. Runtime not tested.
+
 - **v2.42:** localized 309 quoted-string occurrences across 16 overlay files. Targeted residual cleanup covers selected character banter, epilogue/finale text, NPC dialogue, encounter choices, and mission labels. Line/string-token counts, non-string code, and resource paths preserved; zero unmatched rules; ZIP and manifest checks PASS. Global coverage not computed; runtime not tested.
 
 - **v2.41:** localized 15 previously unoverlaid character-banter modules, ending/credits, human combat barks, and priority CYOA headings/choices; corrected the display-only `Shotgunner` label to `Ahli Shotgun` without changing the canonical key. 453 literal occurrences changed across 24 files. Static checks and local patch ZIP integrity passed; global coverage not computed; runtime not tested.
