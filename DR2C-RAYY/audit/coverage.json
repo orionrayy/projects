@@ -1,7 +1,7 @@
 {
   "project": "DR2C VORENYX",
   "locale": "id-ID",
-  "build": "v2.25 — optimistic survivor and wrestler dialogue",
+  "build": "v2.26 — five special-character profiles",
   "source_script_files_scanned": 541,
   "source_quoted_literal_occurrences": 17329,
   "unique_source_literals": 13038,
@@ -11,41 +11,35 @@
   "untranslated_unique_candidates_heuristic": 2822,
   "full_translation_complete": false,
   "coverage_measurement_build": "v2.22",
-  "coverage_measurement_status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_25",
+  "coverage_measurement_status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_26",
   "v2_22_contextual_expressions_rewritten": 94,
   "v2_22_literal_occurrences_changed": 183,
   "v2_23_unique_source_literals_localized": 51,
   "v2_23_literal_occurrences_changed": 52,
   "v2_24_literal_mapping_rules": 277,
   "v2_24_literal_occurrences_changed": 279,
-  "v2_25_scope_files": [
-    "assets/deathforth/blurb/optimist.df",
-    "assets/deathforth/blurb/sc/wrestler.df"
-  ],
   "v2_25_literal_mapping_rules": 63,
   "v2_25_literal_occurrences_changed": 63,
-  "v2_25_file_structure": {
-    "optimist.df": {
-      "quoted_literal_tokens_before": 29,
-      "quoted_literal_tokens_after": 29,
-      "lines_before": 114,
-      "lines_after": 114
-    },
-    "sc/wrestler.df": {
-      "quoted_literal_tokens_before": 34,
-      "quoted_literal_tokens_after": 34,
-      "lines_before": 137,
-      "lines_after": 137
-    }
-  },
-  "v2_25_zip_entries": 305,
-  "v2_25_manifest_entries": 304,
-  "v2_25_manifest_hash_failures": 0,
-  "v2_25_duplicate_paths": 0,
-  "v2_25_runner_local_path_leaks": 0,
-  "v2_25_zip_crc": "PASS",
-  "v2_25_sha256": "693714b5f2a1e79f0e8b5c9749f7f4dfe1c6ffaa4dc891d0ee689549f82f7fe5",
+  "v2_26_scope_files": [
+    "assets/deathforth/blurb/sc/beeman.df",
+    "assets/deathforth/blurb/sc/boxer.df",
+    "assets/deathforth/blurb/sc/caveman.df",
+    "assets/deathforth/blurb/sc/knight.df",
+    "assets/deathforth/blurb/sc/ninja.df"
+  ],
+  "v2_26_literal_mapping_rules": 66,
+  "v2_26_literal_occurrences_changed": 66,
+  "v2_26_structural_files_checked": 5,
+  "v2_26_line_and_token_counts_preserved": true,
+  "v2_26_mapped_source_residues_remaining": 0,
+  "v2_26_zip_entries": 312,
+  "v2_26_manifest_entries": 311,
+  "v2_26_manifest_hash_failures": 0,
+  "v2_26_duplicate_paths": 0,
+  "v2_26_machine_path_leaks": 0,
+  "v2_26_zip_crc": "PASS",
+  "v2_26_sha256": "edda11648c4f7ed32d1413b154fd70e65943edfb367f18c6bffa0b5119a3f02c",
   "validation_missed_exact_mapping_rules": 0,
   "candidate_inventory_status": "HISTORICAL_V2_22_QUEUE_NOT_RECOMPUTED",
-  "warning": "69.07% is the last measured v2.22 heuristic. No global coverage recomputation has been made for v2.25; semantic completeness and runtime screen coverage are unverified."
+  "warning": "69.07% remains the v2.22 heuristic baseline. No global coverage computation has been made for v2.26; semantic completeness and runtime screen coverage are unverified."
 }
