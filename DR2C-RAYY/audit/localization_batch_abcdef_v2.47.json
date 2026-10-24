@@ -1,0 +1,78 @@
+{
+  "project": "DR2C VORENYX",
+  "candidate": "v2.47 Batch A+B+C+D+E+F source patch only",
+  "base_apk_sha256": "6d4e2f3df07d199807c08418ae5d30b9927e5b2e36c780a51858045336b29313",
+  "changed_script_files": [
+    "assets/deathforth/events/city/region/special-lots.df",
+    "assets/deathforth/events/trade/oldtrade.df",
+    "assets/deathforth/events/locationlogic.df",
+    "assets/deathforth/events/common/PANCREAS.df",
+    "assets/deathforth/events/trade/rare.df",
+    "assets/deathforth/events/exterior/junk-maker.df",
+    "assets/deathforth/don/events/common/015-graves.df",
+    "assets/deathforth/events/exterior/region/frozen.df"
+  ],
+  "initial_queue_rows_applied": 38,
+  "total_translation_operations": 313,
+  "total_literal_occurrences_replaced": 325,
+  "operation_counts": {
+    "A-static-queue": 38,
+    "B-oldtrade-title-choice": 17,
+    "B-oldtrade-dynamic": 9,
+    "B-oldtrade-narrative": 17,
+    "B2-oldtrade-narrative": 35,
+    "C-forecast-vocabulary": 60,
+    "D-high-priority-residual": 73,
+    "E-residual-narrative": 46,
+    "F-residual-english": 18
+  },
+  "static_validation": {
+    "modified_scripts": 8,
+    "nonstring_token_streams_identical_to_baseline": true,
+    "choice_handler_sequences_identical": true,
+    "unclosed_strings_by_lightweight_lexer": 0,
+    "escaped_double_quotes_remaining": 0,
+    "patch_zip_bytes": 69656,
+    "patch_zip_sha256": "08731efd0d451332a7d0af5f4587d7bc524f291d4700c720cf483d230a0158cc",
+    "patch_zip_entries": 10,
+    "patch_zip_crc": "PASS",
+    "duplicate_paths": 0
+  },
+  "residual_english_triage": {
+    "scripts_scanned": 509,
+    "unique_candidate_strings": 397,
+    "likely_english_p1_review_candidates": 159,
+    "top_files": [
+      {
+        "path": "gamemodes.df",
+        "count": 19
+      },
+      {
+        "path": "events/finale/epilogue-check.df",
+        "count": 10
+      },
+      {
+        "path": "events/inner/region/swarmarcade.df",
+        "count": 8
+      },
+      {
+        "path": "events/common/common4.df",
+        "count": 7
+      },
+      {
+        "path": "events/common/LIVER.df",
+        "count": 5
+      },
+      {
+        "path": "mission-events.df",
+        "count": 4
+      }
+    ],
+    "note": "Heuristic candidate counts, not verified player-visible untranslated strings or semantic localization percentage. Test/demo/debug and mixed/dynamic strings are categorized separately."
+  },
+  "apk_build": {
+    "built": false,
+    "reason": "Private key for the existing v2.46 test certificate is unavailable; using a new key would break in-place update compatibility."
+  },
+  "runtime_validation": "Not performed on device; lightweight lexer is not the Deathforth interpreter."
+}
