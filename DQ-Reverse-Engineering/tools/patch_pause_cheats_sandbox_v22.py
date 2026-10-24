@@ -90,6 +90,10 @@ def replace_once(data: bytes, old: str, new: str, area: str) -> tuple[bytes, int
     return data.replace(lp(old), lp(new), 1), count
 
 def patch_hud(source: bytes) -> tuple[bytes, dict]:
+    if len(OLD_LABEL.encode("utf-8")) != len(NEW_LABEL.encode("utf-8")):
+        raise PatchError("v22 label replacement must preserve serialized UTF-8 byte length")
+    if len(OLD_ACTION.encode("utf-8")) != len(NEW_ACTION.encode("utf-8")):
+        raise PatchError("callback replacement must preserve serialized UTF-8 byte length")
     before, version = sections(source)
     if version != 12:
         raise PatchError(f"expected HUD v12; got {version}")
@@ -130,7 +134,7 @@ def patch_hud(source: bytes) -> tuple[bytes, dict]:
     if check["elements"].count(lp(NEW_LABEL)) != 1 or check["elements"].count(lp(NEW_ACTION)) != 1:
         raise PatchError("patched label/callback not uniquely present")
     report = {
-        "schema": "dq-pause-cheats-asset-patch-v21",
+        "schema": "dq-pause-cheats-asset-patch-v22",
         "source_sha256": hashlib.sha256(source).hexdigest(),
         "output_sha256": hashlib.sha256(out).hexdigest(),
         "source_size_bytes": len(source),
