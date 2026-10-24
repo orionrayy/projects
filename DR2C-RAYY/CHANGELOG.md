@@ -1,5 +1,7 @@
 # Changelog — DR2C VORENYX
 
+- **v2.43 APK candidate (updated signing):** APK assembled locally, then verified using Android SDK Build Tools 35.0.1 apksigner; signature schemes v1/v2/v3 PASS. SHA-256 `3019dd04098e9e8fef01045a2e391d9525bf87ef6874b0d0049c5a073a052f25`. Static packaging PASS; Android install/launch/gameplay/UI/save-load/stability tests NOT RUN. Original publisher key absent and PairIP/Play license checks may reject the locally signed package. APK remains local-only. See [APK build report](docs/APK_BUILD_v2.43.md).
+
 - **v2.43 APK candidate build:** assembled the v2.43 overlay into the supplied extracted Android package and applied a local JAR/v1 signature. Static package/manifest/hash/signature/ZIP/ABI checks PASS. Android install, launch, gameplay, UI fit, save/load and stability remain NOT TESTED; PairIP/Play license checks may reject re-signed package. APK remains local-only; see [APK build report](docs/APK_BUILD_v2.43.md).
 
 - **v2.43:** localized 159 quoted-string occurrences across 58 files, including 9 newly overlaid modules. Static string/code/path checks passed, zero unmatched rules, local ZIP manifests validated. Recheck of the inherited 598-row heuristic queue shows 131 active candidate rows (down from 241 after v2.42); not a semantic coverage metric. Runtime not tested.
