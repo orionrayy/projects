@@ -1,0 +1,71 @@
+/*
+ * Source-style reconstruction of selected methods from com.shinybox.smash.Smash.
+ * Not the original source file; compare with the accompanying Dalvik listing.
+ */
+
+public boolean createWritableDirectory(String path, boolean deleteOnExit) {
+    try {
+        java.io.File directory = new java.io.File(path);
+        if (!directory.exists() && !directory.mkdirs()) {
+            return false;
+        }
+        if (deleteOnExit) {
+            directory.deleteOnExit();
+        }
+        java.lang.SecurityManager securityManager = System.getSecurityManager();
+        if (securityManager != null) {
+            securityManager.checkWrite(path);
+        }
+        return true;
+    } catch (SecurityException exception) {
+        exception.printStackTrace();
+        return false;
+    }
+}
+
+public boolean extractAssetFromAPK(String assetName,
+                                   String destinationDirectory,
+                                   String outputName) {
+    if (!createWritableDirectory(destinationDirectory, true)) {
+        return false;
+    }
+    try {
+        java.io.InputStream input = getAssets().open(assetName);
+        if (input == null) {
+            return false;
+        }
+        java.io.FileOutputStream output = new java.io.FileOutputStream(
+            destinationDirectory + "/" + outputName
+        );
+        byte[] buffer = new byte[0x80000]; // 512 KiB
+        while (input.available() > 0) {
+            int available = input.available();
+            int length = Math.min(available, buffer.length);
+            input.read(buffer, 0, length);
+            // Mirroring the observed bytecode: it writes the requested length,
+            // not the return value from read(). This can mishandle short reads.
+            output.write(buffer, 0, length);
+        }
+        input.close();
+        output.close();
+        return true;
+    } catch (java.io.IOException exception) {
+        exception.printStackTrace();
+        return false;
+    }
+}
+
+/*
+ * Control-flow reconstruction of extractMainPack():
+ * 1. Try AssetManager.openFd("S3DMain.smf"); retain descriptor, start offset,
+ *    and length on the Smash instance.
+ * 2. If valid and length != -1, prefer /sdcard/Android/data/<package>.
+ * 3. If creating that directory fails, try the application's cache directory.
+ * 4. If opening/validating the descriptor fails, attempt to copy the asset
+ *    S3DMain.smf to an output named S3DMain.stk, first to package data,
+ *    then to cache as fallback.
+ * 5. If both copy attempts fail, clear mPackDirPath and return false.
+ *
+ * This wrapper provides pack metadata to the render bridge; it does not decode
+ * the proprietary contents of S3DMain.smf.
+ */
