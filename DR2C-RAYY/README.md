@@ -11,7 +11,7 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Patch ZIP: 444 entries / 443 manifest records; CRC PASS, zero hash failures and duplicates. SHA-256: `00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024`.
 - Local project archive v2.8: 472 entries / 471 checksum records; CRC PASS, zero checksum failures. SHA-256: `417d8256a74ad6ed64072c93fd1e9b9f255cdb7bca41c49c96333fba6a569cd5`.
 - Heuristic recheck of the inherited 598-row queue: 131 active candidate rows remain after v2.43, down from 241 after v2.42 (120 exact literals in overlay files; 11 rows in files without overlays). This is triage, not a confirmed untranslated-text count.
-- Global semantic/player-visible coverage remains **NOT COMPUTED**. Runtime gameplay/UI fit/save-load/device tests remain unrun. A v2.43 APK candidate was assembled and JAR/v1-signed locally; Android install/launch stability is unverified. Binary APK and full archive stay local-only.
+- Global semantic/player-visible coverage remains **NOT COMPUTED**. A local v2.43 APK candidate is assembled and verified with signature schemes v1/v2/v3; Android install/launch, gameplay, UI fit and save/load remain untested. The APK is not runtime-confirmed stable and stays local-only.
 
 ## v2.42 targeted residual pass
 
@@ -49,7 +49,7 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 
 ## Tests not performed
 
-Runtime gameplay/event-path, actual UI fit/overflow, save/load, Android install and launch tests are **NOT RUN**. A v2.43 APK candidate was assembled and locally JAR/v1-signed, but is not a verified stable release. The supplied package contains PairIP/Play license-check components; because the publisher private key was not supplied, re-signing may cause rejection. Static package integrity does not prove runtime stability.
+Runtime gameplay/event-path, actual UI fit/overflow, save/load, Android install and launch tests are **NOT RUN**. A v2.43 APK candidate was assembled and signed with Android SDK Build Tools 35.0.1 `apksigner`; schemes v1/v2/v3 all verify. It is **not a verified stable release**: the original publisher key is not present, and PairIP/Play license checks may reject a locally re-signed APK. Static package integrity does not prove runtime stability.
 
 ## Project records
 
