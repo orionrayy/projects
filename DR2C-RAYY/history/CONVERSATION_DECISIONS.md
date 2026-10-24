@@ -50,3 +50,12 @@ The project is not 100% translated yet. Runtime gameplay, save/load and APK rebu
 - Last measured coverage remains the v2.22 heuristic (69.07%); it was not recomputed for v2.23. Do not claim full localization.
 - Runtime gameplay, UI fit, save/load and APK rebuild/signing remain untested. Public GitHub stores sanitized reports, not the original archive or binary overlay.
 
+## Checkpoint v2.24 — 24 October 2026
+
+- Local artifact: `DR2C_VORENYX_ID_v2.24_localization_patch.zip`; 301 ZIP entries, CRC PASS, 300 manifest files verified, zero hash mismatches.
+- Contextual Indonesian localization batch covers seven character/shared-banter files: 277 mapping rules and 279 literal occurrences changed.
+- Two dynamic father-topic phrases reordered to natural Indonesian while preserving literal-token counts and source structure.
+- All seven touched files passed independent source-skeleton checks; quoted-literal counts and line counts remained stable. Fourteen English oneliners previously found in the `sharp` profile were included in final QA.
+- Last measured coverage remains the v2.22 heuristic baseline (69.07%); it has not been recomputed for v2.24. Full localization is not complete.
+- Runtime gameplay, UI fit, save/load and APK rebuild/signing remain untested. Public GitHub stores sanitized records only, not the original archive or binary overlay.
+
