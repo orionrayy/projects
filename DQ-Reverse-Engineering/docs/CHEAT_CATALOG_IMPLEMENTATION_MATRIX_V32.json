@@ -2862,5 +2862,53 @@
     },
     "runtime_verified": false,
     "caveat": "Only routes/callbacks are added; effects and persistence must be tested on-device. The 222-cheat concept is not complete."
+  },
+  "v33_increment": {
+    "artifact": "Dungeon_Quest_3.3.2.0_CheatMenu_GoldSteppers_v33.xapk",
+    "sha256": "65e4cdc2284e02747c9eb942edc171588209cb4ffba723892f52cabe1ad81a3d",
+    "package_id": "com.shinybox.dqv30",
+    "status": "STATIC_VALIDATION_PASSED_RUNTIME_PENDING",
+    "ui": "Four button-only Gold adjustments placed inside the existing Add tab; no new Gold root tab and no numeric text input.",
+    "controls": [
+      {
+        "label": "Gold -10",
+        "callback": "onGoldMinus10",
+        "target": "uai_gp_hud.SpendGold(10.000)",
+        "runtime_verified": false
+      },
+      {
+        "label": "Gold -1",
+        "callback": "onGoldMinus1",
+        "target": "uai_gp_hud.SpendGold(1.000)",
+        "runtime_verified": false
+      },
+      {
+        "label": "Gold +1",
+        "callback": "onGoldPlus1",
+        "target": "uai_gp_hud.RewardGold(1.000)",
+        "runtime_verified": false
+      },
+      {
+        "label": "Gold +10",
+        "callback": "onGoldPlus10",
+        "target": "uai_gp_hud.RewardGold(10.000)",
+        "runtime_verified": false
+      }
+    ],
+    "debug_hud": {
+      "elements_before": 71,
+      "elements_after": 75,
+      "actions_before": 13,
+      "actions_after": 17
+    },
+    "package_validation": {
+      "split_count": 20,
+      "all_stk_entries": 5630,
+      "header_key_matches_metadata_crc": true,
+      "all_stk_entry_crc_pass": true,
+      "all_local_v2_signatures_pass": true,
+      "all_inner_outer_zip_crc_pass": true
+    },
+    "caveat": "This is a limited functional candidate for Gold adjustment, not the complete 222-cheat table. Buttons must be exercised on the device before their runtime effects are accepted."
   }
 }
