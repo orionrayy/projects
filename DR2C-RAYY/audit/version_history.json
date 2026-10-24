@@ -136,5 +136,12 @@
     "focus": "contextual full-expression localization for camp choices, character bio and selected encounters",
     "playerFacingHeuristicPct": 69.07,
     "static": "PASS; 94 display expressions rewritten; 183 existing literal tokens changed; 138 inventory rows newly marked; 49 missed exact mapping rules require reconciliation; runtime/save-load not run"
+  },
+  {
+    "version": "v2.23",
+    "focus": "contextual camp3 English-residue cleanup and reconciliation of v2.22 mapping misses",
+    "playerFacingHeuristicPct": null,
+    "coverageMeasurementBaselinePct": 69.07,
+    "static": "PASS; 51 distinct literals/52 occurrences changed; 47 camp3 misses repaired; two non-actionable rules reconciled; heuristic not remeasured; runtime not tested"
   }
 ]
