@@ -1,8 +1,17 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint: v2.42 · Static integrity PASS for targeted residual cleanup · Full localization NOT COMPLETE**
+**Latest checkpoint: v2.43 · Targeted static validation PASS · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
+
+## v2.43 targeted residual pass
+
+- Changed **159 quoted-string occurrences across 58 overlay files**, including **9 files newly added to the overlay** for selected visible character emotes, event instructions, trade/mall signs, and dialogue.
+- Static checks: line/token counts preserved; non-string code skeleton and resource paths unchanged; zero unmatched mapping rules.
+- Patch ZIP: 444 entries / 443 manifest records; CRC PASS, zero hash failures and duplicates. SHA-256: `00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024`.
+- Local project archive v2.8: 472 entries / 471 checksum records; CRC PASS, zero checksum failures. SHA-256: `417d8256a74ad6ed64072c93fd1e9b9f255cdb7bca41c49c96333fba6a569cd5`.
+- Heuristic recheck of the inherited 598-row queue: 131 active candidate rows remain after v2.43, down from 241 after v2.42 (120 exact literals in overlay files; 11 rows in files without overlays). This is triage, not a confirmed untranslated-text count.
+- Global semantic/player-visible coverage remains **NOT COMPUTED**. Runtime/UI fit/save-load/device tests and APK rebuild/signing are not performed. Patch and archive stay local-only.
 
 ## v2.42 targeted residual pass
 
@@ -46,7 +55,12 @@ Runtime gameplay/event-path testing, actual UI fit/overflow testing, save/load r
 
 - [Canonical project memory](PROJECT_MEMORY.md)
 - [Version changelog](CHANGELOG.md)
+- [v2.43 checkpoint](docs/CHECKPOINT_v2.43.md)
+- [v2.43 sanitized static-validation summary](audit/v2.43_static_validation_summary.json)
+- [v2.43 heuristic residual recheck](audit/v2.43_residual_recheck.json)
 - [v2.42 checkpoint](docs/CHECKPOINT_v2.42.md)
+- [v2.43 sanitized static-validation summary](audit/v2.43_static_validation_summary.json)
+- [v2.43 heuristic residual recheck](audit/v2.43_residual_recheck.json)
 - [v2.42 sanitized static-validation summary](audit/v2.42_static_validation_summary.json)
 - [v2.41 checkpoint](docs/CHECKPOINT_v2.41.md)
 - [v2.42 sanitized static-validation summary](audit/v2.42_static_validation_summary.json)
