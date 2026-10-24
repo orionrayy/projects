@@ -1,14 +1,16 @@
 # Validation Record — Iteration 4
 
-Static integrity checks ran against the updated local bundle:
+Static validation in the local analysis environment:
 
-- Android binary manifest was decoded and parses as well-formed XML.
-- DEX file hash/size and metadata summary match the measured input.
-- Exactly 68 app-specific disassembly files are included.
-- The corrected output contains 405 methods, 5,187 instructions, and 50 payload directives.
-- The structural validator reports zero errors for instruction/payload coverage, label references, register bounds, and method boundary consistency.
-- The APK split audit records package com.shinybox.smash/version 3.3.2.0, requiredSplitTypes base__abi/base__density, zero native entries in the uploaded base archive, and a STORED S3DMain.smf asset.
-- Python source scripts pass syntax compilation, and the source bundle excludes the raw APK, classes.dex, S3DMain.smf, and api_key.txt.
-- The two standalone Java reference sources (native method contract and Globals snapshot) compiled successfully using javac in the analysis environment.
+- 68 app-specific Dalvik-level files, 405 methods, 5,187 instruction boundaries and 50 payload directives.
+- Zero structural consistency errors from the local Smali-like validator.
+- DEX index, reachability JSON and the 104-ID IAP inventory parse successfully.
+- Full manifest and analysis excerpt parse as well-formed XML; split metadata is consistent with a base/split delivery hypothesis.
+- Outer STK container: 5,630/5,630 entries parsed; all payload CRC-32 values and expected decoded lengths matched.
+- Content output: 5,619 zlib+XOR entries, 11 raw+XOR entries, 94,513,994 total decoded bytes.
+- Seventeen `Resources/XML/*.xml` data tables parse and contain 2,623 row records.
+- Three higher-confidence Java source excerpts compile via `javac` against temporary stubs for Android `Configuration`, `Application` and superclass `q0.b`.
+- Python helpers pass syntax compilation.
+- Original APK, raw DEX, source asset container and credential-bearing `api_key.txt` are excluded from this source workspace.
 
-Not verified: official Smali assembler acceptance of the 68 reconstructed classes, JADX decompilation, matching split APK acquisition, Gradle build, APK signing, emulator launch, engine runtime behavior, or SMF decoding. The output remains partial reverse-engineering source material, not a ready-to-install app.
+Not validated: full JADX decompilation, Smali assembler acceptance, native library recovery, Android Gradle build, APK signing, emulator launch, runtime equivalence, or source decompilation of inner `.gam`/`.mdo`/`.scn` formats. This is reverse-engineering source material, not a ready-to-install rebuild.
