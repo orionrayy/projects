@@ -40,18 +40,22 @@ The outer `S3DMain.smf` container was parsed and all 5,630 entries passed CRC-32
 
 The supplied base APK contains zero `lib/*.so` entries. DEX records `System.loadLibrary` order `crypto`, `ssl`, `openal`, `S3DClient`. The manifest excerpt declares `requiredSplitTypes="base__abi,base__density"` and `android:isSplitRequired="true"`. A matching ABI/density split set and native library hashes have not been verified locally. A drop-in engine replacement would require reimplementing 44 JNI contracts plus rendering, asset decoding, and runtime behavior; that is a separate high-risk port, not a small modkit patch.
 
-## Synchronization inventory — v12
+## Synchronization inventory — v13
 
-- [Current GitHub tree counts, IAP evidence boundary, native split blocker, and next steps](docs/SYNC_STATUS_AND_NEXT_STEPS_V12.md)
+- [Latest source-sync, test-bookkeeping, SKU evidence status, and native split blocker](docs/SYNC_STATUS_AND_NEXT_STEPS_V13.md)
+- [Prior v12 inventory](docs/SYNC_STATUS_AND_NEXT_STEPS_V12.md)
 
 The curated branch currently tracks only two `.smali` files (plus the inventory Markdown) and no generated `reconstruction/java/` scaffolds. It does **not** contain all 68 app-specific disassemblies or 68 Java declaration scaffolds mentioned in earlier local-bundle descriptions. No CI run was returned for the latest branch HEAD during this audit.
 
-## Latest evidence reports — v11
+## Latest evidence reports — v13 and v11
 
+- [v13 purchase-to-entitlement evidence boundary and rerun instructions](docs/IAP_RUNTIME_ENTITLEMENT_EVIDENCE_V13.md)
+- [Machine-readable 109-SKU matrix with runtime grant status on every row](docs/IAP_SKU_RUNTIME_EVIDENCE_V13.json)
+- [Fail-closed v13 evidence validator](tools/validate_iap_runtime_evidence_v13.py) and [tests](tests/test_iap_runtime_evidence_v13.py)
 - [Artifact scope, Smash.gam model registry, IAP trace, and native split/engine boundary](docs/ARTIFACT_RECONCILIATION_AND_NATIVE_ENGINE_V11.md)
 - [SKU evidence summary and unresolved reward mapping](docs/IAP_SKU_ASSET_EVIDENCE_SUMMARY_V11.md)
 
-These text reports are committed to this PR branch. The comprehensive machine-generated 107-row SKU evidence matrix and the additional v11 audit runner/tests are part of the local delivery ZIP, not synchronized as a full source bundle. The report intentionally leaves reward writes marked unverified where the native callback or proprietary model bytecode is unavailable.
+The v13 registry matrix and validator are now tracked in this branch. All 109 SKU grants remain unverified: the native purchase callbacks have no DEX bodies, the matching native split has not been obtained, and the current evidence contains no per-SKU persisted-state transition. The local v10 ZIP's suite reruns as 35 passing tests while its historical validation metadata says 34; see the v13 sync report for that bookkeeping discrepancy.
 
 ## Reproduction and remaining blockers
 
