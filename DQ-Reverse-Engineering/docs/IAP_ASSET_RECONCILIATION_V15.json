@@ -108,5 +108,50 @@
     "Gold tiers are balancing proposals, not gameplay-verified economy values.",
     "The patched STK is a local asset pack, not an installable APK.",
     "No RUNTIME-VERIFIED result is claimed."
-  ]
+  ],
+  "local_replay": {
+    "status": "PASS",
+    "run_date": "2026-10-24",
+    "command": "python /mnt/data/dq_v15_audit/work/reconcile_iap_asset_tables_v15.py --source-root /mnt/data/dq_v15_audit/decoded --patched-root /mnt/data/dq_v15_audit/patch/v15_vanity_xml --matrix /tmp/IAP_CANONICAL_MAPPING_LOCAL_ACTUAL.json --patch-report /mnt/data/dq_v15_audit/patch/v15_vanity_patch_report.json --output-json /mnt/data/dq_v15_audit/patch/v15_actual_table_reconciliation.json",
+    "input_root": "/mnt/data/dq_v15_audit/decoded",
+    "patched_root": "/mnt/data/dq_v15_audit/patch/v15_vanity_xml",
+    "output_report_local": "/mnt/data/dq_v15_audit/patch/v15_actual_table_reconciliation.json",
+    "output_report_sha256": "faf9e07159a906686fdffe87a9a605a0f21386944ec7518ddf5596f89897079f",
+    "result": {
+      "iap_xml_rows": 107,
+      "canonical_records": 109,
+      "dex_static_skus": 104,
+      "shared": 102,
+      "xml_only": [
+        "angelicslime",
+        "demonicslime",
+        "poisonslime",
+        "vanity72",
+        "vanity73"
+      ],
+      "dex_only": [
+        "package20",
+        "package21"
+      ],
+      "union": 109,
+      "vanity_rows": 74,
+      "iap_linked_vanity_skus": 46,
+      "shop_rows_before": 51,
+      "shop_rows_after": 53,
+      "changed_decoded_tables": [
+        "Resources/XML/Shop.xml",
+        "Resources/XML/Vanity.xml"
+      ],
+      "unchanged_tables": [
+        "Resources/XML/IAP.xml",
+        "Resources/XML/Items.xml",
+        "Resources/XML/Dictionary.xml"
+      ],
+      "missing_earnability_routes": [],
+      "unexpected_table_changes": [],
+      "discrepancies": []
+    },
+    "evidence_level": "STATIC-DIRECT source/patch table check; UNIT-VERIFIED invariants. Not RUNTIME-VERIFIED.",
+    "source_matrix_note": "The local replay uses a temporary join projection created from parsed source XML and the available v13 registry flags, then checks source/patch table invariants. The committed canonical mapping has its own independent CI validation."
+  }
 }
