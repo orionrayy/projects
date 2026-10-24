@@ -1,53 +1,72 @@
 package dev.dqdebug.sandboxharness;
 
-import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-/** Emulator smoke test: the UI starts, labels the game adapter disconnected, and category taps work. */
-@SuppressWarnings("deprecation")
-public final class MainActivitySmokeTest extends ActivityInstrumentationTestCase2<MainActivity> {
-    public MainActivitySmokeTest() {
-        super(MainActivity.class);
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+/**
+ * Emulator regression smoke test for navigation and local preview controls.
+ * It explicitly verifies the game adapter remains disconnected.
+ */
+@RunWith(AndroidJUnit4.class)
+public final class MainActivitySmokeTest {
+
+    @Test
+    public void homeAndCategoryNavigationStayDisconnected() {
+        try (ActivityScenario<MainActivity> scenario =
+                     ActivityScenario.launch(MainActivity.class)) {
+            scenario.onActivity(activity -> {
+                View decor = activity.getWindow().getDecorView();
+                assertTextPresent(decor, "Cheats Sandbox");
+                assertTextPresent(decor, "GAME LINK  •  DISCONNECTED");
+                assertTextPresent(decor, "does not modify Dungeon Quest");
+
+                clickButton(activity, "Economy");
+                assertTextPresent(activity.getWindow().getDecorView(), "Gold multiplier");
+                assertTextPresent(activity.getWindow().getDecorView(),
+                        "GAME LINK  •  DISCONNECTED");
+
+                clickButton(activity, "World");
+                assertTextPresent(activity.getWindow().getDecorView(), "No-clip (preview)");
+                assertTextPresent(activity.getWindow().getDecorView(),
+                        "GAME LINK  •  DISCONNECTED");
+
+                clickButton(activity, "Diagnostics");
+                assertTextPresent(activity.getWindow().getDecorView(),
+                        "Hitbox overlay (preview)");
+                assertTextPresent(activity.getWindow().getDecorView(),
+                        "GAME LINK  •  DISCONNECTED");
+
+                clickButton(activity, "Player");
+                clickButton(activity, "Power preview");
+                assertTextPresent(activity.getWindow().getDecorView(),
+                        "GAME LINK  •  DISCONNECTED");
+                clickButton(activity, "Undo");
+                clickButton(activity, "Reset");
+                assertTextPresent(activity.getWindow().getDecorView(), "Cheats Sandbox");
+                assertTextPresent(activity.getWindow().getDecorView(),
+                        "GAME LINK  •  DISCONNECTED");
+            });
+        }
     }
 
-    public void testHomeAndCategoryNavigationStayDisconnected() throws Exception {
-        final MainActivity activity = getActivity();
-        assertNotNull("MainActivity must launch", activity);
-        getInstrumentation().waitForIdleSync();
-
-        assertTextPresent(activity.getWindow().getDecorView(), "Cheats Sandbox");
-        assertTextPresent(activity.getWindow().getDecorView(), "GAME LINK  •  DISCONNECTED");
-        assertTextPresent(activity.getWindow().getDecorView(), "does not modify Dungeon Quest");
-
-        clickButton(activity, "Economy");
-        assertTextPresent(activity.getWindow().getDecorView(), "Gold multiplier");
-        assertTextPresent(activity.getWindow().getDecorView(), "GAME LINK  •  DISCONNECTED");
-
-        clickButton(activity, "World");
-        assertTextPresent(activity.getWindow().getDecorView(), "No-clip (preview)");
-        assertTextPresent(activity.getWindow().getDecorView(), "GAME LINK  •  DISCONNECTED");
-
-        clickButton(activity, "Diagnostics");
-        assertTextPresent(activity.getWindow().getDecorView(), "Hitbox overlay (preview)");
-        assertTextPresent(activity.getWindow().getDecorView(), "GAME LINK  •  DISCONNECTED");
+    private static void clickButton(MainActivity activity, String label) {
+        Button button = findButton(activity.getWindow().getDecorView(), label);
+        assertNotNull("Expected clickable button: " + label, button);
+        button.performClick();
     }
 
-    private void clickButton(final MainActivity activity, final String label) throws Exception {
-        final Button[] found = new Button[1];
-        getInstrumentation().runOnMainSync(new Runnable() {
-            @Override public void run() {
-                found[0] = findButton(activity.getWindow().getDecorView(), label);
-                if (found[0] != null) found[0].performClick();
-            }
-        });
-        assertNotNull("Expected clickable button: " + label, found[0]);
-        getInstrumentation().waitForIdleSync();
-    }
-
-    private Button findButton(View view, String label) {
+    private static Button findButton(View view, String label) {
         if (view instanceof Button && label.contentEquals(((Button) view).getText())) {
             return (Button) view;
         }
@@ -61,12 +80,12 @@ public final class MainActivitySmokeTest extends ActivityInstrumentationTestCase
         return null;
     }
 
-    private void assertTextPresent(View view, String expected) {
-        assertTrue("Expected visible/accessibility text containing: " + expected,
+    private static void assertTextPresent(View view, String expected) {
+        assertTrue("Expected UI/accessibility text containing: " + expected,
                 containsText(view, expected));
     }
 
-    private boolean containsText(View view, String expected) {
+    private static boolean containsText(View view, String expected) {
         if (view instanceof TextView) {
             CharSequence text = ((TextView) view).getText();
             if (text != null && text.toString().contains(expected)) return true;
