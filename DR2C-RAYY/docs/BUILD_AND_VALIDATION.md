@@ -1,38 +1,29 @@
-# Build and Validation — v2.36
+# Build and Validation — v2.40
 
-## Release artifact
-- Local artifact: `DR2C_VORENYX_ID_v2.36_localization_patch.zip`
-- Size: 20771028 bytes
-- SHA-256: `fa76da687ce7d8ea5b1e2fafa165b40c31829248fadb5e8c9c6b1ebec3dd5608`
-- ZIP entries: 376
-- SHA-256 manifest entries: 375
-- ZIP CRC: PASS
-- Duplicate paths: 0
-- Manifest hash failures: 0
-- Machine-local path leaks: 0
+## Release artifacts (local; not hosted on GitHub)
 
-The release checksum is kept in an adjacent SHA-256 sidecar, outside the ZIP. The public GitHub repository contains sanitized documentation/audits, not the local source overlay.
+- Patch: `DR2C_VORENYX_ID_v2.40_localization_patch.zip`
+- Bytes: 24380609
+- SHA-256: `a863cadfda4d99ef14c9199e255cbfc8e687c1d05a1853b8f461f096870b26eb`
+- ZIP CRC: PASS; entries: 411; internal tree-manifest entries: 410; manifest hash failures: 0; duplicate paths: 0; machine-local path leaks: 0.
+- Full project archive: `DR2C_VORENYX_Project_Archive_v2.5.zip`
+- Bytes: 105064456
+- SHA-256: `cc0e7818dd87f0fe508692ae0545343ad89c727c401c81ad00f703377962fa97`
+- ZIP CRC: PASS; entries: 185; manifest entries: 184; hash failures: 0; unmanifested files: 0; duplicate paths: 0.
 
-## v2.36 scope and static checks
-- 45 complete display expressions rewritten.
-- 12 direct literal mapping rules matched; 12 occurrences changed.
-- 31 scoped modules; source line counts and non-display skeletons preserved.
-- CYOA IDs, choice IDs, and route-path literals preserved.
-- Direct mapping residues: 0 for targeted literals.
-- Independent ZIP/manifest validation: PASS.
-- Comment-aware scan: 541 source files, 16,819 active quoted-string tokens.
-- Residual triage queue: 77 candidate rows across 36 files; candidate counts are not a coverage score.
+## Source invariants
 
-## Metadata reconciliation
-The v2.34 archive had a mismatch between checkpoint scope and actual archive contents, with stale embedded ZIP digest metadata. v2.35 reconciled it to the actual nine-file v2.34 scope; v2.36 carries that correction forward. See [v2.34 reconciliation](CHECKPOINT_v2.34.md).
+- 45 trait/perk machine-key mismatches from v2.39 repaired across 13 modules.
+- Zero source-vs-overlay key mismatches remain across 195 compared operands.
+- CYOA/choice identifiers preserved; route/resource path literals preserved.
+- Title-art copies are byte-identical.
 
-## Coverage status
-The 69.07% figure belongs to the v2.22 heuristic and is stale. Current global semantic coverage is not computed. Full localization is incomplete.
+## Inventory and completeness
 
-## Not executed
-- Runtime gameplay test
-- Actual UI-fit / text-overflow test
-- Save/load test
-- APK rebuild and signing
+- 541 .df/.txt files scanned; 16,834 active quoted literals indexed.
+- Inherited high-likelihood candidate queue: 0 rows in the current merged source. This is a triage result, not a coverage score.
+- Global semantic coverage: NOT COMPUTED; full Indonesian localization: NOT COMPLETE.
 
-Static structure and archive integrity do not prove runtime compatibility or semantic completeness.
+## Not run
+
+Runtime gameplay, event-path regression, actual UI text fit/overflow, save/load and APK rebuild/signing were NOT RUN / NOT PERFORMED. This is a data/script overlay, not a rebuilt or signed APK.
