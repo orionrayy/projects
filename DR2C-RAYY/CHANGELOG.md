@@ -1,8 +1,9 @@
 # Changelog — DR2C VORENYX
 
-- **v2.35:** 32 complete display expressions and 9 direct literal occurrences across 12 files; game modes, route planning, missions/rewards, gym/coffee/factory encounters, generator puzzle, broom/portal interactions, and Mountie Alpha-end text. Static checks pass; global coverage not computed; runtime not tested.
+- **v2.36:** localized 45 complete display expressions and 12 direct literal occurrences across 31 modules. Focus: arcade-defense tutorial, bandit-defense rewards, bodybuilder/hero and siege encounters, shops/fairies/parks, city rangers and pandas, character blurbs, perk/trait help, and epilogue fragments. Static validation and package integrity PASS; triage queue now 77 rows in 36 files; global coverage not computed; runtime not tested.
+- **v2.35:** 32 complete display expressions and 9 direct literal occurrences across 12 files; game modes, route planning, missions/rewards, gym/coffee/factory encounters, generator puzzle, broom/portal interactions, and Mountie Alpha-end text. Metadata reconciled for v2.34; static validation PASS; global coverage not computed; runtime not tested.
 - **v2.34:** 25 complete display expressions and 3 direct literal occurrences across nine files: sewer/tutorial, Canada crossing, hazmat, Santa/Billy, common encounter, Bogan, daily medical CYOA, and special trader-camp items. Checkpoint/ZIP metadata reconciled in v2.35.
-- **v2.33:** 31 display expressions and 9 direct literal occurrences across nine trader/DMV/junk-maker/character/graves modules. Static checks pass; global coverage not computed; runtime not tested.
+- **v2.33:** 31 display expressions and 9 direct literals across nine trader/DMV/junk-maker/character/graves modules. Static checks pass; global coverage not computed; runtime not tested.
 
 - **v2.26:** contextual Indonesian localization for Beeman, Boxer, Caveman, Knight and Ninja dialogue/emotes across five files; 66 mappings and 66 occurrences; static structure PASS; coverage not remeasured; runtime not tested.
 - **v2.25:** contextual Indonesian localization in the active optimistic-survivor profile and wrestler response profile; 63 mapping rules and 63 occurrences changed; both files preserve source line/token counts; ZIP CRC and manifest checks PASS; global coverage not remeasured; runtime not tested.
