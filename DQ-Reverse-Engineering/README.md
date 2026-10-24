@@ -1,39 +1,46 @@
 # Dungeon Quest — Reverse-Engineering Workspace
 
-**Status: partial source reconstruction from DEX; not a complete or build-verified Android project.**
+**Status: partial source reconstruction from DEX plus verified extraction of the outer game-asset archive. This is not a complete/build-verified Android project.**
 
-Analyzed APK: package com.shinybox.smash, version 3.3.2.0. Original APK binaries, proprietary asset pack, raw DEX and credential-bearing asset are excluded.
+Analyzed APK: package `com.shinybox.smash`, version `3.3.2.0`. Original APK, raw DEX, pack container, and credential-bearing asset are excluded from this code repository.
 
-## Available
+## Included
 
-- Decoded Android manifest and selected reconstructed Smali-like class snapshots.
-- Complete 68-class generated Smali-like source snapshot in the downloadable analysis ZIP.
-- Java contract snapshots under `reference/java/`, including 34 native renderer signatures and observed Globals values. They compile standalone but do not implement the engine.
-- DEX inventory/disassembly, AXML decoder, SMF probe, APK split audit and static validation tools.
-- Reports for asset flow, native/split package boundary, unresolved SMF format, validation and sensitive asset handling.
+- `disassembly/`: representative Dalvik-level output and class/method inventory for the 68 app-specific classes.
+- `reconstruction/verified/java/`: higher-confidence `BuildConfig`, `Globals`, and `S3DEngine` source excerpts; compiled against temporary Java stubs only.
+- `reconstruction/fragments/`: reconstructed methods from `ShinyActivity`, `Smash` pack I/O, native-library load order and the JNI renderer boundary.
+- `tools/`: offline Python helpers for AXML, DEX inventory/disassembly, Java declaration scaffolds, reachability heuristics, SMF reconnaissance, and safe STK extraction.
+- `docs/`: evidence report, IAP identifier catalog, native method index, split-APK findings, STK format findings, extracted-asset catalog and validation details.
 
-Corrected metrics: 68 app-specific classes, 405 methods, 5,187 decoded instructions, 50 payload directives and 44 native declarations. Static validation is not proof of Smali assembler acceptance or runtime equivalence.
+The full local analysis bundle contains 68 generated Dalvik class files, 68 Java declaration scaffolds, complete per-asset hashes/sizes, and the remaining scripts. This curated public directory does not include all 68 generated files or publish the extracted binary assets.
 
-## Main finding: required split APKs
+## DEX evidence
 
-The manifest declares required split types for ABI and display density, `android:isSplitRequired=true` and `android:extractNativeLibs=false`. This upload contains no native `lib/<abi>/*.so` entries, so the missing engine may reside in a matching ABI split rather than be absent from the distribution. Matching splits have not yet been acquired or validated.
+- 10,768 total DEX class definitions and 59,460 method IDs; these include platform/dependency classes.
+- 68 app-specific `com.shinybox.*` classes, 405 method declarations, 361 code-bearing methods in the reachability scan.
+- 5,187 decoded instruction boundaries, 50 payload directives and 44 native declarations.
+- 104 distinct static IAP SKU identifiers; these do not establish current store prices or entitlements.
 
-The asset `S3DMain.smf` is stored without ZIP compression and passed to native methods using its descriptor, offset and length. Its internal format remains unresolved; high entropy does not prove encryption.
+## Asset archive — resolved
 
-## Reproduce locally
+The `S3DMain.smf` container was parsed successfully: signature `0x00000008`, version 6, 5,630 entries, all payload CRC-32 and decoded-size checks passing. It yielded 94,513,994 bytes across 5,619 zlib+XOR and 11 raw+XOR entries. Seventeen readable `Resources/XML/*.xml` tables contain 2,623 row records. See `docs/STK_FORMAT_FINDINGS.md` and `docs/ASSET_CATALOG.md`.
 
-Extract the corresponding artifacts from an APK you are authorized to analyze:
+The outer container is decoded; inner `.gam`, `.mdo`, `.msh`, `.ske`, `.scn` and related engine-specific formats remain binary data, not decompiled native source.
+
+## Reproduction
 
 ```bash
-python tools/axml_decode.py AndroidManifest.xml manifest/AndroidManifest.xml
-python tools/dex_inventory.py classes.dex --output docs/dex-index.json
-python tools/dex_disasm.py classes.dex --out disassembly
-python tools/smf_probe.py assets/S3DMain.smf --output docs/smf-probe.json
-python tools/apk_split_audit.py DQ.apk manifest/AndroidManifest.xml --output docs/apk-split-audit.json
+python tools/dex_inventory.py /path/to/classes.dex --output docs/dex-index.json
+python tools/dex_disasm.py /path/to/classes.dex --out disassembly
+python tools/generate_java_stubs.py /path/to/classes.dex --out reconstruction/java --include-safe-constants
+python tools/analyze_dex_reachability.py /path/to/classes.dex --output docs/dex-reachability.json
+python tools/stk_unpacker.py /path/to/S3DMain.smf --inventory-json docs/asset-inventory.json --inventory-csv docs/asset-inventory.csv
+python tools/stk_unpacker.py /path/to/S3DMain.smf --extract /path/to/new-empty-directory
 python tests/validate_bundle.py
-python tests/validate_smali.py --root disassembly
 ```
 
-JADX, Apktool and a Smali assembler were unavailable in the offline execution environment. Original Java comments/formatting/local names, native implementation and SMF internals are not recovered.
+## Remaining blockers
 
-The uploaded APK contains `assets/api_key.txt` with a credential-shaped token. That file and its value are excluded. Rotate/revoke the credential if active.
+The manifest's `requiredSplitTypes="base__abi,base__density"` and `isSplitRequired="true"` are consistent with split delivery; exact ABI/density companion APKs have not been obtained. The 44 JNI native implementations are absent from DEX. JADX, Apktool and a Smali assembler have not run in this offline environment; no complete Gradle build, signing, emulator launch or runtime-equivalence test has succeeded.
+
+The uploaded APK contained `assets/api_key.txt` with a credential-shaped token. That file/value is excluded; rotate/revoke the token if active.
