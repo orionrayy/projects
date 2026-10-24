@@ -1,7 +1,7 @@
 {
   "project": "DR2C VORENYX",
   "locale": "id-ID",
-  "build": "v2.23 — camp event English-residue repair and mapping reconciliation",
+  "build": "v2.24 — character personality banter and shared blurbs",
   "source_script_files_scanned": 541,
   "source_quoted_literal_occurrences": 17329,
   "unique_source_literals": 13038,
@@ -10,22 +10,38 @@
   "likely_player_facing_change_percent_heuristic": 69.07,
   "untranslated_unique_candidates_heuristic": 2822,
   "full_translation_complete": false,
-  "v2_22_scope_files": [
+  "coverage_measurement_build": "v2.22",
+  "coverage_measurement_status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_24",
+  "v2_22_historical_scope_files": [
     "assets/deathforth/charstats-textfill.df",
     "assets/deathforth/events/camp/camp3.df",
     "assets/deathforth/events/common/common4.df",
     "assets/deathforth/events/rareloc/rare1.df",
     "assets/deathforth/cyoa-charstats.df (two added group-label helpers)"
   ],
-  "v2_22_contextual_expressions_rewritten": 94,
-  "v2_22_literal_occurrences_changed": 183,
-  "v2_22_inventory_rows_newly_marked": 138,
-  "validation_missed_exact_mapping_rules": 0,
-  "warning": "The 69.07% value is the last measured v2.22 heuristic and has not been recomputed for v2.23. It is not semantic completeness or runtime screen coverage.",
-  "coverage_measurement_build": "v2.22",
-  "coverage_measurement_status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_23",
   "v2_23_unique_source_literals_localized": 51,
   "v2_23_literal_occurrences_changed": 52,
   "v2_23_historical_mapping_misses_repaired": 47,
-  "v2_23_historical_mapping_rules_reconciled_as_non_actionable": 2
+  "v2_23_historical_mapping_rules_reconciled_as_non_actionable": 2,
+  "v2_24_scope_files": [
+    "assets/deathforth/blurb/aggressive.df",
+    "assets/deathforth/blurb/passive.df",
+    "assets/deathforth/blurb/pessimist.df",
+    "assets/deathforth/blurb/dull.df",
+    "assets/deathforth/blurb/sharp.df",
+    "assets/deathforth/blurb/blurbdeck.df",
+    "assets/deathforth/blurb/screply.df"
+  ],
+  "v2_24_literal_mapping_rules": 277,
+  "v2_24_literal_occurrences_changed": 279,
+  "v2_24_contextual_word_order_fixes": 2,
+  "v2_24_structural_files_checked": 7,
+  "v2_24_line_and_token_counts_preserved": true,
+  "v2_24_zip_entries": 301,
+  "v2_24_manifest_entries": 300,
+  "v2_24_manifest_hash_failures": 0,
+  "v2_24_zip_crc": "PASS",
+  "validation_missed_exact_mapping_rules": 0,
+  "candidate_inventory_status": "HISTORICAL_V2_22_QUEUE_NOT_RECOMPUTED",
+  "warning": "69.07% is the last measured v2.22 heuristic. The v2.24 batch has not had a new global coverage computation; semantic completeness and runtime screen coverage are unverified."
 }
