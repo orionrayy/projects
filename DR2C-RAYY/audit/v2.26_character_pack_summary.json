@@ -1,0 +1,72 @@
+{
+  "project": "DR2C VORENYX",
+  "build": "v2.26",
+  "base_checkpoint": "v2.25",
+  "locale": "id-ID",
+  "scope_files": [
+    "assets/deathforth/blurb/sc/beeman.df",
+    "assets/deathforth/blurb/sc/boxer.df",
+    "assets/deathforth/blurb/sc/caveman.df",
+    "assets/deathforth/blurb/sc/knight.df",
+    "assets/deathforth/blurb/sc/ninja.df"
+  ],
+  "literal_mapping_rules": 66,
+  "literal_occurrences_changed": 66,
+  "mapped_source_residues_remaining": 0,
+  "static_integrity": "PASS",
+  "source_structure_checks": [
+    {
+      "file": "assets/deathforth/blurb/sc/beeman.df",
+      "quoted_literal_tokens": 12,
+      "lines": 44,
+      "status": "PASS"
+    },
+    {
+      "file": "assets/deathforth/blurb/sc/boxer.df",
+      "quoted_literal_tokens": 16,
+      "lines": 52,
+      "status": "PASS"
+    },
+    {
+      "file": "assets/deathforth/blurb/sc/caveman.df",
+      "quoted_literal_tokens": 16,
+      "lines": 52,
+      "status": "PASS"
+    },
+    {
+      "file": "assets/deathforth/blurb/sc/knight.df",
+      "quoted_literal_tokens": 10,
+      "lines": 40,
+      "status": "PASS"
+    },
+    {
+      "file": "assets/deathforth/blurb/sc/ninja.df",
+      "quoted_literal_tokens": 13,
+      "lines": 61,
+      "status": "PASS"
+    }
+  ],
+  "package": {
+    "zip_entries": 312,
+    "duplicate_paths": 0,
+    "crc": "PASS",
+    "manifest_entries": 311,
+    "manifest_hash_failures": 0,
+    "machine_local_path_leaks": 0,
+    "bytes": 11275547,
+    "sha256": "edda11648c4f7ed32d1413b154fd70e65943edfb367f18c6bffa0b5119a3f02c"
+  },
+  "coverage": {
+    "measurement_build": "v2.22",
+    "percent": 69.07,
+    "status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_26",
+    "full_translation_complete": false
+  },
+  "tests": {
+    "runtime_gameplay": "NOT RUN",
+    "ui_fit": "NOT RUN",
+    "save_load": "NOT RUN",
+    "apk_rebuild_signing": "NOT PERFORMED"
+  },
+  "distribution_boundary": "Sanitized audit only. No original archive, extracted game scripts or binary overlay committed."
+}
