@@ -52,3 +52,15 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - Comment-aware inventory: 541 source files, 16,819 active quoted-string tokens; 77 heuristic candidate rows across 36 files remain. These are triage rows, not coverage.
 - The 69.07% metric is the stale v2.22 heuristic baseline. Current global semantic coverage is not computed. Gameplay, UI fit, save/load and APK rebuild/signing remain untested.
 - The v2.34 checkpoint/hash discrepancy remains documented as reconciled in v2.35; v2.36 builds from the actual v2.35 ZIP.
+
+
+## Active checkpoint — 24 October 2026, v2.40
+- Canonical latest overlay checkpoint: v2.40, based on the verified v2.39 patch archive.
+- Repaired 45 trait/perk state-key mismatches across 13 modules; 0 mismatches remain across 195 operand comparisons.
+- Trait/perk presentation labels are localized at the display boundary; underlying identifiers remain source-canonical.
+- Continued localization across CYOA guidance, journey/camp prompts, NPC dialogue, rewards, comic/magazine interactions, medical feedback and event narration.
+- Refreshed the title-art badge to V2.40 in both packaged title-art copies.
+- Current comment-aware inventory: 541 .df/.txt files and 16,834 active quoted literals. This inventory pipeline differs from the older curated inventory.
+- The inherited high-likelihood candidate queue now has 0 remaining rows in the merged source; this is not a semantic coverage score and does not prove that every player-visible string is localized.
+- Global semantic coverage is NOT COMPUTED. Gameplay/runtime, UI fit, save/load and APK rebuild/signing remain untested.
+- Public GitHub stores sanitized documentation and audit summaries only; the source archive, full literal inventory and binary overlay are not committed.
