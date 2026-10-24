@@ -54,12 +54,9 @@ jobs:
           profile: pixel_2
           disable-animations: true
           script: |
-            set -eu
-            HARNESS="$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness"
-            gradle -p "$HARNESS" --no-daemon --stacktrace connectedDebugAndroidTest
-            APK="$HARNESS/app/build/outputs/apk/debug/app-debug.apk"
-            test -s "$APK"
-            adb install -r "$APK"
+            gradle -p "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness" --no-daemon --stacktrace connectedDebugAndroidTest
+            test -s "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness/app/build/outputs/apk/debug/app-debug.apk"
+            adb install -r "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness/app/build/outputs/apk/debug/app-debug.apk"
             adb shell am force-stop dev.dqdebug.sandboxharness
             adb shell am start -W -n dev.dqdebug.sandboxharness/.MainActivity
             adb shell uiautomator dump /sdcard/dq-harness-window.xml >/dev/null
