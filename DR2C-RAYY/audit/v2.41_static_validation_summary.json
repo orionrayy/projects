@@ -51,11 +51,11 @@
   },
   "local_only_artifacts": {
     "patch_zip": "DR2C_VORENYX_ID_v2.41_localization_patch.zip",
-    "patch_zip_bytes": 24402012,
-    "patch_zip_sha256": "7561fd67cb89ef970529566f18460f84c881c7e76f24dbda1f8bb512777a0e77",
+    "patch_zip_bytes": 24402009,
+    "patch_zip_sha256": "e2d965d64d566c2f5eb516b2e2b6500c472ba354b4534d95a7fc488bcbdc4bf1",
     "project_archive": "DR2C_VORENYX_Project_Archive_v2.6.zip",
-    "project_archive_bytes": 137025063,
-    "project_archive_sha256": "d3203f7ce7025d1fe3bac4947694260e33d3a1feda09c61d52f7eb00fe4fad0c",
+    "project_archive_bytes": 137025093,
+    "project_archive_sha256": "20be915f19c9d3b7d800e1e179c1430f067bb72a6d194d0a3a5344ec64282f9f",
     "project_archive_entries": 457,
     "project_archive_checksum_entries": 456
   },
