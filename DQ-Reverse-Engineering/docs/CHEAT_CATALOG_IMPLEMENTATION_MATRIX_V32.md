@@ -88,3 +88,19 @@ The HUD element serialization is not yet losslessly decoded/serialized. Adding 2
 - This human-readable audit and phased plan.
 
 No new XAPK is claimed by this revision. The next gameplay-changing XAPK should only be made after the first small group of native handlers and HUD edits can be verified, not by enabling 222 unbacked controls.
+
+
+## Increment v32 — three additional native-command controls
+
+The user confirmed the v31 route opens the bundled debug HUD. The v32 XAPK statically adds three more controls using callback names already present in the game's original HUD action tables:
+
+- **Level Up** → `uai_gp_hud.onShortcut("levelup", 1)`
+- **Gold +100K** → `uai_gp_hud.onDebug(6)`
+- **Gold Down** → `uai_gp_hud.onDebug(7)`
+
+The debug HUD grows from 71 to 75 elements and from 13 to 16 actions. All original element records remain byte-for-byte identical. The STK pack header key matches the decoded metadata-table CRC32 and all 5,630 entries pass local decode/CRC validation. Only the decoded `Resources/HUD/debug.hud` entry changes. All 20 APK split signatures and ZIP CRCs pass a local verifier.
+
+Artifact: `Dungeon_Quest_3.3.2.0_CheatMenu_ExpandedDebug_v32.xapk`  
+SHA-256: `7fdec74ef3d3f1d0b9f506e60f1adfd2f61d5dea821c07c88974ab5584f1cc32`
+
+**Runtime pending.** The user has not yet tested v32. The +100K callback is statically mapped; exact Gold Down behavior is not established. The newly exposed controls do not implement 222 catalog entries and do not make unsupported toggles work. Do not mark any catalog effect runtime-verified until the user confirms the control and its resulting game state.
