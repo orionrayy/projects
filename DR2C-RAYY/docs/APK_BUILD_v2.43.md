@@ -1,33 +1,28 @@
-# DR2C VORENYX v2.43 — APK Build Candidate
+# DR2C VORENYX v2.43 — APK Build Report
 
-**Status: assembled and JAR/v1-signed; Android runtime stability NOT VERIFIED.**
-
-## Artifact (local only)
+- Result: **APK assembled; APK Signature Schemes v1, v2 and v3 verified by official `apksigner`.**
 - File: `DR2C_VORENYX_v2.43.apk`
-- Size: **39,610,091 bytes**
-- SHA-256: `cefe665d0164495248f0d2cc960f54478d60b980ec137c3878181732d0885a90`
-- App package: `com.noodlecake.drtc`
-- Base game's manifest version: `1.8.2` / version code `57`
-- Min/target SDK: `23` / `35`
-- Signature: local JAR/v1 signature using SHA-256 with RSA. It is not signed by the original publisher.
-- Native libraries: `arm64-v8a` and `armeabi-v7a`; 3 DEX files preserved.
-- The package is rebuilt from the locally available extracted APK contents plus the v2.43 patch overlay. It is not a Gradle source build.
+- Size: 39,748,335 bytes
+- SHA-256: `3019dd04098e9e8fef01045a2e391d9525bf87ef6874b0d0049c5a073a052f25`
+- Package: `com.noodlecake.drtc`
+- Original game version: `1.8.2` (version code 57)
+- SDK range: min 23 / target 35
+- Overlay payloads applied and hash-verified: **272** (271 existing entries replaced, one new title-screen image added).
+- APK ZIP integrity: PASS (1,015 entries, no duplicate paths, CRC PASS).
+- Signature: v1 PASS, v2 PASS, v3 PASS using Android SDK Build Tools 35.0.1 `apksigner` 0.9.
+- Native payloads: 16 stored `.so` files across `arm64-v8a` and `armeabi-v7a`; every native library is 4-byte aligned. Three DEX files and required manifest present.
+- Signing certificate SHA-256: `6ea04e10965de1459a7fee845e8ae903bc1535a744f4762c14b2c7bb82eb13f9` (local key, not original publisher certificate).
 
-## Independent static checks
-- APK ZIP CRC: PASS.
-- JAR/v1 signature verification: PASS.
-- All 272 v2.43 overlay file payloads matched their archived hashes after packaging.
-- 1,015 ZIP entries; no unintended outer project-directory prefix.
-- Native library local data offsets: 4-byte aligned.
-- Required manifest, DEX, libraries and title/splash assets: present.
-- Build SHA-256 sidecar matches the APK.
+## Stability and launch limitations
 
-## Patch metadata note
-The v2.43 patch's `README.txt` says 309 changed occurrences across 16 files, while its checkpoint and translation ledger report 159 occurrences across 58 files, with 9 new overlay modules. This build records the discrepancy instead of silently conflating the counts. The packaged overlay itself contains 272 file payloads, 271 replacing existing APK files and one new title-screen image; that payload count is not a translation count.
+The APK is now correctly signed with v2/v3 in addition to v1, resolving the previous v1-only signing-format blocker. However, **runtime stability is still unverified**. The supplied archive does not contain the original publisher's private signing key, and this APK uses a new local certificate. The manifest includes `com.pairip.application.Application` and PairIP/Play license-check components; the game may reject a re-signed package or fail at launch. No licensing or anti-tamper bypass was attempted.
 
-## Critical runtime limitation
-The original private signing key is not included in the supplied archive. The package also contains `com.pairip.application.Application` and PairIP/Play license-check components. Re-signing may cause the game to reject the package or fail at launch. No attempt was made to bypass licensing or anti-tamper checks.
+No Android device/emulator/ADB was available. Android install, launch, gameplay/event-path, UI fit/overflow, save/load and stability tests were **NOT RUN**. Do not uninstall the official game or risk existing saves based on this static build alone. A release that is truly confirmed stable needs authorized signing compatibility and runtime tests on a device.
 
-No Android device/emulator/ADB was available for an install, launch, gameplay, UI-fit, save/load, or stability test. Therefore the artifact is a **statically validated APK candidate**, not a claim that the game is confirmed stable. Do not uninstall the official game or risk existing saves solely on the basis of these static checks.
+## Patch metadata discrepancy
 
-The APK, full extracted game content, and overlay remain local-only; GitHub stores this sanitized build report and summary only.
+The v2.43 patch `README.txt` reports 309 changed occurrences across 16 files, while its checkpoint and translation ledger report 159 across 58 files. This discrepancy is intentionally recorded, not silently reconciled to an unsupported number. The 272 figure above is the actual overlay payload count, not a translation count.
+
+The APK and full extracted game content remain local-only. The public GitHub repository has a sanitized build report; the binary APK was not uploaded.
+
+Machine-readable report: `DR2C_VORENYX_v2.43_APK_BUILD_REPORT.json`.
