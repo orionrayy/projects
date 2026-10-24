@@ -40,6 +40,13 @@ The outer `S3DMain.smf` container was parsed and all 5,630 entries passed CRC-32
 
 The supplied base APK contains zero `lib/*.so` entries. DEX records `System.loadLibrary` order `crypto`, `ssl`, `openal`, `S3DClient`. The manifest excerpt declares `requiredSplitTypes="base__abi,base__density"` and `android:isSplitRequired="true"`. A matching ABI/density split set and native library hashes have not been verified locally. A drop-in engine replacement would require reimplementing 44 JNI contracts plus rendering, asset decoding, and runtime behavior; that is a separate high-risk port, not a small modkit patch.
 
+## Latest evidence reports — v11
+
+- [Artifact scope, Smash.gam model registry, IAP trace, and native split/engine boundary](docs/ARTIFACT_RECONCILIATION_AND_NATIVE_ENGINE_V11.md)
+- [SKU evidence summary and unresolved reward mapping](docs/IAP_SKU_ASSET_EVIDENCE_SUMMARY_V11.md)
+
+These text reports are committed to this PR branch. The comprehensive machine-generated 107-row SKU evidence matrix and the additional v11 audit runner/tests are part of the local delivery ZIP, not synchronized as a full source bundle. The report intentionally leaves reward writes marked unverified where the native callback or proprietary model bytecode is unavailable.
+
 ## Reproduction and remaining blockers
 
 The source tools support offline metadata extraction, DEX inventory/disassembly, Java declaration scaffolds, STK extraction/rebuild, and narrow asset patching. The repository does **not** claim complete original Java source, JNI implementations, bundle reward mapping, a full Gradle build, signing, emulator launch, or runtime equivalence.
