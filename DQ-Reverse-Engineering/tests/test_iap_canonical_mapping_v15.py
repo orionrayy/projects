@@ -48,6 +48,19 @@ class CanonicalIAPMappingV15Tests(unittest.TestCase):
         self.assertEqual(result["status"], "FAIL")
         self.assertTrue(any("vanity1" in e for e in result["errors"]))
 
+    def test_dynamic_model_target_cannot_be_claimed_static_verified(self):
+        data = json.loads(MATRIX.read_text(encoding="utf-8"))
+        data["flow"]["success_handler"] = "handler is known"
+        for record in data["records"]:
+            record["callback_path"]["dynamic_ai_handler_value"] = "statically established"
+            record["callback_path"]["status"] = "STATIC-DIRECT through all edges"
+        with tempfile.TemporaryDirectory() as td:
+            target = Path(td) / "matrix.json"
+            target.write_text(json.dumps(data), encoding="utf-8")
+            result = audit_mapping(target)
+        self.assertEqual(result["status"], "FAIL")
+        self.assertTrue(any("dynamic sAIHandler" in e or "dynamic model target" in e for e in result["errors"]))
+
 
 if __name__ == "__main__":
     unittest.main()
