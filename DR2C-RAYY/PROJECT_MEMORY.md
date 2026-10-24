@@ -7,16 +7,15 @@
 - Target voice: natural colloquial Indonesian, blunt and sarcastic with occasional profanity, distinct NPC personas, and context-sensitive community slang.
 - Target: 100% of player-visible text reviewed and localized; **not achieved yet**.
 
-## Current checkpoint — v2.23 (24 October 2026)
-- Local patch artifact: `DR2C_VORENYX_ID_v2.23_localization_patch.zip`. The binary overlay and original archive remain outside public GitHub.
-- Scope: contextual English-residue cleanup in `assets/deathforth/events/camp/camp3.df`.
-- 51 distinct source literals localized across 52 literal occurrences.
-- All 47 historical exact-mapping misses from the v2.22 `camp3.df` report repaired.
-- Two other historical warnings reconciled: `Orange` is retained as a proper name; the old `common4.df` feast rule was stale because that exact literal was already absent after contextual rewriting.
-- Current exact-mapping misses after reconciliation: 0.
-- Static checks: quoted-literal count 177 before/after and line count 418 before/after; patch ZIP has 294 entries and CRC PASS.
-- Coverage: 69.07% is the last measured heuristic from v2.22. The v2.23 metric has not been recomputed. It is not a semantic or runtime screen-coverage score.
-- Runtime gameplay, UI fit, save/load and APK rebuild/signing: NOT RUN / NOT PERFORMED.
+## Current checkpoint — v2.24 (24 October 2026)
+- Local patch artifact: `DR2C_VORENYX_ID_v2.24_localization_patch.zip`. The binary overlay and original archive remain outside public GitHub.
+- Scope: personality blurbs, general road-trip chatter, and special-character replies in seven files: aggressive, passive, pessimist, dull, sharp, shared blurb deck, and special-character replies.
+- 277 contextual mapping rules applied; 279 literal occurrences changed.
+- Two dynamic father-topic expressions were reordered to natural Indonesian word order. Identifiers, branches, stats, reward logic, item constants, and deck structure were not intentionally modified.
+- Static validation: PASS. All seven touched files preserve quoted-token counts and source line counts; independent non-string source skeleton checks passed.
+- Package validation: 301 ZIP entries, CRC PASS, no duplicate paths, and 300 manifest-listed file hashes verified with zero failures.
+- Coverage: 69.07% is the last measured heuristic from v2.22. No new global coverage measurement has been made for v2.24; do not report it as current coverage or semantic completeness.
+- Runtime gameplay, UI fit, save/load, and APK rebuild/signing: NOT RUN / NOT PERFORMED.
 
 ## Coverage interpretation
 Inventory percentages are heuristic. The denominator may contain fragments, identifiers or code-like strings, while a single displayed sentence can span multiple literal tokens. A 100% claim requires classifying candidates, reviewing complete assembled player-visible expressions, checking placeholders and UI fit, and testing runtime surfaces.
@@ -32,10 +31,10 @@ Inventory percentages are heuristic. The denominator may contain fragments, iden
 Preserve trait/perk/character IDs, stat keys, weapon IDs/constants, food costs, reward operations, CYOA IDs, trader counters, branch conditions, placeholders, interpolation, newlines, tabs, display delimiters and original campaign flow. Translate presentation text only. Prefer exact-context or complete-expression rewrites over global substring substitutions.
 
 ## Next priorities
-1. Continue contextual review of the highest-impact remaining player-visible events, routes, traders, traits/perks, items and tutorial surfaces.
-2. Rebuild the inventory QA pipeline so literal extraction cannot be confused by comments or code context, then reclassify candidates semantically.
+1. Refresh the historical untranslated-candidate queue with a comment-aware parser after merging the current base/overlay, then manually classify likely player-facing expressions.
+2. Continue contextual localization across high-impact event, route, trader, item, trait/perk, and tutorial surfaces.
 3. Review grammar, register, profanity, character voice, UI length and accidental mixed-language expressions.
-4. Recompute coverage from a validated merged overlay/base inventory; do not reuse the v2.22 metric as a v2.23 score.
+4. Recompute coverage only from a validated merged base/overlay inventory; maintain a clear distinction between heuristic coverage and semantic/runtime completeness.
 5. Run menus/events/trade/combat/save-load in a compatible runtime.
 6. Rebuild/sign APK only after overlay compatibility is demonstrated.
 7. Keep README, changelog, inventory metadata, checkpoint reports and version history synchronized.
