@@ -18,11 +18,16 @@ jobs:
           curl --fail --location --retry 3             https://dl.google.com/android/repository/build-tools_r35.0.1_linux.zip             --output build-tools.zip
           echo "5993499f3229a021b89f87088c57242aeefaa62316bf3d69da7de40bfd5350f1  build-tools.zip" | sha256sum --check
           mkdir extracted
-          unzip -q build-tools.zip 'build-tools/35.0.1/apksigner' 'build-tools/35.0.1/lib/*' -d extracted
-          test -x extracted/build-tools/35.0.1/apksigner
+          unzip -q build-tools.zip -d extracted
+          APKSIGNER="$(find extracted -type f -name apksigner -print -quit)"
+          test -n "$APKSIGNER"
+          test -x "$APKSIGNER"
+          BTDIR="$(dirname "$APKSIGNER")"
+          test -d "$BTDIR/lib"
           mkdir -p apksigner-bundle/build-tools/35.0.1
-          cp -a extracted/build-tools/35.0.1/apksigner extracted/build-tools/35.0.1/lib apksigner-bundle/build-tools/35.0.1/
-          printf '%s\n' 'Android SDK Build Tools 35.0.1 apksigner only; downloaded from dl.google.com and SHA-256-verified.' > apksigner-bundle/NOTICE.txt
+          cp -a "$APKSIGNER" "$BTDIR/lib" apksigner-bundle/build-tools/35.0.1/
+          printf '%s\n' 'Android SDK Build Tools 35.0.1 apksigner + required lib directory; Google archive SHA-256 verified.' > apksigner-bundle/NOTICE.txt
+          "$APKSIGNER" version
       - name: Upload signer tool bundle (no game files)
         uses: actions/upload-artifact@v4
         with:
