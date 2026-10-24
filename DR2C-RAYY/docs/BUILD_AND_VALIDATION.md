@@ -1,17 +1,19 @@
-# Build and Validation — v2.24
+# Build and Validation — v2.25
 
 ## Static verification evidence
-- Local patch artifact: `DR2C_VORENYX_ID_v2.24_localization_patch.zip`.
-- ZIP package: 301 entries; CRC scan PASS; no duplicate paths.
-- SHA-256 manifest: 300 listed files, all hashes verified with zero mismatches.
-- Scope: character personality and shared banter in seven scripts: `aggressive.df`, `passive.df`, `pessimist.df`, `dull.df`, `sharp.df`, `blurbdeck.df`, and `screply.df`.
-- 277 contextual mapping rules; 279 literal occurrences changed.
-- Two dynamic father-topic expressions reordered for natural Indonesian word order.
-- Independent structural QA preserved quoted-token counts and line counts in all seven edited files; non-string source skeleton checks PASS.
-- Manual residue follow-up fixed 14 previously identified English oneliners in `sharp.df`.
+- Local patch artifact: `DR2C_VORENYX_ID_v2.25_localization_patch.zip`.
+- ZIP package: 305 entries; CRC scan PASS; zero duplicate paths.
+- SHA-256 manifest: 304 listed files, all hashes verified with zero mismatches; no runner-local path leaks.
+- Scope: two active dialogue files: `assets/deathforth/blurb/optimist.df` and `assets/deathforth/blurb/sc/wrestler.df`.
+- 63 contextual mapping rules; 63 literal occurrences changed.
+- `optimist.df`: 29 quoted tokens and 114 lines before/after.
+- `sc/wrestler.df`: 34 quoted tokens and 137 lines before/after.
+- Mapped source residue scan: zero mapped English source literals remain in the two edited files.
+- Proper names, wrestling move names, censor-mask placeholders and non-dialogue structure were preserved where required.
+- Artifact SHA-256: `693714b5f2a1e79f0e8b5c9749f7f4dfe1c6ffaa4dc891d0ee689549f82f7fe5`.
 
 ## Coverage status
-The last available heuristic measurement is v2.22: 7,490/10,844 = 69.07%. It has not been recomputed for v2.24 and is not a current coverage score, semantic completeness estimate, or runtime screen-coverage measure. The untranslated-candidate queue is a historical heuristic snapshot and must be rebuilt using a comment-aware parser before subsequent comprehensive triage.
+The last available heuristic measurement is v2.22: 7,490/10,844 = 69.07%. It has not been recomputed for v2.25 and is not a current coverage score, semantic completeness estimate, or runtime screen-coverage measure. The historical untranslated-candidate queue must be rebuilt with a comment-aware parser before broad triage.
 
 ## Not tested
 - Runtime gameplay and actual UI layout/fit: NOT RUN.
