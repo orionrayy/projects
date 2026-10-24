@@ -1,5 +1,6 @@
 # Changelog — DR2C VORENYX
 
+- **v2.25:** contextual Indonesian localization in the active optimistic-survivor profile and wrestler response profile; 63 mapping rules and 63 occurrences changed; both files preserve source line/token counts; ZIP CRC and manifest checks PASS; global coverage not remeasured; runtime not tested.
 - **v2.24:** contextual Indonesian localization of character personality banter and shared chatter across seven files; 277 mapping rules; 279 literal occurrences changed; two father-topic word-order fixes; static structure, ZIP CRC, and manifest validation PASS; coverage not remeasured; runtime not tested.
 - **v2.23:** contextual English-residue repair in `camp3.df`; 51 unique source literals and 52 literal occurrences localized; all 47 historical camp3 mapping misses repaired; two non-actionable historical rules reconciled. Coverage heuristic not recomputed; runtime not tested.
 
