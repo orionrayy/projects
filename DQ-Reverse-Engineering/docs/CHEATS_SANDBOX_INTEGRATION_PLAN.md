@@ -1,40 +1,38 @@
 # Cheats Sandbox — Integration boundary and implementation plan
 
-## User-facing target
+## Target
 
-Add a first-party Cheats (Sandbox) page inside the game's Pause → Options navigation, with:
-- searchable categories and favorites;
-- per-setting switches, numeric values, ranges, enums, and parameterized actions;
-- presets, profiles, import/export, undo, reset by item/category/profile;
-- clear risk badges and explanations, deterministic test seed, snapshots, event log and performance diagnostics;
-- sandbox-only saves, offline-only mutable gameplay settings, and no cloud/leaderboard/achievement synchronization while cheats are active.
+Add a first-party Cheats (Sandbox) page inside Pause -> Options with searchable categories, favorites, setting controls, safe presets, undo/reset, snapshots, diagnostics and an event log. The standalone prototype/catalog are design artefacts only, not evidence of game handlers.
 
-The standalone prototype and 222-entry draft catalog are design artifacts, not evidence that game effects are wired up.
+## Evidence-backed UI path
 
-## What is grounded in the repository
+Static inspection of the recovered v3.3.2.0 assets confirms:
+- `Resources/HUD/pause.hud`: Options entry plus `onShowOptions`, `onOptionsClose`, and `onResume`.
+- `Resources/AIModels/uai_gp_options.aim`: `onShowOptions`, `onShowTab`, `onSaveOptions`, `onSetControlsOption`, and `onSetGameplayOption`.
+- `Resources/HUD/debug.hud`: existing debug controls including `Add Levels`, `Add Feat`, and `GOTO Floor`.
+- `Games/Smash.gam`: both `uai_gp_options` and `uai_gp_debug` are registered model names.
 
-The reconstructed wrapper identifies com.shinybox.smash.Smash, S3DSurfaceView, S3DRenderer, and native S3DClient entry points. Smash delegates rendering and engine lifecycle through JNI. The asset pack contains readable Resources/XML tables, including Vanity and IAP, but the inner .gam, .scn, .mdo, .msh, .ske, and similar records are not native source code.
+The evidence confirms asset/model presence, **not** a working Options -> debug HUD transition. No such event binding has been established.
 
-There are 44 JNI declarations, but the native implementation binaries have not been obtained. The manifest strongly indicates base/ABI/density split delivery. The repository is not currently a complete Android/Gradle project and has not been build-verified.
+## v16 bridge
 
-## Safe implementation order
+`runtime-adapter/src/main/java/dev/dqdebug/runtime/PauseOptionsCheatsBridge.java` provides the single route-facing entrypoint. It requires the real Options host to confirm the parent route and the entry callback registration. It passes a fail-closed readiness state to the page presenter:
+- `READY`: isolated sandbox save, offline mode, cloud/leaderboard/achievement submissions disabled, and a complete runtime snapshot hydrated.
+- `READ_ONLY`: any gate/snapshot missing.
+- `RECOVERY_REQUIRED`: a previous mutation rollback could not be verified; Apply and actions must remain blocked until runtime reconciliation.
 
-1. Ship diagnostics-only functionality in a wrapper-level screen: current package/build identity, frame timing where observable, memory and input telemetry, UI layout, log export. Do not infer hidden game state.
-2. Define a catalog schema and controller API. Keep all gameplay adapters absent by default and refuse to apply unknown IDs.
-3. Add a sandbox state provider in the host; require offline mode and an isolated save before enabling mutation.
-4. Add one reversible test adapter only after its actual state owner and rollback semantics are verified.
-5. Integrate the Options route using an available original UI hook. Do not invent S3D scene APIs from JNI names alone.
-6. Expand the catalog in small groups; every effect needs a precondition, bounds, conflict declaration, snapshot/restore behavior, unit test, and explicit unverified/verified status.
+No adapter is registered by this class and it performs no game-state writes. The catalog-bound controller must revalidate every mutation.
 
-## Non-goals / hard constraints
+## Status and constraints
 
-- No claim that the HTML prototype is part of the APK.
-- No native ABI/library substitution from another game.
-- No false source reconstruction: generated declaration stubs are not original method bodies.
-- No modification of IAP receipts or purchase-history records.
-- No disabling of cloud/online integrity on a live service. Use a local sandbox/test build.
-- No APK signature or runtime-test claim until an actual compatible Android build succeeds.
+- Route bridge source: `IMPLEMENTED`.
+- Java/Python contract tests: `UNIT-VERIFIED` when CI is green.
+- Actual Pause -> Options hook: `BLOCKED`; requires authorized source/UI authoring source or a validated serializer for S3D HUD/model data.
+- In-game runtime click path: not verified.
+- APK build/sign/install: not performed.
 
-## IAP replacement work still outstanding
+The original HUD/model assets use a proprietary binary serialization format. We intentionally do not rewrite `pause.hud` by guessing record layouts; a malformed scene could break the entire Pause/Options menu.
 
-The first asset-level patch changes only 16 cash-only Vanity rows. It does not turn off billing or replace gold, pets, slots, stash, boosts, random packs, and bundle entitlements. Those need product-to-content mapping and balance testing before migration. Maintain a clear known/inferred/unresolved ledger for every SKU.
+## Next integration milestone
+
+Implement `OptionsUiHook` at a verified source callsite or through a format-correct HUD edit. Then render the page using the catalog-bound controller, wire a read-only host snapshot first, prove save isolation and offline gates, and test a reversible adapter with apply/read-back/reset plus forced rollback and recovery tests. Do not mark the route `RUNTIME-VERIFIED` until exercised in the exact-version APK.

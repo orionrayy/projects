@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "target": {
+    "package": "com.shinybox.smash",
+    "version": "3.3.2.0",
+    "integration_goal": "Pause -> Options -> Cheats (Sandbox)"
+  },
+  "observed_native_ui_assets": [
+    {
+      "path": "Resources/HUD/pause.hud",
+      "sha256": "12499b08c49b4a5bb34649468b910b62ba1a64adfd831bd638d13d420af9f395",
+      "evidence_status": "STATIC-DIRECT",
+      "symbols": ["options", "onShowOptions", "onOptionsClose", "onResume"]
+    },
+    {
+      "path": "Resources/AIModels/uai_gp_options.aim",
+      "sha256": "294dc84260b1a58dcbf6cf8fe939c107e8c0ae2bacc7ffe11b34ac62a54b5625",
+      "evidence_status": "STATIC-DIRECT",
+      "symbols": ["onShowOptions", "onShowTab", "onSaveOptions", "onSetControlsOption", "onSetGameplayOption"]
+    },
+    {
+      "path": "Resources/HUD/debug.hud",
+      "sha256": "02ed5420fceacaba5bc614596fddc52646abf04914446e26bc240806930f15b6",
+      "evidence_status": "STATIC-DIRECT",
+      "symbols": ["onClose", "onCreateFeat", "onGotoLevel", "Add Levels", "Add Feat", "GOTO Floor"]
+    },
+    {
+      "path": "Games/Smash.gam",
+      "evidence_status": "STATIC-DIRECT",
+      "symbols": ["uai_gp_options", "uai_gp_debug"],
+      "note": "Model registration does not establish screen reachability or an Options -> debug transition."
+    }
+  ],
+  "bridge": {
+    "source": "runtime-adapter/src/main/java/dev/dqdebug/runtime/PauseOptionsCheatsBridge.java",
+    "implementation_status": "IMPLEMENTED",
+    "unit_test_status": "UNIT-VERIFIED",
+    "responsibility": "Registers a Cheats entry only through a host-provided Options UI hook; routes the click to a page presenter; computes fail-closed read-only, ready, and recovery-required states.",
+    "mutation_gates": [
+      "sandbox_profile_active",
+      "save_isolated",
+      "offline_sandbox",
+      "online_session == false",
+      "cloud_sync_enabled == false",
+      "leaderboard_submission_enabled == false",
+      "achievement_submission_enabled == false",
+      "runtime_state_hydrated",
+      "mutation_recovery_required == false"
+    ]
+  },
+  "route_binding": {
+    "status": "BLOCKED",
+    "actual_pause_options_hook_implemented": false,
+    "actual_cheats_screen_connected": false,
+    "reason": "The APK exposes proprietary S3D HUD/AIM resources, but this repository has no validated HUD authoring/parser or original UI source callsite. The Java bridge is a tested integration seam, not a live native-menu hook."
+  },
+  "runtime": {
+    "pause_options_to_cheats_reached": false,
+    "gameplay_action_verified": false,
+    "apk_built_signed_installed": false,
+    "runtime_verified_claims": 0
+  }
+}
