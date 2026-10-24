@@ -1,0 +1,60 @@
+{
+  "project": "DR2C VORENYX",
+  "audit_date": "2026-10-25",
+  "raw_apk": {
+    "file": "com.noodlecake.drtc_1.8.2-APK_Award.apk",
+    "bytes": 105454977,
+    "sha256": "63b2177de597e00616d07b9721b3fd4de3db9d800c0e4efd0030c720c36b50bd",
+    "entry_count": 1003,
+    "zip_testzip_failure": "classes3.dex",
+    "classes3_dex": {
+      "uncompressed_bytes": 10808,
+      "central_directory_crc32": "0xc61322b2",
+      "actual_payload_crc32": "0x0cc169a1",
+      "dex_magic": "dex\\n035\\0",
+      "declared_size_matches_payload": true,
+      "adler32_checksum_matches": true,
+      "sha1_header_digest_matches": true,
+      "interpretation": "ZIP entry CRC is inconsistent, but the extracted DEX's own header checksums validate; this is an outer ZIP-integrity defect, not proof of corrupted DEX code bytes."
+    }
+  },
+  "source_archive": {
+    "file": "DR2C-RAYY(2).zip",
+    "bytes": 13809097,
+    "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1",
+    "source_prefixed_entry_count": 1014,
+    "zip_crc_test": "PASS"
+  },
+  "comparison": {
+    "common_non_directory_paths": 883,
+    "byte_identical_common_paths": 719,
+    "different_common_paths": 163,
+    "unreadable_common_paths_due_to_zip_crc": [
+      "classes3.dex"
+    ],
+    "common_assets_paths": 656,
+    "byte_identical_common_assets": 656,
+    "byte_different_common_assets": 0,
+    "different_paths_by_first_component": {
+      "AndroidManifest.xml": 1,
+      "META-INF": 3,
+      "classes.dex": 1,
+      "classes2.dex": 1,
+      "res": 156,
+      "resources.arsc": 1
+    }
+  },
+  "local_build_environment": {
+    "available": {
+      "apksigner": false,
+      "zipalign": false,
+      "adb": false,
+      "apktool": false,
+      "d8": false
+    },
+    "previous_v2_44_test_keystore_found": false,
+    "bundled_google_client_keystore_must_not_be_used_for_app_signing": true,
+    "apk_built": false
+  },
+  "decision": "Do not mix non-asset files from the source archive and raw APK. Continue with an authorized, integrity-verified base and a supported Android signing/alignment toolchain. Android 11 rejects target-30+ APK installs/updates signed only with v1; v2 or newer is required."
+}
