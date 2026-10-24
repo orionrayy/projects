@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "purpose": "proposed conversion of numeric Vanity.xml cash prices to earnable gold costs",
+  "source_file": "Resources/XML/Vanity.xml",
+  "conversion": {
+    "0.99": 250000,
+    "1.99": 500000,
+    "2.99": 750000,
+    "3.99": 1000000,
+    "5.99": 1500000
+  },
+  "evidence": {
+    "vanity_rows": 74,
+    "numeric_cash_price_rows": 16,
+    "existing_gold_costs_observed": [25000, 50000, 100000, 150000, 300000, 1000000]
+  },
+  "status": "proposal_not_runtime_verified",
+  "warning": "This mapping does not disable the IAP registry or billing wrappers and is not a complete replacement for all IAP families."
+}
