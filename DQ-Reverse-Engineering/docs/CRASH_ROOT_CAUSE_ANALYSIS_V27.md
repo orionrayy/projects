@@ -34,3 +34,12 @@ Because the new candidate is signed with a different local certificate, Android 
 2. **If v26 crashes while the stock control launches:** test logs are required. This raises the likelihood of packed-resource integrity or parser constraints, but is not alone proof of anti-tamper. Capture Android `logcat` around the crash before producing more blind variants.
 
 No IAP entitlement, billing receipt, cloud save, achievement, or leaderboard code was modified. Do not mark cheat functionality as implemented until an on-device test shows the menu and verifies each action.
+
+
+## Device result update — 2026-10-25
+
+The user reports that the problem reappeared after testing v26. In context, this is treated as the v26 startup-crash result; the exact on-screen symptom should be confirmed when collecting logs.
+
+Assuming v26 again closes at the Shinybox splash while the stock-pack control launches, the evidence now points to a raw packed-asset/container dependency or a parser constraint triggered by changing the stored stream, even when decoded HUD bytes are identical. This is **not proof of anti-tamper**: malformed or unsupported pack encoding and unchecked parser assumptions remain plausible.
+
+**Stop making further blind pack variants.** The next required evidence is Android `logcat` captured across a fresh launch. See [CRASH_LOGCAT_CAPTURE_V28.md](CRASH_LOGCAT_CAPTURE_V28.md). Do not claim cheat functionality is implemented; v26 is diagnostic-only.
