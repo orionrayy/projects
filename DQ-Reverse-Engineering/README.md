@@ -14,11 +14,11 @@ Analyzed input: Android APK package `com.shinybox.smash`, version `3.3.2.0`. The
 
 ## Repository vs. local bundle
 
-This GitHub directory contains findings, helper scripts, security notes, and a representative Dalvik listing. The full local archive supplied with the task contains the decoded manifest, complete class/method index, probe output, and all 68 app-specific Dalvik disassembly files. It excludes the original APK and sensitive token file.
+This GitHub directory contains findings, helper scripts, security notes, validation checks and a representative Dalvik listing. The companion ZIP supplied in this task contains the decoded manifest, complete class/method index, probe output, and all 68 app-specific Dalvik disassembly files. It excludes the original APK and sensitive token file.
 
-## Reproduce locally
+## Tools
 
-Python analysis tools use the standard library only:
+All Python helpers use the standard library only. Run them against corresponding files extracted from an APK you are authorized to analyze:
 
 ```bash
 python tools/axml_decode.py AndroidManifest.xml manifest/AndroidManifest.xml
@@ -27,6 +27,8 @@ python tools/dex_disasm.py classes.dex --out disassembly
 python tools/smf_probe.py assets/S3DMain.smf --output docs/smf-probe.json
 ```
 
-To attempt Java-like reconstruction, run JADX locally: `jadx -d build/jadx DQ.zip`. Apktool can decode Android resources and smali project layout: `apktool d -f DQ.zip -o build/apktool`. Neither is bundled in this workspace.
+These commands expect source artifacts such as `classes.dex` and `assets/S3DMain.smf` to be present locally; those original binaries are intentionally not committed.
+
+To attempt Java-like reconstruction, run JADX locally: `jadx -d build/jadx DQ.zip`. Apktool can decode Android resources and smali project structure: `apktool d -f DQ.zip -o build/apktool`. They are not bundled in this workspace.
 
 Do not claim full game-source recovery until the SMF records have been structurally decoded and the recovered code is validated. Never add `assets/api_key.txt` to version control; rotate the credential through the owning service if active.
