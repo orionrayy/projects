@@ -1,0 +1,30 @@
+plugins {
+    id "com.android.application"
+}
+
+android {
+    namespace "dev.dqdebug.sandboxharness"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "dev.dqdebug.sandboxharness"
+        minSdk 23
+        targetSdk 34
+        versionCode 17
+        versionName "0.17.0"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    testImplementation "junit:junit:4.13.2"
+}

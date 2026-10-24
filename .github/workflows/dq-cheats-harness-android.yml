@@ -1,0 +1,68 @@
+name: Build DQ Cheats Sandbox Harness APK
+
+on:
+  push:
+    branches:
+      - feat/dq-iap-debug-cheats-modkit-v7
+    paths:
+      - "DQ-Reverse-Engineering/cheats-harness/**"
+      - ".github/workflows/dq-cheats-harness-android.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/cheats-harness/**"
+      - ".github/workflows/dq-cheats-harness-android.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android-build:
+    name: Test and build Android debug APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Android API 35
+        run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+      - name: Set up Gradle 8.9
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: "8.9"
+      - name: Run tests and build APK
+        working-directory: DQ-Reverse-Engineering/cheats-harness
+        run: gradle --no-daemon --stacktrace testDebugUnitTest assembleDebug
+      - name: Verify APK exists and calculate hash
+        id: apk
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="DQ-Reverse-Engineering/cheats-harness/app/build/outputs/apk/debug/app-debug.apk"
+          test -s "$APK"
+          echo "sha256=$(sha256sum "$APK" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          echo "size=$(stat -c%s "$APK")" >> "$GITHUB_OUTPUT"
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dq-cheats-sandbox-harness-debug-apk
+          path: DQ-Reverse-Engineering/cheats-harness/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
+      - name: Add build receipt to job summary
+        shell: bash
+        run: |
+          {
+            echo "## DQ Cheats Sandbox Harness APK"
+            echo "- Artifact: dq-cheats-sandbox-harness-debug-apk"
+            echo "- SHA-256: ${{ steps.apk.outputs.sha256 }}"
+            echo "- Size: ${{ steps.apk.outputs.size }} bytes"
+            echo "- Build: Android API 35 / AGP 8.7.3 / Gradle 8.9 / JDK 17"
+            echo "- Boundary: standalone UI harness; not patched into Dungeon Quest."
+          } >> "$GITHUB_STEP_SUMMARY"
