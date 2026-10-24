@@ -31,11 +31,13 @@ Purchase request messages 600 and 602 route to the statically observed wrapper h
 
 The matrix validator checks these counts and mismatch sets, and requires a concrete reward payload, evidence references, an observed persisted entitlement write, and a passing runtime test before a row may be marked `VERIFIED`.
 
-## Test-run bookkeeping
+## Test-run bookkeeping and current CI result
 
-The local v10 ZIP contains 35 unittest-discovered tests; all 35 passed when rerun. Its packaged `reports/validation_v10.json` says `test_count: 34`, so that metadata field is stale by one. This report does not rewrite the historical v10 ZIP or claim that GitHub CI ran the v13 tests.
+The local v10 ZIP contains 35 unittest-discovered tests; all 35 passed when rerun. Its packaged `reports/validation_v10.json` says `test_count: 34`, so that historical metadata field is stale by one. The old ZIP was not modified.
 
-No GitHub Actions run was returned for the v13 evidence commit at the time this status was checked. The PR description's linked Actions run is earlier evidence and must not be read as validation of the new v13 files.
+The v13 code is now validated by [GitHub Actions run 40084242834](https://github.com/orionrayy/projects/actions/runs/40084242834/job/120843790028). At code commit `9683f820a0edca8f3a5d40c1a071aec16a328572`, the workflow's “Validate v13 IAP runtime evidence and run focused tests” step completed successfully. It validated the exact committed matrix (109 records; 0 runtime-reward-verified; 109 unverified) and ran all four focused Python tests.
+
+The first v13 run failed because the negative test changed a registry row that was already DEX-absent, making the mutation a no-op. The test was corrected to select a SKU whose DEX flag is true before flipping it; the subsequent run passed. This CI result validates source-level evidence consistency and tests only—not the Android runtime, native grants, APK build, install, or gameplay.
 
 ## Source synchronization and native blocker
 
