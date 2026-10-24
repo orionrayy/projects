@@ -40,3 +40,13 @@ The project is not 100% translated yet. Runtime gameplay, save/load and APK rebu
 - The validation report lists 49 exact mapping rules whose original source literals were not found after contextual rewrites. Treat these as QA debt, not successful exact matches; reconcile whether each was superseded by a full-expression rewrite or still needs translation.
 - User requested continued localization to 100%, with quality prioritized over the percentage. Avoid global pronoun/verb substitutions; inspect complete display expressions and preserve dynamic placeholders and game logic.
 - Public GitHub is used for project memory, authored documentation and sanitized audit reports. Keep the binary overlay and source archive out of the public repo.
+
+## Checkpoint v2.23 — 24 October 2026
+
+- Local patch artifact: `DR2C_VORENYX_ID_v2.23_localization_patch.zip`; 294 ZIP entries and CRC PASS.
+- Repaired 47 historical exact-mapping misses in `camp3.df` and localized four additional display residues, for 51 distinct literals / 52 occurrences.
+- Reconciled two other historical warnings as non-actionable; remaining exact-mapping misses: 0.
+- Structure check preserved the file's 177 quoted-literal tokens and 418 source lines. Newline/tab sequence in the pitchfork event was retained.
+- Last measured coverage remains the v2.22 heuristic (69.07%); it was not recomputed for v2.23. Do not claim full localization.
+- Runtime gameplay, UI fit, save/load and APK rebuild/signing remain untested. Public GitHub stores sanitized reports, not the original archive or binary overlay.
+
