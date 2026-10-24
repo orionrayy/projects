@@ -2,51 +2,50 @@
 
 ## Artifact identity
 
-- Input: uploaded `DQ.zip` (Android APK; the .zip extension is misleading).
-- File size: 37,200,621 bytes.
-- SHA-256: `1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9`.
-- Package: `com.shinybox.smash`.
-- Version: `3.3.2.0`; version code `1423433200`.
-- Min SDK 21, target SDK 34, compile SDK 34.
-- Main activity: `com.shinybox.smash.Smash`.
-- Application class: `com.shinybox.smash.S3DEngine`.
-- Main game pack: `assets/S3DMain.smf`.
-- No native `lib/*.so` file was found in the inspected archive.
+- Input: uploaded `DQ.zip`, an Android APK container.
+- Size: 37,200,621 bytes; SHA-256: `1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9`.
+- Package: `com.shinybox.smash`; version `3.3.2.0`; version code `1423433200`.
+- Min SDK 21; target SDK 34; compile SDK 34.
+- Main Activity: `com.shinybox.smash.Smash`; Application class: `com.shinybox.smash.S3DEngine`.
+- Main game pack: `assets/S3DMain.smf`; no `lib/<abi>/*.so` files were found inside the supplied APK archive.
 
-## Hash evidence
+## Recorded hashes
 
-| Entry | Bytes | SHA-256 |
+| Entry | Size (bytes) | SHA-256 |
 |---|---:|---|
-| Whole APK | 37,200,621 | `1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9` |
+| Uploaded APK | 37,200,621 | `1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9` |
 | `classes.dex` | 6,996,484 | `bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b` |
 | `assets/S3DMain.smf` | 33,978,539 | `340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3` |
 
-## DEX metadata results
+## DEX and source reconstruction
 
-- 37,620 strings; 12,348 type IDs; 14,055 prototype IDs.
-- 30,461 field IDs; 59,460 method IDs; 10,768 class definitions.
-- 68 classes in the `com.shinybox.*` package scope emitted to the local Dalvik disassembly.
+- 37,620 strings; 12,348 type IDs; 14,055 prototypes; 30,461 field IDs; 59,460 method IDs; 10,768 total class definitions.
+- 68 app-specific `com.shinybox.*` classes were emitted as Smali-like source.
+- Corrected output totals: 405 methods, 5,187 decoded instructions, 50 payload directives, 44 native method declarations.
+- Static validation reports zero structural errors across those 68 files.
 
-The full DEX class count also includes platform and third-party dependency classes; it does not mean all classes were authored by the game developer.
+The full DEX also contains Android/third-party dependencies; 10,768 is the DEX class table count, not a count of game-authored classes.
 
-## Architectural observations
+## Architecture
 
-- `S3DEngine` subclasses `q0.b`; inspected application lifecycle methods delegate to Android's Application lifecycle.
-- `Smash` is the primary Activity wrapper. DEX metadata includes lifecycle, sound, camera, sensor, input, asset-extraction, directory/cache and IAP-related method names.
-- `S3DSurfaceView` subclasses `GLSurfaceView` and handles the engine surface/input boundary.
-- `IAPWrapper` exposes purchase and restore callbacks.
-- Method names and bytecode signatures provide evidence of interfaces, but are not sufficient to assert every runtime behavior.
+- `Smash` is the main Activity wrapper; inspected method names/instructions cover lifecycle, asset/file handling, audio, camera, sensors, input and purchase integration.
+- `S3DSurfaceView` derives from Android `GLSurfaceView` and handles the rendering surface and input boundary.
+- `S3DRenderer` declares native engine entry points for initialization/shutdown, frame updates, surface callbacks, pack-file descriptor handoff and input forwarding.
+- `ShinyActivity`, `IAPWrapper` and `GooglePlayServicesWrapper` declare further native callbacks.
+- `IAPWrapper` contains product ID strings such as `com.shinybox.dq.gold1`–`gold5`, `hires`, `slot`, `hunter`, `multi`, `pickup`, `crystal`, `exp`, `gold`, and `luck`. These strings alone do not prove which products are active at runtime.
 
-## Manifest caveats
+See `NATIVE_ENGINE_BOUNDARY.md` for why the DEX is not the complete engine.
 
-A best-effort AXML decoder produced readable XML. The resource table was not completely decoded, so some IDs remain numeric and are not resolved into resource names.
+## Correction and validation
 
-## Recovery status
+The first disassembly pass had opcode-width errors that caused subsequent instruction boundaries to drift. Opcode widths and operand decoding were corrected, then all 68 class outputs were regenerated. The validator checks method boundaries, instruction/payload code-unit coverage, branch label references, register bounds and unresolved placeholders. The decoded XML manifest is well formed and helper Python files pass syntax compilation.
 
-Recovered: file identity/hashes, decoded manifest, DEX class/method metadata, and draft Dalvik disassembly for 68 app-specific classes.
+This is a **Smali-like reconstruction**, not original Java source and not proof that all output can be assembled. JADX, Apktool and a Smali assembler could not be run in the current offline runtime. No Gradle build, signing, emulator launch, or runtime-equivalence test has been performed.
 
-Not recovered: original Java source formatting/comments/local variable names, full resource-name mapping, complete clean Android Studio project, or the game logic/assets inside the proprietary SMF pack. Disassembly may omit/approximate annotations, exception/debug metadata and unsupported opcode details. No APK rebuild or runtime test was performed.
+## SMF status
 
-## Security
+`S3DMain.smf` remains unresolved. GZIP candidate header scan produced zero plausible candidates; 3,952 zlib-looking candidate positions all failed stream validation in a bounded probe. High entropy alone does not prove encryption. See `SMF_FORMAT_STATUS.md`.
 
-The uploaded package contains `assets/api_key.txt` with a credential-shaped Amazon token. Its value and file are excluded from this repository and local bundle. If it is active, revoke or rotate it through the owning service.
+## Credential handling
+
+The APK contains `assets/api_key.txt` with a credential-shaped Amazon token. Its contents and the file are excluded. Rotate/revoke the token through the owning service if active.
