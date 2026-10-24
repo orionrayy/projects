@@ -1,15 +1,25 @@
 {
   "project": "DR2C VORENYX",
   "locale": "id-ID",
-  "build": "v2.2 — player-visible English residue repair",
+  "build": "v2.22 — contextual camp, character-bio and encounter localization",
   "source_script_files_scanned": 541,
   "source_quoted_literal_occurrences": 17329,
   "unique_source_literals": 13038,
   "likely_player_facing_occurrences_heuristic": 10844,
-  "likely_player_facing_occurrences_changed": 3509,
-  "likely_player_facing_change_percent_heuristic": 32.36,
-  "untranslated_unique_candidates_heuristic": 6531,
+  "likely_player_facing_occurrences_changed": 7490,
+  "likely_player_facing_change_percent_heuristic": 69.07,
+  "untranslated_unique_candidates_heuristic": 2822,
   "full_translation_complete": false,
-  "added_exact_context_rows": 15,
-  "warning": "Literal-delta heuristic counts full and partial string changes; not semantic completeness or runtime screen coverage."
+  "v2_22_scope_files": [
+    "assets/deathforth/charstats-textfill.df",
+    "assets/deathforth/events/camp/camp3.df",
+    "assets/deathforth/events/common/common4.df",
+    "assets/deathforth/events/rareloc/rare1.df",
+    "assets/deathforth/cyoa-charstats.df (two added group-label helpers)"
+  ],
+  "v2_22_contextual_expressions_rewritten": 94,
+  "v2_22_literal_occurrences_changed": 183,
+  "v2_22_inventory_rows_newly_marked": 138,
+  "validation_missed_exact_mapping_rules": 49,
+  "warning": "Coverage remains a literal-inventory heuristic, not semantic completeness or runtime screen coverage. The denominator may include fragments/code-like strings. The 49 missed rules must be reconciled rather than counted as successful translations."
 }
