@@ -1,16 +1,20 @@
-# Build and Validation — v2.2
+# Build and Validation — v2.22
 
-## Verified static status
-- Patch: `DR2C_VORENYX_ID_v2.2_localization_patch.zip`.
-- Input inventory: 541 files, 17,329 quoted literal occurrences, 13,038 unique strings.
-- Likely player-facing heuristic: 10,844 occurrences; changed 3,509 (32.36%); probable unique untranslated candidates: 6,531.
-- v2.2 exact-context fixes: 15.
-- Targeted residue patterns remaining in `weapons.df`: 0.
-- Display markers in `weapons.df`: 157/157.
-- Embedded static report: PASS; failures empty; ZIP CRC PASS.
-- Runtime gameplay/save-load/APK rebuild: NOT RUN / NOT PERFORMED.
+## Static verification evidence
+- Local patch artifact: `DR2C_VORENYX_ID_v2.22_localization_patch.zip`.
+- ZIP entries: 292; Python ZIP CRC scan (`testzip`) returned no corrupt entry.
+- Source inventory baseline: 541 files, 17,329 quoted literal occurrences, 13,038 unique literals.
+- Scope: `charstats-textfill.df`, `events/camp/camp3.df`, `events/common/common4.df`, `events/rareloc/rare1.df`, and `cyoa-charstats.df` for the two deliberate helper-macro additions.
+- 94 complete display expressions rewritten; 183 existing literal tokens changed; 138 inventory rows newly marked.
+- Static report: PASS; zero structural failures. Four expression-only files preserved literal-token and line counts. The helper file adds two literals and two lines intentionally.
+- Heuristic inventory delta: 7,490 / 10,844 = 69.07%; full localization is not complete.
+- QA debt: 49 exact mapping rules did not find their original source literals after contextual rewrites. Review and reconcile before release; do not count them as successful matches.
 
-v2.2 also resolves a packaging discrepancy: v2.1’s working-folder validation report passed, but the report embedded in the ZIP still listed English-residue findings. v2.2 verifies the actual packaged artifact.
+## Not tested
+- Runtime gameplay: NOT RUN.
+- Save/load: NOT RUN.
+- APK rebuild/signing: NOT PERFORMED.
+- ZIP integrity does not prove compatibility with a particular installed game version. Treat the artifact as an overlay, not a rebuilt APK.
 
-## Installation/reproduction limits
-Keep the user-provided archive as a read-only base. Back up target data and confirm game version/path before applying the overlay. This is not a signed APK. Static integrity does not prove runtime compatibility; test UI, event branches, costs/rewards, combat, save/load and rebuild/signing in a compatible environment.
+## Reproduction / review
+Keep the user-provided source archive read-only. Before installation, back up the target data and confirm the game version/path. Test menus, camp branches, encounter choices, NPC dialogue, trade costs/rewards, save/load and transitions in a compatible runtime.
