@@ -2,22 +2,23 @@
 
 **Status: partial source reconstruction from DEX; not a complete or build-verified Android project.**
 
-Analyzed APK: package com.shinybox.smash, version 3.3.2.0. Original APK binaries, proprietary asset pack, raw DEX, and credential-bearing asset are excluded.
+Analyzed APK: package com.shinybox.smash, version 3.3.2.0. Original APK binaries, proprietary asset pack, raw DEX and credential-bearing asset are excluded.
 
 ## Available
 
 - Decoded Android manifest and selected reconstructed Smali-like class snapshots.
-- DEX inventory, 68-class class/method metadata and a corrected 68-class source bundle attached to the task ZIP.
-- Standard-library Python helpers: DEX inventory/disassembly, AXML decoder, SMF probe and APK split/asset audit.
-- Static validation scripts and reports for source reconstruction, asset loading, native boundary, and security findings.
+- Complete 68-class generated Smali-like source snapshot in the downloadable analysis ZIP.
+- Java contract snapshots under `reference/java/`, including 34 native renderer signatures and observed Globals values. They compile standalone but do not implement the engine.
+- DEX inventory/disassembly, AXML decoder, SMF probe, APK split audit and static validation tools.
+- Reports for asset flow, native/split package boundary, unresolved SMF format, validation and sensitive asset handling.
 
-Corrected metrics: 68 app-specific classes, 405 methods, 5,187 decoded instructions, 50 payload directives, and 44 native declarations. Static validation is not proof of Smali assembler acceptance or runtime equivalence.
+Corrected metrics: 68 app-specific classes, 405 methods, 5,187 decoded instructions, 50 payload directives and 44 native declarations. Static validation is not proof of Smali assembler acceptance or runtime equivalence.
 
 ## Main finding: required split APKs
 
-The manifest declares required split types for ABI and display density, `android:isSplitRequired=true`, and `android:extractNativeLibs=false`. This upload contains no native `lib/<abi>/*.so` entries, so the missing binary engine may be in a matching ABI split rather than absent from the distribution. Matching splits have not yet been acquired or validated.
+The manifest declares required split types for ABI and display density, `android:isSplitRequired=true` and `android:extractNativeLibs=false`. This upload contains no native `lib/<abi>/*.so` entries, so the missing engine may reside in a matching ABI split rather than be absent from the distribution. Matching splits have not yet been acquired or validated.
 
-The asset `S3DMain.smf` is stored without ZIP compression and passed to native methods using its file descriptor, offset and length. Its internal format remains unresolved. Do not infer encryption from high entropy alone.
+The asset `S3DMain.smf` is stored without ZIP compression and passed to native methods using its descriptor, offset and length. Its internal format remains unresolved; high entropy does not prove encryption.
 
 ## Reproduce locally
 
@@ -33,6 +34,6 @@ python tests/validate_bundle.py
 python tests/validate_smali.py --root disassembly
 ```
 
-JADX, Apktool, a Smali assembler, the matching split APKs and a runtime build have not yet been run/verified in this environment. Original Java comments/formatting/locals, native implementations and SMF internals are not recovered.
+JADX, Apktool and a Smali assembler were unavailable in the offline execution environment. Original Java comments/formatting/local names, native implementation and SMF internals are not recovered.
 
 The uploaded APK contains `assets/api_key.txt` with a credential-shaped token. That file and its value are excluded. Rotate/revoke the credential if active.
