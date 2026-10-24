@@ -106,3 +106,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - Inherited 598-row heuristic queue now has 131 active candidate rows after v2.43, down from 241 after v2.42; this is a triage delta, not a confirmed untranslated-string count. Global semantic coverage remains NOT COMPUTED.
 - Patch SHA-256: `00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024`; local project archive v2.8 SHA-256: `417d8256a74ad6ed64072c93fd1e9b9f255cdb7bca41c49c96333fba6a569cd5`. These binaries and the detailed ledger are not hosted publicly.
 - See [v2.43 checkpoint](docs/CHECKPOINT_v2.43.md), [sanitized validation summary](audit/v2.43_static_validation_summary.json), and [residual recheck](audit/v2.43_residual_recheck.json).
+
+
+## APK candidate build — 24 October 2026
+- Rebuilt a local Android APK candidate from the provided extracted base package plus the v2.43 overlay: `DR2C_VORENYX_v2.43.apk` (39,610,091 bytes; SHA-256 `cefe665d0164495248f0d2cc960f54478d60b980ec137c3878181732d0885a90`).
+- Static checks PASS: ZIP CRC, JAR/v1 signature verification, all 272 overlay payload hashes, 4-byte alignment of stored native libraries, 3 DEX files, and arm64-v8a/armeabi-v7a libraries.
+- The APK was signed with a new local key because the original publisher private key is unavailable. The manifest includes `com.pairip.application.Application` and PairIP/Play license-check components; the candidate may be rejected at install/launch. No licensing or anti-tamper bypass was attempted.
+- Android runtime install, launch, gameplay/event paths, UI fit, save/load and stability remain NOT TESTED. It is a statically validated APK candidate, not a verified stable release. The APK and extracted game content remain local-only; GitHub stores sanitized reports only.
+- v2.43 patch metadata contains a conflict: README.txt states 309 changed occurrences across 16 files, while checkpoint/ledger state 159 across 58 files. The discrepancy is documented rather than silently reconciled to an unsupported number.
