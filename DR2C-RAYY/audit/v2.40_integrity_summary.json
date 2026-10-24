@@ -1,0 +1,58 @@
+{
+  "project": "DR2C VORENYX",
+  "build": "v2.40",
+  "base_build": "v2.39",
+  "static_integrity": "PASS",
+  "canonical_trait_perk_key_audit": {
+    "mismatches_before": 45,
+    "mismatches_repaired": 45,
+    "remaining_mismatches": 0,
+    "operands_compared": 195,
+    "affected_modules": 13
+  },
+  "control_flow_integrity": {
+    "cyoa_choice_ids_preserved": true,
+    "route_resource_path_literals_preserved": true
+  },
+  "inventory": {
+    "text_files_scanned": 541,
+    "files_with_active_quoted_literals": 434,
+    "active_quoted_literals": 16834,
+    "inherited_candidate_rows_remaining": 0,
+    "coverage_status": "NOT_COMPUTED"
+  },
+  "patch": {
+    "bytes": 24380609,
+    "sha256": "a863cadfda4d99ef14c9199e255cbfc8e687c1d05a1853b8f461f096870b26eb",
+    "zip_crc": "PASS",
+    "zip_entries": 411,
+    "manifest_entries": 410,
+    "manifest_hash_failures": 0,
+    "duplicate_paths": 0,
+    "machine_local_path_leaks": 0,
+    "title_art_copies_match": true
+  },
+  "full_project_archive": {
+    "version": "v2.5",
+    "bytes": 105064456,
+    "sha256": "cc0e7818dd87f0fe508692ae0545343ad89c727c401c81ad00f703377962fa97",
+    "zip_crc": "PASS",
+    "zip_entries": 185,
+    "manifest_entries": 184,
+    "manifest_hash_failures": 0,
+    "unmanifested_files": 0,
+    "duplicate_paths": 0
+  },
+  "not_run": {
+    "runtime_gameplay": "NOT RUN",
+    "ui_fit_overflow": "NOT RUN",
+    "save_load": "NOT RUN",
+    "apk_rebuild_signing": "NOT PERFORMED"
+  },
+  "limitations": [
+    "Zero inherited candidate rows does not prove that all player-visible text is localized.",
+    "Global semantic coverage has not been computed.",
+    "Runtime compatibility and UI fit are unverified."
+  ],
+  "distribution": "Public repository contains sanitized documentation/audit summaries only; source archive and binary overlay are not included."
+}
