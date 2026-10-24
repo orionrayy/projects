@@ -19,7 +19,7 @@ The DEX contains native IAP result declarations, while the decoded proprietary `
 | `Resources/HUD/pause.hud` | 29,446 B | `12499b08c49b4a5bb34649468b910b62ba1a64adfd831bd638d13d420af9f395` | `options`, `onOptionsClose`, `onResume` |
 | `Resources/HUD/debug.hud` | 12,887 B | `02ed5420fceacaba5bc614596fddc52646abf04914446e26bc240806930f15b6` | `onAddBattle`, `onCreateCS`, `onAddLevel`, `onCreateFeat`, `GOTO Floor` |
 
-The complete expected-symbol lists are defined in `tools/audit_aim_hud_symbols.py`; its output reports every requested symbol's first printable-byte offset. These hashes are from the decoded assets used for this analysis. Re-run the tool against the asset tree actually being studied rather than relying on names alone.
+The complete expected-symbol lists are defined in `tools/audit_aim_hud_symbols.py`; its output reports every requested symbol's first printable-byte offset. A [machine-readable v14 snapshot](AIM_HUD_SYMBOL_AUDIT_V14.json) records the locally cross-checked sizes, hashes, and all 58 offsets. These hashes are from the decoded assets used for this analysis. Re-run the tool against the asset tree actually being studied rather than relying on names alone.
 
 ## Reproduction
 
