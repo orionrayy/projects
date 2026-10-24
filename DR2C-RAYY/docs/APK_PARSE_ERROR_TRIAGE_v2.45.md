@@ -1,33 +1,42 @@
 # DR2C VORENYX v2.45 — APK Package-Parse Error Triage
 
 **Date:** 2026-10-25  
-**Status:** A concrete native-library alignment defect was repaired in a new local candidate. The user's Android install attempt has not been re-run; causality is not yet confirmed.
+**Status:** The prior two candidates had a confirmed Android 11 package-layout defect. A corrected candidate was built and passed local structural checks; installation on the user's phone has not yet been verified.
 
 ## User-observed symptom
 
-Android Package Installer displays “Ada masalah saat mengurai paket” for `DR2C_VORENYX_v2.45_TEST.apk`. Treat this as a real package rejection, not a mere existing-package signature conflict.
+Android Package Installer displays “Ada masalah saat mengurai paket”. This means the package is rejected at parse/install validation; it is not enough to attribute it to an existing-package signing conflict.
 
-## Verified defect
+## Confirmed defect in both previous candidates
 
-The previous candidate's manifest specifies `android:extractNativeLibs="false"`. All seven native `.so` payloads were stored uncompressed but had only 4-byte alignment; their actual payload offsets were not divisible by 4,096. The original supplied base package had those seven payloads page-aligned.
+The manifest specifies `targetSdkVersion=35`. In both `DR2C_VORENYX_v2.45_TEST.apk` and `DR2C_VORENYX_v2.45_PAGEALIGNED_TEST.apk`, `resources.arsc` was stored uncompressed, but its actual payload offset had `offset % 4 = 1`.
 
-Android's native-loader documentation says a shared library loaded directly from an APK with `extractNativeLibs=false` must be stored uncompressed and page-aligned:
-https://android.git.googlesource.com/platform/bionic/+/HEAD/android-changes-for-ndk-developers.md
+Android's official Android 11 documentation states that apps targeting API 30 or higher cannot be installed if `resources.arsc` is compressed or not aligned to a 4-byte boundary: https://developer.android.com/about/versions/11/behavior-changes-11#app-signing
 
-## Correction made
+This is a concrete invalid package layout and plausibly explains the repeat parse failure. It is a stronger explanation than the earlier native-library alignment hypothesis.
 
-A new file was generated: `DR2C_VORENYX_v2.45_PAGEALIGNED_TEST.apk`.
+## Correction in the new candidate
 
-- Every native library is stored uncompressed at a 4,096-byte-aligned payload offset.
-- ZIP CRC scan: PASS; 1,005 entries; no duplicate paths.
-- JAR/v1 signature verified with JDK `jarsigner -verify`.
-- APK Signature Scheme v2 block, RSA signature, and whole-file content digest independently verified by the local verifier.
-- Binary AndroidManifest.xml chunk structure checked; minimum SDK 23, target SDK 35; both splash and game activity have landscape orientation.
-- Size: 112,237,647 bytes.
-- SHA-256: `adbe5fff97ba43c670c640e648b4ccc9a9f55996840559665a791d16d06267e7`.
+Artifact: `DR2C_VORENYX_v2.45_PARSEFIX_TEST.apk`
 
-## What remains unverified
+- Size: 112,238,771 bytes.
+- SHA-256: `e727b5eb9f8314e312e1808acce5c11923265716a1ea2fb84638cca2d53530e6`.
+- ZIP CRC: PASS; 1,005 entries; zero duplicate paths.
+- `resources.arsc`: stored uncompressed, payload offset 73,704,384; `offset % 4 = 0`.
+- All 260 stored entries are 4-byte aligned; zero alignment failures.
+- Seven uncompressed native `.so` payloads are page-aligned to 4,096 bytes, consistent with `android:extractNativeLibs=false`.
+- JAR/v1 signature and a local APK v2 signature/content-digest verifier pass.
+- Manifest structure passes the local chunk-level check; target SDK 35, min SDK 23; splash and game activities use landscape orientation.
 
-No Android device or Package Installer log is available in this build environment, so it is not proven that this alignment defect was the only cause of the generic parse error. If the new candidate still reports a parsing error, obtain the exact `INSTALL_PARSE_FAILED_*` / `INSTALL_FAILED_*` code from Package Installer/ADB before guessing again.
+## Remaining limits
 
-The candidate uses a local test certificate, not the publisher's certificate. An in-place update over a differently signed installed app may be rejected separately. Do not uninstall the current game without backing up saves. Publisher license checks were not removed or bypassed.
+- No Android device or PackageInstaller logs are available in this build environment; the new candidate's install has not been re-run.
+- The APK has a local test certificate, not the publisher's certificate. A separate signature-mismatch error may occur if updating over a differently signed installation.
+- The v2 signature was checked with a local implementation, not the official `apksigner` binary. If the correctly named new candidate still fails parsing, capture the exact `INSTALL_PARSE_FAILED_*` / `INSTALL_FAILED_*` code from Package Installer/ADB instead of building another guessed APK.
+- Original PairIP/Play licensing checks remain intact.
+- Do not uninstall the current game before backing up its save data.
+
+## Evidence
+
+- APK build report: [DR2C_VORENYX_v2.45_PARSEFIX_BUILD_REPORT.md](sandbox:/mnt/data/DR2C_VORENYX_v2.45_PARSEFIX_BUILD_REPORT.md)
+- Machine-readable validation: [DR2C_VORENYX_v2.45_PARSEFIX_VALIDATION.json](sandbox:/mnt/data/DR2C_VORENYX_v2.45_PARSEFIX_VALIDATION.json)
