@@ -1,0 +1,60 @@
+{
+  "description": "Static token comparison between source scripts and the v2.45 overlay. Comments are masked, literal strings normalized, and whole ($ ... $) display interpolation blocks replaced by a sentinel. Results are a heuristic, not a full Deathforth parse.",
+  "files_with_nontextblock_token_changes": 6,
+  "changed_files": [
+    {
+      "file": "boot.df",
+      "change_types": [
+        "insert"
+      ],
+      "classification": "id-name-localize display-only mapping helper"
+    },
+    {
+      "file": "charstats-textfill.df",
+      "change_types": [
+        "insert"
+      ],
+      "classification": "calls display-name mapper for trait/perk text"
+    },
+    {
+      "file": "cyoa-charstats.df",
+      "change_types": [
+        "insert"
+      ],
+      "classification": "display-only group-name helper"
+    },
+    {
+      "file": "doglogic.df",
+      "change_types": [
+        "insert"
+      ],
+      "classification": "display-only pet wording helper"
+    },
+    {
+      "file": "events/common/cyoa-example-7types.df",
+      "change_types": [
+        "insert"
+      ],
+      "classification": "display-only dog/cat wording helper"
+    },
+    {
+      "file": "events/unlock/perktrait.df",
+      "change_types": [
+        "insert"
+      ],
+      "classification": "display-only mapping calls for titles and choice labels"
+    }
+  ],
+  "token_change_kinds": [
+    "insert"
+  ],
+  "non_insertion_change_ops": 0,
+  "gameplay_effect_primitive_counts_changed": false,
+  "canonical_trait_perk_keys": {
+    "count": 60,
+    "set_matches_source": true,
+    "display_mapping_coverage": 60,
+    "missing_display_mappings": []
+  },
+  "runtime_verified": false
+}
