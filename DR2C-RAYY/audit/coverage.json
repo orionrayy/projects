@@ -1,7 +1,7 @@
 {
   "project": "DR2C VORENYX",
   "locale": "id-ID",
-  "build": "v2.22 — contextual camp, character-bio and encounter localization",
+  "build": "v2.23 — camp event English-residue repair and mapping reconciliation",
   "source_script_files_scanned": 541,
   "source_quoted_literal_occurrences": 17329,
   "unique_source_literals": 13038,
@@ -20,6 +20,12 @@
   "v2_22_contextual_expressions_rewritten": 94,
   "v2_22_literal_occurrences_changed": 183,
   "v2_22_inventory_rows_newly_marked": 138,
-  "validation_missed_exact_mapping_rules": 49,
-  "warning": "Coverage remains a literal-inventory heuristic, not semantic completeness or runtime screen coverage. The denominator may include fragments/code-like strings. The 49 missed rules must be reconciled rather than counted as successful translations."
+  "validation_missed_exact_mapping_rules": 0,
+  "warning": "The 69.07% value is the last measured v2.22 heuristic and has not been recomputed for v2.23. It is not semantic completeness or runtime screen coverage.",
+  "coverage_measurement_build": "v2.22",
+  "coverage_measurement_status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_23",
+  "v2_23_unique_source_literals_localized": 51,
+  "v2_23_literal_occurrences_changed": 52,
+  "v2_23_historical_mapping_misses_repaired": 47,
+  "v2_23_historical_mapping_rules_reconciled_as_non_actionable": 2
 }
