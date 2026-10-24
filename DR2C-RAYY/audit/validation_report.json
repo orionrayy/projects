@@ -1,6 +1,6 @@
 {
   "project": "DR2C VORENYX",
-  "build": "v2.43",
+  "build": "v2.44",
   "static_integrity": "PASS",
   "static_failures": [],
   "canonical_key_integrity": {
@@ -48,53 +48,80 @@
     "duplicates": 0
   },
   "apk_candidate_build": {
-    "artifact": "DR2C_VORENYX_v2.43.apk",
-    "bytes": 39748335,
-    "sha256": "3019dd04098e9e8fef01045a2e391d9525bf87ef6874b0d0049c5a073a052f25",
-    "status": "ASSEMBLED; STATIC PACKAGING AND SIGNATURE VALIDATION PASS; RUNTIME NOT VERIFIED",
-    "package": "com.noodlecake.drtc",
-    "game_version": "1.8.2",
-    "version_code": 57,
-    "min_sdk": 23,
-    "target_sdk": 35,
+    "artifact": "DR2C_VORENYX_v2.44_START_UI_HOTFIX.apk",
+    "bytes": 39748341,
+    "sha256": "e28314611411aeba2fdd6bf2cee918fa64ddecac159536e4a39918e7af81f8a6",
+    "status": "STATIC PACKAGE CHECKS PASS; RUNTIME NOT VERIFIED",
+    "hotfixes": {
+      "boot_marker": {
+        "file": "assets/deathforth/boot.df",
+        "before": "PENANDA-GAME",
+        "after": "GAME-MARKER",
+        "static": "PASS",
+        "runtime": "NOT TESTED"
+      },
+      "orientation": [
+        {
+          "activity": "com.noodlecake.drtc.SplashActivity",
+          "before": 6,
+          "after": 0,
+          "static": "PASS"
+        },
+        {
+          "activity": "com.noodlecake.drtc.DrtcGameActivity",
+          "before": 6,
+          "after": 0,
+          "static": "PASS"
+        }
+      ],
+      "start_path": {
+        "deferred_main_event_select_declared": true,
+        "select_handler_registered": true,
+        "select_start_registered": true,
+        "tutorial_region_exists": true,
+        "start_route_to_tutorial_or_select": true
+      }
+    },
+    "package": {
+      "entries": 1015,
+      "crc": "PASS",
+      "duplicate_paths": 0,
+      "overlay_payloads": 272,
+      "overlay_hash_mismatches": 0,
+      "dex_files": 3,
+      "native_libraries": 16,
+      "abis": [
+        "arm64-v8a",
+        "armeabi-v7a"
+      ],
+      "native_alignment": "PASS"
+    },
     "signature": {
-      "tool": "Android SDK Build Tools 35.0.1 apksigner 0.9",
       "v1": "PASS",
       "v2": "PASS",
       "v3": "PASS",
+      "tool": "Android SDK Build Tools 35.0.1 apksigner 0.9",
       "certificate_sha256": "6ea04e10965de1459a7fee845e8ae903bc1535a744f4762c14b2c7bb82eb13f9",
-      "certificate_is_publisher": false
+      "original_publisher_certificate": false
     },
-    "zip": {
-      "entries": 1015,
-      "crc": "PASS",
-      "duplicate_paths": 0
-    },
-    "overlay": {
-      "payload_count": 272,
-      "hash_mismatches": 0,
-      "missing": 0,
-      "unchanged_vs_base": 0
-    },
-    "dex_files": 3,
-    "native_libraries": 16,
-    "native_abis": [
-      "arm64-v8a",
-      "armeabi-v7a"
-    ],
-    "native_lib_alignment": "PASS",
     "pairip_license_check_present": true,
-    "original_publisher_key_available": false,
-    "license_bypass_attempted": false,
-    "runtime": {
-      "install": "NOT RUN",
-      "launch": "NOT RUN",
-      "gameplay": "NOT RUN",
-      "ui_fit": "NOT RUN",
-      "save_load": "NOT RUN",
-      "stability": "NOT RUN"
+    "apkvision": {
+      "logo_in_game_splash": false,
+      "namespace_in_classes3_dex": true,
+      "namespace_in_libstub": true,
+      "wrapper_removed": false,
+      "clean_authorized_base_needed": true
     },
-    "risk": "PairIP/Play license checks may reject a re-signed APK. Not a verified stable release."
+    "runtime": {
+      "install": "NOT TESTED",
+      "launch": "NOT TESTED",
+      "start_button": "NOT TESTED ON DEVICE",
+      "ui_fit": "NOT TESTED ON DEVICE",
+      "gameplay": "NOT TESTED",
+      "save_load": "NOT TESTED",
+      "stability": "NOT VERIFIED"
+    },
+    "license_or_anti_tamper_bypass_attempted": false
   },
   "metadata_conflict": "README.txt says 309 changed occurrences across 16 files; v2.43 checkpoint and translation ledger say 159 across 58 files. Reported batch metric follows the checkpoint/ledger and retains the discrepancy.",
   "distribution": "The APK, base APK contents, full source scripts, and binary overlay are local-only. GitHub contains sanitized reports.",
