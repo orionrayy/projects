@@ -1,0 +1,47 @@
+{
+  "project": "DR2C VORENYX",
+  "build": "v2.24",
+  "base_checkpoint": "v2.23",
+  "locale": "id-ID",
+  "scope_files": [
+    "assets/deathforth/blurb/aggressive.df",
+    "assets/deathforth/blurb/passive.df",
+    "assets/deathforth/blurb/pessimist.df",
+    "assets/deathforth/blurb/dull.df",
+    "assets/deathforth/blurb/sharp.df",
+    "assets/deathforth/blurb/blurbdeck.df",
+    "assets/deathforth/blurb/screply.df"
+  ],
+  "literal_mapping_rules": 277,
+  "literal_occurrences_changed": 279,
+  "contextual_word_order_fixes": 2,
+  "manual_residue_qa_corrections": 14,
+  "static_structure": "PASS",
+  "file_structure": {
+    "quoted_literal_count_preserved": true,
+    "line_count_preserved": true,
+    "non_string_source_skeleton_preserved": true
+  },
+  "package": {
+    "zip_entries": 301,
+    "duplicate_paths": 0,
+    "crc": "PASS",
+    "manifest_entries": 300,
+    "manifest_hash_failures": 0,
+    "sha256": "e2353ff369e6d351a3ee1899f6307f65d7242d94b540d5ae6a49e7d72a18654b",
+    "bytes": 11256978
+  },
+  "coverage": {
+    "measurement_build": "v2.22",
+    "percent": 69.07,
+    "status": "STALE_BASELINE_NOT_RECOMPUTED_FOR_V2_24",
+    "full_translation_complete": false
+  },
+  "tests": {
+    "runtime_gameplay": "NOT RUN",
+    "ui_fit": "NOT RUN",
+    "save_load": "NOT RUN",
+    "apk_rebuild_signing": "NOT PERFORMED"
+  },
+  "distribution_boundary": "Sanitized audit only. No original archive, extracted game scripts, or binary overlay committed."
+}
