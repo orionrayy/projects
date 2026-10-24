@@ -11,6 +11,18 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
 - [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
 
+## v2.46 English residual multi-analysis
+
+- Baseline: `DR2C_VORENYX_v2.46_UI_LOCALIZED_TEST.apk`, SHA-256 `6d4e2f3df07d199807c08418ae5d30b9927e5b2e36c780a51858045336b29313`. Static scan covers all 509 packaged `.df` scripts.
+- Extraction detected 3,624 display templates and 9,890 standalone literals. Candidate scoring ranked 443 high-confidence player-facing candidates (P1), 55 medium (P2), 199 short labels/titles/shouts, and 677 unique normalized phrases. These are triage counts, not semantic coverage or a claim that every candidate appears during gameplay.
+- Biggest residual hotspot: `events/trade/oldtrade.df` (76 P1 candidates), especially weapon trade descriptions, gas/ammo, medical supplies and robbery outcomes. Other targets: `events/common/PANCREAS.df`, `events/trade/rare.df`, `events/city/region/special-lots.df`, and `events/locationlogic.df`.
+- The native scan found 3,332 English-like ASCII strings: 2,035 in `libmain.so`, 576 in `libSDL2_image.so`, 527 in `libSDL2.so`, and smaller counts in mixer/PairIP/codec libraries. These are not all player-facing text; engine diagnostics, error messages, identifiers and third-party middleware must not be blindly translated.
+- False-positive patterns include internal/log tokens such as `DAY-PICK-DECK5 RECRUIT`, `old-total-kills:`, and `door-no-escape`. Dynamic templates require their character/group placeholders and markup to remain intact.
+- A curated next-wave review queue has 38 candidate translations for static location labels, simple trade choices and forecast labels. It is a review queue, not yet applied to the APK.
+- Runtime validation of v2.46 on the user's device remains unconfirmed.
+
+See the detailed report in `docs/ENGLISH_RESIDUAL_MULTIANALYSIS_v2.46.md` and the CSV review queue shared with the conversation artifacts.
+
 ## v2.46 screenshot-driven UI localization
 
 - Targets the English/mixed-language text seen in the user's latest screenshots: tutorial CYOA choices and prose, plus Team, Swap Meet, Choose UR Fate, and 10 character-stat labels in native `libmain.so`.
