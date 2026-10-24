@@ -31,7 +31,7 @@
       "package21"
     ],
     "union_identifiers": 109,
-    "vanity_sku_asset_correlations": 0,
+    "vanity_sku_asset_correlations": 46,
     "runtime_reward_verified": 0,
     "runtime_reward_unverified": 109
   },
@@ -1592,7 +1592,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1621,7 +1621,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1649,7 +1649,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1677,7 +1677,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1705,7 +1705,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1733,7 +1733,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1761,7 +1761,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1789,7 +1789,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1817,7 +1817,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1845,7 +1845,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1873,7 +1873,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1901,7 +1901,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1929,7 +1929,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1957,7 +1957,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -1985,7 +1985,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2013,7 +2013,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2041,7 +2041,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2069,7 +2069,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2097,7 +2097,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2125,7 +2125,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2153,7 +2153,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2181,7 +2181,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2209,7 +2209,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2237,7 +2237,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2265,7 +2265,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2293,7 +2293,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2321,7 +2321,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2349,7 +2349,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2377,7 +2377,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2405,7 +2405,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2434,7 +2434,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2463,7 +2463,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2492,7 +2492,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2521,7 +2521,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2550,7 +2550,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2579,7 +2579,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2608,7 +2608,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2637,7 +2637,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2666,7 +2666,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2695,7 +2695,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2724,7 +2724,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2753,7 +2753,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2782,7 +2782,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2809,7 +2809,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2836,7 +2836,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
@@ -2865,7 +2865,7 @@
         "persisted_entitlement_write": "NOT_OBSERVED",
         "runtime_test_status": "NOT_RUN",
         "evidence_boundary": "The DEX callback target is native and the matching native implementation/proprietary model call edge has not been verified.",
-        "asset_correlation_note": "No SKU-specific runtime grant proof is established by the current source set.",
+        "asset_correlation_note": "Vanity SKU ↔ same-suffix Vanity.xml asset correlation only; not proof of ownership grant or persistence.",
         "next_required_evidence": [
           "matching native library/split or equivalent native source/disassembly",
           "decoded model callback edge where relevant",
