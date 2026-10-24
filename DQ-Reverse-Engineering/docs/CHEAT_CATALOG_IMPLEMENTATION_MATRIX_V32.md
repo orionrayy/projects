@@ -104,3 +104,20 @@ Artifact: `Dungeon_Quest_3.3.2.0_CheatMenu_ExpandedDebug_v32.xapk`
 SHA-256: `7fdec74ef3d3f1d0b9f506e60f1adfd2f61d5dea821c07c88974ab5584f1cc32`
 
 **Runtime pending.** The user has not yet tested v32. The +100K callback is statically mapped; exact Gold Down behavior is not established. The newly exposed controls do not implement 222 catalog entries and do not make unsupported toggles work. Do not mark any catalog effect runtime-verified until the user confirms the control and its resulting game state.
+
+
+## Increment v33 — button-only Gold adjustment controls
+
+The user reported that the v32 screen looked unchanged. The reason the previous Gold page may not have appeared is that the custom root tab did not become visible in the active UI. v33 therefore places the new controls inside the existing **Add** tab.
+
+Four buttons were added, ordered left-to-right: **Gold -10**, **Gold -1**, **Gold +1**, **Gold +10**. They call the native model methods `uai_gp_hud.SpendGold(10.000)`, `SpendGold(1.000)`, `RewardGold(1.000)` and `RewardGold(10.000)`, respectively. No new numeric text box or keyboard entry was added. The three existing Add buttons are moved/resized to create room.
+
+- Artifact: `Dungeon_Quest_3.3.2.0_CheatMenu_GoldSteppers_v33.xapk`
+- XAPK SHA-256: `65e4cdc2284e02747c9eb942edc171588209cb4ffba723892f52cabe1ad81a3d`
+- Debug HUD: 75 elements, 17 actions.
+- STK: all 5,630 entries decode/CRC-check; header key equals CRC32 of the decoded metadata table; only `Resources/HUD/debug.hud` changes.
+- APK: 19 non-base splits are byte-identical to v31; only `assets/S3DMain.smf` changes in the base APK outside signature metadata.
+- Signing/packaging: local v2 signer check and inner/outer ZIP CRC checks pass.
+- Runtime: **not yet tested**. Native `RewardGold`/`SpendGold` method names are present in the binary, but the new direct numeric action binding still needs an on-device test.
+
+This is the first visible stepper UI for Gold only. The full 222-cheat design still has 0 entries fully implemented and runtime-verified; unverified controls remain blocked by the native adapter boundary. No billing receipts or paid entitlement code was modified.
