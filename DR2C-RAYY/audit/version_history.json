@@ -150,5 +150,12 @@
     "playerFacingHeuristicPct": null,
     "coverageMeasurementBaselinePct": 69.07,
     "static": "PASS; 277 mapping rules and 279 occurrences changed across seven files; token/line counts preserved; package CRC and hashes pass; coverage not remeasured; runtime not tested"
+  },
+  {
+    "version": "v2.25",
+    "focus": "active optimistic-survivor and wrestler dialogue localization",
+    "playerFacingHeuristicPct": null,
+    "coverageMeasurementBaselinePct": 69.07,
+    "static": "PASS; 63 mapping rules and 63 literal occurrences changed in two files; token/line counts preserved; ZIP CRC and manifest hashes pass; coverage not remeasured; runtime not tested"
   }
 ]
