@@ -3,8 +3,8 @@
   "build": "v2.43 APK candidate",
   "created_at": "2026-10-24",
   "artifact": "DR2C_VORENYX_v2.43.apk",
-  "bytes": 39610091,
-  "sha256": "cefe665d0164495248f0d2cc960f54478d60b980ec137c3878181732d0885a90",
+  "bytes": 39748335,
+  "sha256": "3019dd04098e9e8fef01045a2e391d9525bf87ef6874b0d0049c5a073a052f25",
   "base_archive": {
     "filename": "DR2C-RAYY.zip",
     "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1"
@@ -58,5 +58,15 @@
   },
   "release_status": "STATICALLY_VALIDATED_APK_CANDIDATE_NOT_CONFIRMED_STABLE",
   "source_metadata_conflict": "README reports 309 occurrences across 16 files; v2.43 checkpoint/ledger report 159 occurrences across 58 files.",
-  "distribution": "APK and full source remain local only; this JSON is sanitized."
+  "distribution": "APK and full source remain local only; this JSON is sanitized.",
+  "signature_schemes": {
+    "v1": "PASS",
+    "v2": "PASS",
+    "v3": "PASS",
+    "tool": "Android SDK Build Tools 35.0.1 apksigner 0.9",
+    "certificate_sha256": "6ea04e10965de1459a7fee845e8ae903bc1535a744f4762c14b2c7bb82eb13f9",
+    "original_publisher_signature": false
+  },
+  "status": "STATICALLY_VALIDATED_APK_CANDIDATE_NOT_RUNTIME_STABLE",
+  "pairip_license_check_risk": true
 }
