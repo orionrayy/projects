@@ -27,7 +27,7 @@ def section(payload: bytes) -> bytes:
     return u32(len(payload)) + payload
 
 
-def fixture(version: int = 12) -> bytes:
+def fixture(version: int = 12, marker: bytes = b"NcP") -> bytes:
     general = string("onOpen")
     elements = u32(2) + b"opaque-elements"
     actions = u16(2) + string("onOpen") + u16(1) + string("call:model:handler")
@@ -37,9 +37,17 @@ def fixture(version: int = 12) -> bytes:
     if version > 8:
         actions += string("")
     timers = u16(0)
-    return u32(3) + b"NcP" + bytes([version]) + b"".join(
+    assert marker in (b"NcP", b"NcX", b"NcI")
+    return u32(3) + marker + bytes([version]) + b"".join(
         section(payload) for payload in (general, elements, actions, timers)
     )
+
+
+def test_accepts_all_observed_marker_variants() -> None:
+    for marker in (b"NcP", b"NcX", b"NcI"):
+        result = inspect_hud(fixture(12, marker))
+        assert result["header"] == {"marker": marker.decode("ascii"), "format_version": 12}
+        assert result["actions"]["count"] == 2
 
 
 def test_valid_version_12() -> None:
@@ -99,6 +107,7 @@ def test_rejects_malformed_action_table() -> None:
 
 
 if __name__ == "__main__":
+    test_accepts_all_observed_marker_variants()
     test_valid_version_12()
     test_legacy_version_8()
     test_rejects_bad_marker_truncation_and_trailing_data()
