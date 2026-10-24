@@ -1,22 +1,38 @@
-# Build and Validation — v2.26
+# Build and Validation — v2.35
 
-## Static verification evidence
-- Local patch artifact: `DR2C_VORENYX_ID_v2.26_localization_patch.zip`.
-- ZIP package: 312 entries; CRC scan PASS; zero duplicate paths.
-- SHA-256 manifest: 311 listed files, all hashes verified with zero mismatches; no machine-local path leaks.
-- Scope: five special-character profiles: `sc/beeman.df`, `sc/boxer.df`, `sc/caveman.df`, `sc/knight.df`, and `sc/ninja.df`.
-- 66 exact-context mappings; 66 literal occurrences changed.
-- All five files preserve quoted-token counts, source line counts, and non-string source skeletons; all mapped source residues are absent.
-- Artifact SHA-256: `edda11648c4f7ed32d1413b154fd70e65943edfb367f18c6bffa0b5119a3f02c` (11,275,547 bytes).
+## Release artifact
+- Local artifact: `DR2C_VORENYX_ID_v2.35_localization_patch.zip`
+- Size: 19828207 bytes
+- SHA-256: `df3cd3840b3a6f32e5861b976045112ee790db6e472ae512ebac8d2e1b4fcee1`
+- ZIP entries: 362
+- SHA-256 manifest entries: 361
+- ZIP CRC: PASS
+- Duplicate paths: 0
+- Manifest hash failures: 0
+- Machine-local path leaks: 0
+
+The checksum is recorded outside the ZIP to avoid embedding a self-referential archive digest. The public GitHub repository contains sanitized documentation and audit summaries, not the local source overlay.
+
+## v2.35 scope and static checks
+- 32 full display expressions rewritten across 12 source modules.
+- 9 direct literal mapping rules matched; 9 occurrences changed.
+- File line counts remain equal before/after for every scoped file.
+- Non-display source skeletons preserved.
+- CYOA IDs, choice IDs, and route-path literals preserved.
+- Direct mapping residues: 0 for targeted literals.
+- Current comment-aware scan: 541 source files, 16,827 active quoted-string tokens.
+- Residual triage queue: 129 rows across 67 files; queue count is not a coverage score.
+
+## v2.34 reconciliation
+The v2.34 ZIP's checkpoint text described a stale three-file batch, while its actual audit/ledger scope and overlay changes cover nine different files. Its embedded ZIP digest and byte count were stale as well. The v2.35 package corrects the v2.34 checkpoint and audit metadata using the actual v2.34 ZIP contents. See [v2.34 reconciliation](CHECKPOINT_v2.34.md).
 
 ## Coverage status
-The last available heuristic measurement is v2.22: 7,490/10,844 = 69.07%. It has not been recomputed for v2.26 and is not a current coverage score, semantic completeness estimate, or runtime screen-coverage measure. The historical untranslated-candidate queue must be rebuilt with a comment-aware parser before broad triage.
+The old 69.07% figure belongs to a v2.22 heuristic and is stale. Current global semantic coverage is not computed; the inventory's English-likelihood queue is for triage only. Full localization is incomplete.
 
-## Not tested
-- Runtime gameplay and actual UI layout/fit: NOT RUN.
-- Save/load: NOT RUN.
-- APK rebuild/signing: NOT PERFORMED.
-- ZIP/hash integrity does not prove compatibility with a specific installed game version. Treat the artifact as an overlay, not a rebuilt APK.
+## Not executed
+- Runtime gameplay test
+- Actual UI-fit / text-overflow test
+- Save/load test
+- APK rebuild and signing
 
-## Reproduction / review
-Keep the original user-provided archive read-only. Back up target data and confirm game version/path before applying an overlay. Test menus, camp branches, character dialogue, trade costs/rewards, transitions and save/load in a compatible runtime.
+Static token, line-count, source-skeleton, identifier and ZIP checks do not establish runtime compatibility or complete localization.
