@@ -37,7 +37,7 @@ The 46 numeric-suffix Vanity asset correlations remain asset-level matches only.
 
 ## Validation boundaries and next artifact
 
-The v13 workflow run `40084301017` succeeded on the previous v13 code/doc revision. The v14 workflow was extended in this change to exercise the symbol-inventory tests; its result must be checked on the latest branch HEAD rather than inferred from the prior run.
+The v13 workflow run `40084301017` succeeded on the prior v13 code/doc revision. The v14-updated workflow then completed successfully on commit `1cad7db30de3b712d6792b88da2094f038950ea3` in [run 40084702210](https://github.com/orionrayy/projects/actions/runs/40084702210/job/120845131799). Its v14 AIM/HUD symbol-audit test step passed, as did the v13 evidence tests, existing regression tests, manifest/source-boundary checks, and temporary-stub Java compilation. The run uses synthetic fixtures for v14 tests; it does not assert binary hashes against a live Android installation.
 
 The tracked repo remains a curated analysis workspace; it still lacks all 68 app-specific `.smali` files, 68 generated Java declaration scaffolds, a full decoded manifest/resource set, and native engine libraries. The base APK had no `lib/*.so`, while the manifest excerpt declares required ABI/density splits. A matching version/signature/ABI XAPK/APKS set and its ELF dependencies remain unverified. A drop-in engine replacement is still a large port, not a placeholder-library patch.
 
