@@ -11,6 +11,13 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
 - [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
 
+## v2.45 Start diagnostic APK — isolate tap, dispatch, and boot-state path
+
+- The original `main-event-do-select` / `select-boot` route exists in the package, and the localization overlay did not remove or rewrite the dispatch handler. Static analysis alone cannot determine whether a touch reaches the native callback, whether the deferred script handler is registered at runtime, or whether `select-boot` aborts on state/mode/tutorial loading.
+- A diagnostic-only APK enables the in-game console and adds checkpoints in `boot.df`, `events.df`, and `game-select.df`. It distinguishes: boot did not complete; no select event dispatched on tap; event dispatch but no select callback; or a stop in save/mode/tutorial loading.
+- Local artifact: `DR2C_VORENYX_v2.45_STARTDIAG_TEST.apk`, 112,238,856 bytes, SHA-256 `0bdb268aa1da2d70188f3a291f1c0591a195266fa3edec3376c86ca83527c26c`. ZIP CRC and local v1/v2 checks pass; target-device install has not been tested. This is not a release build.
+- [Start diagnostic build guide](docs/START_DIAGNOSTIC_BUILD_v2.45.md) · [Machine-readable validation](audit/startdiag_v2.45.json)
+
 ## v2.45 APK package-parse error correction — page-aligned test build
 
 - Follow-up analysis of the user-observed Android “Ada masalah saat mengurai paket” error found a concrete packaging defect: seven uncompressed native `.so` payloads were only 4-byte aligned even though the manifest declares `extractNativeLibs=false`. The original base has those payloads aligned to 4,096-byte boundaries.
