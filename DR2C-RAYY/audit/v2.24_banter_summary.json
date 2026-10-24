@@ -28,8 +28,9 @@
     "crc": "PASS",
     "manifest_entries": 300,
     "manifest_hash_failures": 0,
-    "sha256": "e2353ff369e6d351a3ee1899f6307f65d7242d94b540d5ae6a49e7d72a18654b",
-    "bytes": 11256978
+    "sha256": "fe3b18ff60c9c1ca20866b0b08887438c1e7f81f35bd2d49fa8e3d85f7d77d43",
+    "bytes": 11256634,
+    "runner_local_path_leaks": 0
   },
   "coverage": {
     "measurement_build": "v2.22",
