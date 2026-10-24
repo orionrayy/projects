@@ -54,7 +54,7 @@ The full locally generated corrective source patch and its diff are separate art
 
 ## Updated artifact integrity (2026-10-25 follow-up)
 
-- Corrective source ZIP: `DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip`, 82,349 bytes, SHA-256 `782ced605419b4819552c649c60c31d6bb0bf0fb9e542d26718c543eb1f28066`.
+- Corrective source ZIP: `DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip`, 82,435 bytes, SHA-256 `b2cc843325ede21d00cb91dad4a4ff68fa8c3c0e629d6910860727a4db4cf88d`.
 - ZIP creation uses fixed timestamps and stable entry ordering. Two consecutive builds produced the same SHA-256; ZIP CRC test passed.
 - Machine-readable executable token audit: [executable_token_audit_v2.45.json](../audit/executable_token_audit_v2.45.json). The raw APK/source-archive comparison is recorded in [apk_baseline_integrity_v2.45.json](../audit/apk_baseline_integrity_v2.45.json).
 
