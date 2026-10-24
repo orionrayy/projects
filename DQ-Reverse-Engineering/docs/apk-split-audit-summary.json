@@ -1,0 +1,31 @@
+{
+  "apk": {
+    "name": "DQ.zip",
+    "size_bytes": 37200621,
+    "sha256": "1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9"
+  },
+  "package": "com.shinybox.smash",
+  "version_name": "3.3.2.0",
+  "version_code": "1423433200",
+  "split_requirements": {
+    "requiredSplitTypes": "base__abi,base__density",
+    "isSplitRequired": "true",
+    "extractNativeLibs": "false"
+  },
+  "archive": {
+    "entry_count": 280,
+    "native_library_entry_count": 0,
+    "native_library_paths": [],
+    "smf_entry": {
+      "path": "assets/S3DMain.smf",
+      "compressed_size": 33978539,
+      "uncompressed_size": 33978539,
+      "zip_method": 0,
+      "stored_without_zip_compression": true
+    },
+    "sensitive_asset_names_only": [
+      "assets/api_key.txt"
+    ]
+  },
+  "interpretation": "Metadata summary only; exact ABI and density split files still need to be obtained and verified."
+}
