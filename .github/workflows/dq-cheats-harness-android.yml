@@ -13,6 +13,10 @@ on:
       - ".github/workflows/dq-cheats-harness-android.yml"
   workflow_dispatch:
 
+concurrency:
+  group: dq-cheats-harness-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
