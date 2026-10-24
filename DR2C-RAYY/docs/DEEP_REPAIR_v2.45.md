@@ -33,7 +33,7 @@ The patch is based on the v2.43 localization overlay and contains 12 changed Dea
 - Active `perk-view!` calls checked: 44; noncanonical IDs remaining: 0.
 - CYOA declarations preserved against source for covered files: 820 `cyoa:`, 927 `cyoa-choice:`, 190 `cyoa-bridge:`; no added or removed identifiers detected.
 - Tracked gameplay-effect primitive counts unchanged. Additional `solo` tokens appear only in five narrative files where singular/plural text branches were introduced.
-- ZIP CRC: PASS; 18 entries; duplicate paths: 0.
+- ZIP CRC: PASS; 19 entries; duplicate paths: 0.
 - Display mapping coverage: 60/60 canonical perk/trait IDs.
 - Executable-token heuristic: 6 files with additions only; 0 token deletion/replacement operations.
 - Patch SHA-256: `1fdd196c5b0616de82011c7386b435e231191df25e75e65f6a2f4ed7b468c5e3`.
@@ -54,6 +54,9 @@ The full locally generated corrective source patch and its diff are separate art
 
 ## Updated artifact integrity (2026-10-25 follow-up)
 
-- Corrective source ZIP: `DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip`, 79,036 bytes, SHA-256 `09ea2b684ce124778322a16464fb17fbaccceb0cdc9f307dcf94d72e96d6b14f`.
+- Corrective source ZIP: `DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip`, 82,349 bytes, SHA-256 `782ced605419b4819552c649c60c31d6bb0bf0fb9e542d26718c543eb1f28066`.
 - ZIP creation uses fixed timestamps and stable entry ordering. Two consecutive builds produced the same SHA-256; ZIP CRC test passed.
 - Machine-readable executable token audit: [executable_token_audit_v2.45.json](../audit/executable_token_audit_v2.45.json). The raw APK/source-archive comparison is recorded in [apk_baseline_integrity_v2.45.json](../audit/apk_baseline_integrity_v2.45.json).
+
+
+- Static choice label/handler audit: [choice_handler_audit_v2.45.json](../audit/choice_handler_audit_v2.45.json).
