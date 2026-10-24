@@ -38,6 +38,7 @@ class PackerTests(unittest.TestCase):
     def test_traversal_rejected(self):
         with self.assertRaises(ValueError): safe_path("../escape")
         with self.assertRaises(ValueError): safe_path("/absolute")
+        with self.assertRaises(ValueError): safe_path(".." + chr(92) + "escape")
     def test_crc_corruption_rejected(self):
         raw=bytearray(make_pack([("a",b"A"*100)])); raw[-1]^=1
         with self.assertRaises(ValueError): StkArchive(bytes(raw)).decode(StkArchive(bytes(raw)).entries[0])
