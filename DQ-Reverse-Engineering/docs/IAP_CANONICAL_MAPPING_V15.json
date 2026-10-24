@@ -18,7 +18,22 @@
     "native_binary_not_committed": true,
     "source_split": "config.arm64_v8a.apk",
     "signature_sha256_fingerprint": "9A:28:A9:91:71:C8:F6:3F:34:11:E2:91:F6:D9:6F:13:D5:D9:C1:73:62:06:A0:CF:95:EB:EE:99:BC:31:42:1D",
-    "no_apk_or_so_uploaded_to_repository": true
+    "no_apk_or_so_uploaded_to_repository": true,
+    "local_data_patch": {
+      "source_stk_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+      "patched_stk_sha256": "3c2d16566458009f0fa5eb4350b606a50e66b9542974b5d1b781f742c33b2d4d",
+      "patched_stk_size_bytes": 34011490,
+      "report_sha256": "99850b2020c3fecd512447f6cb8e3f27ca848672f968ddde6c48504b33b00e0b",
+      "changed_decoded_entries": [
+        "Resources/XML/Vanity.xml",
+        "Resources/XML/Shop.xml"
+      ],
+      "unchanged_decoded_entries": 5628,
+      "all_5630_entries_crc_and_decoded_size_valid": true,
+      "test_suite": "35 local V10 unit tests passed; source patch output verification PASS",
+      "billing_code_changed": false,
+      "apk_build_performed": false
+    }
   },
   "flow": {
     "purchase_messages": {
@@ -83,7 +98,7 @@
     "static_native_payload_mapped": 44,
     "runtime_grants_verified": 0,
     "runtime_grants_unverified": 109,
-    "vanity_data_routes_unit_verified": 0
+    "vanity_data_routes_unit_verified": 46
   },
   "global_entitlement_evidence": {
     "status": "INFERRED",
@@ -7058,8 +7073,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=1",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7086,10 +7102,10 @@
         "type": "vanity_unlock",
         "vanity_id": 1,
         "persistence_key": "iap.vanity1",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity1"
       ],
@@ -7102,7 +7118,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7120,17 +7141,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity1",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7158,8 +7179,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=2",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7186,10 +7208,10 @@
         "type": "vanity_unlock",
         "vanity_id": 2,
         "persistence_key": "iap.vanity2",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity2"
       ],
@@ -7202,7 +7224,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7220,17 +7247,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity2",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7258,8 +7285,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=3",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7286,10 +7314,10 @@
         "type": "vanity_unlock",
         "vanity_id": 3,
         "persistence_key": "iap.vanity3",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity3"
       ],
@@ -7301,8 +7329,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7320,17 +7353,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity3",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7358,8 +7391,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=4",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7386,10 +7420,10 @@
         "type": "vanity_unlock",
         "vanity_id": 4,
         "persistence_key": "iap.vanity4",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity4"
       ],
@@ -7401,8 +7435,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7420,17 +7459,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity4",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7458,8 +7497,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=5",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7486,10 +7526,10 @@
         "type": "vanity_unlock",
         "vanity_id": 5,
         "persistence_key": "iap.vanity5",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity5"
       ],
@@ -7501,8 +7541,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7520,17 +7565,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity5",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7558,8 +7603,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=6",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7586,10 +7632,10 @@
         "type": "vanity_unlock",
         "vanity_id": 6,
         "persistence_key": "iap.vanity6",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity6"
       ],
@@ -7601,8 +7647,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7620,17 +7671,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity6",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7658,8 +7709,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=7",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7686,10 +7738,10 @@
         "type": "vanity_unlock",
         "vanity_id": 7,
         "persistence_key": "iap.vanity7",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity7"
       ],
@@ -7701,8 +7753,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7720,17 +7777,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity7",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7758,8 +7815,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=8",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7786,10 +7844,10 @@
         "type": "vanity_unlock",
         "vanity_id": 8,
         "persistence_key": "iap.vanity8",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity8"
       ],
@@ -7801,8 +7859,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7820,17 +7883,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity8",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7858,8 +7921,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=9",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7886,10 +7950,10 @@
         "type": "vanity_unlock",
         "vanity_id": 9,
         "persistence_key": "iap.vanity9",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity9"
       ],
@@ -7901,8 +7965,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -7920,17 +7989,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity9",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -7958,8 +8027,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=10",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -7986,10 +8056,10 @@
         "type": "vanity_unlock",
         "vanity_id": 10,
         "persistence_key": "iap.vanity10",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity10"
       ],
@@ -8001,8 +8071,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8020,17 +8095,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity10",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8058,8 +8133,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=11",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8086,10 +8162,10 @@
         "type": "vanity_unlock",
         "vanity_id": 11,
         "persistence_key": "iap.vanity11",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity11"
       ],
@@ -8101,8 +8177,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8120,17 +8201,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity11",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8158,8 +8239,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=12",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8186,10 +8268,10 @@
         "type": "vanity_unlock",
         "vanity_id": 12,
         "persistence_key": "iap.vanity12",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity12"
       ],
@@ -8201,8 +8283,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8220,17 +8307,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity12",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8258,8 +8345,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=13",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8286,10 +8374,10 @@
         "type": "vanity_unlock",
         "vanity_id": 13,
         "persistence_key": "iap.vanity13",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity13"
       ],
@@ -8301,8 +8389,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8320,17 +8413,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity13",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8358,8 +8451,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=14",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8386,10 +8480,10 @@
         "type": "vanity_unlock",
         "vanity_id": 14,
         "persistence_key": "iap.vanity14",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity14"
       ],
@@ -8401,8 +8495,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8420,17 +8519,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity14",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8458,8 +8557,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=15",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8486,10 +8586,10 @@
         "type": "vanity_unlock",
         "vanity_id": 15,
         "persistence_key": "iap.vanity15",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity15"
       ],
@@ -8501,8 +8601,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8520,17 +8625,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity15",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8558,8 +8663,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=16",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8586,10 +8692,10 @@
         "type": "vanity_unlock",
         "vanity_id": 16,
         "persistence_key": "iap.vanity16",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity16"
       ],
@@ -8601,8 +8707,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8620,17 +8731,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity16",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8658,8 +8769,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=17",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8686,10 +8798,10 @@
         "type": "vanity_unlock",
         "vanity_id": 17,
         "persistence_key": "iap.vanity17",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity17"
       ],
@@ -8701,8 +8813,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8720,17 +8837,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity17",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8758,8 +8875,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=18",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8786,10 +8904,10 @@
         "type": "vanity_unlock",
         "vanity_id": 18,
         "persistence_key": "iap.vanity18",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity18"
       ],
@@ -8801,8 +8919,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8820,17 +8943,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity18",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8858,8 +8981,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=19",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8886,10 +9010,10 @@
         "type": "vanity_unlock",
         "vanity_id": 19,
         "persistence_key": "iap.vanity19",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity19"
       ],
@@ -8901,8 +9025,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -8920,17 +9049,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity19",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -8958,8 +9087,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=20",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -8986,10 +9116,10 @@
         "type": "vanity_unlock",
         "vanity_id": 20,
         "persistence_key": "iap.vanity20",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity20"
       ],
@@ -9001,8 +9131,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9020,17 +9155,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity20",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9058,8 +9193,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=21",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9086,10 +9222,10 @@
         "type": "vanity_unlock",
         "vanity_id": 21,
         "persistence_key": "iap.vanity21",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity21"
       ],
@@ -9101,8 +9237,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9120,17 +9261,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity21",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9158,8 +9299,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=22",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9186,10 +9328,10 @@
         "type": "vanity_unlock",
         "vanity_id": 22,
         "persistence_key": "iap.vanity22",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity22"
       ],
@@ -9201,8 +9343,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9220,17 +9367,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity22",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9258,8 +9405,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=24",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9286,10 +9434,10 @@
         "type": "vanity_unlock",
         "vanity_id": 24,
         "persistence_key": "iap.vanity24",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity24"
       ],
@@ -9301,8 +9449,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9320,17 +9473,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity24",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9358,8 +9511,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=25",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9386,10 +9540,10 @@
         "type": "vanity_unlock",
         "vanity_id": 25,
         "persistence_key": "iap.vanity25",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity25"
       ],
@@ -9401,8 +9555,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9420,17 +9579,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity25",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9458,8 +9617,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=26",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9486,10 +9646,10 @@
         "type": "vanity_unlock",
         "vanity_id": 26,
         "persistence_key": "iap.vanity26",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity26"
       ],
@@ -9501,8 +9661,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9520,17 +9685,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity26",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9558,8 +9723,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=27",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9586,10 +9752,10 @@
         "type": "vanity_unlock",
         "vanity_id": 27,
         "persistence_key": "iap.vanity27",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity27"
       ],
@@ -9601,8 +9767,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9620,17 +9791,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity27",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9658,8 +9829,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=28",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9686,10 +9858,10 @@
         "type": "vanity_unlock",
         "vanity_id": 28,
         "persistence_key": "iap.vanity28",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity28"
       ],
@@ -9701,8 +9873,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9720,17 +9897,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity28",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9758,8 +9935,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=29",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9786,10 +9964,10 @@
         "type": "vanity_unlock",
         "vanity_id": 29,
         "persistence_key": "iap.vanity29",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity29"
       ],
@@ -9801,8 +9979,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9820,17 +10003,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity29",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9858,8 +10041,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=30",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9886,10 +10070,10 @@
         "type": "vanity_unlock",
         "vanity_id": 30,
         "persistence_key": "iap.vanity30",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity30"
       ],
@@ -9901,8 +10085,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -9920,17 +10109,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity30",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -9958,8 +10147,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=31",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -9986,10 +10176,10 @@
         "type": "vanity_unlock",
         "vanity_id": 31,
         "persistence_key": "iap.vanity31",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity31"
       ],
@@ -10001,8 +10191,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10020,17 +10215,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity31",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10058,8 +10253,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=32",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10086,10 +10282,10 @@
         "type": "vanity_unlock",
         "vanity_id": 32,
         "persistence_key": "iap.vanity32",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity32"
       ],
@@ -10102,7 +10298,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10120,17 +10321,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity32",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10158,8 +10359,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=33",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10186,10 +10388,10 @@
         "type": "vanity_unlock",
         "vanity_id": 33,
         "persistence_key": "iap.vanity33",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity33"
       ],
@@ -10202,7 +10404,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10220,17 +10427,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity33",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10258,8 +10465,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=56",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10286,10 +10494,10 @@
         "type": "vanity_unlock",
         "vanity_id": 56,
         "persistence_key": "iap.vanity56",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity56"
       ],
@@ -10302,7 +10510,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10320,17 +10533,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity56",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10358,8 +10571,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=57",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10386,10 +10600,10 @@
         "type": "vanity_unlock",
         "vanity_id": 57,
         "persistence_key": "iap.vanity57",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity57"
       ],
@@ -10402,7 +10616,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10420,17 +10639,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity57",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10458,8 +10677,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=58",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10486,10 +10706,10 @@
         "type": "vanity_unlock",
         "vanity_id": 58,
         "persistence_key": "iap.vanity58",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity58"
       ],
@@ -10502,7 +10722,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10520,17 +10745,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity58",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10558,8 +10783,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=64",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10586,10 +10812,10 @@
         "type": "vanity_unlock",
         "vanity_id": 64,
         "persistence_key": "iap.vanity64",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity64"
       ],
@@ -10602,7 +10828,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10620,17 +10851,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity64",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10658,8 +10889,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=65",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10686,10 +10918,10 @@
         "type": "vanity_unlock",
         "vanity_id": 65,
         "persistence_key": "iap.vanity65",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity65"
       ],
@@ -10702,7 +10934,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10720,17 +10957,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity65",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10758,8 +10995,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=66",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10786,10 +11024,10 @@
         "type": "vanity_unlock",
         "vanity_id": 66,
         "persistence_key": "iap.vanity66",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity66"
       ],
@@ -10802,7 +11040,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10820,17 +11063,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity66",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10858,8 +11101,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=67",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10886,10 +11130,10 @@
         "type": "vanity_unlock",
         "vanity_id": 67,
         "persistence_key": "iap.vanity67",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity67"
       ],
@@ -10902,7 +11146,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -10920,17 +11169,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity67",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -10958,8 +11207,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=68",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -10986,10 +11236,10 @@
         "type": "vanity_unlock",
         "vanity_id": 68,
         "persistence_key": "iap.vanity68",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity68"
       ],
@@ -11002,7 +11252,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -11020,17 +11275,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity68",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -11058,8 +11313,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=69",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -11086,10 +11342,10 @@
         "type": "vanity_unlock",
         "vanity_id": 69,
         "persistence_key": "iap.vanity69",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity69"
       ],
@@ -11102,7 +11358,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -11120,17 +11381,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity69",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -11158,8 +11419,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=70",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -11186,10 +11448,10 @@
         "type": "vanity_unlock",
         "vanity_id": 70,
         "persistence_key": "iap.vanity70",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity70"
       ],
@@ -11202,7 +11464,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -11220,17 +11487,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity70",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -11258,8 +11525,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=71",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -11286,10 +11554,10 @@
         "type": "vanity_unlock",
         "vanity_id": 71,
         "persistence_key": "iap.vanity71",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity71"
       ],
@@ -11302,7 +11570,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -11320,17 +11593,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity71",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -11358,8 +11631,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=72",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -11386,10 +11660,10 @@
         "type": "vanity_unlock",
         "vanity_id": 72,
         "persistence_key": "iap.vanity72",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity72"
       ],
@@ -11401,8 +11675,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -11413,17 +11692,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity72",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -11451,8 +11730,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=73",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -11479,10 +11759,10 @@
         "type": "vanity_unlock",
         "vanity_id": 73,
         "persistence_key": "iap.vanity73",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity73"
       ],
@@ -11494,8 +11774,13 @@
         "runtime_persistence": "NOT-RUNTIME-VERIFIED"
       },
       "replacement_route": {
-        "status": "BLOCKED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "status": "UNIT-VERIFIED",
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -11506,17 +11791,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity73",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     },
     {
@@ -11544,8 +11829,9 @@
       },
       "ui_reference": [
         "Resources/XML/IAP.xml",
+        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)",
         "Resources/XML/Vanity.xml#Row id=74",
-        "Resources/XML/Shop.xml#Tab3 (patched earnable Gold route; listing/reference must be tested in game)"
+        "Resources/XML/Shop.xml#Tab3 (Gold route in patched data; runtime interaction not tested)"
       ],
       "request_path": {
         "purchase_request_messages": [
@@ -11572,10 +11858,10 @@
         "type": "vanity_unlock",
         "vanity_id": 74,
         "persistence_key": "iap.vanity74",
-        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler and account serialization key"
+        "mapping_basis": "SKU suffix ↔ Vanity.xml row ID plus generic vanity handler at 0x73aa0c and account serialization key"
       },
       "grant_status": "INFERRED",
-      "state_owner": "uai_gp_hud generic vanity handler; uai_gp_account::SetIAP/GetIAPString",
+      "state_owner": "uai_gp_hud generic vanity branch; uai_gp_account::SetIAP/GetIAPString",
       "persistence_key": [
         "iap.vanity74"
       ],
@@ -11588,7 +11874,12 @@
       },
       "replacement_route": {
         "status": "UNIT-VERIFIED",
-        "route": "BLOCKED: no implementation route until effect and save behavior are established"
+        "route": "Direct purchase for earned Gold through Vanity.xml/Shop.xml data patch; all 46 IAP-linked vanity SKUs have a Gold route in the patched pack. Runtime shop listing, purchase, equip, and reload still require game testing.",
+        "artifacts": [
+          "S3DMain_v15_vanity_earnability.smf",
+          "v15_vanity_patch_report.json",
+          "v15_verify_economy.json"
+        ]
       },
       "evidence": [
         {
@@ -11606,17 +11897,17 @@
           "confidence": "high"
         },
         {
-          "claim": "Native account serialization references the matching iap.vanity key and a generic vanity handler exists",
+          "claim": "Generic native vanity handler and matching account serialization key support the SKU-suffix-to-row mapping; exact runtime entitlement mutation remains inferred",
           "source": "libS3DClient.so",
-          "location": "uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; generic vanity branch @ 0x73aa0c",
+          "location": "generic vanity handler @ 0x73aa0c; uai_gp_account::SetIAP @ 0x4faa2c; GetIAPString @ 0x4edff8; key iap.vanity74",
           "type": "INFERRED",
           "confidence": "medium"
         }
       ],
       "test_status": {
-        "data_patch": "NOT-RUN",
+        "data_patch": "UNIT-VERIFIED: pricing/listing route and full STK decoded-entry validation passed",
         "runtime": "NOT-RUNTIME-VERIFIED",
-        "note": "No behavior in this record is marked RUNTIME-VERIFIED."
+        "note": "Native state mapping is inferred; no live unlock/equip/save test."
       }
     }
   ]
