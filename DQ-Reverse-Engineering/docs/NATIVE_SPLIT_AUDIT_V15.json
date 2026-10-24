@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "title": "Dungeon Quest 3.3.2.0 Split and Native IAP Audit v15",
+  "date": "2026-10-24",
+  "scope": "Static inspection of user-supplied XAPK and its exact APK split set. Does not claim Android runtime behavior.",
+  "xapk": {
+    "local_path": "/mnt/data/Dungeon+Quest_3.3.2.0_APKPure.xapk",
+    "sha256": "3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "size_bytes": 57802446,
+    "zip_test": "PASS",
+    "member_count": 22,
+    "apk_member_count": 20,
+    "manifest": {
+      "package_name": "com.shinybox.smash",
+      "version_name": "3.3.2.0",
+      "version_code": 1423433200,
+      "min_sdk": 21,
+      "target_sdk": 34,
+      "abi_split": "config.arm64_v8a",
+      "density_split": "config.xxhdpi"
+    },
+    "handling": "Raw XAPK/APK/DEX/native libraries and the credential-shaped assets/api_key.txt are local-only and excluded from GitHub."
+  },
+  "signer": {
+    "sha256_fingerprint_colon": "9A:28:A9:91:71:C8:F6:3F:34:11:E2:91:F6:D9:6F:13:D5:D9:C1:73:62:06:A0:CF:95:EB:EE:99:BC:31:42:1D",
+    "sha1_fingerprint_colon": "3F:78:BA:30:48:CC:A9:34:3B:7C:6D:A2:24:11:48:85:C5:5E:0D:96",
+    "subject": "CN=Shiny Box LLC, OU=Shiny Box LLC, O=Shiny Box LLC, L=Houston, ST=TX, C=US",
+    "certificate_serial": "5f5bbf79",
+    "verification": "All 20 APK files in the XAPK showed the same signing certificate fingerprint."
+  },
+  "splits": [
+    {
+      "name": "com.shinybox.smash.apk",
+      "role": "base",
+      "sha256": "c7bd6ab38ed2827a3aadd4f415ffc994eb366fc1ce9d66742077d6ef5e954abc",
+      "size_bytes": 37200621,
+      "native_libraries": 0
+    },
+    {
+      "name": "config.arm64_v8a.apk",
+      "role": "ABI",
+      "sha256": "5cb55f369b1ab9af3752595c87fcbc8fafa9ec31cd8870a45645309f8c2a40c2",
+      "native_libraries": 4
+    },
+    {
+      "name": "config.xxhdpi.apk",
+      "role": "density",
+      "sha256": "0a49043f26b35966865cc646d72f894f063ea672cdcdbb952662536aa911ac62",
+      "native_libraries": 0
+    }
+  ],
+  "app_artifacts": {
+    "dex": {
+      "member": "classes.dex",
+      "sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+      "size_bytes": 6996484,
+      "app_class_defs": 68,
+      "total_class_defs": 10768
+    },
+    "stk": {
+      "member": "assets/S3DMain.smf",
+      "sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+      "size_bytes": 33978539,
+      "decoded_entries": 5630
+    },
+    "warning": "Base APK has no lib/*.so itself; native code is carried by the matching arm64 ABI split. A credential-shaped assets/api_key.txt exists in the supplied base archive; its value is deliberately not copied."
+  },
+  "native_libraries": [
+    {
+      "path": "lib/arm64-v8a/libS3DClient.so",
+      "size_bytes": 17029072,
+      "sha256": "0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
+      "elf_class": "ELF64",
+      "machine": "AArch64",
+      "type": "DYN",
+      "soname": "libS3DClient.so",
+      "build_id": "8385828de7471019721e575ea64dd27dcfb60204",
+      "android_api_min": 21,
+      "ndk": "r20",
+      "needed": [
+        "libopenal.so",
+        "libssl.so",
+        "libcrypto.so",
+        "libGLESv2.so",
+        "libEGL.so",
+        "libdl.so",
+        "liblog.so",
+        "libc.so",
+        "libm.so"
+      ]
+    },
+    {
+      "path": "lib/arm64-v8a/libcrypto.so",
+      "size_bytes": 1818504,
+      "sha256": "0b045b13171a9708a422a911a2770133fa484c603a7d3525ab963cf8ea4887bf",
+      "elf_class": "ELF64",
+      "machine": "AArch64",
+      "type": "DYN",
+      "soname": "libcrypto.so",
+      "needed": [
+        "libdl.so",
+        "libc.so"
+      ]
+    },
+    {
+      "path": "lib/arm64-v8a/libssl.so",
+      "size_bytes": 390248,
+      "sha256": "d19a05e843704cd102c0b94cef356a1f599c7b8c086348afd387c2711217aec6",
+      "elf_class": "ELF64",
+      "machine": "AArch64",
+      "type": "DYN",
+      "soname": "libssl.so",
+      "needed": [
+        "libcrypto.so",
+        "libdl.so",
+        "libc.so"
+      ]
+    },
+    {
+      "path": "lib/arm64-v8a/libopenal.so",
+      "size_bytes": 309704,
+      "sha256": "7920d48e7b373d3fce8cc11309e5a243097b42ff5e9e24189c77974ae3402b34",
+      "elf_class": "ELF64",
+      "machine": "AArch64",
+      "type": "DYN",
+      "soname": "libopenal.so",
+      "needed": [
+        "liblog.so",
+        "libc.so",
+        "libm.so",
+        "libstdc++.so",
+        "libdl.so"
+      ]
+    }
+  ],
+  "native_iap_trace": {
+    "jni_exports": [
+      {
+        "name": "Java_com_shinybox_iap_IAPWrapper_onPurchaseSuccess",
+        "address": "0x1e5b68",
+        "direct_call": "S3DClient_SendEventToCurrentUser@0x7aea00"
+      },
+      {
+        "name": "Java_com_shinybox_iap_IAPWrapper_onPurchaseFailed",
+        "address": "0x1e5abc",
+        "direct_call": "S3DClient_SendEventToCurrentUser@0x7aea00"
+      },
+      {
+        "name": "Java_com_shinybox_iap_IAPWrapper_onPurchaseRefunded",
+        "address": "0x1e5c14",
+        "direct_call": "S3DClient_SendEventToCurrentUser@0x7aea00"
+      },
+      {
+        "name": "Java_com_shinybox_iap_IAPWrapper_onRestorePurchasesComplete",
+        "address": "0x1e5cc0",
+        "direct_call": "S3DClient_SendEventToCurrentUser@0x7aea00"
+      }
+    ],
+    "model_event": {
+      "class": "InAppPurchase",
+      "success_handler": "InAppPurchase::onPurchaseSuccess@0x41c254",
+      "failure_handler": "InAppPurchase::onPurchaseFailed@0x41be5c",
+      "refund_handler": "InAppPurchase::onPurchaseRefunded@0x41c058",
+      "dynamic_forward_variable": "sAIHandler",
+      "aim_offset_decimal": 24,
+      "comment_offset_decimal": 42,
+      "comment": "This will be set to the UAI model that should receive the IAP notifications.",
+      "candidate_success_destination": "uai_gp_hud::onPurchaseSuccess@0x736ea4",
+      "dynamic_target_runtime_value": "UNKNOWN"
+    },
+    "account_sync": {
+      "get_iap": "uai_gp_account::GetIAPString@0x4edff8",
+      "get_caller": "uai_gp_account::onUpload@0x5346c0",
+      "get_callsite": "0x535028",
+      "set_iap": "uai_gp_account::SetIAP@0x4faa2c",
+      "set_caller": "uai_gp_account::onDownloadResult@0x509670",
+      "set_callsite": "0x50b0a8",
+      "interpretation": "Directly establishes account upload/download serialization of IAP keys. Does not establish local save-file format or runtime reload success."
+    },
+    "key_functions": [
+      {
+        "symbol": "uai_gp_hud::onPurchaseSuccess",
+        "address": "0x736ea4",
+        "size_bytes": 35700
+      },
+      {
+        "symbol": "uai_gp_hud::RewardGold",
+        "address": "0x65feec"
+      },
+      {
+        "symbol": "uai_gp_hud::PurchaseSlot",
+        "address": "0x664f00"
+      },
+      {
+        "symbol": "uai_gp_hud::onPurchasePet",
+        "address": "0x73225c"
+      },
+      {
+        "symbol": "uai_gp_hud::onPurchaseRestore",
+        "address": "0x736d1c"
+      },
+      {
+        "symbol": "uai_gp_hud::onPurchaseCheck",
+        "address": "0x72fb3c"
+      },
+      {
+        "symbol": "uai_gp_hud::onShopItemPurchase",
+        "address": "0x752c78"
+      },
+      {
+        "symbol": "uai_gp_account::GetIAPString",
+        "address": "0x4edff8"
+      },
+      {
+        "symbol": "uai_gp_account::SetIAP",
+        "address": "0x4faa2c"
+      },
+      {
+        "symbol": "uai_gp_options::onLoadOptions",
+        "address": "0x781600"
+      },
+      {
+        "symbol": "uai_gp_options::onSaveOptions",
+        "address": "0x782b70"
+      },
+      {
+        "symbol": "Pandora::EngineCore::Game::Save",
+        "address": "0x941514"
+      }
+    ]
+  },
+  "status": {
+    "native_split_recovered": "STATIC-DIRECT",
+    "signer_and_abi_consistent": "STATIC-DIRECT",
+    "gold_grant_amounts": "STATIC-DIRECT",
+    "upload_download_iap_key_path": "STATIC-DIRECT",
+    "model_to_uai_handler_target": "INFERRED",
+    "local_save_persistence": "BLOCKED",
+    "live_game_runtime": "BLOCKED",
+    "android_rebuild_sign_install": "BLOCKED: apktool/aapt2/apksigner/zipalign absent in current tool environment"
+  }
+}
