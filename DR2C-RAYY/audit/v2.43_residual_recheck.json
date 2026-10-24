@@ -1,0 +1,28 @@
+{
+  "project": "DR2C VORENYX",
+  "build": "v2.43",
+  "base_build": "v2.42",
+  "date": "2026-10-24",
+  "source_queue": "Inherited v2.40 English-likelihood candidate rows; heuristic only.",
+  "queue_rows": 598,
+  "current_active_candidate_rows": 131,
+  "current_exact_literal_rows_in_overlay": 120,
+  "current_rows_in_files_without_overlay": 11,
+  "previous_v2_42_active_rows": 241,
+  "change_since_v2_42": -110,
+  "status_by_priority": {
+    "P1": {
+      "exact_literal_rows": 5,
+      "note": "Preserved game-title strings."
+    },
+    "P2": {
+      "exact_literal_rows_in_overlay": 30,
+      "rows_in_files_without_overlay": 5
+    },
+    "P3_TEST": {
+      "exact_literal_rows_in_overlay": 85,
+      "rows_in_files_without_overlay": 6
+    }
+  },
+  "note": "This exact-match recheck does not determine visibility, semantics, duplicates, proper names, or false positives; it is not global semantic coverage."
+}
