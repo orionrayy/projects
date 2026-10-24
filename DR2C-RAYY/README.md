@@ -1,8 +1,15 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint: v2.44 Start/UI hotfix candidate · Static packaging PASS · Runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest checkpoint: v2.44 hotfix failed to verify · user reports symptoms unchanged · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
+
+## Post-install result: v2.44 symptoms unchanged
+
+- User reports Start still does not trigger, UI remains misaligned, and APKVISION branding remains.
+- Static file inspection confirms the boot marker and landscape manifest edits exist in the v2.44 APK, but the phone may still be running the old APKVISION package: v2.44 uses the same package ID but a different local signing certificate, so Android cannot update an install signed by another key.
+- Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
+- [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
 
 ## v2.44 Start/UI hotfix candidate
 
