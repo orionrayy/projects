@@ -42,3 +42,12 @@ Preserve trait/perk/character IDs, stat keys, weapon IDs/constants, food costs, 
 
 ## Public-repository boundary
 Public GitHub stores project-authored documentation, research and sanitized audit summaries only. Do not commit the user-provided archive, full extracted game scripts, original APK or binary overlay.
+
+
+## Active checkpoint — 24 October 2026, v2.35
+- Canonical latest artifact: `DR2C_VORENYX_ID_v2.35_localization_patch.zip` (local release, not committed to the public repository).
+- Batch: 32 complete display expressions and 9 direct literal occurrences across 12 files, including game-mode explainers, journey planning, mission/reward dialogue, gym/coffee/factory encounters, the generator puzzle, broom/portal characters and Mountie Alpha-end text.
+- Static source/ZIP integrity: PASS; archive 362 entries, 361 manifest entries, no duplicate paths, no manifest digest mismatches, no local path leaks. SHA-256: `df3cd3840b3a6f32e5861b976045112ee790db6e472ae512ebac8d2e1b4fcee1`.
+- Comment-aware inventory: 541 source files, 16,827 active string tokens. Residual queue: 129 candidate rows / 67 files; it is for triage, not a coverage score.
+- Historical 69.07% figure is v2.22-only and stale. Global semantic coverage, runtime/UI fit/save-load tests, and APK rebuild/signing remain unverified.
+- Metadata correction: the v2.34 checkpoint and embedded ZIP hash/size were inconsistent with its actual archived contents. v2.35 reconciles the v2.34 checkpoint and audit to the actual nine-file scope before proceeding.
