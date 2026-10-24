@@ -127,6 +127,8 @@ public final class MainActivity extends Activity {
                 currentCategory = cat;
                 renderCategory();
             });
+            // Give category navigation a stable target distinct from same-named presets.
+            b.setTag("category:" + cat);
             categoryBar.addView(b);
             categoryButtons.add(new CategoryButton(cat, b));
         }

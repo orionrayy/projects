@@ -31,23 +31,23 @@ public final class MainActivitySmokeTest {
                 assertTextPresent(decor, "GAME LINK  •  DISCONNECTED");
                 assertTextPresent(decor, "does not modify Dungeon Quest");
 
-                clickButton(activity, "Economy");
+                clickCategory(activity, "Economy");
                 assertTextPresent(activity.getWindow().getDecorView(), "Gold multiplier");
                 assertTextPresent(activity.getWindow().getDecorView(),
                         "GAME LINK  •  DISCONNECTED");
 
-                clickButton(activity, "World");
+                clickCategory(activity, "World");
                 assertTextPresent(activity.getWindow().getDecorView(), "No-clip (preview)");
                 assertTextPresent(activity.getWindow().getDecorView(),
                         "GAME LINK  •  DISCONNECTED");
 
-                clickButton(activity, "Diagnostics");
+                clickCategory(activity, "Diagnostics");
                 assertTextPresent(activity.getWindow().getDecorView(),
                         "Hitbox overlay (preview)");
                 assertTextPresent(activity.getWindow().getDecorView(),
                         "GAME LINK  •  DISCONNECTED");
 
-                clickButton(activity, "Player");
+                clickCategory(activity, "Player");
                 clickButton(activity, "Power preview");
                 assertTextPresent(activity.getWindow().getDecorView(),
                         "GAME LINK  •  DISCONNECTED");
@@ -58,6 +58,27 @@ public final class MainActivitySmokeTest {
                         "GAME LINK  •  DISCONNECTED");
             });
         }
+    }
+
+    private static void clickCategory(MainActivity activity, String category) {
+        Button button = findButtonByTag(
+                activity.getWindow().getDecorView(), "category:" + category);
+        assertNotNull("Expected clickable category: " + category, button);
+        button.performClick();
+    }
+
+    private static Button findButtonByTag(View view, String tag) {
+        if (view instanceof Button && tag.equals(view.getTag())) {
+            return (Button) view;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                Button found = findButtonByTag(group.getChildAt(i), tag);
+                if (found != null) return found;
+            }
+        }
+        return null;
     }
 
     private static void clickButton(MainActivity activity, String label) {
