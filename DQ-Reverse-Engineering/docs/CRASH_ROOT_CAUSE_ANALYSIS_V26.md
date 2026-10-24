@@ -31,3 +31,10 @@ The same-ID stock control is the next discriminator:
 The control uses the same package ID as v25, but a different signing certificate. Android will not install it over v25; uninstall v25 first, install this control, launch offline with no account sign-in and a disposable profile. Reinstall v25 only after uninstalling the control. This control is stock content and does not enable cheats.
 
 No billing receipt, paid entitlement, cloud save, achievement or leaderboard code was changed.
+
+
+## Device test update — 2026-10-24
+
+The user reports that the same-package stock-pack control **successfully launches into the game**. This is expected: the control deliberately contains the original, unchanged `S3DMain.smf` and has no cheat implementation. The result narrows the v25 startup crash to the modified packed asset or a factor coupled to the build, but does not by itself prove anti-tamper.
+
+Next discriminator: v26 no-op packed-header candidate, documented in [CRASH_ROOT_CAUSE_ANALYSIS_V27.md](CRASH_ROOT_CAUSE_ANALYSIS_V27.md). It leaves all decoded assets unchanged and alters only a zlib header hint byte plus its corresponding STK entry CRC.
