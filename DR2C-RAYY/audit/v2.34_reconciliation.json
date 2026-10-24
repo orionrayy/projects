@@ -1,0 +1,37 @@
+{
+  "project": "DR2C VORENYX",
+  "corrected_in_build": "v2.35",
+  "source_archive": "DR2C_VORENYX_ID_v2.34_localization_patch.zip",
+  "issue_1": {
+    "field": "docs/CHECKPOINT_v2.34.md",
+    "problem": "The checkpoint said carlogic.df, car1.df and camp2.df, but the actual v2.34 localization audit/ledger and source diff specify nine different files.",
+    "correction": "The v2.34 checkpoint is now grounded to the actual audit and translation ledger."
+  },
+  "issue_2": {
+    "field": "audit/v2.34_localization_audit.json",
+    "problem": "Embedded ZIP SHA-256 and byte size reflected an earlier archive, not the supplied ZIP.",
+    "correction": "Stale digest fields are cleared in the packaged v2.34 audit copy; release checksum belongs in an external sidecar."
+  },
+  "actual_scope": [
+    "events/industrial/sewer.df",
+    "events/exterior/region/canada-crossing-region.df",
+    "events/rareloc/region/hazmat.df",
+    "events/sc/santa.df",
+    "events/sc/billy.df",
+    "events/common/common4.df",
+    "events/rareloc/bogan.df",
+    "events/common/cyoa-dailymedic.df",
+    "events/trade/trader-camp-region-special6.df"
+  ],
+  "v2_34_counts": {
+    "display_expressions_rewritten": 25,
+    "direct_literal_rules_applied": 3,
+    "direct_literal_occurrences_changed": 3,
+    "source_files_scanned": 541,
+    "active_quoted_literal_tokens": 16827,
+    "candidate_rows": 157,
+    "candidate_files": 72
+  },
+  "coverage": "Global semantic coverage is not computed. The v2.22 69.07% heuristic is stale.",
+  "runtime_validation": "Not run"
+}
