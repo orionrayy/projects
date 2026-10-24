@@ -38,6 +38,16 @@ class IAPRuntimeEvidenceV13Tests(unittest.TestCase):
             result = audit_matrix(target)
         self.assertEqual(result["status"], "FAIL")
 
+    def test_tampered_runtime_summary_fails_closed(self):
+        data = json.loads(MATRIX.read_text(encoding="utf-8"))
+        data["evidence_counts"]["runtime_reward_unverified"] = 108
+        with tempfile.TemporaryDirectory() as td:
+            target = Path(td) / "matrix.json"
+            target.write_text(json.dumps(data), encoding="utf-8")
+            result = audit_matrix(target)
+        self.assertEqual(result["status"], "FAIL")
+        self.assertTrue(any("runtime_reward_unverified summary" in error for error in result["errors"]))
+
 
 if __name__ == "__main__":
     unittest.main()
