@@ -1,31 +1,33 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Current checkpoint: v2.2. Static integrity passes; localization remains in progress.**
+**Current checkpoint: v2.22. Static source-structure checks PASS; localization remains incomplete.**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for Death Road to Canada. The original Canada-bound campaign flow remains an invariant.
 
-## Verified checkpoint v2.2
-
-- Audit baseline: 541 script/text files, 17,329 quoted literal occurrences, 13,038 unique literal values.
-- Likely player-facing occurrences (heuristic): 10,844; changed: 3,509 (**32.36% heuristic estimate**).
-- Likely untranslated unique candidates: 6,531.
-- v2.2 repairs 15 contextual player-facing English literals in weapon-trader dialogue/choices/item text.
-- Targeted residue scan: 0 matches; display markers in `weapons.df`: 157/157; static report PASS; ZIP CRC PASS.
+## Verified checkpoint v2.22
+- Baseline inventory: 541 script/text files, 17,329 quoted literal occurrences, 13,038 unique literal values.
+- Heuristic player-facing inventory: 7,490 / 10,844 rows marked localized (**69.07%**).
+- v2.22 scope: contextual full-expression localization in camp choices, character bio text, and selected encounters: `events/camp/camp3.df`, `charstats-textfill.df`, `events/common/common4.df`, `events/rareloc/rare1.df`, with two presentation helper macros in `cyoa-charstats.df`.
+- 94 display expressions rewritten; 183 existing literal tokens changed; 138 inventory rows newly marked.
+- Static source-structure validation reports zero failures and preserves literal-token/line counts in the four expression-only files; the helper file deliberately adds two literals and two lines. ZIP CRC validation passes.
+- **QA follow-up:** 49 exact mapping rules are recorded as missed after contextual rewrites. These are not counted as successful rewrites and need reconciliation/review.
 - Runtime gameplay, save/load and APK rebuild/signing: NOT RUN.
 
-The percentage is a literal-delta heuristic, not semantic or runtime screen coverage.
+The 69.07% figure is an inventory heuristic, not semantic completeness or in-game screen coverage. Full player-visible localization is not complete.
 
 ## Project records
 - [Canonical project memory](PROJECT_MEMORY.md)
 - [Version changelog](CHANGELOG.md)
-- [v2.2 checkpoint report](docs/CHECKPOINT_v2.2.md)
+- [v2.22 checkpoint report](docs/CHECKPOINT_v2.22.md)
 - [Localization guide](docs/LOKALISASI_ID.md)
 - [Slang research](docs/SLANG_RESEARCH_AND_EVIDENCE.md)
 - [Build and validation](docs/BUILD_AND_VALIDATION.md)
-- [Coverage](audit/coverage.json)
+- [Coverage summary](audit/coverage.json)
 - [Static validation](audit/validation_report.json)
-- [v2.2 reconciliation summary](audit/v2.2_reconciliation_summary.json)
 - [Version history](audit/version_history.json)
 
+## Voice and slang policy
+Use natural, context-driven Indonesian with distinct NPC personas, blunt sarcasm and profanity where appropriate. Meme terms such as `ragnamok`, `jomok/perjomokan` and `cewe standar TikTok` must remain context-bound; see the localization guide and slang research for confidence notes.
+
 ## Distribution boundary
-This public repository stores project-authored documentation, research and sanitized audit reports. It does not include the original APK/archive or full extracted game scripts/overlay to avoid redistributing third-party game materials. The complete v2.2 data-overlay ZIP and private/local project archive are provided separately as user artifacts.
+The public repository contains authored documentation, research and sanitized audit summaries. It does not include the original APK/archive, full extracted game scripts, source inventory, or binary localization overlay.
