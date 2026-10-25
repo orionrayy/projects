@@ -1,0 +1,64 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "source-reconciliation checkpoint v2.52 (not an APK version)",
+  "audit_date": "2026-10-25",
+  "status": "SOURCE_PATCH_RECONCILED; APK_NOT_BUILT; RUNTIME_NOT_TESTED",
+  "inputs": [
+    {
+      "role": "base_source_archive",
+      "file": "DR2C-RAYY(2).zip",
+      "bytes": 13809097,
+      "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1",
+      "zip_crc": "PASS",
+      "source_df_files": 509
+    },
+    {
+      "role": "overlay_layer_1",
+      "file": "DR2C_VORENYX_ID_v2.43_localization_patch.zip",
+      "bytes": 24350974,
+      "sha256": "00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024",
+      "payload_count": 272
+    },
+    {
+      "role": "overlay_layer_2",
+      "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
+      "bytes": 82435,
+      "sha256": "b2cc843325ede21d00cb91dad4a4ff68fa8c3c0e629d6910860727a4db4cf88d",
+      "payload_count": 12
+    },
+    {
+      "role": "overlay_layer_3",
+      "file": "DR2C_VORENYX_v2.45_STARTFIX_SOURCE_PATCH.zip",
+      "bytes": 36081,
+      "sha256": "36f423d620ec852a82d74d34fab02b83f350c8cd5a1cd304d6e247d494495267",
+      "payload_count": 6
+    }
+  ],
+  "output": {
+    "file": "DR2C_VORENYX_v2.45_RECONCILED_SOURCE_PATCH.zip",
+    "bytes": 7515623,
+    "sha256": "faebba3ee0d14dd0cee668fe132fa95c8ba21f08963f627f59e5364c02658c0f",
+    "zip_entries": 274,
+    "zip_crc": "PASS",
+    "duplicate_paths": []
+  },
+  "verified": {
+    "input_archives_crc": "PASS",
+    "output_zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "overlay_df_paths_resolve_to_source": true,
+    "source_df_files": 509,
+    "overlay_df_payloads": 269,
+    "canonical_GAME_MARKER": "PASS",
+    "remaining_escaped_backslash_quote_sequences": 0,
+    "unit_tests": "4 passed"
+  },
+  "unresolved": [
+    "The v2.51 Batch K report says 77/509 cumulative overlay scripts, while the available v2.43 patch physically contains 269 .df overlay payloads; reconcile definitions after obtaining the v2.51 ZIP.",
+    "The v2.47-v2.51 ZIP patch layers were not present in the active Library/workspace and are not represented in this artifact.",
+    "Full Deathforth interpreter parse not run.",
+    "APK not built, aligned, signed, installed or runtime-tested; apksigner, zipalign, apktool and adb unavailable.",
+    "Installed Android package version and signer not verified; avoid uninstalling until save backup and package identity are confirmed."
+  ],
+  "interpretation": "This is the normalized v2.43 + v2.45 corrective + v2.45 quote-fix source overlay. It is not v2.51 and not a release APK."
+}
