@@ -56,6 +56,27 @@ class ProvenanceAuditTests(unittest.TestCase):
             with self.assertRaisesRegex(ProvenanceAuditError, "unsafe logical path"):
                 compare_archives(base, overlay)
 
+    def test_ambiguous_source_roots_fail_closed(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            base, overlay = root/"base.zip", root/"overlay.zip"
+            self.write_zip(base, {
+                "GAME/assets/deathforth/boot.df": b"x",
+                "OTHER/assets/deathforth/rogue.df": b"y",
+            })
+            self.write_zip(overlay, {"P/overlay/assets/deathforth/boot.df": b"x"})
+            with self.assertRaisesRegex(ProvenanceAuditError, "ambiguous assets/deathforth path prefixes"):
+                compare_archives(base, overlay)
+
+    def test_noncanonical_dot_segment_fails_closed(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            base, overlay = root/"base.zip", root/"overlay.zip"
+            self.write_zip(base, {"GAME/assets/deathforth/boot.df": b"x"})
+            self.write_zip(overlay, {"P/overlay/assets/deathforth/events/./evil.df": b"x"})
+            with self.assertRaisesRegex(ProvenanceAuditError, "unsafe or noncanonical logical path"):
+                compare_archives(base, overlay)
+
     def test_missing_archive_fails_closed(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
