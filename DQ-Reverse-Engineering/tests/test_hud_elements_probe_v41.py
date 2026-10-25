@@ -24,7 +24,7 @@ def f32(value: float = 0.0) -> bytes:
 def common(name: str, element_type: int) -> bytes:
     out = bytearray(s(name))
     out += bytes([element_type]) + s("label") + struct.pack("<I", 0x80000001)
-    out += b"\x01" + f32(1) + f32(2) + f32(3) + f32(4) + f32(5) + f32(6)
+    out += b"\x01" + f32(1) + f32(2) + f32(3) + f32(4) + f32(5) + f32(0)
     out += bytes([1, 2, 3, 4, 5]) + f32(7)
     out += bytes([255, 1, 2, 3]) * 3 + s("resource")
     out += f32(8) + f32(9) + f32(10) + f32(11) + bytes([1, 1])
