@@ -11,7 +11,7 @@ Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1
 - [Serializer tests](tests/test_hud_action_serializer_v46.py)
 - [Audit and candidate boundaries](docs/HUD_ACTION_SERIALIZER_AND_DEBUG_GOLD_CANDIDATE_V46.md)
 
-A local source-asset experiment adds one Gold +100K button to a copied debug.hud and a matching onAddGold action routed through uai_gp_hud.onDebug(6.0). Source framing round-trips exactly; output reparsing verifies 72 elements and 14 actions, versus 71 and 13 in the source. The static native audit associates branch 6.0 with RewardGold(100000.0), but this remains unverified in a running game. The candidate is local only; no HUD binary, STK, APK or XAPK is committed or built.
+A local source-asset experiment adds one Gold +100K button to a copied debug.hud and a matching onAddGold action routed through uai_gp_hud.onDebug(6.0). Source framing round-trips exactly; output reparsing verifies 72 elements and 14 actions, versus 71 and 13 in the source. The resulting STK candidate was rebuilt and independently decoded: all 5,630 entries validate and exactly one entry, Resources/HUD/debug.hud, differs from the original. Candidate SHA-256: ca6387141047a096cc279d06a03c6392602d1cd0a3c97643067c48434b8bfa57. The static native audit associates branch 6.0 with RewardGold(100000.0), but this remains unverified in a running game. No binary asset is committed; no APK/XAPK was built.
 
 ## HUD action-stream framing audit — v45
 
