@@ -7,6 +7,7 @@ on:
       - "DQ-Reverse-Engineering/docs/DIAGNOSTIC_APK_BUILD_V70.md"
       - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V70_2026-10-25.md"
       - "DQ-Reverse-Engineering/tools/validate_diagnostic_apk_build_v70.py"
+      - "DQ-Reverse-Engineering/tools/build_diagnostic_probe_apk_v70.py"
       - "DQ-Reverse-Engineering/tests/test_diagnostic_apk_build_v70.py"
       - ".github/workflows/dq-diagnostic-apk-build-v70.yml"
   pull_request:
@@ -35,6 +36,7 @@ jobs:
           set -eu
           python -m py_compile \
             DQ-Reverse-Engineering/tools/validate_diagnostic_apk_build_v70.py \
+            DQ-Reverse-Engineering/tools/build_diagnostic_probe_apk_v70.py \
             DQ-Reverse-Engineering/tests/test_diagnostic_apk_build_v70.py
       - name: Validate pinned package report
         working-directory: DQ-Reverse-Engineering
