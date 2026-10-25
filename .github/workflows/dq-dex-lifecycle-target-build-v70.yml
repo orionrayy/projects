@@ -1,0 +1,44 @@
+name: DQ exact-target DEX lifecycle build audit v70
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/DEX_LIFECYCLE_TARGET_BUILD_V70.json"
+      - "DQ-Reverse-Engineering/docs/DEX_LIFECYCLE_TARGET_BUILD_V70.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V70_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_dex_lifecycle_target_build_v70.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_lifecycle_target_build_v70.py"
+      - ".github/workflows/dq-dex-lifecycle-target-build-v70.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/DEX_LIFECYCLE_TARGET_BUILD_V70.json"
+      - "DQ-Reverse-Engineering/docs/DEX_LIFECYCLE_TARGET_BUILD_V70.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V70_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_dex_lifecycle_target_build_v70.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_lifecycle_target_build_v70.py"
+      - ".github/workflows/dq-dex-lifecycle-target-build-v70.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-target-build-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: |
+          set -eu
+          python -m py_compile \
+            DQ-Reverse-Engineering/tools/validate_dex_lifecycle_target_build_v70.py \
+            DQ-Reverse-Engineering/tests/test_dex_lifecycle_target_build_v70.py
+      - name: Validate pinned target-build report
+        working-directory: DQ-Reverse-Engineering
+        run: python tools/validate_dex_lifecycle_target_build_v70.py docs/DEX_LIFECYCLE_TARGET_BUILD_V70.json
+      - name: Run fail-closed report regressions
+        working-directory: DQ-Reverse-Engineering
+        run: python -m unittest discover -s tests -p 'test_dex_lifecycle_target_build_v70.py' -v
