@@ -140,7 +140,7 @@ def patch_renderer(source: str) -> tuple[str, dict]:
         raise PatchError("init shape changed: engineInitialize()Z must be followed by original bInitialized iput")
     reg = field.group(1)
     nl = "\r\n" if lines[idx].endswith("\r\n") else "\n"
-    indent = re.match(r"^\\s*", lines[idx]).group(0)
+    indent = re.match(r"^\s*", lines[idx]).group(0)
     injected = [
         f"{indent}move-result {reg}{nl}",
         f"{indent}if-eqz {reg}, :dq_probe_init_skip_v67{nl}",
@@ -159,7 +159,7 @@ def patch_renderer(source: str) -> tuple[str, dict]:
         if n > a + 1 and "DqNativeProbe;->tryUnregister()V" in lines[n-1]:
             raise PatchError(f"unregister hook already present in {descriptor}")
         nl = "\r\n" if lines[n].endswith("\r\n") else "\n"
-        indent = re.match(r"^\\s*", lines[n]).group(0)
+        indent = re.match(r"^\s*", lines[n]).group(0)
         lines.insert(n, f"{indent}invoke-static {{}}, Lcom/shinybox/smash/DqNativeProbe;->tryUnregister()V{nl}")
     output = "".join(lines)
     out_lines = output.splitlines()
