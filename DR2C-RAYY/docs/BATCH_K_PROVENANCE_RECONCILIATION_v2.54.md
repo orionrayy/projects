@@ -19,7 +19,7 @@ This checkpoint adds no localization patch and is not an APK release. It compare
 | Overlay-only script paths absent from base | 0 |
 | v2.51 reported target paths present and byte-different in v2.43 overlay | 9 of 9 |
 
-Both locally available ZIPs pass CRC and have no duplicate archive paths. See `audit/batch_k_provenance_v2.54.json` for the compact evidence summary. The full local tool output is available in the attached audit artifact.
+Both locally available ZIPs pass CRC and have no duplicate archive paths. The auditor also records the nine target paths individually, including canonical source/overlay roots. Its path validation now fails closed on ambiguous source roots and noncanonical dot-segment paths; the complete automated suite contains 12 unit tests.
 
 ## Later report metadata checked
 
@@ -29,7 +29,7 @@ Both locally available ZIPs pass CRC and have no duplicate archive paths. See `a
 - **v2.50 Batch J:** PR description says supplies/barter and baked-cod event were covered, but no Batch J report/JSON appears in the PR changed-file list or accessible current artifacts.
 - **v2.51 Batch K:** reports 77 cumulative overlay scripts; 460,379-byte ZIP, 85 entries, SHA-256 `e265c7d2789e6936aadea49a42c4b5c87799c202945f8cfa4bee7291a8a40046`. Its nine listed paths include Cupid blurb, Santa blurb and Sasquatch event as three newly added overlay scripts.
 
-The actual v2.51 ZIP cannot be byte-verified here. All nine paths are already present and byte-different from the base in the locally available v2.43 overlay, including those three paths described as new in v2.51.
+A full Library ZIP inventory enumerated 299 ZIP artifacts and found no v2.47–v2.51 patch ZIPs; the v2.47 SHA-256 sidecar exists separately, but the corresponding ZIP bytes do not. The v2.46 APK is likewise represented by a report/hash rather than an accessible APK file. The actual v2.51 ZIP cannot be byte-verified here. All nine paths are already present and byte-different from the base in the locally available v2.43 overlay, including those three paths described as new in v2.51.
 
 ## Interpretation and gate
 
