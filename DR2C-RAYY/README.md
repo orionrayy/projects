@@ -1,6 +1,6 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint: v2.44 hotfix failed to verify · user reports symptoms unchanged · Full localization NOT COMPLETE**
+**Latest checkpoint (26 October 2026): v2.64 Start Runtime Trace Toolkit hardened · 11/11 static assertions PASS · Android runtime BLOCKED pending device trace · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
@@ -62,6 +62,16 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Patch ZIP: **24,380,609 bytes**; SHA-256 `a863cadfda4d99ef14c9199e255cbfc8e687c1d05a1853b8f461f096870b26eb`; 411 entries; 410 manifest entries; CRC PASS; zero manifest hash failures; zero duplicate paths; zero machine-local path leaks.
 - Full project archive v2.5: **105,064,456 bytes**; SHA-256 `cc0e7818dd87f0fe508692ae0545343ad89c727c401c81ad00f703377962fa97`; 185 entries; 184 manifest entries; CRC PASS; zero manifest hash failures; zero unmanifested files; zero duplicate paths.
 - The binary patch and full source archive are **not hosted in this public repository**. SHA-256 sidecars accompany the local release artifacts.
+
+
+## Latest diagnostic checkpoint — v2.64 (26 October 2026)
+
+The Start Runtime Trace Toolkit was hardened to avoid clearing existing Android log buffers, capture only from the recent/live edge, enforce a 90-second window, and report early logcat failures. Static/package checks pass; no device trace has been obtained in this environment. The Start no-op, runtime gameplay, UI fit, save/load, and stability remain unverified. Do not make a new APK build until a real-device trace classifies the failure.
+
+- [v2.64 toolkit checkpoint](docs/START_RUNTIME_TRACE_TOOLKIT_v2.64.md)
+- [Sanitized validation JSON](audit/runtime_trace_toolkit_v2.64.json)
+- [PowerShell collector source](tools/runtime_trace_v2.64/Collect-DR2CStartTrace.ps1)
+- [Toolkit README](tools/runtime_trace_v2.64/README.md)
 
 ## Tests not performed
 
