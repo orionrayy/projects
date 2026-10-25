@@ -5,6 +5,15 @@
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
 
+
+## Latest static contract gate — v2.53 (25 October 2026)
+
+- Reconciled source-only patch SHA-256: 73c9f60cd1a88a6d121843f3bdc6304262d47c01b2cdc36237015b7d083583d7; ZIP CRC PASS, 274 entries, 0 duplicate paths.
+- Added strict checks for quoted-string closure in the overlay, ordered single-quoted Forth code-symbol sequence preservation, canonical Jack of All Trades perk key, and Start/tutorial dispatch contracts.
+- Actual result across the supplied source: 269 overlay script files, 0 code-symbol sequence differences, 0 escaped backslash-quote regressions, canonical boot marker PASS, perk-key PASS, Start/tutorial dispatch tokens PASS. Six unit tests pass.
+- This artifact is v2.43 + v2.45 corrective + v2.45 quote-fix, not v2.51 and not an APK. The actual v2.47–v2.51 ZIP layers remain unavailable for byte-level reconciliation.
+- APK build/sign/install/runtime and save/load remain untested. See the v2.53 source contract gate, audit JSON, and reconciliation tool.
+
 ## Source-to-build reconciliation gate — 25 October 2026
 
 - Batch K v2.51 is the latest documented localization pass, but its actual patch ZIP was not available for byte-level inspection in this execution. Treat its reported count of 77/509 scripts as a source report, not a translation-coverage percentage.
