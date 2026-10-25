@@ -1,0 +1,70 @@
+name: DQ DEX lifecycle smali patcher v67
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v67.py"
+      - "DQ-Reverse-Engineering/tests/test_patch_dex_lifecycle_smali_v67.py"
+      - "DQ-Reverse-Engineering/tests/prepare_dex_lifecycle_smali_fixture_v67.py"
+      - "DQ-Reverse-Engineering/tests/fixtures/dex_lifecycle_hook_v67/**"
+      - "DQ-Reverse-Engineering/docs/DEX_LIFECYCLE_SMALI_PATCHER_V67.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V67_2026-10-25.md"
+      - ".github/workflows/dq-dex-lifecycle-smali-patcher-v67.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v67.py"
+      - "DQ-Reverse-Engineering/tests/test_patch_dex_lifecycle_smali_v67.py"
+      - "DQ-Reverse-Engineering/tests/prepare_dex_lifecycle_smali_fixture_v67.py"
+      - "DQ-Reverse-Engineering/tests/fixtures/dex_lifecycle_hook_v67/**"
+      - "DQ-Reverse-Engineering/docs/DEX_LIFECYCLE_SMALI_PATCHER_V67.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V67_2026-10-25.md"
+      - ".github/workflows/dq-dex-lifecycle-smali-patcher-v67.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-source-patcher:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Compile and run fail-closed source-patcher tests
+        run: |
+          set -eu
+          python -m py_compile \
+            DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v67.py \
+            DQ-Reverse-Engineering/tests/test_patch_dex_lifecycle_smali_v67.py \
+            DQ-Reverse-Engineering/tests/prepare_dex_lifecycle_smali_fixture_v67.py
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_patch_dex_lifecycle_smali_v67.py' -v
+      - name: Fetch pinned smali assemblers
+        run: |
+          set -eu
+          mkdir -p "$RUNNER_TEMP/smali-tools"
+          curl --fail --location --silent --show-error \
+            https://repo.maven.apache.org/maven2/org/smali/smali/2.5.2/smali-2.5.2.jar \
+            -o "$RUNNER_TEMP/smali-tools/smali-2.5.2.jar"
+          curl --fail --location --silent --show-error \
+            https://repo.maven.apache.org/maven2/org/smali/baksmali/2.5.2/baksmali-2.5.2.jar \
+            -o "$RUNNER_TEMP/smali-tools/baksmali-2.5.2.jar"
+      - name: Assemble and re-disassemble synthetic overlay
+        run: |
+          set -eu
+          python DQ-Reverse-Engineering/tests/prepare_dex_lifecycle_smali_fixture_v67.py "$RUNNER_TEMP/dq-v67-overlay"
+          java -jar "$RUNNER_TEMP/smali-tools/smali-2.5.2.jar" assemble \
+            --api 28 -o "$RUNNER_TEMP/dq-v67-synthetic.dex" "$RUNNER_TEMP/dq-v67-overlay"
+          test -s "$RUNNER_TEMP/dq-v67-synthetic.dex"
+          java -jar "$RUNNER_TEMP/smali-tools/baksmali-2.5.2.jar" disassemble \
+            --api 28 -o "$RUNNER_TEMP/dq-v67-roundtrip" "$RUNNER_TEMP/dq-v67-synthetic.dex"
+          grep -q 'tryRegisterAndRoundTrip()V' "$RUNNER_TEMP/dq-v67-roundtrip/com/shinybox/smash/S3DRenderer.smali"
+          grep -q 'nativeInvokeProbe()Z' "$RUNNER_TEMP/dq-v67-roundtrip/com/shinybox/smash/DqNativeProbe.smali"
+          grep -q 'tryUnregister()V' "$RUNNER_TEMP/dq-v67-roundtrip/com/shinybox/smash/S3DRenderer.smali"
+          echo 'PASS: synthetic smali overlay assembled and re-disassembled; no game DEX/APK involved.'
