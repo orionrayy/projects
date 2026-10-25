@@ -4,6 +4,14 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## Reproducible STK single-asset verification — v48
+
+- [Fail-closed archive delta verifier](tools/verify_stk_single_asset_delta_v48.py)
+- [Synthetic regression tests](tests/test_stk_single_asset_delta_v48.py)
+- [Verification contract and reproduction command](docs/STK_SINGLE_ASSET_DELTA_VERIFICATION_V48.md)
+
+This verifier reopens source and candidate archives, decodes all entries, confirms matching archive inventories and validates every CRC/decoded-size check, then fails closed unless only Resources/HUD/debug.hud differs. Six synthetic tests are integrated into the static workflow. This proves asset-level archive integrity only, not in-game behavior or APK readiness.
+
 ## Pause → Options → Cheats route blocker — v47
 
 - [Read-only route evidence and remaining native requirements](docs/PAUSE_OPTIONS_CHEATS_ROUTE_AUDIT_V47.md)
