@@ -1,0 +1,47 @@
+{
+  "project": "DR2C VORENYX",
+  "candidate": "v2.49 Batch I",
+  "status": "source-only; no APK built; no device runtime test",
+  "source_scripts_scanned": 509,
+  "batch_i": {
+    "files_touched": 14,
+    "translation_records": 203,
+    "literal_occurrences_affected": 203,
+    "unmatched_mapping_keys": 0,
+    "files": [
+      "events/inner/region/rpgfare.df",
+      "events/common/common5.df",
+      "events/common/OMENTUM.df",
+      "events/rareloc/region/alien.df",
+      "events/rareloc/animestore.df",
+      "events/bandit/bandit1.df",
+      "events/bandit/bandit2.df",
+      "events/sc/cyoa-screcruit1.df",
+      "events/sc/cyoa-screcruit2.df",
+      "events/sc/cyoa-screcruit3.df",
+      "events/sc/cyoa-screcruit4.df",
+      "events/trade/trader-camp-region-special1.df",
+      "events/trade/trader-camp-region-special2.df",
+      "events/trade/weapons.df"
+    ]
+  },
+  "cumulative_overlay_script_files": 73,
+  "checks": {
+    "quote_parity_failures": 0,
+    "escaped_double_quote_regressions": 0,
+    "executable_skeleton_differences": 0,
+    "handler_logic_edits": 0,
+    "zip_crc": "PASS",
+    "zip_entries": 77,
+    "duplicate_paths": 0,
+    "zip_bytes": 429369,
+    "zip_sha256": "926278b87eac76a5329e7ce16c04993dd127cc296a78fc6dedb56cd791562ced"
+  },
+  "validation_method": "Apply replacements only inside existing double-quoted string contents. Mask all string literals before comparing executable skeletons. This does not replace a full Deathforth parser or runtime test.",
+  "limitations": [
+    "Localization remains incomplete.",
+    "No APK rebuilt or device runtime tested.",
+    "Complex dynamic sentence fragments were left for later template-level translation when literal-only translation would break grammar.",
+    "Merge/reconcile with v2.46 native UI patch and v2.45 Startfix before future APK build."
+  ]
+}
