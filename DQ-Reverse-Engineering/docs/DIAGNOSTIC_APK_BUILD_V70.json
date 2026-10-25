@@ -72,7 +72,8 @@
     "A local test certificate is used. This package is a distinct app ID and is not an update to the official app.",
     "The game code still contains its original purchase/account/cloud logic; this build does not bypass licensing or integrity checks.",
     "The native callback ABI and engine-thread/lifetime behavior remain unverified in the running game. The probe can fail or expose a runtime defect, so this is a diagnostic build rather than a stable release.",
-    "All 222 catalogue effects remain disconnected; the Gold +100K candidate itself remains 0/9 runtime-verified."
+    "All 222 catalogue effects remain disconnected; the Gold +100K candidate itself remains 0/9 runtime-verified.",
+    "No physical-device runtime test has been performed; static validation does not prove successful installation or gameplay behavior."
   ],
   "promotion_allowed": false
 }
