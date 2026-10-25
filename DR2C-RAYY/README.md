@@ -6,6 +6,14 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 
 
 
+## Start-route static contract audit — v2.56 (25 October 2026; not a game/APK version)
+
+- Audited 12 route-related `.df` files against the original source and cumulative source-only patch. Result: **12/12 static contract checks PASS**; boot label/helper check PASS.
+- `game-select.df`, `game-start.df`, `game-info.df`, `boot-end.df` and `events/tutorial.df` preserve normalized executable code skeletons and ordered single-quoted Forth symbol streams relative to base.
+- Required boot/start dispatch and tutorial tokens are present. `boot.df` adds `id-name-localize`, translates `READY.` to `SIAP.`, and preserves the canonical `GAME-MARKER` marker.
+- This is not runtime proof. No APK build/install, touchscreen Start test, UI-fit, gameplay or save/load validation was run. The actual v2.47–v2.51 ZIPs remain unavailable; no v2.51 integration is claimed.
+- See `docs/START_ROUTE_STATIC_AUDIT_v2.56.md`, `audit/start_route_static_contract_v2.56.json`, and `tools/audit_start_route.py`.
+
 ## Reproducible source packaging — v2.55 (25 October 2026; not a game/APK version)
 
 - Normalized ZIP member timestamps and file modes so repeat source builds are byte-reproducible. Three independent builds produced SHA-256 `95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d`.
