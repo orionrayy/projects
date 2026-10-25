@@ -128,6 +128,15 @@ def single_quoted_symbol_stream(text: str) -> tuple[list[str], bool]:
     return re.findall(r"'\s*([A-Za-z_][A-Za-z0-9_-]*)", masked), unclosed
 
 
+def write_deterministic_entry(archive: zipfile.ZipFile, name: str, content: bytes | str) -> None:
+    """Write a ZIP member with normalized metadata so repeated builds hash identically."""
+    info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.create_system = 3
+    info.external_attr = (0o100644 & 0xFFFF) << 16
+    archive.writestr(info, content, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+
+
 def reconcile(base: Path, patches: list[Path], out: Path, report_path: Path,
               expected_base_sha256: str | None = None, fail_on_overrides: bool = False) -> dict[str, Any]:
     base_hash = sha256_file(base)
@@ -275,10 +284,13 @@ def reconcile(base: Path, patches: list[Path], out: Path, report_path: Path,
     report_path.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(out, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for logical, content in sorted(final.items()):
-            z.writestr(f'overlay/{logical}', content)
-        z.writestr('audit/reconciliation_manifest.json', json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
-        z.writestr('README_RECONCILED_SOURCE_PATCH.md',
-                   '# DR2C VORENYX reconciled source overlay\n\nSource patch only. Not built, signed, installed or runtime-tested.\n')
+            write_deterministic_entry(z, f'overlay/{logical}', content)
+        write_deterministic_entry(
+            z, 'audit/reconciliation_manifest.json',
+            json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
+        write_deterministic_entry(
+            z, 'README_RECONCILED_SOURCE_PATCH.md',
+            '# DR2C VORENYX reconciled source overlay\n\nSource patch only. Not built, signed, installed or runtime-tested.\n')
     oz, output_names = checked_zip(out)
     oz.close()
     manifest['output'] = {'file': out.name, 'bytes': out.stat().st_size, 'sha256': sha256_file(out),
