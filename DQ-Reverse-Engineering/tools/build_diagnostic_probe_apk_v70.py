@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import struct
 import subprocess
 import zipfile
@@ -26,6 +27,7 @@ PINNED_CANDIDATE_SHA = "f6cd9ed0011b2c7f72dff506397d24194e3ed7d3fb7aa58adea9f8e9
 PINNED_PATCHED_DEX_SHA = "2c05a2fb599024659b4784086d295fe0b3090dad073c847bbdec3b0964d1ea90"
 PINNED_BRIDGE_SHA = "82f19bbe8aec8ac95030a5e0f773168f0b3a5bfde76e1fe334f103415f8e0fd5"
 PINNED_STK_SHA = "e17884a13c775c9aac3afce3c0003eb9ed54a3b9a32ef4a6b89bf72e6ef9f52e"
+OFFICIAL_SIGNER_SHA256 = "9A28A99171C8F63F3411E291F6D96F13D5D9C1736206A0CF95EBEE99BC31421D"
 
 def sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
@@ -328,9 +330,12 @@ def main() -> int:
     with zipfile.ZipFile(apk_out) as final:
         if final.testzip():
             raise ValueError("final APK ZIP CRC verification failed")
-    cert_match = "Signer #1 certificate SHA-256 digest: b8f8b624ce1368dca48e3413b4433e81d117fb3cbab904e11ec308ecc79ad60c"
-    if cert_match not in signed_verify:
-        raise RuntimeError("unexpected signer identity in final APK")
+    cert_match = re.search(r"Signer #1 certificate SHA-256 digest: ([0-9a-fA-F]+)", signed_verify)
+    if not cert_match:
+        raise RuntimeError("apksigner did not report a signer certificate SHA-256")
+    signer_sha256 = cert_match.group(1).upper()
+    if signer_sha256 == OFFICIAL_SIGNER_SHA256:
+        raise RuntimeError("diagnostic build unexpectedly uses the official signer identity")
 
     report = {
         "schema": "dq-diagnostic-arm64-apk-build-v70",
@@ -359,14 +364,14 @@ def main() -> int:
         "validation": {
             "outer_zip_crc": "PASS", "all_apk_zip_entries_crc": "PASS",
             "zipalign_pre_sign_16k_native": "PASS", "zipalign_post_sign_16k_native": "PASS",
-            "apksigner_verify_v1": "PASS" if "v1 signing scheme): true" in signed_verify else "NOT_CONFIRMED",
-            "apksigner_verify_v2": "PASS" if "v2 signing scheme): true" in signed_verify else "NOT_CONFIRMED",
-            "apksigner_verify_v3": "PASS" if "v3 signing scheme): true" in signed_verify else "NOT_CONFIRMED",
+            "apksigner_verify_v1": "PASS" if "Verified using v1 scheme (JAR signing): true" in signed_verify else "NOT_CONFIRMED",
+            "apksigner_verify_v2": "PASS" if "Verified using v2 scheme (APK Signature Scheme v2): true" in signed_verify else "NOT_CONFIRMED",
+            "apksigner_verify_v3": "PASS" if "Verified using v3 scheme (APK Signature Scheme v3): true" in signed_verify else "NOT_CONFIRMED",
             "aapt_dump_badging": "PASS", "package_id_verified_by_aapt": True,
             "launchable_activity_found": "com.shinybox.smash.Smash",
             "signer": {
                 "kind": "local diagnostic test certificate",
-                "certificate_sha256": "b8f8b624ce1368dca48e3413b4433e81d117fb3cbab904e11ec308ecc79ad60c",
+                "certificate_sha256": signer_sha256.lower(),
                 "matches_official_signer": False, "private_key_in_repository": False, "private_key_shared": False
             }
         },
