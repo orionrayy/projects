@@ -1,0 +1,94 @@
+{
+  "schema": "dq-diagnostic-arm64-apk-build-v72",
+  "status": "BUILT_STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_VERIFIED",
+  "artifact": {
+    "file_name": "DQ_ModKit_v72_ABI_Probe_LOGCAT_ARM64.apk",
+    "size_bytes": 57717702,
+    "sha256": "6261d077092098986094ebcf79522b767143467b7b3bc074341b2da6700098b6",
+    "package_id": "com.shinybox.dqv72",
+    "version_name": "3.3.2.0",
+    "launcher_label": "DQ v72 Tester",
+    "abi": "arm64-v8a",
+    "split_count": 1
+  },
+  "inputs": {
+    "source_candidate_apk_sha256": "f6cd9ed0011b2c7f72dff506397d24194e3ed7d3fb7aa58adea9f8e939ab6dfa",
+    "source_stk_sha256": "e17884a13c775c9aac3afce3c0003eb9ed54a3b9a32ef4a6b89bf72e6ef9f52e",
+    "patched_dex_sha256": "1533a5858e8624f2dc615e5335d14afd6de983c0478271963acb985423eb4d48",
+    "bridge_sha256": "82f19bbe8aec8ac95030a5e0f773168f0b3a5bfde76e1fe334f103415f8e0fd5",
+    "source_candidate_package_id": "com.shinybox.smash",
+    "source_stk_changed_entries": [
+      "Resources/HUD/pause.hud"
+    ]
+  },
+  "package_transform": {
+    "target_package_id": "com.shinybox.dqv72",
+    "application_id_length_preserved": true,
+    "resources_package_name_updated": true,
+    "launcher_label_before": "Dungeon Quest",
+    "launcher_label_after": "DQ v72 Tester",
+    "unresolved_icon_attributes_removed": true,
+    "source_app_id_preserved": "com.shinybox.smash",
+    "original_apk_modified_in_place": false,
+    "original_xapk_modified_in_place": false
+  },
+  "validation": {
+    "outer_zip_crc": "PASS",
+    "all_apk_zip_entries_crc": "PASS",
+    "zipalign_pre_sign_16k_native": "PASS",
+    "zipalign_post_sign_16k_native": "PASS",
+    "apksigner_verify_v1": "PASS",
+    "apksigner_verify_v2": "PASS",
+    "apksigner_verify_v3": "PASS",
+    "aapt_dump_badging": "PASS",
+    "package_id_verified_by_aapt": true,
+    "launchable_activity_found": "com.shinybox.smash.Smash",
+    "signer": {
+      "kind": "local diagnostic test certificate",
+      "certificate_sha256": "b8f8b624ce1368dca48e3413b4433e81d117fb3cbab904e11ec308ecc79ad60c",
+      "matches_official_signer": false,
+      "private_key_in_repository": false,
+      "private_key_shared": false
+    }
+  },
+  "probe_observability": {
+    "log_tag": "DQv72Probe",
+    "expected_markers": [
+      "library_load=PASS",
+      "library_load=FAIL",
+      "callback_register=PASS",
+      "callback_register=FAIL",
+      "callback_roundtrip=PASS",
+      "callback_roundtrip=FAIL",
+      "callback_unregister=PASS",
+      "callback_unregister=FAIL",
+      "callback_probe=EXCEPTION",
+      "callback_unregister=EXCEPTION",
+      "callback_unregister=SKIP"
+    ],
+    "runtime_logcat_captured": false,
+    "runtime_markers_verified": false
+  },
+  "runtime_gate": {
+    "installed_on_device": false,
+    "launched_on_device": false,
+    "offline_tested": false,
+    "native_probe_roundtrip_21_to_42_verified": false,
+    "shutdown_unregister_verified": false,
+    "gold_runtime_checks_passed": 0,
+    "gold_runtime_checks_total": 9,
+    "catalog_items": 222,
+    "catalog_routes_assigned": 0,
+    "catalog_runtime_verified_effects": 0,
+    "promotion_allowed": false
+  },
+  "limitations": [
+    "The artifact is statically validated only; no Android Package Manager install or game launch was performed in this environment.",
+    "No physical-device installation, Logcat capture, or callback runtime validation has been performed.",
+    "The test certificate is local and is not the official publisher certificate; the new package ID creates a separate app.",
+    "The native ABI, engine-thread behavior, callback lifetime, and shutdown path remain unverified in the running game.",
+    "The probe logs callback_roundtrip=PASS only when the native dispatcher returns exactly one numeric output equal to 42 for input 21; a runtime log must still be captured to verify it occurred.",
+    "The 222-entry catalogue remains at zero routed/verified effects, and Gold +100K remains 0/9 runtime-verified."
+  ],
+  "promotion_allowed": false
+}
