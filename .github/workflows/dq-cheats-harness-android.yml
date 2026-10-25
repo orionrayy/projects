@@ -86,15 +86,16 @@ jobs:
           test -s "$APK"
           echo "sha256=$(sha256sum "$APK" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
           echo "size=$(stat -c%s "$APK")" >> "$GITHUB_OUTPUT"
-      - name: Exercise APK on Android API 34 emulator
+      - name: Exercise APK on Android API 30 emulator
         id: emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
-          target: google_apis
+          api-level: 30
+          target: default
           arch: x86_64
           profile: pixel_2
-          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot
+          emulator-boot-timeout: 300
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
           disable-animations: true
           script: |
             set +e
@@ -149,7 +150,7 @@ jobs:
             echo "- SHA-256: ${{ steps.apk.outputs.sha256 }}"
             echo "- Size: ${{ steps.apk.outputs.size }} bytes"
             echo "- Emulator instrumentation: ${{ steps.emulator.outcome }}"
-            echo "- Build: Android API 34 emulator + compile SDK 35 / AGP 8.7.3 / Gradle 8.9 / JDK 17"
+            echo "- Build: Android API 30 emulator + compile SDK 35 / AGP 8.7.3 / Gradle 8.9 / JDK 17"
             echo "- Validation: JVM unit tests + Android instrumentation test + emulator install/launch/UI smoke check"
             echo "- Boundary: standalone UI harness; not patched into Dungeon Quest."
           } >> "$GITHUB_STEP_SUMMARY"
