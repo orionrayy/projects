@@ -37,4 +37,8 @@ library_load=PASS/FAIL, callback_register=PASS/FAIL, callback_roundtrip=PASS/FAI
 
 callback_roundtrip=PASS is emitted only when the native dispatcher returns exactly one numeric output equal to 42 for input 21. The marker has not yet been observed on a physical device. Follow the runtime smoke-test protocol in DIAGNOSTIC_APK_RUNTIME_SMOKE_TEST_V72.md.
 
-The JSON report pins the local artifact hash. The reproducible builder is source-only and expects a locally held candidate APK, exact DEX, native bridge, Android Build Tools, and a private local test keystore; none of those private signing credentials are committed.
+The JSON report pins the local artifact hash.
+
+## Reproducibility boundary
+
+The builder fails closed unless the supplied patched DEX hash is exactly `1533a5858e8624f2dc615e5335d14afd6de983c0478271963acb985423eb4d48`. Reassembling a source overlay with a different DEX assembler/API or file ordering can produce different binary DEX bytes even where the disassembled classes match. Such a DEX is not interchangeable with this artifact: do not rebuild/package it until it matches the pinned hash and passes the package gates. The CI workflow tests the source patcher and pinned report; it does not rebuild the local APK because the candidate game input and signing key remain local. The reproducible builder is source-only and expects a locally held candidate APK, exact DEX, native bridge, Android Build Tools, and a private local test keystore; none of those private signing credentials are committed.
