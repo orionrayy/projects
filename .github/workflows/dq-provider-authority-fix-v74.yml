@@ -1,0 +1,41 @@
+name: DQ v74 provider-authority fix report gate
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/PROVIDER_AUTHORITY_FIX_V74.json"
+      - "DQ-Reverse-Engineering/docs/PROVIDER_AUTHORITY_FIX_V74.md"
+      - "DQ-Reverse-Engineering/docs/PHONE_ONLY_INSTALL_TEST_V74.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V74_2026-10-26.md"
+      - "DQ-Reverse-Engineering/tools/validate_provider_authority_fix_v74.py"
+      - "DQ-Reverse-Engineering/tests/test_provider_authority_fix_v74.py"
+      - ".github/workflows/dq-provider-authority-fix-v74.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/PROVIDER_AUTHORITY_FIX_V74.json"
+      - "DQ-Reverse-Engineering/docs/PROVIDER_AUTHORITY_FIX_V74.md"
+      - "DQ-Reverse-Engineering/docs/PHONE_ONLY_INSTALL_TEST_V74.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V74_2026-10-26.md"
+      - "DQ-Reverse-Engineering/tools/validate_provider_authority_fix_v74.py"
+      - "DQ-Reverse-Engineering/tests/test_provider_authority_fix_v74.py"
+      - ".github/workflows/dq-provider-authority-fix-v74.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-v74-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: |
+          set -eu
+          python -m py_compile DQ-Reverse-Engineering/tools/validate_provider_authority_fix_v74.py DQ-Reverse-Engineering/tests/test_provider_authority_fix_v74.py
+      - name: Validate report
+        working-directory: DQ-Reverse-Engineering
+        run: python tools/validate_provider_authority_fix_v74.py docs/PROVIDER_AUTHORITY_FIX_V74.json
+      - name: Regression tests
+        working-directory: DQ-Reverse-Engineering
+        run: python -m unittest discover -s tests -p 'test_provider_authority_fix_v74.py' -v
