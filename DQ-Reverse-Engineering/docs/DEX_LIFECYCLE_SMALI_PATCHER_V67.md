@@ -16,7 +16,7 @@ It requires a fresh, separate output directory and refuses changed callsite shap
 
 ## Validation
 
-Eight regression tests cover init-success gating, preserving the original flag assignment, unregister ordering, wrong source identity, changed/duplicate callsites, output overwrite prevention, and input immutability. CI then assembles and re-disassembles only a synthetic fixture with smali/baksmali 2.5.2. A passing synthetic assembler job proves syntax/transform consistency, not that the actual game's DEX or native ABI works.
+Nine regression tests cover init-success gating, preserving the original flag assignment, unregister ordering, wrong source identity, changed/duplicate callsites, output overwrite prevention, and input immutability. CI then assembles and re-disassembles only a synthetic fixture with smali/baksmali 2.5.2. GitHub Actions run [40206173884](https://github.com/orionrayy/projects/actions/runs/40206173884) passed the 9-test suite and synthetic smali assemble/re-disassemble gate. This proves syntax/transform consistency, not that the actual game's DEX or native ABI works.
 
 ## Hard limits
 
