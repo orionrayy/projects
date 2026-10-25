@@ -1,0 +1,105 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.57 local APK test candidate; not a release and not v2.51 integration",
+  "status": "BUILD_AND_STATIC_PACKAGE_VALIDATION_PASS; DEVICE_RUNTIME_NOT_TESTED",
+  "output": {
+    "file": "DR2C_VORENYX_v2.57_TEST_CANDIDATE.apk",
+    "bytes": 115614035,
+    "sha256": "ef66364da7e3d8862b460348d67d397e8132896aaa80f70a9243589d934435e5",
+    "zip_entries": 1015,
+    "zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "deathforth_df_scripts": 509,
+    "escaped_quote_scripts": 0
+  },
+  "inputs": {
+    "base_apk": {
+      "file": "DR2C-v1.8.2-full-apkvision.apk",
+      "sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15"
+    },
+    "base_source_archive": {
+      "file": "DR2C-RAYY(2).zip",
+      "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1"
+    },
+    "source_patch": {
+      "file": "DR2C_VORENYX_REPRODUCIBLE_SOURCE_PATCH_v2.55.zip",
+      "sha256": "95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d"
+    }
+  },
+  "static_checks": {
+    "resources_arsc": {
+      "method": "STORED",
+      "payload_offset": 115340884,
+      "offset_mod4": 0
+    },
+    "stored_entry_alignment_failures": 0,
+    "uncompressed_native_libraries_per_abi": 7,
+    "uncompressed_native_libs_page_alignment_4096": "PASS",
+    "manifest": {
+      "splash_activity_orientation": 0,
+      "game_activity_orientation": 0,
+      "binary_xml_size_preserved": true
+    },
+    "native_ui_slots": {
+      "arm64": "13/13 PASS",
+      "armv7": "13/13 PASS",
+      "library_sizes_preserved": true,
+      "slot_offsets_preserved": true
+    },
+    "tutorial": {
+      "twelve_display_rewrites": "PASS",
+      "six_handlers_preserved": true,
+      "ordered_single_quoted_symbol_stream_preserved": true
+    },
+    "pairip": {
+      "arm64_sha256": "cc7b6aade6048f1b1565d37d938f728ce307487a3ebb7df8d24eb735b1f3b1d9",
+      "armv7_sha256": "786da8e08b08590d891fe4bdf2ae9210b20042b9c272a215f606bb07f26f543c",
+      "byte_identical_to_base": true
+    },
+    "tests": {
+      "candidate_builder": "8/8 PASS",
+      "full_source_reconciler_ci": "previous checkpoint 16/16 PASS"
+    }
+  },
+  "signing": {
+    "jar_v1": "PASS",
+    "apk_v2": "NOT GENERATED/NOT VERIFIED; apksigner unavailable",
+    "test_certificate_sha256": "8663b5eebde76028e326d80a650ac3a10a99d52470b54cb5a77cf1cba5a7a180"
+  },
+  "branding": {
+    "splash_badge_sync": {
+      "source_badge_expected": "V0.3",
+      "badge_text_after_build": "LOKALISASI INDONESIA  //  V2.43",
+      "title_art_badge_matches": true,
+      "dimensions_preserved": true,
+      "status": "PASS"
+    },
+    "no_apkvision_string_in_title_or_splash_images": true,
+    "original_launcher_banner_retained": true,
+    "apkvision_ascii_hits": {
+      "classes3_dex": 13,
+      "arm64_libstub": 16,
+      "armv7_libstub": 16
+    },
+    "wrapper_removal": "NOT ATTEMPTED; identifiers retained to avoid speculative changes to third-party wrapper/protection paths"
+  },
+  "source_lineage": {
+    "available_layers": [
+      "base source archive",
+      "v2.43 overlay",
+      "v2.45 corrective patch",
+      "v2.45 Startfix patch",
+      "candidate-only tutorial/native-label/manifest/splash integration"
+    ],
+    "exact_v246_apk_available": false,
+    "actual_v247_v251_zip_patches_available": false,
+    "v251_integration_claimed": false
+  },
+  "limitations": [
+    "Not installed or runtime-tested on Android device/emulator.",
+    "No Start tap, UI hitbox, screen transition, gameplay/event load, save/load, or startup stability evidence.",
+    "Local test signature differs from publisher/current installed signer; in-place update may be rejected.",
+    "Preserved licensing wrapper may reject locally re-signed APK.",
+    "APK Signature Scheme v2 is not generated or independently verified."
+  ]
+}
