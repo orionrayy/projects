@@ -66,6 +66,11 @@ jobs:
           python DQ-Reverse-Engineering/tests/test_stk_packer.py
           python DQ-Reverse-Engineering/tests/test_cosmetic_patch.py
           python DQ-Reverse-Engineering/tests/test_iap_sku_reconciliation.py
+      - name: Run v48 single-asset STK delta verifier tests
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m py_compile tools/verify_stk_single_asset_delta_v48.py tests/test_stk_single_asset_delta_v48.py
+          python -m unittest discover -s tests -p 'test_stk_single_asset_delta_v48.py' -v
       - name: Validate v13 IAP runtime evidence and run focused tests
         run: |
           cd DQ-Reverse-Engineering
