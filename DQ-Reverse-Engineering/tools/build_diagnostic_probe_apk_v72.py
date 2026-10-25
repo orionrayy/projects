@@ -387,7 +387,8 @@ def main() -> int:
                 "callback_unregister=PASS",
                 "callback_unregister=FAIL",
                 "callback_probe=EXCEPTION",
-                "callback_unregister=EXCEPTION"
+                "callback_unregister=EXCEPTION",
+                "callback_unregister=SKIP"
             ],
             "runtime_logcat_captured": false,
             "runtime_markers_verified": false
@@ -400,6 +401,7 @@ def main() -> int:
         },
         "limitations": [
             "This script statically packages a diagnostic build only; no Package Manager install or game launch is performed.",
+            "No physical-device installation, Logcat capture, or callback runtime validation has been performed.",
             "The local test certificate is not the official publisher certificate and the new package ID creates a separate app.",
             "The native bridge callback ABI/lifetime and engine thread behavior remain unverified in the running game.",
             "All 222 catalogue effects remain disconnected and the Gold +100K candidate remains 0/9 runtime-verified."
