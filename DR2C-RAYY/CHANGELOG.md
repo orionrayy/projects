@@ -1,5 +1,15 @@
 # Changelog — DR2C VORENYX
 
+## Local APK test candidate v2.57 — 25 October 2026 (not a release APK)
+
+- Built `DR2C_VORENYX_v2.57_TEST_CANDIDATE.apk` from the available base + v2.43 overlay + v2.45 corrective + v2.45 Startfix layers.
+- Updated 12 tutorial/CYOA display expressions with handler and ordered Forth symbol preservation, ported 13 documented native UI/stat label replacements to both ABIs, normalized primary activity orientation to landscape, and synchronized splash badge V0.3 to the title-art badge V2.43.
+- Package gates: SHA-256 `ef66364da7e3d8862b460348d67d397e8132896aaa80f70a9243589d934435e5`; 115,614,035 bytes; 1,015 entries; CRC PASS; 509 .df scripts; no escaped quote regressions or duplicate ZIP paths; resources.arsc and stored-entry alignment checks PASS; 26/26 native slots PASS.
+- JAR/v1 test signature verifies; APK v2 signature not generated/verified because `apksigner` is unavailable. PairIP libs preserved byte-for-byte. Binary `apkvision` wrapper identifiers remain in DEX and `libstub.so`; wrapper removal was not attempted.
+- Local builder tests: 8/8 PASS. Device install, Start button, UI fit, game flow, save/load and runtime stability NOT TESTED. The exact v2.46 APK and actual v2.47–v2.51 ZIPs remain unavailable, so no v2.51 integration is claimed.
+- See `docs/APK_CANDIDATE_BUILD_v2.57.md` and `audit/apk_candidate_v2.57_summary.json`.
+
+
 ## Start-route static audit v2.56 — 25 October 2026 (not a game/APK version)
 
 - Added `tools/audit_start_route.py` and three unit tests for localized display strings, missing Start tokens, and executable skeleton drift.
