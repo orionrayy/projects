@@ -68,7 +68,8 @@ class SetGoldV35PatcherTests(unittest.TestCase):
         self.assertIn(b"Set Gold", appended)
         self.assertNotIn(b"Gold -10", appended)
         self.assertEqual(actions[-1]["name"], "onGoldMinus10")
-        self.assertIn("uai_gp_hud.onSetGold", actions[-1]["params"][0])
+        self.assertIn("uai_gp_hud", actions[-1]["params"][0])
+        self.assertIn("onSetGold", actions[-1]["params"][0])
         self.assertEqual(report["correct_transform_offsets"], [34, 38, 42, 46])
         self.assertTrue(report["preserves_v33_layout_prefix"])
 
