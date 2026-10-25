@@ -1,0 +1,38 @@
+name: DQ ShiVa AIFunction ABI/bootstrap cross-check v63
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/SHIVA_AIFUNCTION_ABI_BOOTSTRAP_V63.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V63_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_shiva_aifunction_abi_bootstrap_v63.py"
+      - "DQ-Reverse-Engineering/tests/test_shiva_aifunction_abi_bootstrap_v63.py"
+      - ".github/workflows/dq-shiva-aifunction-abi-bootstrap-v63.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/SHIVA_AIFUNCTION_ABI_BOOTSTRAP_V63.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V63_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_shiva_aifunction_abi_bootstrap_v63.py"
+      - "DQ-Reverse-Engineering/tests/test_shiva_aifunction_abi_bootstrap_v63.py"
+      - ".github/workflows/dq-shiva-aifunction-abi-bootstrap-v63.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-abi-bootstrap-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/validate_shiva_aifunction_abi_bootstrap_v63.py DQ-Reverse-Engineering/tests/test_shiva_aifunction_abi_bootstrap_v63.py
+      - name: Validate header and bootstrap cross-check
+        run: python DQ-Reverse-Engineering/tools/validate_shiva_aifunction_abi_bootstrap_v63.py DQ-Reverse-Engineering/docs/SHIVA_AIFUNCTION_ABI_BOOTSTRAP_V63.json
+      - name: Test source-version and runtime boundaries
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_shiva_aifunction_abi_bootstrap_v63.py' -v

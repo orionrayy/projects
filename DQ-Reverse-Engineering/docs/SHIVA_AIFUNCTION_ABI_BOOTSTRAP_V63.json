@@ -1,0 +1,88 @@
+{
+  "schema":"dq-shiva-aifunction-abi-bootstrap-crosscheck-v63",
+  "audit_status":"LEGACY_HEADER_AND_REGISTRATION_ORDER_CORROBORATED_TARGET_SOURCE_HOOK_STILL_MISSING",
+  "target":{
+    "game_version":"3.3.2.0",
+    "package_id":"com.shinybox.smash",
+    "stock_xapk_sha256":"3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "native_library":"libS3DClient.so",
+    "native_library_sha256":"0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
+    "abi":"arm64-v8a"
+  },
+  "reference":{
+    "repository":"error454/ShiVa-Android-All-In-One",
+    "commit":"1664c1206cba319480cf180e6e135352aefb9b5c",
+    "commit_date":"2019-05-16T18:00:28Z",
+    "header_path":"android/jni/S3DX/S3DXAIFunction.h",
+    "header_blob_sha":"63ab81e2fda6a1f499fe778a69ce093969bf3703",
+    "client_source_path":"android/jni/S3DClient.cpp",
+    "client_source_blob_sha":"b2e285777683e2d40b507bdf178b7ed238f8a600",
+    "wrapper_path":"android/jni/S3DClient_Wrapper.h",
+    "wrapper_blob_sha":"5a604eb126a5daa3fa0800dd6fab03ca6057de0b",
+    "reference_is_historical_not_target_source":true
+  },
+  "legacy_header":{
+    "typedef":"typedef int (*AICallback)(int input_count, const AIVariable* inputs, AIVariable* outputs)",
+    "fields":[
+      {"name":"pName","type":"const char*","arm64_offset":0},
+      {"name":"pCallback","type":"AICallback","arm64_offset":8},
+      {"name":"pReturns","type":"const char*","arm64_offset":16},
+      {"name":"pArguments","type":"const char*","arm64_offset":24},
+      {"name":"pDescription","type":"const char*","arm64_offset":32},
+      {"name":"iReserved","type":"uint32","arm64_offset":40}
+    ],
+    "expected_arm64_size_bytes_by_legacy_header":48,
+    "callback_signature_corroborated_by_target_disassembly":true,
+    "callback_field_offset_matches_target_disassembly":true,
+    "target_exact_header_and_full_struct_layout_verified":false,
+    "allocator_string_ownership_lifecycle_verified":false
+  },
+  "legacy_registration_lifecycle":{
+    "client_init_call_line":875,
+    "pack_load_call_line":934,
+    "client_function_registration_loop_line":939,
+    "observed_sequence":[
+      "S3DClient_Init",
+      "configure client/input/render properties and callbacks",
+      "S3DClient_LoadPack",
+      "iterate static AIFunction table",
+      "S3DClient_RegisterFunction(function.pName, &function)"
+    ],
+    "registration_loop_after_pack_load_in_reference":true,
+    "static_aifunction_table_size":8,
+    "source_registers_functions_from_a_client_owned_static_table":true,
+    "source_unregister_at_shutdown_proven":false,
+    "applies_directly_to_dungeon_quest_binary":false
+  },
+  "target_binary_crosscheck":{
+    "register_symbol":{"name":"S3DClient_RegisterFunction","va":"0x7aec14","size_bytes":188},
+    "unregister_symbol":{"name":"S3DClient_UnregisterFunction","va":"0x7aecd0","size_bytes":132},
+    "dispatch_symbol":{"name":"S3DX_AIScriptAPI_system_callClientFunction","va":"0x892bd8","size_bytes":1556},
+    "kernel_lookup_symbol":{"name":"Pandora::EngineCore::Kernel::GetClientFunction(Pandora::EngineCore::String const&) const","va":"0x8285dc","size_bytes":76},
+    "callback_pointer_offset_used_by_target":8,
+    "registration_hook_in_dungeon_quest_application_source_proven":false,
+    "dungeon_quest_has_custom_AIFunction_table_proven":false
+  },
+  "integration_gate":{
+    "catalog_items":222,
+    "catalog_categories":14,
+    "catalog_routes_assigned":0,
+    "runtime_verified_catalog_effects":0,
+    "separate_native_candidate_actions":1,
+    "runtime_verified_candidate_actions":0,
+    "v50_runtime_checks_passed":0,
+    "v50_runtime_checks_total":9,
+    "target_source_or_authorized_native_client_project_available":false,
+    "safe_registration_hook_proven":false,
+    "exact_target_abi_recovered":false,
+    "new_HUD_AIM_callsite_to_client_function_proven":false,
+    "status":"BLOCKED"
+  },
+  "scope_limitations":[
+    "The public reference is a ShiVa Android client project from 2019; it is not the matching project/source for Dungeon Quest 3.3.2.0.",
+    "The legacy header's field order is consistent with the target binary reading callback at offset +8, but other target ABI details are not independently verified.",
+    "The example registers its static client-function table in native source immediately after S3DClient_LoadPack; that source-level hook is absent from the recovered Dungeon Quest project snapshot.",
+    "No source file from the external repository has been copied into the Dungeon Quest repository; only audit evidence and source/blob identifiers are recorded.",
+    "No APK, XAPK, native library, game asset, license check or integrity path was modified."
+  ]
+}
