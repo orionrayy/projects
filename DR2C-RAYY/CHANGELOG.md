@@ -1,5 +1,12 @@
 # Changelog — DR2C VORENYX
 
+## v2.57 Android 11 signature-fix derivative — 25 October 2026 (test only)
+
+- Diagnosed why v2.57 failed to install even after the previous package was removed: its manifest targets API 35 but the APK only had JAR/v1 signing. Android 11/API 30 requires v2+ for target API 30+ (official reference: https://developer.android.com/about/versions/11/behavior-changes-11).
+- Produced a separate signature-fix derivative of v2.57, `DR2C_VORENYX_v2.57_SIGNATURE_FIX.apk`, SHA-256 `a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7`; it is not the v2.58 localization batch.
+- JAR/v1 and local v2 cryptographic/layout verification pass; 1,015 ZIP entries, CRC PASS, no duplicates, DEX internal checksums pass, alignment failures 0. Official `apksigner` and device install/gameplay remain untested. New local signer; PairIP/license code unchanged.
+- Details: `docs/APK_SIGNATURE_FIX_v2.57.md`.
+
 ## Local APK test candidate v2.58 — 25 October 2026 (not a release APK)
 
 - Built `DR2C_VORENYX_v2.58_TEST_CANDIDATE.apk` with a curated 38-row next-wave localization queue: 41 literal occurrences across three scripts.
