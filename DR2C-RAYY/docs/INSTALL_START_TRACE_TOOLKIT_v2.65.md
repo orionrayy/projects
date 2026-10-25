@@ -34,3 +34,7 @@ The Start no-op and APK installation failure are not diagnosed until the relevan
 ## Next gate
 
 If the APK is absent after the failed installation, run mode 1 while manually repeating the install once. If the package is still installed and Start does not respond, run mode 2 and tap Start once. Inspect the output ZIP for private information before sharing it. Do not uninstall or replace the existing game solely for diagnosis.
+
+## Supplemental static Start-route cross-check
+
+A direct comparison of the actual base and candidate APKs found matching normalized code-token streams in events.df, game-select.df, game-info.df and boot-end.df after masking quoted strings/comments. boot.df adds the id-name-localize display-label helper; removing that helper restores the base token stream. events/tutorial.df remains the known code-token drift exception (chim → cname plus bHe/bhim/bhe expression-token removals). This drift is not proven to cause Start to fail. Both APK ZIPs pass CRC with zero duplicate paths. See [source diff audit](../audit/start_route_source_diff_v2.65.json).
