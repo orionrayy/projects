@@ -79,3 +79,10 @@ jobs:
           grep -q 'nativeInvokeProbe()Z' "$RUNNER_TEMP/dq-v67-roundtrip/com/shinybox/smash/DqNativeProbe.smali"
           grep -q 'tryUnregister()V' "$RUNNER_TEMP/dq-v67-roundtrip/com/shinybox/smash/S3DRenderer.smali"
           echo 'PASS: synthetic smali overlay assembled and re-disassembled; no game DEX/APK involved.'
+      - name: Export short-lived pinned smali toolchain for offline target audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: dq-v67-smali-toolchain
+          path: ${{ runner.temp }}/smali-tools/lib/*.jar
+          if-no-files-found: error
+          retention-days: 1
