@@ -1,55 +1,110 @@
 package dev.dqdebug.sandboxharness;
 
 import org.junit.Test;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class SandboxStateTest {
+    private static CatalogEntry entry(String id, String label, String category, String control,
+            String defaultValue, double min, double max, double step, List<String> options) {
+        return new CatalogEntry(id, label, category, "test catalog entry", control, defaultValue,
+                "", "medium", "requires_game_adapter", min, max, step,
+                options, Collections.emptyList(), Collections.emptyList());
+    }
+
+    private static List<CatalogEntry> fixture() {
+        return Arrays.asList(
+            entry("player.god_mode", "God mode", "Player & Survival", "toggle", "false",
+                    Double.NaN, Double.NaN, Double.NaN, Collections.emptyList()),
+            entry("economy.gold_multiplier", "Gold multiplier", "Economy Lab", "slider", "1",
+                    0, 100, 1, Collections.emptyList()),
+            entry("combat.damage_randomization", "Damage randomization", "Combat Lab", "range", "0.9:1.1",
+                    0, 5, 0.05, Collections.emptyList()),
+            entry("player.resource_policy", "Resource policy", "Player & Survival", "select", "normal",
+                    Double.NaN, Double.NaN, Double.NaN, Arrays.asList("normal", "half_cost", "free")),
+            entry("inventory.grant_item", "Grant item", "Inventory & Gear", "action", "",
+                    Double.NaN, Double.NaN, Double.NaN, Collections.emptyList())
+        );
+    }
+
     @Test public void defaultsAreSafeAndAdapterIsDisconnected() {
-        SandboxState s = new SandboxState();
-        assertEquals(0, s.get("player.god_mode"));
-        assertEquals(1, s.get("economy.gold_multiplier"));
+        SandboxState s = new SandboxState(fixture());
+        assertEquals("false", s.get("player.god_mode"));
+        assertEquals("1", s.get("economy.gold_multiplier"));
+        assertEquals("0.9:1.1", s.get("combat.damage_randomization"));
         assertFalse(s.isGameAdapterConnected());
+        assertEquals(5, s.catalogCount());
+        assertEquals(0, s.stagedCount());
     }
 
     @Test public void undoRestoresOnlyTheLastLocalPreviewSnapshot() {
-        SandboxState s = new SandboxState();
-        s.set("player.god_mode", 1);
-        s.set("economy.gold_multiplier", 12);
+        SandboxState s = new SandboxState(fixture());
+        s.set("player.god_mode", "true");
+        s.set("economy.gold_multiplier", "12");
         assertTrue(s.undo());
-        assertEquals(1, s.get("player.god_mode"));
-        assertEquals(1, s.get("economy.gold_multiplier"));
+        assertEquals("1", s.get("economy.gold_multiplier"));
+        assertEquals("true", s.get("player.god_mode"));
         assertTrue(s.undo());
-        assertEquals(0, s.get("player.god_mode"));
+        assertEquals("false", s.get("player.god_mode"));
+        assertFalse(s.undo());
     }
 
-    @Test public void presetsAndResetAreDeterministic() {
-        SandboxState s = new SandboxState();
+    @Test public void presetsResetAndUndoAreDeterministic() {
+        SandboxState s = new SandboxState(fixture());
         s.applyPreset(SandboxState.Preset.POWER_PREVIEW);
-        assertEquals(1, s.get("player.god_mode"));
-        assertEquals(10, s.get("economy.gold_multiplier"));
+        assertEquals("true", s.get("player.god_mode"));
+        assertEquals("65", s.get("economy.gold_multiplier"));
+        assertEquals("free", s.get("player.resource_policy"));
+        assertEquals(3, s.stagedCount());
+
         s.applyPreset(SandboxState.Preset.DIAGNOSTICS);
-        assertEquals(0, s.get("player.god_mode"));
-        assertEquals(1, s.get("diagnostics.hitboxes_preview"));
+        assertEquals("false", s.get("player.god_mode"));
+        assertEquals("1", s.get("economy.gold_multiplier"));
+        assertEquals("0.9:1.1", s.get("combat.damage_randomization"));
         s.reset();
-        assertEquals(0, s.get("diagnostics.hitboxes_preview"));
-        assertEquals(1, s.get("diagnostics.performance_overlay"));
+        assertEquals(0, s.stagedCount());
+        assertEquals("normal", s.get("player.resource_policy"));
     }
 
-    @Test public void unknownAndOutOfRangeValuesAreRejected() {
-        SandboxState s = new SandboxState();
-        try { s.set("unknown.setting", 1); fail("unknown setting should be rejected"); }
-        catch (IllegalArgumentException expected) {}
-        try { s.set("economy.gold_multiplier", 101); fail("range should be enforced"); }
-        catch (IllegalArgumentException expected) {}
-        try { s.set("player.god_mode", 2); fail("boolean range should be enforced"); }
-        catch (IllegalArgumentException expected) {}
+    @Test public void rejectsUnknownOutOfBoundsOffStepAndInvalidRangeValues() {
+        SandboxState s = new SandboxState(fixture());
+        expectIllegal(() -> s.set("unknown.setting", "1"));
+        expectIllegal(() -> s.set("economy.gold_multiplier", "101"));
+        expectIllegal(() -> s.set("economy.gold_multiplier", "12.5"));
+        expectIllegal(() -> s.set("player.god_mode", "2"));
+        expectIllegal(() -> s.set("combat.damage_randomization", "1.5:1.1"));
+        expectIllegal(() -> s.set("combat.damage_randomization", "0.91:1.1"));
+        expectIllegal(() -> s.set("player.resource_policy", "not-a-policy"));
     }
 
-    @Test public void exportAndEventsClearlyMarkLocalOnlyScope() {
-        SandboxState s = new SandboxState();
+    @Test public void actionsArePreviewRequestsAndNeverSettingWrites() {
+        SandboxState s = new SandboxState(fixture());
+        expectIllegal(() -> s.set("inventory.grant_item", "true"));
+        s.recordActionPreview("inventory.grant_item");
+        assertTrue(s.recentEvents(5).get(s.recentEvents(5).size() - 1).contains("gameplay"));
+        assertEquals(0, s.stagedCount());
+    }
+
+    @Test public void exportClearlyMarksLocalScopeAndContainsStableIds() {
+        SandboxState s = new SandboxState(fixture());
+        s.set("player.god_mode", "true");
         String json = s.exportJson();
         assertTrue(json.contains("\"scope\": \"local-ui-preview-only\""));
         assertTrue(json.contains("\"gameAdapterConnected\": false"));
-        assertTrue(s.recentEvents(5).get(0).contains("adapter is not connected"));
+        assertTrue(json.contains("\"catalogItemCount\": 5"));
+        assertTrue(json.contains("\"player.god_mode\""));
+        assertTrue(json.contains("\"value\": true"));
+    }
+
+    private static void expectIllegal(Runnable action) {
+        try {
+            action.run();
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            // Expected fail-closed validation.
+        }
     }
 }
