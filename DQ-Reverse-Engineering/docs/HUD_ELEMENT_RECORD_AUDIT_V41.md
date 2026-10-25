@@ -48,6 +48,19 @@ Four synthetic tests cover all v12 element type schemas 1–15, exact element-se
 
 Local result: 4 tests passed. Full original-source probe result: 68 of 68 HUD resources passed with zero parsing failures. These local binary checks do not replace CI results or on-device gameplay tests.
 
+## Reciprocal SaveElements writer cross-check
+
+A second read-only disassembly pass located the implementation body reached through the short \`HUDTemplate::SaveElements\` entry point: entry thunk at VA 0x963a1c, implementation body at VA 0x9611bc. It uses the same element-type dispatch strategy as the loader and serializes the List-specific v12 fields in the same logical order as represented by this probe.
+
+For List/type 3 the writer reads the object fields for the flag at +0x1f4; floats at +0x1d8/+0x1dc/+0x1e0; three flags at +0x1e4..+0x1e6; floats at +0x1f8/+0x1fc; strings/resources at +0x208/+0x210; float +0x220; two string/resource references +0x228/+0x238; seven colors +0x230/+0x234/+0x240/+0x244/+0x248/+0x24c/+0x250; eight string/resource references +0x258 through +0x290; then floats +0x298/+0x29c. The writer's v12 condition does not append the additional fields that are conditional on a format version greater than 12. This is reciprocal evidence for the type-3 schema used by the parser and synthetic tests.
+
+Two limitations still prevent calling this a lossless serializer:
+
+1. The writer emits literal float 0.0 for common field +0x28 rather than serializing the in-memory field. In all 4,956 element records parsed from the 68 source HUD files, the corresponding serialized float was 0.0. That is reassuring for this source build, but not a proof for arbitrary or future HUDs.
+2. Resource references are written via engine string/resource lookup and pointer conversion rather than as raw bytes. An offline parser can recover serialized strings, but it does not recreate engine pointer identities or prove that a newly constructed element has valid resource bindings, model ownership, or lifecycle state.
+
+The source List is a contextual rank-up container with its own name, label, colors, and resources; copying its 237 bytes into pause.hud would not by itself create the 222 cheat rows or the required row-selection/action pipeline. No production serializer or asset mutation is enabled by this audit.
+
 ## Next safe gate
 
 Use the decoded 237-byte List record as a reference for read-only investigation of HUDTemplate save/write serialization and the List constructor/runtime callback path. Before any asset mutation, prove lossless parse/write round-trip on a disposable fixture, then on a no-op copy of pause.hud. Keep the current game package and save untouched; do not build another APK/XAPK until the 222-entry menu has a defensible native record format and verified row-action mapping.
