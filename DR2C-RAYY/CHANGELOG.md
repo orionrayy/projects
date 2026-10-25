@@ -1,5 +1,7 @@
 # Changelog — DR2C VORENYX
 
+- **v2.64 Start Runtime Trace Toolkit hardening (26 October 2026):** removed logcat buffer clearing, moved capture to the live edge, enforced a 90-second cap, added early process-exit diagnostics, removed potentially stale crash-buffer output, and made the BAT wrapper propagate errors. Static checks: 11/11 PASS; ZIP CRC PASS; no duplicate paths. **Android runtime still BLOCKED pending a device trace; Start remains unresolved.** See [checkpoint](docs/START_RUNTIME_TRACE_TOOLKIT_v2.64.md) and [sanitized validation](audit/runtime_trace_toolkit_v2.64.json).
+
 - **v2.44 post-install status correction:** user reports all symptoms unchanged. Static marker/orientation edits exist, but runtime fix failed to verify. Same package ID + local signing certificate may prevent updating an APKVISION-signed installation, leaving the old app active. APKVISION wrapper remains. See [post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md). No stable-release claim.
 
 - **v2.44 Start/UI hotfix candidate:** restored the internal boot marker GAME-MARKER (previously renamed PENANDA-GAME) and forced SplashActivity/DrtcGameActivity to fixed landscape. Static event/start-path checks and APK CRC/hash/alignment/signature validation PASS; Android Start behavior, UI layout, install, launch, save/load and stability NOT TESTED. APKVISION wrapper remains; an authorized clean base APK is required for a clean build. SHA-256: e28314611411aeba2fdd6bf2cee918fa64ddecac159536e4a39918e7af81f8a6.
