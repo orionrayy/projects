@@ -1,8 +1,61 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint: v2.44 hotfix failed to verify · user reports symptoms unchanged · Full localization NOT COMPLETE**
+**Latest documented localization batch: v2.51 Batch K · source-lineage unresolved · v2.57 test APK candidate built but runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
+
+
+
+## Local APK test candidate — v2.57 checkpoint (25 October 2026; not a release)
+
+- Built `DR2C_VORENYX_v2.57_TEST_CANDIDATE.apk` from the available base + v2.43 + v2.45 corrective + v2.45 Startfix layers, then applied a tutorial refresh, 13 native labels per ABI, landscape orientation correction, and splash/title badge consistency.
+- Candidate SHA-256: `ef66364da7e3d8862b460348d67d397e8132896aaa80f70a9243589d934435e5`; 115,614,035 bytes; 1,015 ZIP entries; CRC PASS; 509 `.df` scripts; zero escaped-quote regressions; no duplicate paths.
+- Static package gates pass: `resources.arsc` stored/4-byte aligned; stored ZIP alignment checks pass; seven uncompressed native libraries per ABI are page-aligned; 26/26 native label slots pass; both primary activities set to landscape; PairIP libraries stay byte-identical to base.
+- JAR/v1 test signature verifies. APK Signature Scheme v2 was not generated/verified because `apksigner` is unavailable. No device installation, Start tap, gameplay, UI-hitbox, save/load, or runtime stability test has run.
+- `apkvision` identifiers remain in `classes3.dex` (13 hits) and both `libstub.so` files (16 hits each). Visible title/splash assets have no such literal; wrapper identifiers remain unchanged, with no license/security bypass.
+- Exact v2.46 APK and actual v2.47–v2.51 patch ZIPs remain unavailable. This candidate is not v2.51 integration and uses a local self-signed test key; do not install over the current app without understanding the signer mismatch and backing up saves.
+- See `docs/APK_CANDIDATE_BUILD_v2.57.md` and `audit/apk_candidate_v2.57_summary.json`.
+
+## Start-route static contract audit — v2.56 (25 October 2026; not a game/APK version)
+
+- Audited 12 route-related `.df` files against the original source and cumulative source-only patch. Result: **12/12 static contract checks PASS**; boot label/helper check PASS.
+- `game-select.df`, `game-start.df`, `game-info.df`, `boot-end.df` and `events/tutorial.df` preserve normalized executable code skeletons and ordered single-quoted Forth symbol streams relative to base.
+- Required boot/start dispatch and tutorial tokens are present. `boot.df` adds `id-name-localize`, translates `READY.` to `SIAP.`, and preserves the canonical `GAME-MARKER` marker.
+- This is not runtime proof. No APK build/install, touchscreen Start test, UI-fit, gameplay or save/load validation was run. The actual v2.47–v2.51 ZIPs remain unavailable; no v2.51 integration is claimed.
+- See `docs/START_ROUTE_STATIC_AUDIT_v2.56.md`, `audit/start_route_static_contract_v2.56.json`, and `tools/audit_start_route.py`.
+
+## Reproducible source packaging — v2.55 (25 October 2026; not a game/APK version)
+
+- Normalized ZIP member timestamps and file modes so repeat source builds are byte-reproducible. Three independent builds produced SHA-256 `95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d`.
+- Output: `DR2C_VORENYX_REPRODUCIBLE_SOURCE_PATCH_v2.55.zip`, 7,515,735 bytes, 274 entries, zero duplicate paths; 272 overlay paths, 269 Deathforth `.df` files, and 18 later-layer overrides.
+- Reconciled artifact has exactly the same 274 member payloads as v2.53; the prior whole-ZIP hash difference came from archive metadata, not source payload changes.
+- Test coverage: 7/7 source-reconciler tests and 6/6 provenance tests pass. Exact v2.47–v2.51 ZIPs and the v2.46 baseline remain unavailable, so this is NOT v2.51 integration. APK build/runtime remain unverified.
+- See `docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md` and `audit/reproducible_source_patch_v2.55_summary.json`.
+
+## Latest source-lineage gate — v2.54 audit (25 October 2026; not a game/APK version)
+
+- Added `tools/audit_overlay_provenance.py` with unit tests for ZIP CRC/duplicate-path failures, source/overlay script counts, byte-level differences and explicit target paths. Hardened it to fail closed on ambiguous source roots and noncanonical dot-segment paths; total source-audit/reconciler coverage is 12 unit tests.
+- The available v2.43 patch contains 269 `.df` payloads; all 269 differ byte-for-byte from the 509-script base archive, with 240 base scripts lacking overlay payloads.
+- All nine source paths named by the v2.51 Batch K report are present and byte-different in the available v2.43 overlay. Three paths described as newly added in v2.51 are already present in that v2.43 archive.
+- Exact v2.46 baseline and v2.47–v2.51 ZIP bytes remain unavailable; v2.50 Batch J has no report/JSON in this PR change set. Source lineage is unresolved and must not be auto-merged.
+- This is a provenance finding, not evidence of localization completeness or runtime stability. APK build/install/runtime, UI fit, gameplay and save/load remain unverified. See `docs/BATCH_K_PROVENANCE_RECONCILIATION_v2.54.md` and `audit/batch_k_provenance_v2.54.json`.
+
+## Latest static contract gate — v2.53 (25 October 2026)
+
+- Reconciled source-only patch SHA-256: 73c9f60cd1a88a6d121843f3bdc6304262d47c01b2cdc36237015b7d083583d7; ZIP CRC PASS, 274 entries, 0 duplicate paths.
+- Added strict checks for quoted-string closure in the overlay, ordered single-quoted Forth code-symbol sequence preservation, canonical Jack of All Trades perk key, and Start/tutorial dispatch contracts.
+- Actual result across the supplied source: 269 overlay script files, 0 code-symbol sequence differences, 0 escaped backslash-quote regressions, canonical boot marker PASS, perk-key PASS, Start/tutorial dispatch tokens PASS. Six unit tests pass.
+- This artifact is v2.43 + v2.45 corrective + v2.45 quote-fix, not v2.51 and not an APK. The actual v2.47–v2.51 ZIP layers remain unavailable for byte-level reconciliation.
+- APK build/sign/install/runtime and save/load remain untested. See the v2.53 source contract gate, audit JSON, and reconciliation tool.
+
+## Source-to-build reconciliation gate — 25 October 2026
+
+- Batch K v2.51 is the latest documented localization pass, but its actual patch ZIP was not available for byte-level inspection in this execution. Treat its reported count of 77/509 scripts as a source report, not a translation-coverage percentage.
+- A reproducible source patch was independently reconciled from the available base source archive, v2.43 overlay, v2.45 corrective patch, and v2.45 Start quote-fix patch. It contains 269 Deathforth script payloads across 272 normalized overlay paths. This differs from the Batch K report's 77-script figure; the exact newer archive and its counting definition must be checked before declaring the two inventories equivalent.
+- The reconciled source patch SHA-256 is `faebba3ee0d14dd0cee668fe132fa95c8ba21f08963f627f59e5364c02658c0f`. Its ZIP CRC, duplicate-path check, canonical GAME-MARKER check, and escaped-quote scan passed. Four unit tests for the new reconciliation tool passed.
+- This artifact is a v2.43 + v2.45 corrective + v2.45 quote-fix source patch. It is **not v2.51 and not an APK**. The base APK/source archives and binary overlay remain outside the public repository.
+- APK build and runtime remain blocked/unverified: `apksigner`, `zipalign`, `apktool`, and `adb` are unavailable in the current environment. No claim is made that Start, UI layout, branding, save/load, or gameplay stability is fixed.
+- See [source reconciliation gate](docs/SOURCE_RECONCILIATION_GATE_v2.52.md), [reconciliation audit JSON](audit/source_reconciliation_v2.52.json), and [reconciliation tool](tools/reconcile_overlay.py).
 
 ## Post-install result: v2.44 symptoms unchanged
 
@@ -10,6 +63,91 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Static file inspection confirms the boot marker and landscape manifest edits exist in the v2.44 APK, but the phone may still be running the old APKVISION package: v2.44 uses the same package ID but a different local signing certificate, so Android cannot update an install signed by another key.
 - Do not label the hotfix as fixed. Installer output and a new post-install recording are needed to distinguish an installation conflict from remaining runtime faults.
 - [Post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md)
+
+## v2.47 localization batches A–F — source patch
+
+- Applied 38 initial static choice/location labels and 275 additional operations covering trade narratives, weapon/item descriptions, forecast vocabulary, character/weapon hints and selected encounters. Total: **313 operations / 325 literal occurrences** across eight scripts.
+- Static validation: non-string token streams and choice-handler sequences match v2.46 baseline in all eight files; no unclosed strings in the lightweight lexer; no escaped double quotes remain. Patch ZIP CRC PASS; no duplicate paths.
+- Patch SHA-256: `08731efd0d451332a7d0af5f4587d7bc524f291d4700c720cf483d230a0158cc` (69,656 bytes).
+- Residual scan covered all 509 scripts and returned 397 heuristic candidates / 159 P1 review candidates. These are not confirmed untranslated UI strings or a localization percentage.
+- **No APK rebuilt**: matching v2.46 test signing key is absent; a new key would conflict with in-place update. Device runtime and the actual Deathforth interpreter are not tested.
+- [Full v2.47 batch report](docs/LOCALIZATION_BATCH_ABCDEF_v2.47.md) · [Machine-readable audit](audit/localization_batch_abcdef_v2.47.json)
+
+## v2.49 Batch I — gameplay and encounter localization
+
+- Added 203 translation operations across 14 previously uncovered scripts: RPG class descriptions and choices, toilet/zombie-line/drag-race events, gym/chess scenes, alien/anime rare locations, bandit encounters, recruit CYOA options, and weapon/trader descriptions.
+- Cumulative source overlay now contains 73 of 509 `.df` scripts. Static checks: 0 quote-parity failures, 0 escaped-double-quote regressions, 0 executable-skeleton differences, 0 unmatched mapping keys. ZIP CRC PASS; 77 entries, no duplicates.
+- Source-only patch. No APK was rebuilt and no device-side runtime test was performed. Some dynamic sentences remain English when their grammar depends on a placeholder across literal boundaries; translating only one fragment would be incorrect.
+- [Batch I report](docs/LOCALIZATION_BATCH_I_v2.49.md) · [Validation JSON](audit/localization_batch_i_v2.49.json)
+
+## v2.51 Batch K — character, encounter and endgame localization
+
+- Applies 206 curated translation/template records across 9 scripts, affecting 211 literal occurrences. Three new active overlays were added: Sasquatch encounter, Santa blurbs, and Cupid blurbs.
+- Additional fixes cover cemetery/Dracula/mausoleum events, mad scientist and ninja scenes, gym strings, Johnny encounter, and end-of-road completion/streak/credits.
+- Cumulative overlay: 77 of 509 source `.df` scripts. Static checks: 0 lexical errors, 0 escaped-quote regressions, 0 executable-skeleton differences, 0 handler-sequence differences, 0 unexpected missing mapping keys. ZIP CRC PASS; 85 entries; no duplicates.
+- ZIP SHA-256: `e265c7d2789e6936aadea49a42c4b5c87799c202945f8cfa4bee7291a8a40046`.
+- Source patch only; no APK built or device test. Global localization remains incomplete.
+- [Batch K report](docs/LOCALIZATION_BATCH_K_v2.51.md) · [Validation JSON](audit/localization_batch_k_v2.51.json)
+
+## v2.48 Batch H — residual event localization
+
+- Cumulative source overlay now contains 59 script files, including prior batches A–G and new Batch H edits. Batch H touches 39 files: 37 literal-map files plus display-template refactors.
+- 258 change records cover 283 literal occurrences. Main targets include toilet/shower and gym events, rare-location narration, character flavor text, arcade encounters, trainer-camp actions, and assorted trade/event responses.
+- Static checks: 0 odd-quote files, 0 escaped-double-quote patterns across the 59-file cumulative overlay, 0 handler ID/order differences, and 0 executable-skeleton differences outside string/display-template regions. ZIP CRC PASS; 61 entries, 0 duplicate paths.
+- The 49-entry v2.47 seed P1 review queue has 0 exact candidate phrases remaining in the cumulative source after application and filtering comment/disabled-code false positives. This is not a claim that all game text is Indonesian; new English remains outside that seed queue.
+- Source patch only; no APK build or device runtime test. [Batch H report](docs/LOCALIZATION_BATCH_H_v2.48.md).
+
+## v2.46 English residual multi-analysis
+
+- Baseline: `DR2C_VORENYX_v2.46_UI_LOCALIZED_TEST.apk`, SHA-256 `6d4e2f3df07d199807c08418ae5d30b9927e5b2e36c780a51858045336b29313`. Static scan covers all 509 packaged `.df` scripts.
+- Extraction detected 3,624 display templates and 9,890 standalone literals. Candidate scoring ranked 443 high-confidence player-facing candidates (P1), 55 medium (P2), 199 short labels/titles/shouts, and 677 unique normalized phrases. These are triage counts, not semantic coverage or a claim that every candidate appears during gameplay.
+- Biggest residual hotspot: `events/trade/oldtrade.df` (76 P1 candidates), especially weapon trade descriptions, gas/ammo, medical supplies and robbery outcomes. Other targets: `events/common/PANCREAS.df`, `events/trade/rare.df`, `events/city/region/special-lots.df`, and `events/locationlogic.df`.
+- The native scan found 3,332 English-like ASCII strings: 2,035 in `libmain.so`, 576 in `libSDL2_image.so`, 527 in `libSDL2.so`, and smaller counts in mixer/PairIP/codec libraries. These are not all player-facing text; engine diagnostics, error messages, identifiers and third-party middleware must not be blindly translated.
+- False-positive patterns include internal/log tokens such as `DAY-PICK-DECK5 RECRUIT`, `old-total-kills:`, and `door-no-escape`. Dynamic templates require their character/group placeholders and markup to remain intact.
+- A curated next-wave review queue has 38 candidate translations for static location labels, simple trade choices and forecast labels. It is a review queue, not yet applied to the APK.
+- Runtime validation of v2.46 on the user's device remains unconfirmed.
+
+See the detailed report in `docs/ENGLISH_RESIDUAL_MULTIANALYSIS_v2.46.md` and the CSV review queue shared with the conversation artifacts.
+
+## v2.46 screenshot-driven UI localization
+
+- Targets the English/mixed-language text seen in the user's latest screenshots: tutorial CYOA choices and prose, plus Team, Swap Meet, Choose UR Fate, and 10 character-stat labels in native `libmain.so`.
+- Tutorial choices are now Indonesian and use the dynamic character name. Existing `tutorchat-1/-2/-3` handlers remain intact.
+- Native labels are patched in-place, preserving string offsets and native library size. Static checks cover 13 standalone string slots.
+- APK: `DR2C_VORENYX_v2.46_UI_LOCALIZED_TEST.apk`, 112,238,801 bytes, SHA-256 `6d4e2f3df07d199807c08418ae5d30b9927e5b2e36c780a51858045336b29313`.
+- ZIP CRC, v1 signature check, local v2 verification, resource table alignment, stored-entry alignment, and native library page alignment pass. No device-side runtime test yet; localization remains incomplete and native stat behavior needs regression check.
+- [UI localization report](docs/UI_LOCALIZATION_v2.46.md) · [Machine-readable validation](audit/ui_localization_v2.46.json)
+
+## v2.45 Start failure — Deathforth string syntax fix
+
+- The user's runtime console revealed a concrete parse error at `events/common/common4.df:34`: escaped quotes in translated text caused the Deathforth interpreter to parse the string incorrectly and report `Dari` as an unknown token.
+- Replaced all 24 C/JSON-style escaped double-quote sequences in six script files with apostrophes inside the outer display strings. A scan of all 509 scripts embedded in the new APK found zero remaining escaped-quote sequences.
+- New diagnostic APK: `DR2C_VORENYX_v2.45_STARTFIX_TEST.apk`, 112,238,861 bytes, SHA-256 `f3199c9aa28ee49889ba536e0fbbe6cdaa4d37ea9e6db48a2668001896210cc5`. ZIP CRC and local v1/v2 signature checks pass; no Android-device runtime test yet.
+- The new APK retains diagnostic console output to reveal subsequent script errors. It uses the same local test certificate as the previous STARTDIAG candidate, not the publisher certificate.
+- [Quote-parse fix report](docs/DEATHFORTH_QUOTE_FIX_v2.45.md) · [Machine-readable audit](audit/startfix_quote_fix_v2.45.json)
+
+## v2.45 Start diagnostic APK — isolate tap, dispatch, and boot-state path
+
+- The original `main-event-do-select` / `select-boot` route exists in the package, and the localization overlay did not remove or rewrite the dispatch handler. Static analysis alone cannot determine whether a touch reaches the native callback, whether the deferred script handler is registered at runtime, or whether `select-boot` aborts on state/mode/tutorial loading.
+- A diagnostic-only APK enables the in-game console and adds checkpoints in `boot.df`, `events.df`, and `game-select.df`. It distinguishes: boot did not complete; no select event dispatched on tap; event dispatch but no select callback; or a stop in save/mode/tutorial loading.
+- Local artifact: `DR2C_VORENYX_v2.45_STARTDIAG_TEST.apk`, 112,238,856 bytes, SHA-256 `0bdb268aa1da2d70188f3a291f1c0591a195266fa3edec3376c86ca83527c26c`. ZIP CRC and local v1/v2 checks pass; target-device install has not been tested. This is not a release build.
+- [Start diagnostic build guide](docs/START_DIAGNOSTIC_BUILD_v2.45.md) · [Machine-readable validation](audit/startdiag_v2.45.json)
+
+## v2.45 APK package-parse error correction — page-aligned test build
+
+- Follow-up analysis of the user-observed Android “Ada masalah saat mengurai paket” error found a concrete packaging defect: seven uncompressed native `.so` payloads were only 4-byte aligned even though the manifest declares `extractNativeLibs=false`. The original base has those payloads aligned to 4,096-byte boundaries.
+- A replacement local candidate now aligns all seven native library payloads to 4,096-byte boundaries, then verifies ZIP CRC, JAR/v1 signature, APK v2 signature and content digest, and binary manifest chunk structure.
+- Local artifact: `DR2C_VORENYX_v2.45_PAGEALIGNED_TEST.apk`; 112,237,647 bytes; SHA-256 `adbe5fff97ba43c670c640e648b4ccc9a9f55996840559665a791d16d06267e7`.
+- **Not device-tested:** this fixes a confirmed packaging defect, but does not prove it was the only cause of the parse message. Local test signer differs from publisher key, and original license checks remain.
+- [APK parse-error triage](docs/APK_PARSE_ERROR_TRIAGE_v2.45.md)
+
+## v2.45 deep source repair candidate — static only
+
+- A corrective source overlay was prepared for 12 scripts, addressing canonical trait/perk IDs, the `Jack of All Trades` definition key, a malformed translated trade-event string, recruit-screen perk labels, a candy-sharing choice label, and confirmation wording.
+- Static checks: no unclosed string/block comment; no new normalized heuristic warnings; 60/60 canonical trait/perk keys preserved; 44 confirmation calls and 44 perk-preview calls use canonical IDs; CYOA, CYOA-choice, and CYOA-bridge identifiers match the source in covered files.
+- Overlay scope: 269 of 509 source `.df` files. Full localization is not complete.
+- This is a source-overlay candidate, not an APK. No rebuild, install, target-device gameplay, or save/load validation was performed. The previously reported viewport/touch and runtime symptoms remain unresolved pending actual-package testing.
+- [Deep repair report](docs/DEEP_REPAIR_v2.45.md) · [Machine-readable static validation](audit/static_validation_v2.45.json) · [Executable-token audit](audit/executable_token_audit_v2.45.json) · [APK baseline integrity audit](audit/apk_baseline_integrity_v2.45.json) · [Choice-handler audit](audit/choice_handler_audit_v2.45.json)
 
 ## v2.44 Start/UI hotfix candidate
 

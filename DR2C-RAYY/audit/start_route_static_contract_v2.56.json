@@ -1,0 +1,173 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.56 Start-route static audit (not a game/APK version)",
+  "status": "STATIC_ROUTE_CONTRACTS_PASS; ANDROID_RUNTIME_NOT_VERIFIED",
+  "inputs": {
+    "base": {
+      "file": "DR2C-RAYY(2).zip",
+      "bytes": 13809097,
+      "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1"
+    },
+    "overlay": {
+      "file": "DR2C_VORENYX_REPRODUCIBLE_SOURCE_PATCH_v2.55.zip",
+      "bytes": 7515735,
+      "sha256": "95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d"
+    }
+  },
+  "summary": {
+    "route_files_checked": 12,
+    "route_files_static_pass": 12,
+    "route_files_static_fail": 0,
+    "boot_additive_localization_check_pass": true,
+    "overall_static_contracts_pass": true
+  },
+  "route_files": [
+    {
+      "path": "assets/deathforth/boot-end.df",
+      "overlaid": true,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/events.df",
+      "overlaid": false,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "required_tokens": {
+        "main-event-do-select": true
+      },
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/game-info.df",
+      "overlaid": true,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/game-select.df",
+      "overlaid": true,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "required_tokens": {
+        "main-event-do-select": true,
+        "select-start": true,
+        "select-boot": true
+      },
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/game-start.df",
+      "overlaid": true,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "required_tokens": {
+        "game-start-new": true
+      },
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/game-load.df",
+      "overlaid": false,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/game-save.df",
+      "overlaid": false,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/game-save-char.df",
+      "overlaid": false,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/game-save-state.df",
+      "overlaid": false,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/game-save-team.df",
+      "overlaid": false,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/minimenu.df",
+      "overlaid": false,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "status": "PASS_STATIC"
+    },
+    {
+      "path": "assets/deathforth/events/tutorial.df",
+      "overlaid": true,
+      "display_code_skeleton_matches_base": true,
+      "ordered_single_quoted_symbols_match_base": true,
+      "display_strings_closed": true,
+      "escaped_backslash_quote_absent": true,
+      "required_tokens": {
+        "tutorchat-1": true,
+        "tutorchat-2": true,
+        "tutorchat-3": true
+      },
+      "status": "PASS_STATIC"
+    }
+  ],
+  "boot_df_additive_localization_check": {
+    "id_name_localize_helper_added": true,
+    "READY_label_translated_to_SIAP": true,
+    "canonical_GAME_MARKER_preserved": true,
+    "ordered_single_quoted_symbols_preserved": true,
+    "display_strings_closed": true,
+    "escaped_backslash_quote_absent": true,
+    "status": "PASS_STATIC",
+    "note": "boot.df adds the label helper and localizes READY to SIAP. This does not prove the helper executes correctly in the game."
+  },
+  "tests": {
+    "new_start_route_unit_tests": "3/3 PASS",
+    "combined_ci_test_count": 16,
+    "ci_run_id": 40168006045,
+    "ci_conclusion": "SUCCESS",
+    "ci_url": "https://github.com/orionrayy/projects/actions/runs/40168006045"
+  },
+  "limitations": [
+    "Not a full Deathforth parser.",
+    "No Android APK build, signature/install validation, device runtime or actual Start-button tap was performed.",
+    "UI fit, event loading, gameplay, save/load remain unverified.",
+    "The actual v2.47-v2.51 binary patches and exact v2.46 APK baseline remain unavailable; no v2.51 integration claim is made."
+  ]
+}

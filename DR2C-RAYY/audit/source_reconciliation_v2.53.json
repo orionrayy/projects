@@ -1,0 +1,70 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.53 source contract reconciliation (not an APK version)",
+  "audit_date": "2026-10-25",
+  "status": "SOURCE_PATCH_STATIC_CONTRACTS_PASS; APK_NOT_BUILT; RUNTIME_NOT_TESTED",
+  "inputs": [
+    {
+      "role": "base_source_archive",
+      "file": "DR2C-RAYY(2).zip",
+      "bytes": 13809097,
+      "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1"
+    },
+    {
+      "role": "overlay_layer_1",
+      "file": "DR2C_VORENYX_ID_v2.43_localization_patch.zip",
+      "bytes": 24350974,
+      "sha256": "00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024",
+      "payload_count": 272
+    },
+    {
+      "role": "overlay_layer_2",
+      "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
+      "bytes": 82435,
+      "sha256": "b2cc843325ede21d00cb91dad4a4ff68fa8c3c0e629d6910860727a4db4cf88d",
+      "payload_count": 12
+    },
+    {
+      "role": "overlay_layer_3",
+      "file": "DR2C_VORENYX_v2.45_STARTFIX_SOURCE_PATCH.zip",
+      "bytes": 36081,
+      "sha256": "36f423d620ec852a82d74d34fab02b83f350c8cd5a1cd304d6e247d494495267",
+      "payload_count": 6
+    }
+  ],
+  "output": {
+    "file": "DR2C_VORENYX_v2.45_RECONCILED_SOURCE_PATCH_v2.53.zip",
+    "bytes": 7515735,
+    "sha256": "73c9f60cd1a88a6d121843f3bdc6304262d47c01b2cdc36237015b7d083583d7",
+    "zip_entries": 274,
+    "zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "normalized_overlay_paths": 272,
+    "overlay_df_files": 269,
+    "later_layer_path_overrides": 18
+  },
+  "checks": {
+    "input_zip_crc": "PASS",
+    "source_archive_sha256_pinned": "PASS",
+    "overlay_df_paths_resolve_to_source": "PASS",
+    "canonical_GAME_MARKER": "PASS",
+    "escaped_backslash_quotes_in_effective_df": 0,
+    "unclosed_display_strings_in_overlay_df": 0,
+    "ordered_single_quoted_symbol_sequence_differences": 0,
+    "canonical_perk_key_Jack_of_All_Trades": "PASS",
+    "translated_Serba_Bisa_not_used_as_perk_key": "PASS",
+    "main_event_select_contract": "PASS",
+    "select_start_contract": "PASS",
+    "select_boot_contract": "PASS",
+    "tutorial_chat_dispatch_contract": "PASS",
+    "unit_tests": "6/6 PASS"
+  },
+  "limitations": [
+    "Output layers are v2.43 + v2.45 corrective + v2.45 quote-fix; it is not v2.51 and not an APK.",
+    "The actual v2.47-v2.51 patch ZIPs were not available for byte-level integration; their documented 77/509 count remains unreconciled with the available v2.43 archive's 269 .df payloads.",
+    "Global semantic/player-visible localization coverage is NOT COMPUTED.",
+    "Full Deathforth interpreter parse was not run.",
+    "No APK build, alignment, signing, install, device runtime, gameplay, UI-fit or save/load tests were performed.",
+    "Available base APK is APKVISION-repackaged; no license/security wrapper bypass was attempted."
+  ]
+}

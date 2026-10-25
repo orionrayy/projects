@@ -1,0 +1,89 @@
+{
+  "project": "DR2C VORENYX",
+  "candidate": "v2.46 screenshot-driven UI localization",
+  "date": "2026-10-25",
+  "artifact": {
+    "name": "DR2C_VORENYX_v2.46_UI_LOCALIZED_TEST.apk",
+    "bytes": 112238801,
+    "sha256": "6d4e2f3df07d199807c08418ae5d30b9927e5b2e36c780a51858045336b29313",
+    "package": "com.noodlecake.drtc",
+    "architecture": [
+      "arm64-v8a"
+    ],
+    "device_runtime": "NOT TESTED"
+  },
+  "tutorial": {
+    "file": "assets/deathforth/events/tutorial.df",
+    "replacements": 8,
+    "handlers_preserved": [
+      "choice: tutorchat-1",
+      "choice: tutorchat-2",
+      "choice: tutorchat-3",
+      "cyoa-choice: tutorchat-1",
+      "cyoa-choice: tutorchat-2",
+      "cyoa-choice: tutorchat-3"
+    ],
+    "escaped_quote_sequences_remaining_across_509_df_files": 0,
+    "choices": [
+      "Biarkan [nama] dulu",
+      "Suruh [nama] buat 'KALM DULU'",
+      "Bujuk [nama] buat bantu lawan zombi",
+      "Ejek [nama] sebagai orang brengsek"
+    ]
+  },
+  "native_labels": {
+    "library": "lib/arm64-v8a/libmain.so",
+    "replacements": {
+      "Team": "Tim",
+      "Swap Meet": "Barter",
+      "Choose UR Fate": "Pilih Nasibmu",
+      "strength": "kekuatan",
+      "fitness": "bugar",
+      "shooting": "menembak",
+      "wits": "akal",
+      "attitude": "sikap",
+      "composure": "tenang",
+      "loyalty": "setia",
+      "morale": "moral",
+      "medical": "medis",
+      "mechanical": "mekanik"
+    },
+    "exact_standalone_slots_found": 13,
+    "replacement_offsets_preserved": true,
+    "library_size_preserved": true
+  },
+  "package_validation": {
+    "zip_entries": 1005,
+    "duplicate_entries": 0,
+    "zip_crc": "PASS",
+    "v1": "PASS (jarsigner)",
+    "v2": "PASS (local verifier; official apksigner unavailable)",
+    "resources_arsc": {
+      "stored": true,
+      "offset": 73704384,
+      "offset_mod4": 0
+    },
+    "stored_entries": {
+      "count": 260,
+      "all_4_byte_aligned": true,
+      "failures": 0
+    },
+    "native_libraries": {
+      "count": 7,
+      "uncompressed": true,
+      "all_4096_byte_aligned": true
+    },
+    "manifest": {
+      "binary_chunk_structure": "PASS",
+      "min_sdk": 23,
+      "target_sdk": 35,
+      "orientation": "landscape"
+    }
+  },
+  "limitations": [
+    "Target device not tested",
+    "Full localization incomplete",
+    "Local test certificate differs from publisher certificate",
+    "Native display string edits need in-game visual/stat regression check"
+  ]
+}

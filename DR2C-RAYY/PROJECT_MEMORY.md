@@ -134,3 +134,49 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - v2.44 has package `com.noodlecake.drtc`, versionCode 57, and a local signing certificate, not the existing APKVISION/release signer. Android will refuse an in-place update if the currently installed package is signed by a different certificate; old app may remain active. This is a probable deployment blocker, not a confirmed device diagnosis.
 - APKVISION namespaces remain in `classes3.dex` and `libstub.so`; v2.44 did not remove the wrapper, so the watermark issue is not fixed.
 - Status: hotfix **not verified and user reports no change**. No further blind build. First need the installer result, safe save backup status before any uninstall, and a new recording/log from a confirmed installed candidate.
+
+
+## Active checkpoint — v2.53 source contract reconciliation (25 October 2026; not an APK version)
+- Reconciled local source-only patch from DR2C-RAYY(2).zip + v2.43 localization patch + v2.45 corrective patch + v2.45 Start quote-fix patch.
+- Output DR2C_VORENYX_v2.45_RECONCILED_SOURCE_PATCH_v2.53.zip: 7,515,735 bytes, SHA-256 73c9f60cd1a88a6d121843f3bdc6304262d47c01b2cdc36237015b7d083583d7; ZIP CRC PASS, 274 entries, 0 duplicate paths, 272 paths/269 .df payloads, 18 later-layer path overrides.
+- New static contracts: source-hash pin; overlay paths exist in source; canonical GAME-MARKER; no escaped backslash-quotes; no unclosed strings in overlay scripts; ordered single-quoted Forth symbol sequence preserved in all 269 overlay scripts; canonical Jack of All Trades perk key; main-event-do-select, select-start, select-boot, and tutorchat-1 are present. Static checks PASS; 6/6 unit tests pass.
+- Scope remains v2.43 + v2.45 corrective + v2.45 quote fix, not v2.51 and not an APK. Exact v2.47–v2.51 patch ZIPs remain unavailable for byte-level integration, so the report's 77/509 script count is not reconciled against the available v2.43 patch's 269 .df payloads.
+- APK build/sign/install/runtime, UI fit, gameplay, save/load and stability remain NOT RUN / NOT VERIFIED. Current available APK base is APKVISION-repackaged; Android build tools are not installed here and no license/security wrapper bypass is attempted.
+- See docs/SOURCE_RECONCILIATION_GATE_v2.53.md, audit/source_reconciliation_v2.53.json, and tools/reconcile_overlay.py.
+
+## Active checkpoint — v2.54 provenance audit (25 October 2026)
+
+- Added `tools/audit_overlay_provenance.py` to compare ZIP CRC, archive SHA-256, Deathforth `.df` path inventories, byte-identical/different script counts, missing overlay paths, and explicit targets. Hardened path validation to reject ambiguous source roots and noncanonical dot segments. The two suites have 12 unit tests, and CI run #40166720059 passed.
+- Verified against the available local inputs: base `DR2C-RAYY(2).zip` has 509 `.df` scripts; v2.43 overlay has 269 `.df` payloads, all 269 byte-different from base; 240 base scripts have no overlay payload; no overlay-only script paths exist.
+- Batch K v2.51 metadata names nine scripts; all nine already exist and differ from base within the available v2.43 overlay, including the three called “new” in the Batch K report. That is a lineage/evidence discrepancy, not proof that a specific archive is wrong.
+- Exact v2.46 baseline APK and v2.47–v2.51 binary patch ZIPs are unavailable for byte-level comparison; an enumeration of 299 Library ZIP artifacts found no v2.47–v2.51 binaries, although the v2.47 checksum sidecar exists. PR description mentions v2.50 Batch J, but no corresponding report/JSON is in the PR changed-file list or current accessible artifact set.
+- Do not auto-merge the available 269-script v2.43 lineage with the later 77/509 report, do not reconstruct missing translations by inference, and do not claim v2.51 integration. Obtain exact baseline + v2.50/v2.51 ZIPs with checksum sidecars first.
+- No APK build, signature/install verification, Deathforth full parse, device runtime, UI-fit, gameplay, or save/load test was performed in this checkpoint.
+- See `docs/BATCH_K_PROVENANCE_RECONCILIATION_v2.54.md`, `audit/batch_k_provenance_v2.54.json`, and `tools/audit_overlay_provenance.py`.
+
+## Active checkpoint — v2.55 reproducible source packaging (25 October 2026)
+
+- Normalized output ZIP member timestamps and Unix file modes in `tools/reconcile_overlay.py`; added a regression test for two byte-identical builds from identical inputs.
+- Built the available layers three times (base archive + v2.43 overlay + v2.45 corrective patch + v2.45 Startfix patch). All three archives match SHA-256 `95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d`; size 7,515,735 bytes; CRC PASS; 274 entries; 272 overlay paths; 269 .df scripts; 18 overrides.
+- Compared with the earlier v2.53 ZIP: all 274 member paths/payloads are identical; the prior hash drift was ZIP timestamp/file-mode metadata.
+- Test suites: source reconciler 7/7 PASS, provenance 6/6 PASS. Combined 13/13 PASS.
+- Scope explicitly remains v2.43 + v2.45 corrective + v2.45 quote-fix, NOT v2.51. Exact v2.46 APK baseline and actual v2.47–v2.51 ZIPs remain unavailable. No APK build/sign/install/runtime, full interpreter parse, UI fit, Start input, gameplay or save/load test has been performed.
+- See `docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md`, `audit/reproducible_source_patch_v2.55_summary.json`, and provenance gate v2.54.
+
+## Active checkpoint — v2.56 Start-route static audit (25 October 2026)
+
+- Added a static route audit tool and three unit tests. The audit covers 12 route-related .df files against the original base and available v2.55 source-only overlay.
+- Static results: 12/12 route files pass; key overlaid route files preserve normalized executable code skeleton and ordered single-quoted Forth symbol sequence. main-event-do-select, select-start, select-boot, game-start-new, and tutorchat-1 through tutorchat-3 are present.
+- boot.df adds id-name-localize, translates visible READY. to SIAP., and retains canonical GAME-MARKER. Static checks do not prove helper execution or runtime boot success.
+- This is not an APK build or a runtime test. Actual Start-button navigation, touch input, UI fit, gameplay, event loading and save/load remain unverified. v2.47-v2.51 patch binaries and exact v2.46 baseline remain unavailable.
+- See tools/audit_start_route.py, tests/test_audit_start_route.py, docs/START_ROUTE_STATIC_AUDIT_v2.56.md, and audit/start_route_static_contract_v2.56.json.
+
+## Active checkpoint — v2.57 local APK test candidate (25 October 2026)
+
+- Built local test APK `DR2C_VORENYX_v2.57_TEST_CANDIDATE.apk` from base source + v2.43 localization overlay + v2.45 corrective patch + v2.45 Startfix; not v2.51 integration.
+- SHA-256 `ef66364da7e3d8862b460348d67d397e8132896aaa80f70a9243589d934435e5`, 115,614,035 bytes, 1,015 entries, ZIP CRC PASS, no duplicate paths, 509 .df scripts, zero escaped quote regressions.
+- Static gates: resources.arsc uncompressed/4-byte aligned; stored-entry alignment checks pass; seven uncompressed native .so files per ABI page-aligned; both game activities landscape; 13 native UI label slots per ABI preserved; PairIP libs identical to base; tutorial handlers/symbol stream preserved.
+- Synchronized splash badge from V0.3 to the existing title-art badge V2.43. Visible title/splash assets do not contain the literal APKVISION string; classes3.dex and both libstub.so files still contain wrapper identifiers (13, 16, 16 hits). Do not delete or alter these wrapper identifiers speculatively; no license/security bypass.
+- Local test builder suite 8/8 passes. JAR/v1 signature verifies using a local self-signed test certificate; APK v2 signature was not generated/verified because apksigner is unavailable. No Android device/ADB/emulator test was run.
+- Exact v2.46 baseline APK and actual v2.47–v2.51 source patch ZIPs remain unavailable. Do not claim v2.51 integration, release stability, or runtime success. Candidate's local signer differs from publisher/current install; do not uninstall existing app without save backup.
+- See docs/APK_CANDIDATE_BUILD_v2.57.md and audit/apk_candidate_v2.57_summary.json.

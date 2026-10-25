@@ -1,0 +1,69 @@
+{
+  "project": "DR2C VORENYX",
+  "candidate": "v2.45 STARTDIAG_TEST",
+  "build_date": "2026-10-25",
+  "purpose": "Diagnostic-only build to distinguish native tap/event delivery, deferred handler registration, and select-boot state/load failures.",
+  "artifact": {
+    "file": "DR2C_VORENYX_v2.45_STARTDIAG_TEST.apk",
+    "bytes": 112238856,
+    "sha256": "0bdb268aa1da2d70188f3a291f1c0591a195266fa3edec3376c86ca83527c26c",
+    "package": "com.noodlecake.drtc",
+    "certificate_sha256": "050c58901b45dd18715db11c603af3788b3bf3cb87b75dbff2592f98e73f5dcb"
+  },
+  "structural_validation": {
+    "zip_entries": 1005,
+    "duplicate_paths": 0,
+    "zip_crc": "PASS",
+    "v1_jarsigner": "PASS",
+    "v2_signature_and_content_digest": "PASS_BY_LOCAL_VERIFIER",
+    "official_apksigner_available": false,
+    "resources_arsc_uncompressed": true,
+    "resources_arsc_offset": 73704384,
+    "resources_arsc_offset_mod4": 0,
+    "all_stored_entries_aligned": true,
+    "stored_entry_alignment_errors": 0,
+    "native_library_count": 7,
+    "all_native_libs_4096_aligned": true,
+    "device_install_test": "NOT_RUN"
+  },
+  "instrumented_files": {
+    "assets/deathforth/boot.df": [
+      "force console visible",
+      "milestones after core module loading",
+      "after game-select module",
+      "after boot-end, transcheck, check-stack-empty"
+    ],
+    "assets/deathforth/events.df": [
+      "print before invoking main-event-do-select deferred callback"
+    ],
+    "assets/deathforth/game-select.df": [
+      "print entering select-boot",
+      "print after gstats load",
+      "print after mode defs",
+      "print tutorial-done branch and tutorial region load return"
+    ]
+  },
+  "markers": [
+    "VORENYX-DIAG: BOOT COMPLETE",
+    "VORENYX-DIAG: MAIN_EVENT_DO_SELECT DISPATCHED",
+    "VORENYX-DIAG: SELECT-BOOT ENTERED",
+    "VORENYX-DIAG: GSTATS LOAD RETURNED",
+    "VORENYX-DIAG: MODEDEFS RETURNED",
+    "VORENYX-DIAG: TUTORIAL LOAD RETURNED"
+  ],
+  "interpretation": {
+    "no_boot_complete": "boot compile/runtime error before full core load; use the last visible boot marker to narrow file",
+    "boot_complete_but_no_dispatch": "native tap/button callback or native event queue is not delivering MAIN_EVENT_DO_SELECT",
+    "dispatch_without_select_boot": "deferred main-event-do-select registration remains no-op or registration did not occur",
+    "select_boot_without_gstats_return": "state/save load path hangs or aborts",
+    "gstats_return_without_modedefs_return": "gamedef/modedefs path hangs or aborts",
+    "tutorial_false_without_load_return": "tutorial region/load/mission transition path hangs or aborts",
+    "tutorial_true": "select-cyoa should appear; otherwise CYOA screen/state renderer is suspect"
+  },
+  "caveats": [
+    "Diagnostic APK only; not release candidate.",
+    "Console is forced visible and may obscure gameplay.",
+    "Same local test certificate as the prior parsefix candidate; it is not the publisher certificate.",
+    "No Android device runtime test has been performed by the build environment."
+  ]
+}

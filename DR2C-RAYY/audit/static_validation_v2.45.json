@@ -1,0 +1,130 @@
+{
+  "project": "DR2C VORENYX",
+  "candidate": "v2.45 corrective source overlay candidate",
+  "run_date": "2026-10-25",
+  "scope": {
+    "source_df": 509,
+    "overlay_df": 269,
+    "uncovered_source_df": 240,
+    "changed_files_vs_v243": 12,
+    "changed_paths": [
+      "boot.df",
+      "events/4jerksmode.df",
+      "events/common/cyoa-example-7types.df",
+      "events/trade/camp-recruit.df",
+      "events/trade/familiar-recruit.df",
+      "events/trade/oldtrade.df",
+      "events/unlock/perk1.df",
+      "events/unlock/perk2.df",
+      "events/unlock/perk3.df",
+      "events/unlock/perktrait.df",
+      "events/unlock/trait1.df",
+      "perkdef.df"
+    ]
+  },
+  "lexical": {
+    "unclosed_string_or_block_errors_count": 0,
+    "new_normalized_heuristic_warnings_vs_base_count": 0,
+    "note": "Heuristic DSL checker only; not the game's interpreter."
+  },
+  "canonical_trait_perk_ids": {
+    "base_key_count": 60,
+    "overlay_key_count": 60,
+    "same_key_set": true,
+    "confirm_calls_checked": 44,
+    "confirm_call_counts": {
+      "trait-confirm!": 14,
+      "perk-confirm!": 30
+    },
+    "noncanonical_confirm_calls": 0,
+    "perk_view_calls_checked": 44,
+    "noncanonical_perk_view_calls": 0
+  },
+  "route_and_handler_ids": {
+    "cyoa": {
+      "base_count": 820,
+      "overlay_count": 820,
+      "removed": 0,
+      "added": 0
+    },
+    "cyoa-choice": {
+      "base_count": 927,
+      "overlay_count": 927,
+      "removed": 0,
+      "added": 0
+    },
+    "cyoa-bridge": {
+      "base_count": 190,
+      "overlay_count": 190,
+      "removed": 0,
+      "added": 0
+    }
+  },
+  "gameplay_effect_scan": {
+    "tracked_effect_primitive_count_changes": 0,
+    "only_expected_count_differences": "solo narrative branch tokens in five display-text files"
+  },
+  "targeted_fixes": {
+    "boot_marker_restored": true,
+    "trade_medical_multiline_string_scans_clean": true,
+    "jack_of_all_trades_canonical_definition_restored": true,
+    "candy_share_choice_label_corrected": true
+  },
+  "patch_archive": {
+    "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
+    "bytes": 82435,
+    "sha256": "b2cc843325ede21d00cb91dad4a4ff68fa8c3c0e629d6910860727a4db4cf88d",
+    "zip_entry_count": 19,
+    "zip_crc_test": "PASS",
+    "duplicate_paths": 0
+  },
+  "runtime": {
+    "apk_rebuilt": false,
+    "device_tested": false,
+    "save_load_verified": false,
+    "viewport_touch_mapping_verified": false,
+    "localization_complete": false
+  },
+  "display_name_localization": {
+    "canonical_names": 60,
+    "mapped_names": 60,
+    "missing_names": [],
+    "full_coverage": true
+  },
+  "executable_structure_audit": {
+    "files_with_nontextblock_token_changes": 6,
+    "changed_files": [
+      "boot.df",
+      "charstats-textfill.df",
+      "cyoa-charstats.df",
+      "doglogic.df",
+      "events/common/cyoa-example-7types.df",
+      "events/unlock/perktrait.df"
+    ],
+    "token_change_kinds": [
+      "insert"
+    ],
+    "non_insertion_change_ops": 0,
+    "interpretation": "Compared after masking comments, normalizing ordinary string literals, and replacing complete ($ ... $) display blocks with a sentinel. Detected additions are helper definitions/calls for player-facing localization. This heuristic is not a complete Deathforth parser and cannot establish runtime behavior."
+  },
+  "package_build_gate": {
+    "apk_built": false,
+    "reasons": [
+      "The supplied raw APK ZIP has a CRC mismatch at classes3.dex (central CRC 0xc61322b2 vs payload CRC 0x0cc169a1). The DEX's own declared size, Adler-32, and SHA-1 header digest validate, so this is an outer ZIP-integrity defect, not proof the DEX code bytes are corrupt.",
+      "The source ZIP and raw APK differ in 163 of 883 common paths. All 656 common assets match byte-for-byte, but the manifest, DEX files, resources, resource table, and signature metadata differ.",
+      "apksigner, zipalign, adb, apktool, and d8 are unavailable in the current build environment.",
+      "The prior v2.44 test signing keystore was not found. A bundled Google client keystore must not be used as an application signing key.",
+      "The supplied raw APK certificate fingerprint differs from the local v2.44 test certificate fingerprint. This does not establish the certificate of the package currently installed on the user's device."
+    ],
+    "android11_signing_requirement": "Apps targeting API 30+ must have APK Signature Scheme v2 or higher; v1-only is insufficient on Android 11.",
+    "source": "https://developer.android.com/about/versions/11/behavior-changes-11?hl=id"
+  },
+  "choice_handler_audit": {
+    "source_static_pairs": 1295,
+    "overlay_static_pairs": 1295,
+    "handler_sequence_mismatches": 0,
+    "changed_choice_labels": 1115,
+    "heuristic_semantic_conflict_candidates": 0,
+    "note": "Regex-based literal-label/handler triage only. Dynamic labels are excluded; zero heuristic candidates is not proof of semantic correctness."
+  }
+}
