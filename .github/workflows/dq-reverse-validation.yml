@@ -124,3 +124,10 @@ jobs:
           cd DQ-Reverse-Engineering
           python -m py_compile tools/patch_debug_hud_set_gold_v35.py tests/test_debug_hud_set_gold_v35.py
           python -m unittest discover -s tests -p 'test_debug_hud_set_gold_v35.py' -v
+
+      - name: Validate v39 222-cheat scrollable workbench and matrix
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m py_compile tools/validate_cheat_workbench_v39.py tests/test_cheat_workbench_v39.py
+          python tools/validate_cheat_workbench_v39.py --html cheats-sandbox/cheats_options_workbench_v39.html --catalog cheats-sandbox/debug_cheats_catalog_v39.json --matrix docs/CHEAT_CATALOG_IMPLEMENTATION_MATRIX_V39.json
+          python -m unittest discover -s tests -p 'test_cheat_workbench_v39.py' -v
