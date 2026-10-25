@@ -71,6 +71,7 @@ A dual-mode trace collector now covers both failed APK installation and an unres
 
 - [v2.65 checkpoint](docs/INSTALL_START_TRACE_TOOLKIT_v2.65.md)
 - [Sanitized validation JSON](audit/install_start_trace_toolkit_v2.65.json)
+- [Start-route static source-diff audit](audit/start_route_source_diff_v2.65.json)
 - [PowerShell collector](tools/runtime_trace_v2.65/Collect-DR2CTrace.ps1)
 - [Toolkit README](tools/runtime_trace_v2.65/README.md)
 
