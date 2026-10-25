@@ -1,0 +1,102 @@
+{
+  "schema_version": 52,
+  "title": "Native cheat adapter registry and runtime-evidence gate",
+  "target": {
+    "package_id": "com.shinybox.smash",
+    "game_version": "3.3.2.0",
+    "abi": "arm64-v8a",
+    "native_library": "libS3DClient.so",
+    "native_library_sha256": "0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083"
+  },
+  "catalog": {
+    "path": "DQ-Reverse-Engineering/cheats-sandbox/debug_cheats_catalog_v39.json",
+    "count": 222,
+    "category_count": 14,
+    "route_policy": "fail_closed"
+  },
+  "policy": {
+    "statuses": [
+      "requires_game_adapter",
+      "candidate_unverified",
+      "runtime_verified"
+    ],
+    "rule": "A catalog ID is runtime-connected only when a specific allow-listed handler, typed argument contract, runtime state read-back, save/reload test, and regression evidence all pass.",
+    "static_symbols_are_not_runtime_evidence": true,
+    "standalone_harness_writes_to_game": false
+  },
+  "catalog_routes": [],
+  "candidate_actions": [
+    {
+      "id": "native.pause.gold_reward_100k",
+      "label": "Gold +100K",
+      "catalog_id": null,
+      "status": "candidate_unverified",
+      "native_route": {
+        "model": "uai_gp_hud",
+        "handler": "onDebug",
+        "argument_type": "number",
+        "argument": 6
+      },
+      "effect_candidate": {
+        "native_function": "uai_gp_hud::RewardGold",
+        "amount": 100000,
+        "semantics": "fixed increment candidate; not a set-to-target slider"
+      },
+      "evidence": [
+        {
+          "type": "arm64_static_disassembly",
+          "location": "libS3DClient.so+0x6d5048",
+          "detail": "onDebug numeric branch 6.0 is statically associated with RewardGold(100000.0)."
+        },
+        {
+          "type": "hud_action_candidate",
+          "location": "Resources/HUD/pause.hud",
+          "detail": "Candidate button is serialized with action route uai_gp_hud.onDebug(6.0)."
+        },
+        {
+          "type": "stk_single_asset_delta",
+          "sha256": "e17884a13c775c9aac3afce3c0003eb9ed54a3b9a32ef4a6b89bf72e6ef9f52e",
+          "detail": "All 5,630 STK entries decode; only Resources/HUD/pause.hud differs."
+        }
+      ],
+      "runtime_evidence": null,
+      "required_gates": [
+        "game starts on disposable test profile",
+        "candidate button is visible on the pause screen",
+        "tap reaches the intended onDebug branch",
+        "observed Gold delta equals +100000",
+        "no unrelated progress or save mutation",
+        "Gold change survives a clean save/reload",
+        "original install and save recovery remain available"
+      ],
+      "explicit_limit": "This candidate is not mapped to economy.currency_override because a fixed +100,000 reward cannot implement the catalog slider's set-to-target semantics."
+    }
+  ],
+  "native_symbol_inventory": [
+    {
+      "symbol": "uai_gp_hud::onDebug",
+      "library": "libS3DClient.so",
+      "address": "0x6d5048",
+      "role": "numeric developer dispatch callback"
+    },
+    {
+      "symbol": "uai_gp_hud::RewardGold",
+      "library": "libS3DClient.so",
+      "address": "0x65feec",
+      "role": "native Gold reward implementation candidate"
+    },
+    {
+      "symbol": "uai_gp_hud::RewardDust",
+      "library": "libS3DClient.so",
+      "address": "0x65eeec",
+      "role": "native Dust reward implementation candidate"
+    }
+  ],
+  "current_summary": {
+    "catalog_item_count": 222,
+    "catalog_routes": 0,
+    "runtime_verified_catalog_routes": 0,
+    "candidate_actions": 1,
+    "runtime_verified_candidate_actions": 0
+  }
+}

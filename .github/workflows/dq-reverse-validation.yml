@@ -171,3 +171,10 @@ jobs:
           python -m py_compile tools/validate_cheat_workbench_v39.py tests/test_cheat_workbench_v39.py
           python tools/validate_cheat_workbench_v39.py --html cheats-sandbox/cheats_options_workbench_v39.html --catalog cheats-sandbox/debug_cheats_catalog_v39.json --matrix docs/CHEAT_CATALOG_IMPLEMENTATION_MATRIX_V39.json
           python -m unittest discover -s tests -p 'test_cheat_workbench_v39.py' -v
+
+
+      - name: Validate v52 native cheat adapter registry and runtime-evidence gate
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_native_cheat_adapter_registry_v52.py
+          python -m unittest discover -s tests -p 'test_native_cheat_adapter_registry_v52.py' -v
