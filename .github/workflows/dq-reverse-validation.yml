@@ -29,6 +29,43 @@ jobs:
         run: python -m py_compile DQ-Reverse-Engineering/tools/*.py DQ-Reverse-Engineering/tests/*.py
       - name: Run synthetic STK parser safety tests
         run: python DQ-Reverse-Engineering/tests/test_stk_unpacker.py
+      - name: Run synthetic HUD parser safety tests
+        run: python DQ-Reverse-Engineering/tests/test_hud_asset_probe.py
+      - name: Run STK packer and cosmetic patch regression tests
+        run: |
+          python DQ-Reverse-Engineering/tests/test_stk_packer.py
+          python DQ-Reverse-Engineering/tests/test_cosmetic_patch.py
+          python DQ-Reverse-Engineering/tests/test_iap_sku_reconciliation.py
+      - name: Validate v13 IAP runtime evidence and run focused tests
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_iap_runtime_evidence_v13.py
+          python -m unittest discover -s tests -p 'test_iap_runtime_evidence_v13.py' -v
+      - name: Run v14 AIM/HUD symbol-audit regression tests
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_aim_hud_symbols.py' -v
+      - name: Validate v16 Pause -> Options -> Cheats route contract
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_pause_options_cheats_route_v16.py
+          python -m unittest discover -s tests -p 'test_pause_options_cheats_route_v16.py' -v
+      - name: Compile and run Pause -> Options route bridge self-tests
+        run: |
+          set -eu
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          javac -d "$TMP_DIR"             DQ-Reverse-Engineering/runtime-adapter/src/main/java/dev/dqdebug/runtime/PauseOptionsCheatsBridge.java             DQ-Reverse-Engineering/runtime-adapter/src/test/java/dev/dqdebug/runtime/PauseOptionsCheatsBridgeSelfTest.java
+          java -cp "$TMP_DIR" dev.dqdebug.runtime.PauseOptionsCheatsBridgeSelfTest
+      - name: Validate v15 canonical native IAP mapping
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_iap_canonical_mapping_v15.py
+          python -m unittest discover -s tests -p 'test_iap_canonical_mapping_v15.py' -v
+      - name: Run v15 XML/SKU/earnability reconciliation tests
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_iap_asset_reconciliation_v15.py' -v
       - name: Validate manifest, source boundaries, and secret exclusion
         run: |
           python - <<'PY'
@@ -73,11 +110,11 @@ jobs:
           package q0;
           public class b extends android.app.Application { public b() { super(); } }
           JAVA
-          javac -d "$TMP_DIR/classes" \
-            "$TMP_DIR/android/content/res/Configuration.java" \
-            "$TMP_DIR/android/app/Application.java" \
-            "$TMP_DIR/q0/b.java" \
-            DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/BuildConfig.java \
-            DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/Globals.java \
-            DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/S3DEngine.java
+          javac -d "$TMP_DIR/classes"             "$TMP_DIR/android/content/res/Configuration.java"             "$TMP_DIR/android/app/Application.java"             "$TMP_DIR/q0/b.java"             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/BuildConfig.java             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/Globals.java             DQ-Reverse-Engineering/reconstruction/verified/java/com/shinybox/smash/S3DEngine.java
           echo "PASS: three high-confidence Java files compile against minimal temporary stubs"
+
+      - name: Validate full 222-entry cheat catalog and implementation matrix
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_cheat_catalog_v32.py --catalog cheats-sandbox/debug_cheats_catalog_v32.json --matrix docs/CHEAT_CATALOG_IMPLEMENTATION_MATRIX_V32.json
+          python -m unittest discover -s tests -p 'test_cheat_catalog_matrix_v32.py' -v

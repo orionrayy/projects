@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "title": "Dungeon Quest v3.3.2.0 — AIM/HUD Printable Symbol Inventory v14",
+  "generated_date": "2026-10-24",
+  "build": {
+    "package": "com.shinybox.smash",
+    "version": "3.3.2.0",
+    "version_code": 1423433200
+  },
+  "input_pack": {
+    "filename": "S3DMain_fair_economy_v8.smf",
+    "sha256": "3c2d16566458009f0fa5eb4350b606a50e66b9542974b5d1b781f742c33b2d4d",
+    "note": "Local v8 economy data-patch pack used as the decoded input. Its intended modifications are to Vanity.xml and Shop.xml; the seven AIM/HUD files are separately hash-identified below."
+  },
+  "scan_method": {
+    "regex": "[ -~]{3,}",
+    "offsets": "zero-based byte offsets to the first byte of each expected symbol within its containing printable ASCII run",
+    "meaning": "symbol or label bytes are present in the decoded asset; no bytecode semantic analysis is implied"
+  },
+  "summary": {
+    "asset_count": 7,
+    "expected_symbols": 58,
+    "found_symbols": 58,
+    "missing_symbols": 0,
+    "missing_assets": 0,
+    "status": "PASS"
+  },
+  "interpretation_limit": "This inventory does not prove callback binding, bytecode call edges, event reachability, debug HUD reachability in a release build, purchase verification, reward payloads, or persisted entitlement writes.",
+  "assets": [
+    {
+      "path": "Resources/AIModels/InAppPurchase.aim",
+      "size_bytes": 448,
+      "sha256": "010d69cafbd0f80ceb8b218b79aa0d45b51f62df3345910c5568931e9b308f96",
+      "status": "PASS",
+      "symbols": {
+        "onPurchaseFailed": {
+          "status": "FOUND",
+          "byte_offset": 144
+        },
+        "onPurchaseSuccess": {
+          "status": "FOUND",
+          "byte_offset": 126
+        },
+        "onPurchaseRefunded": {
+          "status": "FOUND",
+          "byte_offset": 161
+        },
+        "onRegisterHandler": {
+          "status": "FOUND",
+          "byte_offset": 315
+        },
+        "onRequestPurchase": {
+          "status": "FOUND",
+          "byte_offset": 341
+        },
+        "onRestorePurchases": {
+          "status": "FOUND",
+          "byte_offset": 394
+        },
+        "onRestorePurchasesComplete": {
+          "status": "FOUND",
+          "byte_offset": 421
+        }
+      }
+    },
+    {
+      "path": "Resources/AIModels/uai_gp_options.aim",
+      "size_bytes": 1127,
+      "sha256": "294dc84260b1a58dcbf6cf8fe939c107e8c0ae2bacc7ffe11b34ac62a54b5625",
+      "status": "PASS",
+      "symbols": {
+        "GetAvatar": {
+          "status": "FOUND",
+          "byte_offset": 700
+        },
+        "getEnvVar": {
+          "status": "FOUND",
+          "byte_offset": 717
+        },
+        "setEnvVar": {
+          "status": "FOUND",
+          "byte_offset": 734
+        },
+        "MappingDefault": {
+          "status": "FOUND",
+          "byte_offset": 831
+        },
+        "MappingGetCode": {
+          "status": "FOUND",
+          "byte_offset": 853
+        },
+        "MappingClearAll": {
+          "status": "FOUND",
+          "byte_offset": 875
+        },
+        "ToggleComponent": {
+          "status": "FOUND",
+          "byte_offset": 898
+        },
+        "onInit": {
+          "status": "FOUND",
+          "byte_offset": 933
+        },
+        "onShowTab": {
+          "status": "FOUND",
+          "byte_offset": 948
+        },
+        "onMapButton": {
+          "status": "FOUND",
+          "byte_offset": 966
+        },
+        "onLoadOptions": {
+          "status": "FOUND",
+          "byte_offset": 986
+        },
+        "onSaveOptions": {
+          "status": "FOUND",
+          "byte_offset": 1008
+        },
+        "onShowOptions": {
+          "status": "FOUND",
+          "byte_offset": 1030
+        },
+        "onJoypadButtonDown": {
+          "status": "FOUND",
+          "byte_offset": 1052
+        },
+        "onSetControlsOption": {
+          "status": "FOUND",
+          "byte_offset": 1079
+        },
+        "onSetGameplayOption": {
+          "status": "FOUND",
+          "byte_offset": 1107
+        }
+      }
+    },
+    {
+      "path": "Resources/AIModels/uai_gp_debug.aim",
+      "size_bytes": 566,
+      "sha256": "e41094fd055ca250f282862e383506c3a0fb04c2bb3e2f09d7e139e51570bd59",
+      "status": "PASS",
+      "symbols": {
+        "CompileShaderList": {
+          "status": "FOUND",
+          "byte_offset": 336
+        },
+        "CompileShaders": {
+          "status": "FOUND",
+          "byte_offset": 382
+        },
+        "onDebugLog": {
+          "status": "FOUND",
+          "byte_offset": 421
+        },
+        "onCompileShaders": {
+          "status": "FOUND",
+          "byte_offset": 440
+        },
+        "onDebugLogResult": {
+          "status": "FOUND",
+          "byte_offset": 465
+        },
+        "onDumpShaderList": {
+          "status": "FOUND",
+          "byte_offset": 490
+        },
+        "onDumpFailedShaders": {
+          "status": "FOUND",
+          "byte_offset": 515
+        },
+        "onCompileShadersCancel": {
+          "status": "FOUND",
+          "byte_offset": 543
+        }
+      }
+    },
+    {
+      "path": "Resources/AIModels/uai_gp_hud.aim",
+      "size_bytes": 13929,
+      "sha256": "66607a46a23eeaab4fa2dac02772adbea5ab71e65d4e446e49396c6af6a451cb",
+      "status": "PASS",
+      "symbols": {
+        "bPurchasing": {
+          "status": "FOUND",
+          "byte_offset": 1549
+        },
+        "sPurchaseID": {
+          "status": "FOUND",
+          "byte_offset": 2072
+        },
+        "onPurchaseSuccess": {
+          "status": "FOUND",
+          "byte_offset": 12711
+        },
+        "onPurchaseFailed": {
+          "status": "FOUND",
+          "byte_offset": 12222
+        }
+      }
+    },
+    {
+      "path": "Resources/AIModels/uai_gp_account.aim",
+      "size_bytes": 4373,
+      "sha256": "83e18900dff8b80024befc891f1c412aeab4faa8041b4e97013d118426559676",
+      "status": "PASS",
+      "symbols": {
+        "SetIAP": {
+          "status": "FOUND",
+          "byte_offset": 1584
+        },
+        "GetIAPString": {
+          "status": "FOUND",
+          "byte_offset": 1777
+        },
+        "SetSlotInfo": {
+          "status": "FOUND",
+          "byte_offset": 1758
+        },
+        "GetSlotInfoString": {
+          "status": "FOUND",
+          "byte_offset": 2171
+        },
+        "SetStashInfo": {
+          "status": "FOUND",
+          "byte_offset": 1857
+        },
+        "GetStashInfo": {
+          "status": "FOUND",
+          "byte_offset": 1797
+        }
+      }
+    },
+    {
+      "path": "Resources/HUD/pause.hud",
+      "size_bytes": 29446,
+      "sha256": "12499b08c49b4a5bb34649468b910b62ba1a64adfd831bd638d13d420af9f395",
+      "status": "PASS",
+      "symbols": {
+        "options": {
+          "status": "FOUND",
+          "byte_offset": 38
+        },
+        "onOptionsClose": {
+          "status": "FOUND",
+          "byte_offset": 183
+        },
+        "onOptionMapPosition": {
+          "status": "FOUND",
+          "byte_offset": 1779
+        },
+        "onOptionSort": {
+          "status": "FOUND",
+          "byte_offset": 3435
+        },
+        "onResume": {
+          "status": "FOUND",
+          "byte_offset": 3241
+        }
+      }
+    },
+    {
+      "path": "Resources/HUD/debug.hud",
+      "size_bytes": 12887,
+      "sha256": "02ed5420fceacaba5bc614596fddc52646abf04914446e26bc240806930f15b6",
+      "status": "PASS",
+      "symbols": {
+        "debug": {
+          "status": "FOUND",
+          "byte_offset": 35
+        },
+        "onAddBattle": {
+          "status": "FOUND",
+          "byte_offset": 1149
+        },
+        "onCreateCS": {
+          "status": "FOUND",
+          "byte_offset": 1326
+        },
+        "onAddLevel": {
+          "status": "FOUND",
+          "byte_offset": 1656
+        },
+        "onCreateMS": {
+          "status": "FOUND",
+          "byte_offset": 1992
+        },
+        "onAddHeroic": {
+          "status": "FOUND",
+          "byte_offset": 2743
+        },
+        "onCreateFeat": {
+          "status": "FOUND",
+          "byte_offset": 2924
+        },
+        "gotoLevel": {
+          "status": "FOUND",
+          "byte_offset": 3250
+        },
+        "onClose": {
+          "status": "FOUND",
+          "byte_offset": 862
+        },
+        "Add Levels": {
+          "status": "FOUND",
+          "byte_offset": 2377
+        },
+        "Add Feat": {
+          "status": "FOUND",
+          "byte_offset": 3049
+        },
+        "GOTO Floor": {
+          "status": "FOUND",
+          "byte_offset": 3204
+        }
+      }
+    }
+  ]
+}

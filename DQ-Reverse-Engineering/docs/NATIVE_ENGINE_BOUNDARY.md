@@ -1,43 +1,40 @@
 # Native Engine Boundary
 
-## DEX evidence
+**Current evidence snapshot:** see [NATIVE_SPLIT_AUDIT_V18.md](NATIVE_SPLIT_AUDIT_V18.md). This file supersedes the older statement that the matching ABI split had not been obtained.
 
-The regenerated DEX output contains 44 native declarations in four wrapper classes:
+## DEX/native boundary
 
-| Class | Native methods | Role suggested by method signatures |
+The recovered DEX has 44 declarations marked native across four wrapper classes:
+
+| Class | Native methods | Role inferred from method signatures |
 |---|---:|---|
-| com.shinybox.smash.S3DRenderer | 34 | Engine initialize/shutdown, frame loop, surface lifecycle, pack descriptor and input/sensor forwarding |
+| com.shinybox.smash.S3DRenderer | 34 | Engine lifecycle, frame loop, surface lifecycle, pack descriptor, input and sensor forwarding |
 | com.shinybox.base.ShinyActivity | 6 | Joypad events and global native callbacks |
 | com.shinybox.googleplayservices.GooglePlayServicesWrapper | 2 | Login/initialization completion callbacks |
 | com.shinybox.iap.IAPWrapper | 2 | Purchase success/failure callbacks |
 
-The Smash static initializer requests libraries named crypto, ssl, openal, and S3DClient. S3DRenderer declares native methods including engineInitialize, engineRunOneFrame, engineSetPackFileDescriptor, and surface/input callbacks.
+The matching XAPK now provides the ARM64 split and four native libraries. The libS3DClient.so binary is ELF64/AArch64, has 64 Java_* dynamic exports, and includes C exports such as S3DClient_CallHUDAction and S3DClient_SetGameOption. These are binary-level findings, not a recovered engine source tree.
 
-## Split APK finding
+## What native exports do and do not establish
 
-The decoded manifest contains:
+Static symbols and disassembly indicate that S3DClient_CallHUDAction delegates to the engine's internal GameManager action path and S3DClient_SetGameOption delegates to OptionsManager. The existing exports do not supply a validated Java binding contract, an authoritative function header, a safe calling-thread policy, a complete runtime state API, or proof that a requested player-stat/cheat action can be called safely.
 
-- `requiredSplitTypes="base__abi,base__density"`
-- `android:isSplitRequired="true"`
-- `android:extractNativeLibs="false"`
-- A `com.android.vending.splits.required=true` metadata entry
+Do not guess a native pointer, parameter meaning, option ID, or callback thread. Native integration requires a narrow adapter backed by explicit signatures and runtime tests, with the fail-closed sandbox gates maintained.
 
-Android's platform manifest attributes define required split categories and say the package manager rejects installation if a required split type is missing. See the Android platform source: https://android.googlesource.com/platform/frameworks/base/+/refs/heads/android14-release/core/res/res/values/attrs_manifest.xml
+## S3D HUD/model boundary
 
-Android documents native libraries using the standard `lib/<abi>/lib<name>.so` paths inside APK content: https://developer.android.com/ndk/guides/abis
+The outer S3DMain.smf pack format is parsed and all 5,630 entries have passed CRC/decoded-size checks. However, Resources/HUD/pause.hud, Resources/HUD/debug.hud and the AIM model files are serialized binary resources. Finding names such as options, onShowOptions, uai_gp_debug, and onDebug proves only that the identifiers occur in assets. It does not prove a new menu row can be added by changing strings or that the options route can reach the debug model.
 
-**Interpretation:** the lack of `lib/<abi>/*.so` in this one uploaded archive is not evidence that those libraries were never distributed. Its manifest strongly suggests that the APK is a base/split package and expects ABI and density splits. The exact split files and their contents have not yet been obtained or verified.
+There is no validated HUD parser/serializer with lossless round-trip tests in the repository. Do not commit guessed byte-level edits to the proprietary scene.
 
-## Comparison with public Shiny Box engine references
+## Current integration gate
 
-A publicly documented port of Naught 2 instructs users to extract `libS3DClient.so` from `lib/armeabi-v7a` and `S3DMain.smf` separately from the game's assets: https://www.gamebrew.org/wiki/Naught_2_Vita
+- Matching package/version base, ARM64, density and language split set: recovered; see NATIVE_SPLIT_AUDIT_V18.md.
+- Sampled split signer certificate fingerprints: matched.
+- Native source/header/API documentation: unavailable.
+- Actual Pause → Options → Cheats route: blocked/not runtime-verified.
+- Verified game-state adapter and reversible gameplay effects: unavailable/not runtime-verified.
+- Modified original-game APK build/install/launch: not performed.
+- Receipt/entitlement tampering or purchase-check bypass: out of scope.
 
-That is evidence that a related Shiny Box game uses this native-library/pack naming family. It is **not** proof that its library is binary-compatible with Dungeon Quest, the supplied version, or this APK's signing/version lineage. Do not substitute an unrelated game's .so.
-
-## What must be obtained next
-
-- Matching ABI split APK for this application/version/signing lineage, or the authorized installed split set.
-- Matching density/resource split to restore resources.
-- Verify package name, version, signer identity, and ABI before combining artifacts.
-
-If matching native libraries cannot be obtained, a working engine would require an independent replacement implementation. DEX declarations alone cannot restore native method bodies.
+The separate DQ Cheats Sandbox Harness remains a reproducible Android UI test target only. Its successful build or emulator smoke test must not be described as an integrated Dungeon Quest APK.

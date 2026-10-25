@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "status": "proposed_source_level_design",
+  "principles": [
+    "No gameplay-essential item, convenience feature, capacity upgrade, character slot, pet, or cosmetic is real-money-only in the target test build.",
+    "Every unlock has an explicit deterministic route; no paid-only random bundle and no duplicate cosmetic roll.",
+    "Use existing currencies/materials first; add at most one universal permanent-unlock token only if existing currencies cannot support fair progression.",
+    "Reward claims use stable event IDs and are idempotent.",
+    "Ads, if retained, remain optional and independent of essential progress."
+  ],
+  "currency_policy": {
+    "gold": "Earn from kills, boss clears, gear sales, repeatable contracts, and milestone rewards. Remove paid gold-pack routes only after economy tests.",
+    "existing_crafting_materials": "Use existing crystals, mythstones and other materials for crafting where the original game supports them.",
+    "adventure_marks": "Optional account-wide token from first-clear milestones, achievements and repeatable/weekly contracts; spend on permanent convenience unlocks rather than direct combat power."
+  },
+  "starter_tuning_targets": {
+    "first_extra_character_slot": "By completion of Act I or the first major boss milestone",
+    "additional_character_slots": "Successive campaign, completion and post-campaign challenge milestones",
+    "auto_map_reveal": "Cartographer challenge chain",
+    "stash_upgrades": "At least one campaign upgrade; later bounded cost curve",
+    "specific_cosmetic": "Always direct selection, no duplicate requirement",
+    "boosts": "Earnable/craftable with visible duration and stacking rules"
+  },
+  "migration_requirements": [
+    "Map SKU to verified grant/effect, not prefix alone.",
+    "Migrate previously purchased entitlements only from legitimate persisted ownership state.",
+    "Unknown SKUs stay in review; do not auto-grant or auto-delete.",
+    "Reward, wallet, inventory and unlock updates use one transaction.",
+    "Test fresh and legacy saves, duplicate callbacks, interrupted writes, restores and offline mode."
+  ]
+}
