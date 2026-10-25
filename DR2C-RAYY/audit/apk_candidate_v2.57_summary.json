@@ -101,5 +101,14 @@
     "Local test signature differs from publisher/current installed signer; in-place update may be rejected.",
     "Preserved licensing wrapper may reject locally re-signed APK.",
     "APK Signature Scheme v2 is not generated or independently verified."
-  ]
+  ],
+  "unit_tests": {
+    "candidate_builder": "8/8 PASS locally (includes splash badge fail-closed regression)",
+    "source_reconciler_github_actions": {
+      "run_id": 40170077591,
+      "conclusion": "SUCCESS",
+      "tests": "16/16 PASS",
+      "url": "https://github.com/orionrayy/projects/actions/runs/40170077591"
+    }
+  }
 }
