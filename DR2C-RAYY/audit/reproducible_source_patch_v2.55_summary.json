@@ -1,0 +1,81 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.55 reproducible source patch packaging (not a game/APK version)",
+  "inputs": [
+    {
+      "role": "base_source_archive",
+      "file": "DR2C-RAYY(2).zip",
+      "bytes": 13809097,
+      "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1"
+    },
+    {
+      "role": "overlay_layer_1",
+      "file": "DR2C_VORENYX_ID_v2.43_localization_patch.zip",
+      "bytes": 24350974,
+      "sha256": "00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024"
+    },
+    {
+      "role": "overlay_layer_2",
+      "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
+      "bytes": 82435,
+      "sha256": "b2cc843325ede21d00cb91dad4a4ff68fa8c3c0e629d6910860727a4db4cf88d"
+    },
+    {
+      "role": "overlay_layer_3",
+      "file": "DR2C_VORENYX_v2.45_STARTFIX_SOURCE_PATCH.zip",
+      "bytes": 36081,
+      "sha256": "36f423d620ec852a82d74d34fab02b83f350c8cd5a1cd304d6e247d494495267"
+    }
+  ],
+  "output": {
+    "file": "DR2C_VORENYX_REPRODUCIBLE_SOURCE_PATCH_v2.55.zip",
+    "bytes": 7515735,
+    "sha256": "95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d",
+    "zip_entries": 274,
+    "zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "overlay_paths": 272,
+    "deathforth_df_files": 269,
+    "later_layer_overrides": 18
+  },
+  "reproducibility": {
+    "independent_builds_verified": 3,
+    "all_build_sha256_equal": true,
+    "stable_sha256": "95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d",
+    "normalized_entry_timestamp": [
+      1980,
+      1,
+      1,
+      0,
+      0,
+      0
+    ],
+    "prior_v2_53_sha256": "73c9f60cd1a88a6d121843f3bdc6304262d47c01b2cdc36237015b7d083583d7",
+    "prior_vs_new_member_payload_differences": 0,
+    "member_path_set_difference": 0,
+    "note": "Prior archive had identical member payloads but timestamp/file-mode metadata differed. New packager normalizes ZIP metadata; three builds with the new packager produced the same archive SHA-256."
+  },
+  "static_contracts": {
+    "zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "base_sha256_pinned": "PASS",
+    "overlay_paths_resolve_to_source": "PASS",
+    "canonical_GAME_MARKER": "PASS",
+    "escaped_quote_regressions": 0,
+    "unclosed_display_strings": 0,
+    "single_quoted_symbol_stream_differences": 0,
+    "canonical_perk_key": "PASS",
+    "critical_start_and_tutorial_tokens": "PASS"
+  },
+  "tests": {
+    "reconcile_overlay_suite": "7/7 PASS",
+    "provenance_suite": "6/6 PASS",
+    "total": "13/13 PASS"
+  },
+  "limitations": [
+    "Available source layers are base + v2.43 overlay + v2.45 corrective + v2.45 Start quote fix; this is not v2.51.",
+    "Actual v2.47-v2.51 patch ZIPs and the v2.46 baseline APK are still unavailable for source-lineage comparison.",
+    "No full Deathforth interpreter parse was run.",
+    "No APK was built, aligned, signed, installed or runtime-tested. UI fit, Start input, gameplay and save/load remain unverified."
+  ]
+}
