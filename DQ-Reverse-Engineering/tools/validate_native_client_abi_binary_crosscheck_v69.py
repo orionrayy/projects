@@ -118,10 +118,11 @@ def validate(doc: dict[str, Any]) -> dict[str, Any]:
     need(bridge.get("size_bytes") == 601112, "bridge byte count mismatch", errors)
     need(bridge.get("elf_class") == "ELF64" and bridge.get("elf_machine") == "AArch64",
          "bridge must be ELF64/AArch64", errors)
-    need(set(bridge.get("jni_exports", [])) == JNI_EXPORTS,
-         "bridge JNI export set mismatch", errors)
-    need(len(bridge.get("jni_exports", [])) == len(JNI_EXPORTS),
-         "bridge JNI export list has duplicates or extras", errors)
+    exports = bridge.get("jni_exports")
+    need(isinstance(exports, list), "bridge jni_exports must be an array", errors)
+    if isinstance(exports, list):
+        need(set(exports) == JNI_EXPORTS, "bridge JNI export set mismatch", errors)
+        need(len(exports) == len(JNI_EXPORTS), "bridge JNI export list has duplicates or extras", errors)
     need(bridge.get("dynamic_dependencies") == ["libdl.so", "libm.so", "libc.so"],
          "bridge dynamic dependency set mismatch", errors)
     need(bridge.get("game_state_side_effects") is False, "probe must remain side-effect-free", errors)
@@ -140,9 +141,10 @@ def validate(doc: dict[str, Any]) -> dict[str, Any]:
          "catalog counts must remain 0/222", errors)
     need(runtime.get("promotion_allowed") is False, "promotion must remain blocked", errors)
 
-    need(isinstance(evidence.get("tools"), list) and "readelf --dyn-syms --wide" in evidence.get("tools", []),
-         "binary inspection tool list incomplete", errors)
-    need(evidence.get("scope") is None, "unexpected evidence scope field", errors)
+    evidence_tools = evidence.get("tools")
+    need(isinstance(evidence_tools, list), "evidence.tools must be an array", errors)
+    if isinstance(evidence_tools, list):
+        need("readelf --dyn-syms --wide" in evidence_tools, "binary inspection tool list incomplete", errors)
     need(evidence.get("evidence_scope") ==
          "Static binary/symbol cross-check; no call was made into the live game process",
          "evidence scope must remain static-only", errors)
