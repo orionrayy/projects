@@ -40,6 +40,8 @@ on:
       - "DR2C-RAYY/audit/apk_candidate_v2.58_summary.json"
       - "DR2C-RAYY/audit/next_wave_localization_v2.58.json"
       - "DR2C-RAYY/audit/batch_k_provenance_v2.54.json"
+      - "DR2C-RAYY/audit/apk_source_sync_v2.61.json"
+      - "DR2C-RAYY/docs/APK_SOURCE_SYNC_AUDIT_v2.61.md"
       - "DR2C-RAYY/docs/SOURCE_RECONCILIATION_GATE_v2.53.md"
       - "DR2C-RAYY/docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md"
       - "DR2C-RAYY/docs/START_ROUTE_STATIC_AUDIT_v2.56.md"
