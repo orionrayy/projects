@@ -1,0 +1,36 @@
+name: DQ actual install-preflight replay v59
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/INSTALL_PREFLIGHT_ACTUAL_REPLAY_V59.*"
+      - "DQ-Reverse-Engineering/tools/validate_install_preflight_actual_replay_v59.py"
+      - "DQ-Reverse-Engineering/tests/test_install_preflight_actual_replay_v59.py"
+      - ".github/workflows/dq-install-preflight-actual-replay-v59.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/INSTALL_PREFLIGHT_ACTUAL_REPLAY_V59.*"
+      - "DQ-Reverse-Engineering/tools/validate_install_preflight_actual_replay_v59.py"
+      - "DQ-Reverse-Engineering/tests/test_install_preflight_actual_replay_v59.py"
+      - ".github/workflows/dq-install-preflight-actual-replay-v59.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-actual-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile replay validator and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/validate_install_preflight_actual_replay_v59.py DQ-Reverse-Engineering/tests/test_install_preflight_actual_replay_v59.py
+      - name: Validate pinned actual-file replay summary
+        run: python DQ-Reverse-Engineering/tools/validate_install_preflight_actual_replay_v59.py DQ-Reverse-Engineering/docs/INSTALL_PREFLIGHT_ACTUAL_REPLAY_V59.json
+      - name: Test report integrity and uncertainty boundaries
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_install_preflight_actual_replay_v59.py' -v
