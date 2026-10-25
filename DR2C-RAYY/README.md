@@ -1,8 +1,18 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest candidate: v2.45 corrective source overlay · static checks PASS · APK/runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest documented localization batch: v2.51 Batch K · cumulative overlay claim 77/509 scripts · APK/runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
+
+
+## Source-to-build reconciliation gate — 25 October 2026
+
+- Batch K v2.51 is the latest documented localization pass, but its actual patch ZIP was not available for byte-level inspection in this execution. Treat its reported count of 77/509 scripts as a source report, not a translation-coverage percentage.
+- A reproducible source patch was independently reconciled from the available base source archive, v2.43 overlay, v2.45 corrective patch, and v2.45 Start quote-fix patch. It contains 269 Deathforth script payloads across 272 normalized overlay paths. This differs from the Batch K report's 77-script figure; the exact newer archive and its counting definition must be checked before declaring the two inventories equivalent.
+- The reconciled source patch SHA-256 is `faebba3ee0d14dd0cee668fe132fa95c8ba21f08963f627f59e5364c02658c0f`. Its ZIP CRC, duplicate-path check, canonical GAME-MARKER check, and escaped-quote scan passed. Four unit tests for the new reconciliation tool passed.
+- This artifact is a v2.43 + v2.45 corrective + v2.45 quote-fix source patch. It is **not v2.51 and not an APK**. The base APK/source archives and binary overlay remain outside the public repository.
+- APK build and runtime remain blocked/unverified: `apksigner`, `zipalign`, `apktool`, and `adb` are unavailable in the current environment. No claim is made that Start, UI layout, branding, save/load, or gameplay stability is fixed.
+- See [source reconciliation gate](docs/SOURCE_RECONCILIATION_GATE_v2.52.md), [reconciliation audit JSON](audit/source_reconciliation_v2.52.json), and [reconciliation tool](tools/reconcile_overlay.py).
 
 ## Post-install result: v2.44 symptoms unchanged
 
