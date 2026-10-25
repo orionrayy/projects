@@ -134,3 +134,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - v2.44 has package `com.noodlecake.drtc`, versionCode 57, and a local signing certificate, not the existing APKVISION/release signer. Android will refuse an in-place update if the currently installed package is signed by a different certificate; old app may remain active. This is a probable deployment blocker, not a confirmed device diagnosis.
 - APKVISION namespaces remain in `classes3.dex` and `libstub.so`; v2.44 did not remove the wrapper, so the watermark issue is not fixed.
 - Status: hotfix **not verified and user reports no change**. No further blind build. First need the installer result, safe save backup status before any uninstall, and a new recording/log from a confirmed installed candidate.
+
+
+## Active checkpoint — 26 October 2026, v2.64 runtime trace toolkit
+- Latest diagnostic utility: DR2C_VORENYX_v2.64_START_RUNTIME_TRACE_TOOLKIT.zip; SHA-256 50545f6e2cf61b48e067910781e2996ae822895fef073a61859d9b249020a. The ZIP has CRC PASS, zero duplicate paths, and 11/11 static assertions pass.
+- Hardened collector: it no longer clears Android log buffers; it starts near the live edge, auto-stops after 90 seconds, flags early logcat startup failure, removes temporary raw logs, and avoids mixing stale crash-buffer lines into the output.
+- Runtime status remains blocked pending execution on a Windows PC connected to the Android device via authorized ADB. No actual Start tap trace has been collected in this environment.
+- Current APK candidate reference remains the v2.57 signature-fix APK (SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7); the Library artifact named v2.58 is byte-identical. This is not a runtime-verified release; local signing certificate is not the publisher's key.
+- Next gate: collect trace → classify input/Deathforth/native/integrity failure → make a narrow fix → rerun package/source checks → device test install, Start, events, UI and save/load. Do not build blindly or risk existing saves.
