@@ -1,0 +1,146 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.62 APK change-surface audit",
+  "date": "2026-10-25",
+  "status": "STATIC_PACKAGE_DIFF_PASS_RUNTIME_NOT_TESTED",
+  "base": {
+    "file": "DR2C-v1.8.2-full-apkvision.apk",
+    "bytes": 109011456,
+    "sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15",
+    "entries": 1014,
+    "zip_crc": "PASS",
+    "duplicate_paths": 0
+  },
+  "candidate": {
+    "file": "DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk",
+    "bytes": 115615585,
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7",
+    "entries": 1015,
+    "zip_crc": "PASS",
+    "duplicate_paths": 0
+  },
+  "candidate_alias": {
+    "file": "DR2C_VORENYX_v2.58_ANDROID11_SIGNATURE_FIX.apk",
+    "byte_identical_to_candidate": true,
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7"
+  },
+  "entry_counts": {
+    "common": 1012,
+    "identical_common": 737,
+    "changed_common": 275,
+    "changed_deathforth_scripts": 269,
+    "changed_non_script_paths": [
+      "AndroidManifest.xml",
+      "META-INF/MANIFEST.MF",
+      "assets/gfx/ui/dr2c_title_small.png",
+      "res/drawable-xxhdpi-v4/splash.png",
+      "lib/arm64-v8a/libmain.so",
+      "lib/armeabi-v7a/libmain.so"
+    ],
+    "base_only": [
+      "META-INF/CERT.RSA",
+      "META-INF/CERT.SF"
+    ],
+    "candidate_only": [
+      "META-INF/DR2C-VOR.RSA",
+      "META-INF/DR2C-VOR.SF",
+      "assets/gfx/ui/vorenyx_title_screen.png"
+    ],
+    "entry_add_remove_matches_expected": true,
+    "unexpected_paths": []
+  },
+  "dex": {
+    "entry_count": 3,
+    "all_byte_identical": true,
+    "changed_paths": []
+  },
+  "native_libraries": {
+    "count": 16,
+    "changed_libraries": [
+      "lib/arm64-v8a/libmain.so",
+      "lib/armeabi-v7a/libmain.so"
+    ],
+    "all_other_native_libraries_byte_identical": true,
+    "each_libmain_bytes": {
+      "arm64_v8a": 7460800,
+      "armeabi_v7a": 6554816
+    },
+    "each_libmain_changed_bytes": 89,
+    "each_libmain_changed_string_slots": 13,
+    "all_changed_bytes_inside_ascii_string_slots": true
+  },
+  "localized_native_labels": [
+    {
+      "source": "strength",
+      "candidate": "kekuatan"
+    },
+    {
+      "source": "fitness",
+      "candidate": "bugar"
+    },
+    {
+      "source": "mechanical",
+      "candidate": "mekanik"
+    },
+    {
+      "source": "attitude",
+      "candidate": "sikap"
+    },
+    {
+      "source": "morale",
+      "candidate": "moral"
+    },
+    {
+      "source": "loyalty",
+      "candidate": "setia"
+    },
+    {
+      "source": "Team",
+      "candidate": "Tim"
+    },
+    {
+      "source": "composure",
+      "candidate": "tenang"
+    },
+    {
+      "source": "medical",
+      "candidate": "medis"
+    },
+    {
+      "source": "shooting",
+      "candidate": "menembak"
+    },
+    {
+      "source": "Choose UR Fate",
+      "candidate": "Pilih Nasibmu"
+    },
+    {
+      "source": "Swap Meet",
+      "candidate": "Barter"
+    },
+    {
+      "source": "wits",
+      "candidate": "akal"
+    }
+  ],
+  "summary": {
+    "base_zip_crc_pass": true,
+    "candidate_zip_crc_pass": true,
+    "changed_deathforth_script_count": 269,
+    "dex_byte_identical": true,
+    "non_libmain_native_libraries_identical": true,
+    "libmain_string_slot_only_changes": true,
+    "no_unexpected_non_script_changes": true,
+    "entry_add_remove_matches_expected": true,
+    "overall_static_package_diff_pass": true,
+    "runtime_install": "NOT_TESTED",
+    "start_dispatch": "NOT_TESTED",
+    "gameplay_save_load_stability": "NOT_TESTED"
+  },
+  "limits": [
+    "Static diffs do not prove touch dispatch or Start behavior.",
+    "Local signing certificate differs from publisher signing certificate; PairIP/licensing remains unchanged.",
+    "No Android runtime, ADB/logcat, emulator, official apksigner, or embedded Deathforth VM was available.",
+    "No license/security bypass was attempted; this is not a release-ready APK."
+  ]
+}

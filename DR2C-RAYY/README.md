@@ -1,5 +1,14 @@
 # DR2C VORENYX — Indonesian Localization
 
+## APK change-surface audit — v2.62 (25 October 2026)
+
+- Compared the exact base and signature-fix candidate APKs. Both ZIP CRC checks pass; no duplicate ZIP paths.
+- Entry delta: 1,014 base entries, 1,015 candidate entries, 1,012 common; 737 common entries byte-identical and 275 changed. The common changes comprise 269 Deathforth scripts, manifest/signing metadata, two libmain.so files, and title/splash art. Added/removed paths match the expected local-signature and title-art set; no unexpected package paths.
+- All three DEX files are byte-identical. Every native shared library except the arm64 and armv7 libmain.so copies is byte-identical.
+- Each libmain.so remains the same size and differs by 89 bytes within 13 ASCII UI-label string slots only: strength→kekuatan, fitness→bugar, mechanical→mekanik, attitude→sikap, morale→moral, loyalty→setia, Team→Tim, composure→tenang, medical→medis, shooting→menembak, Choose UR Fate→Pilih Nasibmu, Swap Meet→Barter, and wits→akal.
+- This narrows the change surface but does not prove the Start tap reaches the handler or that native integrity/licensing accepts the locally re-signed APK. Start/install/gameplay/UI/save-load remain NOT TESTED. Do not label the candidate stable.
+- Tool/report: DR2C-RAYY/tools/audit_apk_change_surface.py, DR2C-RAYY/docs/APK_CHANGE_SURFACE_AUDIT_v2.62.md, and DR2C-RAYY/audit/apk_change_surface_v2.62.json.
+
 ## Source-to-APK payload reconciliation — v2.61 audit (25 October 2026)
 
 - The base source archive and base APK each contain 509 Deathforth .df scripts. All 509 are byte-identical.
@@ -18,7 +27,7 @@
 - Reproducible audit tool and six synthetic regression tests: DR2C-RAYY/tools/audit_apk_start_path.py and DR2C-RAYY/tests/test_audit_apk_start_path.py. The base APK, candidate APK and extracted game payloads remain outside public GitHub.
 - Details: DR2C-RAYY/docs/APK_START_PATH_AUDIT_v2.60.md and DR2C-RAYY/audit/apk_start_path_v2.60.json.
 
-**Latest documented localization batch remains v2.51 Batch K · v2.61 audit confirms exact 509/509 source-to-candidate script payload parity for available layers after a one-file tutorial supplement · v2.47–v2.51 source lineage still unresolved · Android runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest documented localization batch remains v2.51 Batch K · v2.61 audit confirms exact 509/509 source-to-candidate script payload parity for available layers · v2.62 package diff confirms DEX identity and native label-only changes · v2.47–v2.51 source lineage still unresolved · Android runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 

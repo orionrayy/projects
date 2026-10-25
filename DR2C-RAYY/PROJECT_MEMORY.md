@@ -1,5 +1,13 @@
 # PROJECT_MEMORY — DR2C VORENYX
 
+## Active engineering checkpoint — v2.62 APK change-surface audit (25 October 2026)
+- Compared base APK SHA-256 d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15 with candidate SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7. Both ZIP CRC checks pass and each has zero duplicate paths.
+- Package diff: 1,014 base entries, 1,015 candidate entries, 1,012 common entries, 737 unchanged common entries, and 275 changed common entries. Those are 269 Deathforth scripts plus the manifest/signature metadata, two libmain.so label tables, and title/splash art. Added/removed paths match the expected signing and title-art set.
+- All three DEX files and all native libraries other than the two ABI copies of libmain.so are byte-identical. Each libmain.so retains its exact size; its 89 changed bytes are confined to 13 ASCII UI-label string slots.
+- This reduces uncertainty about the static package diff but does not establish runtime cause: Start tap dispatch, embedded Deathforth initialization, licensing/integrity outcome, install, gameplay, UI fit and save/load remain NOT TESTED. No license bypass or speculative hitbox rewrite.
+- Source-to-APK payload parity v2.61 remains PASS for the exact layers available, 509/509 scripts. Exact v2.47–v2.51 patch ZIPs and the distinct v2.58 localization APK remain unavailable, so complete localization lineage is not established.
+- Evidence: docs/APK_CHANGE_SURFACE_AUDIT_v2.62.md and audit/apk_change_surface_v2.62.json.
+
 ## Active engineering checkpoint — v2.61 source-to-APK reconciliation (25 October 2026)
 - The base source archive and base APK contain 509 Deathforth .df scripts and all 509 payloads match byte-for-byte.
 - Compared the candidate APK against the available ordered layers: v2.43 localization patch, v2.45 corrective source patch, v2.45 Startfix source patch. Without a supplement, 508/509 effective script payloads matched; only assets/deathforth/events/tutorial.df differed.

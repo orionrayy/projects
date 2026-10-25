@@ -17,7 +17,9 @@ on:
       - "DR2C-RAYY/audit/next_wave_localization_v2.58.json"
       - "DR2C-RAYY/audit/batch_k_provenance_v2.54.json"
       - "DR2C-RAYY/audit/apk_source_sync_v2.61.json"
+      - "DR2C-RAYY/audit/apk_change_surface_v2.62.json"
       - "DR2C-RAYY/docs/APK_SOURCE_SYNC_AUDIT_v2.61.md"
+      - "DR2C-RAYY/docs/APK_CHANGE_SURFACE_AUDIT_v2.62.md"
       - "DR2C-RAYY/docs/SOURCE_RECONCILIATION_GATE_v2.53.md"
       - "DR2C-RAYY/docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md"
       - "DR2C-RAYY/docs/START_ROUTE_STATIC_AUDIT_v2.56.md"
@@ -41,7 +43,9 @@ on:
       - "DR2C-RAYY/audit/next_wave_localization_v2.58.json"
       - "DR2C-RAYY/audit/batch_k_provenance_v2.54.json"
       - "DR2C-RAYY/audit/apk_source_sync_v2.61.json"
+      - "DR2C-RAYY/audit/apk_change_surface_v2.62.json"
       - "DR2C-RAYY/docs/APK_SOURCE_SYNC_AUDIT_v2.61.md"
+      - "DR2C-RAYY/docs/APK_CHANGE_SURFACE_AUDIT_v2.62.md"
       - "DR2C-RAYY/docs/SOURCE_RECONCILIATION_GATE_v2.53.md"
       - "DR2C-RAYY/docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md"
       - "DR2C-RAYY/docs/START_ROUTE_STATIC_AUDIT_v2.56.md"
@@ -75,7 +79,7 @@ jobs:
           python-version: "3.12"
 
       - name: Compile source reconciler
-        run: python -m py_compile DR2C-RAYY/tools/reconcile_overlay.py DR2C-RAYY/tools/audit_overlay_provenance.py DR2C-RAYY/tools/audit_start_route.py DR2C-RAYY/tools/audit_apk_start_path.py DR2C-RAYY/tools/audit_apk_source_sync.py
+        run: python -m py_compile DR2C-RAYY/tools/reconcile_overlay.py DR2C-RAYY/tools/audit_overlay_provenance.py DR2C-RAYY/tools/audit_start_route.py DR2C-RAYY/tools/audit_apk_start_path.py DR2C-RAYY/tools/audit_apk_source_sync.py DR2C-RAYY/tools/audit_apk_change_surface.py
 
       - name: Run source reconciler unit tests
         run: python -m unittest discover -s DR2C-RAYY/tests -p "test_*.py" -v

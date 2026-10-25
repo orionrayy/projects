@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.62 APK change-surface audit — 25 October 2026 (audit only, not a game/APK version)
+- Added tools/audit_apk_change_surface.py with checks for ZIP CRC/duplicate paths, expected package entry additions/removals, byte-level payload differences, DEX identity and native label-string-slot boundaries.
+- Added five regression tests covering expected package changes, DEX-change rejection, non-ASCII native diffs, unexpected added paths and duplicate paths.
+- Actual comparison: 1,014 base entries, 1,015 candidate entries, 1,012 common; 737 identical common entries and 275 changed. Changed common paths comprise 269 Deathforth .df scripts and six expected non-script paths. No unexpected package-entry changes.
+- All three DEX files are byte-identical. Only two libmain.so files differ among native libraries; each has 89 changed bytes in 13 ASCII label slots and identical file size. Other native libraries remain identical.
+- This is static diff evidence only; Start, licensing/runtime outcome, gameplay, UI fit and save/load remain NOT TESTED. PR stays draft.
+- See docs/APK_CHANGE_SURFACE_AUDIT_v2.62.md and audit/apk_change_surface_v2.62.json.
+
+
+
 ## v2.61 source-to-APK payload reconciliation — 25 October 2026 (audit/supplement, not a game/APK version)
 - Added tools/audit_apk_source_sync.py. The checker verifies base-source-to-base-APK byte parity, applies ordered overlay layers, rejects duplicate or malformed archive paths, checks ZIP CRCs, and compares every effective Deathforth script with the candidate APK.
 - Added six source-sync regression tests (presentation-only sync, code drift, source-base mismatch, missing candidate script, duplicate ZIP path, and malformed overlay path) and extended CI compilation to all Start/source audit tools.
