@@ -4,6 +4,14 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## Native AIM model framing audit — v43
+
+- [Read-only AIM v10 probe](tools/aim_model_probe_v43.py)
+- [Synthetic framing regression tests](tests/test_aim_model_probe_v43.py)
+- [Source inventory and integration boundary](docs/AIM_MODEL_FRAMING_AUDIT_V43.md)
+
+Local source validation parsed 162/162 AIM files and inventoried 3,889 variables, 664 functions, 164 state descriptors and 1,013 handlers (5,730 length-framed records total). The parser preserves unknown record payloads as opaque hashes and reports a source anomaly in \`ai_Effect.aim\` instead of inferring a correction. Six synthetic tests pass locally; the test command is in static CI, but remote CI status has not yet been verified. This does not decode full AIM script semantics or connect the in-game 222-entry Cheats menu.
+
 ## HUD codec source round-trip — v42
 
 - [Field-preserving v12 HUD element codec](tools/hud_elements_codec_v42.py)
