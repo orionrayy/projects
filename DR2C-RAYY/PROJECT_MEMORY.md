@@ -7,6 +7,13 @@
 - Target voice: natural colloquial Indonesian, blunt and sarcastic with occasional profanity, distinct NPC personas, and context-sensitive community slang.
 - Target: 100% of player-visible text reviewed and localized; **not achieved yet**.
 
+## Active Start-liveness investigation — v2.59 (25 October 2026)
+- User reports the Start button remains unresponsive with the v2.57 signature-fix APK.
+- Confirmed the signature-fix derivative changed no Deathforth script payloads; it therefore did not repair Start/runtime state.
+- Static menu route words and `GAME-MARKER` are present. The new/unfinished tutorial route loads `events/tutorial.df`, whose display-expression tokens differ slightly from the base while handler IDs remain intact. This is the next isolation target, not a proven root cause.
+- PairIP/licensing remains unchanged; native integrity rejection is a possible alternative after local re-signing. No bypass or hitbox change attempted.
+- No ADB/emulator/runtime/logcat available in the audit environment; not verified stable. See `docs/START_LIVENESS_AUDIT_v2.59.md` and `audit/start_liveness_v2.59.json`.
+
 ## Install-failure investigation — v2.57 signature-fix derivative (25 October 2026)
 - User reported v2.57 still failed to install after uninstalling the previous package. Confirmed manifest target SDK 35 plus JAR/v1-only signing; Android 11 requires APK Signature Scheme v2 or higher for apps targeting API 30+.
 - Separate test derivative `DR2C_VORENYX_v2.57_SIGNATURE_FIX.apk`, SHA-256 `a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7`; local v1 and v2 verification passes, but official `apksigner` and device runtime are not tested. This does not replace or include the separately documented v2.58 localization batch.
