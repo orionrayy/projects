@@ -15,6 +15,12 @@ Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1
 Locally, the parser validated 68 source HUD resources (4,956 element records), and the canonical serializer reproduced all 68 resources byte-for-byte when writing to a separate temporary directory. A synthetic round-trip test covers element types 1–15, with fail-closed checks for a nonzero field that native SaveElements canonicalizes and non-finite numbers. The source contains only one type-3 List record, in match_result_anim.hud; neither pause.hud nor debug.hud has one. This establishes a source-build v12 serialization contract, not a working in-game cheat list: AIM row population and selection/action dispatch remain unresolved. Static CI now runs the synthetic parser and serializer tests; verify the newest run before treating remote CI as green. No APK/XAPK was built or original game asset modified in this increment.
 
 
+## Latest native List/model audit — v42
+
+- [AIM/HUD List population and callback audit](docs/AIM_LIST_CALLBACK_AUDIT_V42.md)
+
+The source ARM64 library shows the existing LegendEx model calling its native CreateLegendItem and UpdateList methods from onOpen. CreateLegendItem references the listitem_legend template, generated legend_ instance names, the legendex.list container and the model's own click callback. This is concrete evidence of an AOT-implemented, template-based row pattern, not a reusable 222-cheat dispatcher. The model is tied to LegendEx data and native code in libS3DClient.so; editing AIM/HUD declarations alone does not add new native handler bodies. The next gate remains a generic, allow-listed action bridge plus one-row runtime proof in a parallel package. No game asset or native library was modified and no APK/XAPK was built by v42.
+
 ## Artifact scope — read this before comparing ZIPs
 
 | Artifact | Scope | Explicit exclusions |
