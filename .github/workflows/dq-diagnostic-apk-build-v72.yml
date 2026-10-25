@@ -1,0 +1,57 @@
+name: DQ v72 Logcat-observable diagnostic report gate
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/DIAGNOSTIC_APK_BUILD_V72.json"
+      - "DQ-Reverse-Engineering/docs/DIAGNOSTIC_APK_BUILD_V72.md"
+      - "DQ-Reverse-Engineering/docs/DIAGNOSTIC_APK_RUNTIME_SMOKE_TEST_V72.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V72_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_diagnostic_apk_build_v72.py"
+      - "DQ-Reverse-Engineering/tools/build_diagnostic_probe_apk_v72.py"
+      - "DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v72.py"
+      - "DQ-Reverse-Engineering/tests/test_diagnostic_apk_build_v72.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_lifecycle_probe_v72.py"
+      - ".github/workflows/dq-diagnostic-apk-build-v72.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/DIAGNOSTIC_APK_BUILD_V72.json"
+      - "DQ-Reverse-Engineering/docs/DIAGNOSTIC_APK_BUILD_V72.md"
+      - "DQ-Reverse-Engineering/docs/DIAGNOSTIC_APK_RUNTIME_SMOKE_TEST_V72.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V72_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_diagnostic_apk_build_v72.py"
+      - "DQ-Reverse-Engineering/tools/build_diagnostic_probe_apk_v72.py"
+      - "DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v72.py"
+      - "DQ-Reverse-Engineering/tests/test_diagnostic_apk_build_v72.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_lifecycle_probe_v72.py"
+      - ".github/workflows/dq-diagnostic-apk-build-v72.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-v72-diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile source, validator and tests
+        run: |
+          set -eu
+          python -m py_compile \
+            DQ-Reverse-Engineering/tools/validate_diagnostic_apk_build_v72.py \
+            DQ-Reverse-Engineering/tools/build_diagnostic_probe_apk_v72.py \
+            DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v72.py \
+            DQ-Reverse-Engineering/tests/test_diagnostic_apk_build_v72.py \
+            DQ-Reverse-Engineering/tests/test_dex_lifecycle_probe_v72.py
+      - name: Validate pinned static report
+        working-directory: DQ-Reverse-Engineering
+        run: python tools/validate_diagnostic_apk_build_v72.py docs/DIAGNOSTIC_APK_BUILD_V72.json
+      - name: Run v72 report and patcher regression tests
+        working-directory: DQ-Reverse-Engineering
+        run: |
+          python -m unittest discover -s tests -p 'test_diagnostic_apk_build_v72.py' -v
+          python -m unittest discover -s tests -p 'test_dex_lifecycle_probe_v72.py' -v
