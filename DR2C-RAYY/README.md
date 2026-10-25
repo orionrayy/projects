@@ -12,6 +12,13 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Built a signature-fix derivative of the v2.57 localization payload: `DR2C_VORENYX_v2.57_SIGNATURE_FIX.apk`, SHA-256 `a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7`. This is **not** the separate v2.58 localization candidate described below.
 - JAR/v1 and the local v2 structural/cryptographic verifier pass; ZIP CRC, DEX internal checksums and stored-entry alignment pass. Official `apksigner` and device installation/runtime remain untested. The APK uses a new local test certificate; PairIP/licensing was not modified.
 
+## Start-liveness re-audit — v2.59 (25 October 2026; no runtime fix claimed)
+
+- User reports the Start button remains unresponsive in the v2.57 signature-fix APK. Audit confirms that the signing derivative leaves every Deathforth script payload unchanged, so it did not fix Start logic.
+- Core `game-select.df` selection/start route wiring and required handler words are statically present. The unfinished-tutorial path loads `events/tutorial.df`; this candidate tutorial has a small display-expression token drift (`chim`→`cname`, and removed `bHe`/`bhim`/`bhe` interpolation tokens) although handler IDs and ordered quoted Forth symbols remain intact.
+- This does not prove a compile/runtime failure. Runtime, logcat, and PairIP/license outcome cannot be confirmed here; PairIP was not modified. No hitbox change or security bypass attempted.
+- See `docs/START_LIVENESS_AUDIT_v2.59.md` and `audit/start_liveness_v2.59.json`. Do not call the APK stable. Next gate is isolate `select-boot` → tutorial load or obtain device runtime error.
+
 ## Local APK test candidate — v2.58 checkpoint (25 October 2026; not a release)
 
 - Built `DR2C_VORENYX_v2.58_TEST_CANDIDATE.apk` with a reviewed 38-row localization queue producing 41 literal changes across three scripts. The “SIEGE ALERT!” translation was corrected to “AWAS PENGEPUNGAN!”.
