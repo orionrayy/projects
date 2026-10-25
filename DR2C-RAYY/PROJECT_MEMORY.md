@@ -153,3 +153,12 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - Do not auto-merge the available 269-script v2.43 lineage with the later 77/509 report, do not reconstruct missing translations by inference, and do not claim v2.51 integration. Obtain exact baseline + v2.50/v2.51 ZIPs with checksum sidecars first.
 - No APK build, signature/install verification, Deathforth full parse, device runtime, UI-fit, gameplay, or save/load test was performed in this checkpoint.
 - See `docs/BATCH_K_PROVENANCE_RECONCILIATION_v2.54.md`, `audit/batch_k_provenance_v2.54.json`, and `tools/audit_overlay_provenance.py`.
+
+## Active checkpoint — v2.55 reproducible source packaging (25 October 2026)
+
+- Normalized output ZIP member timestamps and Unix file modes in `tools/reconcile_overlay.py`; added a regression test for two byte-identical builds from identical inputs.
+- Built the available layers three times (base archive + v2.43 overlay + v2.45 corrective patch + v2.45 Startfix patch). All three archives match SHA-256 `95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d`; size 7,515,735 bytes; CRC PASS; 274 entries; 272 overlay paths; 269 .df scripts; 18 overrides.
+- Compared with the earlier v2.53 ZIP: all 274 member paths/payloads are identical; the prior hash drift was ZIP timestamp/file-mode metadata.
+- Test suites: source reconciler 7/7 PASS, provenance 6/6 PASS. Combined 13/13 PASS.
+- Scope explicitly remains v2.43 + v2.45 corrective + v2.45 quote-fix, NOT v2.51. Exact v2.46 APK baseline and actual v2.47–v2.51 ZIPs remain unavailable. No APK build/sign/install/runtime, full interpreter parse, UI fit, Start input, gameplay or save/load test has been performed.
+- See `docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md`, `audit/reproducible_source_patch_v2.55_summary.json`, and provenance gate v2.54.
