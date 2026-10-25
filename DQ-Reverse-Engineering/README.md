@@ -4,6 +4,14 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## HUD action-stream framing audit — v45
+
+- [Read-only HUD action-stream parser](tools/hud_action_probe_v45.py)
+- [Synthetic framing tests](tests/test_hud_action_probe_v45.py)
+- [Source audit and debug-command cross-reference](docs/HUD_ACTION_STREAM_AUDIT_V45.md)
+
+Local validation decoded action framing for 68/68 source HUDs: 1,232 action records and 2,538 length-prefixed statements, with no leftover bytes. The existing debug HUD maps its buttons to uai_gp_hud.onDebug numeric commands; static v43 disassembly separately identifies argument 6.0 as a +100,000 Gold candidate, but that action is not currently wired in debug.hud and remains not runtime-verified. This parser does not change assets and does not solve the generic List row/selection dispatch for the 222-entry Cheats menu.
+
 ## Native List script-API contract audit — v44
 
 - [Native List wrapper disassembly and call-shape audit](docs/NATIVE_LIST_API_CONTRACT_AUDIT_V44.md)
