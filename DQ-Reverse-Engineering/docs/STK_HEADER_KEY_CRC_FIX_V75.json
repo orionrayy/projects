@@ -1,0 +1,89 @@
+{
+  "schema": "dq-v75-stk-crc-key-fix-apk",
+  "date": "2026-10-26",
+  "status": "STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_TESTED",
+  "artifact": {
+    "file_name": "DQ_ModKit_v75_STK_CRC_KEY_FIX_ARM64.apk",
+    "size_bytes": 57062268,
+    "sha256": "02f175d07dcacd46f9f9f9d67809a081dd9b1926737247bcbe7ea5b8484f9346",
+    "package_id": "com.shinybox.dqv75",
+    "launcher_label": "DQ v75 Tester",
+    "abi": "arm64-v8a",
+    "version_name": "3.3.2.0",
+    "split_count": 1
+  },
+  "stk": {
+    "sha256": "24a89cf3f356a2b48474d9681dedd662cec8cd5ec9f01574b26bed02d0ee6182",
+    "size_bytes": 33983604,
+    "header_key_hex": "0x45150cdf",
+    "metadata_crc32_hex": "0x45150cdf",
+    "header_key_equals_metadata_crc": true,
+    "entry_count": 5630,
+    "verified_entry_crc_and_decoded_sizes": 5630,
+    "only_changed_decoded_entry": "Resources/HUD/pause.hud",
+    "unchanged_decoded_entries_identical": 5629,
+    "non_target_entry_offsets_preserved": 5629,
+    "exact_alias_groups_preserved": 41,
+    "all_non_target_exact_alias_topology_preserved": true,
+    "previous_candidate_header_key_hex": "0x4c4060e8",
+    "previous_candidate_metadata_crc32_hex": "0x87bfe0b7",
+    "previous_candidate_invariant": false,
+    "original_stock_header_key_hex": "0x4c4060e8",
+    "original_stock_metadata_crc32_hex": "0x4c4060e8",
+    "target_old_offset": 122287,
+    "target_new_offset": 33643009,
+    "target_old_csize": 5003,
+    "target_new_csize": 5065,
+    "target_old_usize": 29446,
+    "target_new_usize": 29731
+  },
+  "manifest": {
+    "new_package_id": "com.shinybox.dqv75",
+    "old_authorities_absent": true,
+    "new_authorities_present": true,
+    "provider_authorities": {
+      "com.shinybox.dqv74.mobileadsinitprovider": "com.shinybox.dqv75.mobileadsinitprovider",
+      "com.shinybox.dqv74.androidx-startup": "com.shinybox.dqv75.androidx-startup"
+    }
+  },
+  "package_diff_excluding_signature_metadata": [
+    "AndroidManifest.xml",
+    "assets/S3DMain.smf",
+    "resources.arsc"
+  ],
+  "static_validation": {
+    "zip_crc": "PASS",
+    "zipalign_16k_pre_sign": "PASS",
+    "zipalign_16k_post_sign": "PASS",
+    "apksigner_v1": "PASS",
+    "apksigner_v2": "PASS",
+    "apksigner_v3": "PASS",
+    "aapt_badging": "PASS",
+    "aapt_provider_authorities": "PASS",
+    "stock_dex": "PASS",
+    "native_probe_absent": "PASS",
+    "only_expected_members_differ": "PASS"
+  },
+  "signing": {
+    "kind": "local diagnostic test certificate",
+    "certificate_sha256": "75e03ca7ea9cdc74eea6904b4fa0c0172724bfb2b79696767147e1fed08d8dee",
+    "matches_official_signer": false,
+    "private_key_shared": false,
+    "private_key_in_repository": false
+  },
+  "runtime": {
+    "device_install_tested": false,
+    "device_launch_tested": false,
+    "force_close_fixed_on_device": false,
+    "gold_runtime_checks": "0/9",
+    "catalog_runtime_verified": "0/222",
+    "promotion_allowed": false
+  },
+  "limitations": [
+    "The previous candidate used header key 0x4c4060e8 while CRC32 of its decoded metadata table was 0x87bfe0b7; this violated the v30 correction invariant.",
+    "v75 fixes the invariant and preserves all non-target offsets and exact alias relationships, but no physical-device installation or launch was performed.",
+    "The package is signed with a local diagnostic certificate and cannot update the publisher-signed application.",
+    "Gold +100K remains unverified; native integration of the 222-entry catalogue remains 0/222."
+  ],
+  "promotion_allowed": false
+}
