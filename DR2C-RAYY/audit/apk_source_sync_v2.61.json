@@ -1,0 +1,118 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.61 source-to-APK payload reconciliation using exact locally available lineage",
+  "date": "2026-10-25",
+  "runtime_status": "NOT_TESTED",
+  "release_ready": false,
+  "base_source_archive": {
+    "file": "DR2C-RAYY(2).zip",
+    "bytes": 13809097,
+    "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1",
+    "zip_entries": 1119,
+    "zip_crc": "PASS",
+    "first_bad_zip_entry": null,
+    "duplicate_paths": 0
+  },
+  "base_apk": {
+    "file": "DR2C-v1.8.2-full-apkvision.apk",
+    "bytes": 109011456,
+    "sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15",
+    "zip_entries": 1014,
+    "zip_crc": "PASS",
+    "first_bad_zip_entry": null,
+    "duplicate_paths": 0
+  },
+  "candidate_apk": {
+    "file": "DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk",
+    "bytes": 115615585,
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7",
+    "zip_entries": 1015,
+    "zip_crc": "PASS",
+    "first_bad_zip_entry": null,
+    "duplicate_paths": 0
+  },
+  "candidate_alias": {
+    "file": "DR2C_VORENYX_v2.58_ANDROID11_SIGNATURE_FIX.apk",
+    "byte_identical_to_candidate": true,
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7"
+  },
+  "layers": [
+    {
+      "order": 1,
+      "file": "DR2C_VORENYX_ID_v2.43_localization_patch.zip",
+      "sha256": "00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024",
+      "script_count": 269,
+      "overrides_prior_payload_count": 269,
+      "zip_crc": "PASS",
+      "paths_missing_from_base_source": []
+    },
+    {
+      "order": 2,
+      "file": "DR2C_VORENYX_v2.45_CORRECTIVE_SOURCE_PATCH.zip",
+      "sha256": "b2cc843325ede21d00cb91dad4a4ff68fa8c3c0e629d6910860727a4db4cf88d",
+      "script_count": 12,
+      "overrides_prior_payload_count": 12,
+      "zip_crc": "PASS",
+      "paths_missing_from_base_source": []
+    },
+    {
+      "order": 3,
+      "file": "DR2C_VORENYX_v2.45_STARTFIX_SOURCE_PATCH.zip",
+      "sha256": "36f423d620ec852a82d74d34fab02b83f350c8cd5a1cd304d6e247d494495267",
+      "script_count": 6,
+      "overrides_prior_payload_count": 6,
+      "zip_crc": "PASS",
+      "paths_missing_from_base_source": []
+    },
+    {
+      "order": 4,
+      "file": "DR2C_VORENYX_v2.61_TUTORIAL_SOURCE_SYNC_PATCH.zip",
+      "sha256": "2ba7c3f5b095e6372e8799c7eb6b85d8fb692ec24d465f15b0c9872f9a0ec88b",
+      "script_count": 1,
+      "overrides_prior_payload_count": 1,
+      "zip_crc": "PASS",
+      "paths_missing_from_base_source": []
+    }
+  ],
+  "base_source_to_base_apk": {
+    "source_script_count": 509,
+    "base_apk_script_count": 509,
+    "exact_payload_matches": 509,
+    "mismatch_paths": [],
+    "missing_from_base_apk": [],
+    "extra_in_base_apk": [],
+    "exact": true
+  },
+  "effective_source_to_candidate_apk": {
+    "effective_script_count": 509,
+    "candidate_script_count": 509,
+    "exact_payload_matches": 509,
+    "missing_from_candidate": [],
+    "extra_in_candidate": [],
+    "mismatches": [],
+    "overridden_path_count": 269,
+    "exact": true
+  },
+  "summary": {
+    "base_source_to_base_apk_exact": true,
+    "all_layer_zip_crcs_pass": true,
+    "candidate_source_sync_exact": true,
+    "source_script_count": 509,
+    "overlay_script_count": 269,
+    "candidate_script_matches": 509,
+    "candidate_script_mismatches": 0,
+    "overall_payload_sync_pass": true
+  },
+  "missing_history": {
+    "exact_v247_v251_source_patch_zips_available": false,
+    "distinct_v258_localization_candidate_available": false,
+    "full_batch_a_k_integration_verified": false,
+    "semantic_localization_coverage": "NOT_COMPUTED"
+  },
+  "limits": [
+    "Exact payload parity proves the candidate scripts match only the exact base and source layers listed above; it does not prove full missing v2.47-v2.51 lineage.",
+    "Exact payload parity does not prove the embedded Deathforth interpreter executes scripts correctly.",
+    "APK install, input dispatch, gameplay, UI fit, save/load, and native integrity/licensing runtime require device-side validation.",
+    "This audit reports bytes and does not classify semantic translation quality."
+  ]
+}

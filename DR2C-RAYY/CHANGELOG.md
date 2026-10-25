@@ -1,4 +1,15 @@
 # Changelog
+
+## v2.61 source-to-APK payload reconciliation — 25 October 2026 (audit/supplement, not a game/APK version)
+- Added tools/audit_apk_source_sync.py. The checker verifies base-source-to-base-APK byte parity, applies ordered overlay layers, rejects duplicate or malformed archive paths, checks ZIP CRCs, and compares every effective Deathforth script with the candidate APK.
+- Added six source-sync regression tests (presentation-only sync, code drift, source-base mismatch, missing candidate script, duplicate ZIP path, and malformed overlay path) and extended CI compilation to all Start/source audit tools.
+- Actual artifacts: base source archive and base APK match 509/509 scripts. With available v2.43, v2.45 corrective and v2.45 Startfix layers, 508/509 candidate script payloads matched; the only drift was assets/deathforth/events/tutorial.df.
+- Created local-only one-file source-sync supplement from the candidate's exact tutorial payload. With that layer applied, the checker passes 509/509 scripts, 0 missing, 0 extra, 0 mismatches; CRC passes and duplicate paths are zero across all inputs.
+- Confirmed the Library-named v2.58_ANDROID11_SIGNATURE_FIX APK and v2.57 signature-fix candidate are byte-identical, SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7.
+- Limits: exact v2.47–v2.51 patch ZIPs and the distinct v2.58 localization candidate remain unavailable. This does not establish full localization integration or runtime stability. Start/install/gameplay/UI/save-load remain NOT TESTED; PR remains draft.
+- Report: docs/APK_SOURCE_SYNC_AUDIT_v2.61.md. Sanitized result: audit/apk_source_sync_v2.61.json.
+
+
 ## v2.60 engineering audit — 25 October 2026 (not a game/APK version)
 - Added tools/audit_apk_start_path.py to compare the provided base APK against a candidate APK using ZIP CRC/duplicate checks, all 12 Start/tutorial route files, normalized code-token streams, handler identifiers, string closure, escaped-quote scanning and the canonical boot marker.
 - Added six regression tests for presentation-only translation, dynamic identifier drift, required-handler loss, missing route files, duplicate ZIP paths and code-token deltas independent of string text.

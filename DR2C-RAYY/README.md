@@ -1,5 +1,15 @@
 # DR2C VORENYX — Indonesian Localization
 
+## Source-to-APK payload reconciliation — v2.61 audit (25 October 2026)
+
+- The base source archive and base APK each contain 509 Deathforth .df scripts. All 509 are byte-identical.
+- Reconciled the exact locally available layers in order: v2.43 localization (269 overlay scripts), v2.45 corrective source patch, v2.45 Startfix source patch, and a one-file v2.61 tutorial synchronization supplement.
+- Before the supplement, 508/509 candidate script payloads matched the effective source. The only difference was assets/deathforth/events/tutorial.df. The supplement captures that exact payload from the already-built v2.57 signature-fix candidate.
+- After applying the supplement, all 509/509 script payloads match exactly; missing=0, extra=0, mismatches=0. The base archive, base APK, candidate APK, and all layers passed ZIP CRC checks with no duplicate paths.
+- The Library file named DR2C_VORENYX_v2.58_ANDROID11_SIGNATURE_FIX.apk is byte-identical to DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk (SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7). The v2.58 filename does not mean it contains the separate v2.58 localization batch.
+- This proves byte-level synchronization only for the exact base and patch archives available for inspection. The actual v2.47–v2.51 patch ZIPs and distinct v2.58 localization candidate remain unavailable, so full Batch A–K integration and complete localization are not claimed. Android install, Start, gameplay, UI fit, save/load and runtime stability remain NOT TESTED.
+- Tool/report: DR2C-RAYY/tools/audit_apk_source_sync.py, DR2C-RAYY/docs/APK_SOURCE_SYNC_AUDIT_v2.61.md, and DR2C-RAYY/audit/apk_source_sync_v2.61.json. The APKs and binary supplement remain outside public GitHub.
+
 ## Latest engineering checkpoint — v2.60 Start-path audit (25 October 2026)
 
 - Exact base/candidate APK comparison completed: base SHA-256 d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15; v2.57 signature-fix candidate SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7.
@@ -8,7 +18,7 @@
 - Reproducible audit tool and six synthetic regression tests: DR2C-RAYY/tools/audit_apk_start_path.py and DR2C-RAYY/tests/test_audit_apk_start_path.py. The base APK, candidate APK and extracted game payloads remain outside public GitHub.
 - Details: DR2C-RAYY/docs/APK_START_PATH_AUDIT_v2.60.md and DR2C-RAYY/audit/apk_start_path_v2.60.json.
 
-**Latest documented localization batch: v2.51 Batch K · source-lineage unresolved · v2.58 localization APK runtime NOT VERIFIED · v2.57 Android 11 signature-fix derivative available for install testing · Full localization NOT COMPLETE**
+**Latest documented localization batch remains v2.51 Batch K · v2.61 audit confirms exact 509/509 source-to-candidate script payload parity for available layers after a one-file tutorial supplement · v2.47–v2.51 source lineage still unresolved · Android runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 

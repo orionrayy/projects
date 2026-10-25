@@ -1,5 +1,14 @@
 # PROJECT_MEMORY — DR2C VORENYX
 
+## Active engineering checkpoint — v2.61 source-to-APK reconciliation (25 October 2026)
+- The base source archive and base APK contain 509 Deathforth .df scripts and all 509 payloads match byte-for-byte.
+- Compared the candidate APK against the available ordered layers: v2.43 localization patch, v2.45 corrective source patch, v2.45 Startfix source patch. Without a supplement, 508/509 effective script payloads matched; only assets/deathforth/events/tutorial.df differed.
+- Created a local-only v2.61 one-file tutorial source-sync supplement containing the exact tutorial payload from the existing candidate. Re-running the standard-library audit with that last layer yielded 509/509 exact script payload matches, no missing/extra paths, zero mismatches, passing ZIP CRCs and no duplicate paths.
+- The separate Library artifact named DR2C_VORENYX_v2.58_ANDROID11_SIGNATURE_FIX.apk is byte-identical to the v2.57 signature-fix candidate (SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7). Do not mislabel this alias as the separately documented v2.58 localization build.
+- This reconciles only the exact artifacts available in the Library. The actual v2.47–v2.51 binary patch ZIPs and distinct v2.58 localization APK remain unavailable, so source lineage is still incomplete and full Batch A–K integration is not claimed.
+- Runtime stability remains blocked: no device/ADB/logcat/emulator/Deathforth VM in this environment. Start dispatch, install, gameplay, UI fit and save/load are NOT TESTED. Keep PR draft and do not call APK stable.
+- Evidence: docs/APK_SOURCE_SYNC_AUDIT_v2.61.md; audit/apk_source_sync_v2.61.json. Local supplement SHA-256: 2ba7c3f5b095e6372e8799c7eb6b85d8fb692ec24d465f15b0c9872f9a0ec88b8.
+
 ## Active engineering checkpoint — v2.60 APK-to-APK Start-path audit (25 October 2026)
 - Compared the exact supplied base APK against the latest available v2.57 signature-fix derivative. Both ZIP CRC checks pass, duplicate-path count is zero, and all 12 critical route scripts are present.
 - Static route outcome: 11/12 strict passes; assets/deathforth/events/tutorial.df requires review because four chim references became cname and bHe/bhim/bhe expression tokens were removed from translated responses. This could be intentional display rewriting, so do not call it a confirmed syntax defect or Start root cause.
