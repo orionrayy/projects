@@ -26,6 +26,8 @@ The following exported wrappers were located in the supplied ARM64 library. Addr
 
 The wrappers consistently resolve the first argument as an engine-managed HUD element reference, with range checks against the current HUD manager's element registry. This is significant: the exported wrappers expect a valid in-engine HUD object and engine state. They are not safe direct calls from a separately installed Android app, and no Java/JNI call contract was inferred from them.
 
+A source-asset cross-check inspected the action tables in all 68 v12 HUD files: none contains a call to these \`hud_addListItem\` / \`hud_setListItemTextAt\` / \`hud_setListOnSelectionChangedAction\` wrappers. This is a bounded negative result for the HUD action tables only; it does not rule out calls from other engine/model paths. At present, the recovered package provides no concrete serialized HUD action example to copy for the List population sequence.
+
 ## Implications for the 222-entry Cheat Menu
 
 1. **Adding text rows is feasible at the native API level.** \`hud_addListItem\` uses a text item with a null texture; it does not automatically create a structured row with a toggle, slider, detail panel, risk label, or Apply action.
