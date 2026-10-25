@@ -1,0 +1,45 @@
+name: DR2C Source Reconciler
+
+on:
+  push:
+    branches:
+      - main
+      - dr2c-v245-static-repair-audit
+    paths:
+      - "DR2C-RAYY/tools/**"
+      - "DR2C-RAYY/tests/**"
+      - "DR2C-RAYY/audit/source_reconciliation_v2.52.json"
+      - ".github/workflows/dr2c-source-reconciler.yml"
+  pull_request:
+    paths:
+      - "DR2C-RAYY/tools/**"
+      - "DR2C-RAYY/tests/**"
+      - "DR2C-RAYY/audit/source_reconciliation_v2.52.json"
+      - ".github/workflows/dr2c-source-reconciler.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dr2c-source-reconciler-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-reconciler-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile source reconciler
+        run: python -m py_compile DR2C-RAYY/tools/reconcile_overlay.py
+
+      - name: Run source reconciler unit tests
+        run: python -m unittest discover -s DR2C-RAYY/tests -p "test_*.py" -v
