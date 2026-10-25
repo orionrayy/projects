@@ -1291,10 +1291,12 @@
       "game_handler_status": "UNVERIFIED_NATIVE_CANDIDATE",
       "runtime_verified": false,
       "candidate_routes": [
-        "uai_gp_hud::onGetGold at 0x6e8e00 (shop/gold UI path; input/commit semantics unresolved)",
-        "uai_gp_hud::onSetGold at 0x74ff84 (display/model formatting; authoritative balance mutation unproven)"
+        "uai_gp_hud::RewardGold(S3DX::AIVariable) at 0x65feec: native Gold reward helper; argument/read-back contract unverified",
+        "uai_gp_hud::SpendGold(S3DX::AIVariable) at 0x637008: native Gold spend helper; bounds/read-back contract unverified",
+        "uai_gp_hud::onSetGold at 0x74ff84: formats/publishes hud.gold display/model value; not proven to set authoritative balance",
+        "uai_gp_hud::onGetGold at 0x6e8e00: shopgold/shop UI flow; not a proven generic custom Gold input route"
       ],
-      "limitation": "Candidate only: custom amount entry, callback lifecycle, authoritative balance write and read-back remain unverified."
+      "limitation": "Gold override is not integrated. Needs a verified current-balance read, numeric argument semantics, sandbox gates, RewardGold/SpendGold contract, read-back and rollback. onSetGold alone appears to update display/model text; OpenKeyboard call sites found so far use nickname fields."
     },
     {
       "id": "economy.adventure_marks",
@@ -2725,5 +2727,22 @@
     "Each enabled runtime cheat requires exact-build handler mapping, parameter validation, sandbox/offline gates, state read-back, and tested recovery/rollback.",
     "The custom Gold keypad is an interaction prototype until the in-game keyboard input/commit path is verified.",
     "No purchase receipt, paid entitlement, cloud save, leaderboard or achievement write is permitted in the cheat adapter."
-  ]
+  ],
+  "native_gold_keyboard_followup": {
+    "audit_revision": "v40",
+    "custom_gold_keyboard_verified": false,
+    "authoritative_gold_setter_verified": false,
+    "direct_native_mutation_helpers": [
+      "uai_gp_hud::RewardGold(S3DX::AIVariable) at 0x65feec",
+      "uai_gp_hud::SpendGold(S3DX::AIVariable) at 0x637008"
+    ],
+    "display_callback": "onSetGold at 0x74ff84 formats/publishes hud.gold display/model value; authoritative balance write unproven",
+    "keyboard_callback": "onKeyboardEnter at 0x705940 reads keyboard.key_entry and sKeyboardDirect and uses setEnvVar/UpdateSlots",
+    "observed_open_keyboard_callers": [
+      "onCheckMessagesResult at 0x504f44 and 0x505338",
+      "onFindMatchResult at 0x50f0e8"
+    ],
+    "open_keyboard_target": "Observed account call sites pass the nickname target, not Gold.",
+    "next_gate": "Prove actual input launch context, current Gold balance read and RewardGold/SpendGold semantics; add read-back and rollback before building a game package."
+  }
 }
