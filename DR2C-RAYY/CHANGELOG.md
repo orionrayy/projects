@@ -1,5 +1,13 @@
 # Changelog — DR2C VORENYX
 
+## Source contract gate v2.53 — 25 October 2026 (not a game/APK version)
+
+- Extended tools/reconcile_overlay.py to preserve and compare the ordered stream of single-quoted Forth code symbols across source and each overlaid script. Also checks overlay string closure, canonical perk key, and critical Start/tutorial route tokens.
+- Reconciled base + v2.43 localization patch + v2.45 corrective patch + v2.45 Start quote-fix. Output: DR2C_VORENYX_v2.45_RECONCILED_SOURCE_PATCH_v2.53.zip, SHA-256 73c9f60cd1a88a6d121843f3bdc6304262d47c01b2cdc36237015b7d083583d7; ZIP CRC PASS, no duplicates, 272 payload paths including 269 .df scripts, 18 later-layer overrides.
+- Checks: 0 escaped quote regressions; 0 unclosed strings in overlay .df files; 0 single-quoted code-symbol sequence differences; canonical GAME-MARKER, Jack of All Trades key, Start dispatch and tutorial route contracts PASS. Unit tests increased from 4 to 6; all six pass locally.
+- This is a source-only v2.43 + v2.45 patch; not v2.51 and not an APK. v2.47–v2.51 ZIP artifacts remain unavailable for byte-level integration. APK build and device runtime remain untested.
+- See docs/SOURCE_RECONCILIATION_GATE_v2.53.md and audit/source_reconciliation_v2.53.json.
+
 ## Source reconciliation checkpoint — 25 October 2026 (not a release version)
 
 - Added `tools/reconcile_overlay.py` and four unit tests to reconcile ordered overlay layers with strict base SHA-256 pinning, ZIP CRC and duplicate-path checks, unsafe-path rejection, source-path validation, the canonical `GAME-MARKER` invariant, and escaped-quote scanning.
