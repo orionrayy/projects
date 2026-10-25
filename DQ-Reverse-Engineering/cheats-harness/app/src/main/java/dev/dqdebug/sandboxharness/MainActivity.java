@@ -146,6 +146,7 @@ public final class MainActivity extends Activity {
         search.setTextColor(TEXT);
         search.setHintTextColor(MUTED);
         search.setHint("Search name, description, stable ID, or tag…");
+        search.setTag("catalog-search");
         search.setPadding(dp(12), dp(8), dp(12), dp(8));
         search.setBackground(roundRect(PANEL, BORDER, 12));
         page.addView(search, marginBottomSmall());
@@ -296,11 +297,14 @@ public final class MainActivity extends Activity {
             int selected = Math.max(0, entry.options.indexOf(value));
             spinner.setSelection(selected, false);
             spinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-                private boolean initial = true;
                 @Override public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                    if (initial) { initial = false; return; }
-                    try { state.set(entry.id, entry.options.get(position)); refreshStatusOnly(); }
-                    catch (IllegalArgumentException ex) { toast(ex.getMessage()); }
+                    try {
+                        String choice = entry.options.get(position);
+                        if (!choice.equals(state.get(entry.id))) {
+                            state.set(entry.id, choice);
+                            refreshStatusOnly();
+                        }
+                    } catch (IllegalArgumentException ex) { toast(ex.getMessage()); }
                 }
                 @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
             });
@@ -545,6 +549,10 @@ public final class MainActivity extends Activity {
     }
 
     private void refreshStatusOnly() {
+        if ("Active".equals(currentCategory)) {
+            renderEntries();
+            return;
+        }
         if (stagedText != null) stagedText.setText(state.stagedCount()
                 + " staged local settings · 0 runtime-connected cheats · all game effects disabled");
         refreshEventLog();
