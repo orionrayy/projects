@@ -1,0 +1,27 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.65 Install/Start Runtime Trace Toolkit",
+  "date": "2026-10-26",
+  "status": "TOOLKIT_STATIC_CHECKS_PASS_RUNTIME_PENDING_DEVICE_TRACE",
+  "artifact": {
+    "filename": "DR2C_VORENYX_v2.65_INSTALL_START_TRACE_TOOLKIT.zip",
+    "bytes": 5166,
+    "sha256": "b67f81776e96a2d96d1cfc04015247aaf85bb7477672a504a7e2698feb48da27",
+    "zip_crc": "PASS",
+    "duplicate_paths": 0
+  },
+  "checks": {
+    "passed": 17,
+    "total": 17
+  },
+  "modes": {
+    "INSTALL_ATTEMPT": "Can run when package com.noodlecake.drtc is absent; records package-manager/install errors while user initiates installation manually.",
+    "START_BUTTON": "Requires the package to be installed; captures app/native/Deathforth/integrity errors after user taps Start once."
+  },
+  "limitations": [
+    "No Windows PowerShell runtime or Android/ADB device available in current environment; no live install or Start tap tested.",
+    "No APK is installed or uninstalled automatically; no save is changed and no signature/licensing bypass is attempted.",
+    "Runtime installation, Start behavior, gameplay, UI fit, save/load and stability remain unverified."
+  ],
+  "next_gate": "Run mode 1 for a failed install when package is absent, or mode 2 when installed and Start is unresponsive; review the generated trace ZIP."
+}
