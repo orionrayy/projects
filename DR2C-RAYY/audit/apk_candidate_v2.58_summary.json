@@ -1,0 +1,70 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.58 local APK test candidate",
+  "status": "BUILD_AND_STATIC_PACKAGE_VALIDATION_PASS; DEVICE_RUNTIME_NOT_TESTED",
+  "warning": "NOT RELEASE-READY; Android runtime not tested; NOT full v2.51 integration.",
+  "output": {
+    "file": "DR2C_VORENYX_v2.58_TEST_CANDIDATE.apk",
+    "bytes": 115614035,
+    "sha256": "11ddc0e41df162837f74c676d602403952c3f6c875f4f6dacd91db68adbb41b0",
+    "zip_entries": 1015,
+    "zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "total_df_scripts": 509,
+    "escaped_quote_scripts": 0
+  },
+  "source_patch": {
+    "file": "DR2C_VORENYX_REPRODUCIBLE_SOURCE_PATCH_v2.58.zip",
+    "bytes": 7522647,
+    "sha256": "c8fc92683ef545b1f27fa205742618b2032f653cc8eea3edfb15f5aa04218799",
+    "zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "overlay_unique_paths": 273,
+    "deathforth_df_overlay_count": 270
+  },
+  "next_wave_localization": {
+    "queue_rows": 38,
+    "literal_occurrences_changed": 41,
+    "modified_paths": [
+      "assets/deathforth/events/city/region/special-lots.df",
+      "assets/deathforth/events/locationlogic.df",
+      "assets/deathforth/events/trade/oldtrade.df"
+    ],
+    "semantic_correction": "SIEGE => PENGEPUNGAN",
+    "code_outside_strings_unchanged": true,
+    "ordered_forth_symbol_streams_preserved": true
+  },
+  "validation": {
+    "builder_and_localization_tests": "13/13 PASS",
+    "apk_zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "total_deathforth_scripts": 509,
+    "escaped_backslash_quote_regressions": 0,
+    "native_ui_slots": "26/26 PASS",
+    "primary_activity_orientation": "landscape on both primary activities",
+    "resources_arsc_alignment": "PASS",
+    "stored_entry_alignment_failures": 0,
+    "uncompressed_native_libraries": "7 per ABI, 4-KiB aligned",
+    "pairip_libraries": "byte-identical to selected base APK",
+    "jar_v1_signature": "PASS",
+    "apk_v2_signature": "NOT GENERATED/NOT VERIFIED (apksigner unavailable)"
+  },
+  "signer": {
+    "certificate_sha256": "0c400f22aff9ae95b318740b17823754b7af55ff86137622bab3b35fd6d2c9e7",
+    "type": "new local self-signed test certificate, not publisher/current-install signer"
+  },
+  "lineage": {
+    "base_apk_sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15",
+    "base_source_archive_sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1",
+    "candidate_includes": "v2.55 cumulative overlay + 38-row v2.46 next-wave review queue (41 literal occurrences), tutorial refresh and native UI label patch",
+    "missing": "full v2.47 batch A-F patch ZIP; v2.48-v2.51 patch ZIPs; exact v2.46 baseline APK",
+    "not_full_v2_51_integration": true
+  },
+  "remaining_limits": [
+    "No Android device, ADB, emulator, Android SDK apksigner, zipalign or full Deathforth interpreter is available here.",
+    "Install, Start input, UI hitboxes, gameplay, event load, save/load and runtime stability are not tested.",
+    "Because this APK uses a new local signer, Android may reject it as an update; the preserved PairIP/licensing wrapper may reject a local build.",
+    "Do not uninstall the current game without backing up save data.",
+    "Original launcher banner and APKVision wrapper identifiers remain. No license/security/anti-tamper bypass was attempted."
+  ]
+}
