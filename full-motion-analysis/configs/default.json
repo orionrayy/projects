@@ -1,0 +1,64 @@
+{
+  "schema_version": "fma.config.v0.2",
+  "analysis": {
+    "max_fps": 30,
+    "analysis_width": 160,
+    "analysis_height": 90,
+    "max_frames": 100000,
+    "window_frames": 16,
+    "window_stride": 8,
+    "primary_unit": "overlapping_rgb_spatiotemporal_volume",
+    "pairwise_optical_flow_is_primary": false
+  },
+  "relational_field": {
+    "feature_schema": "fma.openworld.relational-signature.v1",
+    "spatial_scales": [
+      1,
+      2,
+      4
+    ],
+    "regional_grid_rows": 4,
+    "regional_grid_columns": 6,
+    "max_windows_for_cross_relations": 256,
+    "max_cross_window_relations_reported": 512
+  },
+  "training": {
+    "mode": "unlabeled_local_corpus",
+    "external_api_required": false,
+    "local_media_upload": false,
+    "deduplicate_by_sha256": true,
+    "split_group": "source_video_sha256",
+    "minimum_distinct_videos_for_promotion": 5,
+    "minimum_training_videos_for_promotion": 4,
+    "minimum_timeline_coverage": 0.95,
+    "minimum_heldout_quantization_improvement": 0.05,
+    "require_operator_rights_attestation": true,
+    "promotion_is_semantic_validation": false,
+    "encoder": {
+      "method": "numpy_denoising_autoencoder",
+      "hidden_dim": 48,
+      "latent_dim": 24,
+      "epochs": 8,
+      "batch_size": 64,
+      "mask_probability": 0.12,
+      "no_external_ml_dependency": true,
+      "promote_only_if_clean_reconstruction_loss_decreases": true
+    }
+  },
+  "resource_policy": {
+    "ffmpeg_threads": 1,
+    "max_fps_hard_limit": 120,
+    "max_frames_hard_limit": 1000000,
+    "mcp_local_file_allowlist_required": true,
+    "mcp_public_deployment_allowed": false
+  },
+  "claims_policy": {
+    "universal_domain_accuracy_established": false,
+    "real_world_evidence": false,
+    "state_of_the_art_claim_supported": false,
+    "semantic_motion_understanding_established": false,
+    "causal_motion_understanding": false,
+    "physical_world_speed_available": false,
+    "learned_prototypes_are_semantic_labels": false
+  }
+}

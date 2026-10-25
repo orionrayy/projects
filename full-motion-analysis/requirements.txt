@@ -1,0 +1,3 @@
+numpy>=1.26
+# Optional dense optical flow: pip install opencv-python-headless
+# Optional MCP tools: pip install "mcp[cli]"
