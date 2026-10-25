@@ -1,5 +1,7 @@
 # Changelog — DR2C VORENYX
 
+- **v2.65 Install/Start Runtime Trace Toolkit (26 October 2026):** adds separate modes for a failed APK installation (package can be absent) and a Start-button no-op (package must be installed). Retains non-destructive live-edge capture, 90-second cap, before/after package metadata, mode-specific log filters, and raw-log cleanup. Static checks 17/17 PASS; ZIP CRC PASS; zero duplicates. **Runtime remains pending actual device trace.** See [checkpoint](docs/INSTALL_START_TRACE_TOOLKIT_v2.65.md) and [sanitized validation](audit/install_start_trace_toolkit_v2.65.json).
+
 - **v2.64 Start Runtime Trace Toolkit hardening (26 October 2026):** removed logcat buffer clearing, moved capture to the live edge, enforced a 90-second cap, added early process-exit diagnostics, removed potentially stale crash-buffer output, and made the BAT wrapper propagate errors. Static checks: 11/11 PASS; ZIP CRC PASS; no duplicate paths. **Android runtime still BLOCKED pending a device trace; Start remains unresolved.** See [checkpoint](docs/START_RUNTIME_TRACE_TOOLKIT_v2.64.md) and [sanitized validation](audit/runtime_trace_toolkit_v2.64.json).
 
 - **v2.44 post-install status correction:** user reports all symptoms unchanged. Static marker/orientation edits exist, but runtime fix failed to verify. Same package ID + local signing certificate may prevent updating an APKVISION-signed installation, leaving the old app active. APKVISION wrapper remains. See [post-install diagnosis](docs/POST_INSTALL_DIAGNOSIS_v2.44.md). No stable-release claim.
