@@ -5,7 +5,12 @@ on:
     branches:
       - "feat/dq-iap-debug-cheats-modkit-v7"
     paths:
-      - "DQ-Reverse-Engineering/cheats-harness/**"
+      - "DQ-Reverse-Engineering/cheats-harness/app/**"
+      - "DQ-Reverse-Engineering/cheats-harness/build.gradle"
+      - "DQ-Reverse-Engineering/cheats-harness/gradle.properties"
+      - "DQ-Reverse-Engineering/cheats-harness/settings.gradle"
+      - "DQ-Reverse-Engineering/cheats-harness/ci/**"
+      - "DQ-Reverse-Engineering/cheats-sandbox/debug_cheats_catalog_v39.json"
       - ".github/workflows/dq-cheats-harness-android.yml"
   pull_request:
     paths:
