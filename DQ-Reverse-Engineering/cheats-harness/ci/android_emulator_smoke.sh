@@ -18,7 +18,7 @@ TITLE_STATUS=1
 BOUNDARY_STATUS=1
 
 capture_logcat() {
-  adb logcat -d -v threadtime -t 10000 > "$LOGCAT" 2>&1 || true
+  timeout 15s adb logcat -d -v threadtime -t 10000 > "$LOGCAT" 2>&1 || true
 }
 trap capture_logcat EXIT
 
@@ -29,23 +29,23 @@ if ! test -s "$APK"; then
   exit 2
 fi
 
-adb logcat -c || true
-gradle -p "$PROJECT" --no-daemon --stacktrace connectedDebugAndroidTest > "$TEST_LOG" 2>&1 || TEST_STATUS=$?
+timeout 15s adb logcat -c || true
+timeout 360s gradle -p "$PROJECT" --no-daemon --stacktrace connectedDebugAndroidTest > "$TEST_LOG" 2>&1 || TEST_STATUS=$?
 cat "$TEST_LOG"
 
-adb install -r "$APK"
+timeout 60s adb install -r "$APK"
 INSTALL_STATUS=$?
 if [ "$INSTALL_STATUS" -eq 0 ]; then
-  adb shell am force-stop dev.dqdebug.sandboxharness
-  adb shell am start -W -n dev.dqdebug.sandboxharness/.MainActivity
+  timeout 30s adb shell am force-stop dev.dqdebug.sandboxharness
+  timeout 60s adb shell am start -W -n dev.dqdebug.sandboxharness/.MainActivity
   START_STATUS=$?
 fi
 
 if [ "$START_STATUS" -eq 0 ]; then
-  adb shell uiautomator dump /sdcard/dq-harness-window.xml >/dev/null 2>&1
+  timeout 30s adb shell uiautomator dump /sdcard/dq-harness-window.xml >/dev/null 2>&1
   DUMP_STATUS=$?
   if [ "$DUMP_STATUS" -eq 0 ]; then
-    adb shell cat /sdcard/dq-harness-window.xml > "$UI_DUMP"
+    timeout 20s adb shell cat /sdcard/dq-harness-window.xml > "$UI_DUMP"
     grep -q "Cheats Sandbox" "$UI_DUMP"
     TITLE_STATUS=$?
     grep -q "GAME LINK" "$UI_DUMP"
