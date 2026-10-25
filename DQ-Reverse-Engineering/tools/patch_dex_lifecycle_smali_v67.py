@@ -13,9 +13,9 @@ RENDERER = Path("com/shinybox/smash/S3DRenderer.smali")
 PROBE = Path("com/shinybox/smash/DqNativeProbe.smali")
 DRAW = "onDrawFrame(Ljavax/microedition/khronos/opengles/GL10;)V"
 SHUTDOWN = "onShutdown()V"
-INIT_CALL = re.compile(r"^\\s*invoke-[^\\s]+\\s+\\{[^}]*\\},\\s*Lcom/shinybox/smash/S3DRenderer;->engineInitialize\\(\\)Z(?:\\s+#.*)?$")
-STOP_CALL = re.compile(r"^\\s*invoke-[^\\s]+\\s+\\{[^}]*\\},\\s*Lcom/shinybox/smash/S3DRenderer;->engineShutdown\\(\\)V(?:\\s+#.*)?$")
-INIT_FIELD = re.compile(r"^\\s*iput-boolean\\s+(v\\d+),\\s*[^,]+,\\s*[^,]+->bInitialized:Z(?:\\s+#.*)?$")
+INIT_CALL = re.compile(r"^\s*invoke-[^\s]+\s+\{[^}]*\},\s*Lcom/shinybox/smash/S3DRenderer;->engineInitialize\(\)Z(?:\s+#.*)?$")
+STOP_CALL = re.compile(r"^\s*invoke-[^\s]+\s+\{[^}]*\},\s*Lcom/shinybox/smash/S3DRenderer;->engineShutdown\(\)V(?:\s+#.*)?$")
+INIT_FIELD = re.compile(r"^\s*iput-boolean\s+(v\d+),\s*[^,]+,\s*[^,]+->bInitialized:Z(?:\s+#.*)?$")
 SKIP_DIRECTIVES = (".line ", ".local ", ".end local ", ".restart local ", ".prologue", ".epilogue", ".param ", ".end param")
 
 PROBE_SMALI = """.class public final Lcom/shinybox/smash/DqNativeProbe;
