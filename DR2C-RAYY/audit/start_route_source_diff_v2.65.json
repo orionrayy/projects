@@ -1,0 +1,72 @@
+{
+  "project": "DR2C VORENYX",
+  "audit": "Start-route source diff cross-check",
+  "checkpoint": "v2.65 supplement",
+  "date": "2026-10-26",
+  "status": "STATIC_ROUTE_CODE_MATCH_WITH_TUTORIAL_DRIFT_RUNTIME_UNRESOLVED",
+  "base_apk": {
+    "filename": "DR2C-v1.8.2-full-apkvision.apk",
+    "sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15"
+  },
+  "candidate_apk": {
+    "filename": "DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk",
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7"
+  },
+  "zip_validation": {
+    "base": {
+      "crc": "PASS",
+      "entries": 1014,
+      "duplicate_paths": 0
+    },
+    "candidate": {
+      "crc": "PASS",
+      "entries": 1015,
+      "duplicate_paths": 0
+    }
+  },
+  "files": {
+    "assets/deathforth/events.df": {
+      "byte_identical": true,
+      "base_masked_token_count": 3801,
+      "candidate_masked_token_count": 3801,
+      "token_stream_equal_after_string_comment_mask": true
+    },
+    "assets/deathforth/game-select.df": {
+      "byte_identical": false,
+      "base_masked_token_count": 2178,
+      "candidate_masked_token_count": 2178,
+      "token_stream_equal_after_string_comment_mask": true,
+      "interpretation": "Normalized Start/menu control tokens match; byte differences are confined to string/comment surface for this comparison."
+    },
+    "assets/deathforth/game-info.df": {
+      "byte_identical": false,
+      "base_masked_token_count": 2911,
+      "candidate_masked_token_count": 2911,
+      "token_stream_equal_after_string_comment_mask": true
+    },
+    "assets/deathforth/boot-end.df": {
+      "byte_identical": false,
+      "base_masked_token_count": 4624,
+      "candidate_masked_token_count": 4624,
+      "token_stream_equal_after_string_comment_mask": true
+    },
+    "assets/deathforth/boot.df": {
+      "byte_identical": false,
+      "base_masked_token_count": 1310,
+      "candidate_masked_token_count": 3114,
+      "token_stream_equal_after_string_comment_mask": false,
+      "candidate_helper_definition_count": 1,
+      "token_stream_equal_after_removing_id_name_localize_helper": true,
+      "interpretation": "The only normalized code-token addition in this file is the display-label helper; this does not prove the helper executes correctly in Deathforth."
+    },
+    "assets/deathforth/events/tutorial.df": {
+      "byte_identical": false,
+      "base_masked_token_count": 5329,
+      "candidate_masked_token_count": 5302,
+      "token_stream_equal_after_string_comment_mask": false,
+      "interpretation": "Unresolved token drift already flagged in the earlier audit: chim-to-cname changes and removal of bHe/bhim/bhe expression tokens. This does not prove the Start no-op root cause."
+    }
+  },
+  "method": "Compare byte identity and normalized code-token streams after masking quoted text and comments. This is a static comparison, not a Deathforth parse/runtime test.",
+  "conclusion": "The core menu/event source token stream is unchanged for events.df, game-select.df, game-info.df and boot-end.df. boot.df adds id-name-localize; tutorial.df remains the known code-token exception. No source-only evidence isolates the reported Start failure. Use v2.65 install/start trace to decide between package-install rejection and runtime dispatch/VM/native failure."
+}
