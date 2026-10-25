@@ -1,0 +1,27 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.58 curated next-wave localization",
+  "queue_sha256": "ec3f1ceb853f84aa2fa2d69445245ef62484f3ec73d640b02589cde78bd9f26e",
+  "review_queue_rows": 38,
+  "exact_literal_occurrences_changed": 41,
+  "files_changed": 3,
+  "paths": [
+    "assets/deathforth/events/city/region/special-lots.df",
+    "assets/deathforth/events/locationlogic.df",
+    "assets/deathforth/events/trade/oldtrade.df"
+  ],
+  "semantic_review": {
+    "source_concept": "siege alert",
+    "corrected_indonesian": "AWAS PENGEPUNGAN! GAK ADA JALAN KELUAR!",
+    "rejected_indonesian": "AWAS PENGELOMPOKAN! GAK ADA JALAN KELUAR!",
+    "reason": "pengelompokan means grouping; pengepungan conveys siege"
+  },
+  "checks": {
+    "non_display_executable_token_stream_preserved": true,
+    "ordered_forth_symbols_preserved": true,
+    "display_strings_closed": true,
+    "escaped_quote_regressions": 0
+  },
+  "lineage_note": "This is the reviewed next-wave queue, not a recovered copy of the complete v2.47 A–F patch or v2.48–v2.51 payloads.",
+  "runtime": "NOT TESTED"
+}
