@@ -1,10 +1,20 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest documented localization batch: v2.51 Batch K · cumulative overlay claim 77/509 scripts · APK/runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest documented localization batch: v2.51 Batch K · source-lineage unresolved · v2.57 test APK candidate built but runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
 
+
+## Local APK test candidate — v2.57 checkpoint (25 October 2026; not a release)
+
+- Built `DR2C_VORENYX_v2.57_TEST_CANDIDATE.apk` from the available base + v2.43 + v2.45 corrective + v2.45 Startfix layers, then applied a tutorial refresh, 13 native labels per ABI, landscape orientation correction, and splash/title badge consistency.
+- Candidate SHA-256: `ef66364da7e3d8862b460348d67d397e8132896aaa80f70a9243589d934435e5`; 115,614,035 bytes; 1,015 ZIP entries; CRC PASS; 509 `.df` scripts; zero escaped-quote regressions; no duplicate paths.
+- Static package gates pass: `resources.arsc` stored/4-byte aligned; stored ZIP alignment checks pass; seven uncompressed native libraries per ABI are page-aligned; 26/26 native label slots pass; both primary activities set to landscape; PairIP libraries stay byte-identical to base.
+- JAR/v1 test signature verifies. APK Signature Scheme v2 was not generated/verified because `apksigner` is unavailable. No device installation, Start tap, gameplay, UI-hitbox, save/load, or runtime stability test has run.
+- `apkvision` identifiers remain in `classes3.dex` (13 hits) and both `libstub.so` files (16 hits each). Visible title/splash assets have no such literal; wrapper identifiers remain unchanged, with no license/security bypass.
+- Exact v2.46 APK and actual v2.47–v2.51 patch ZIPs remain unavailable. This candidate is not v2.51 integration and uses a local self-signed test key; do not install over the current app without understanding the signer mismatch and backing up saves.
+- See `docs/APK_CANDIDATE_BUILD_v2.57.md` and `audit/apk_candidate_v2.57_summary.json`.
 
 ## Start-route static contract audit — v2.56 (25 October 2026; not a game/APK version)
 
