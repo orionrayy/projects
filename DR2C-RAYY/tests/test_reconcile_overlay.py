@@ -60,6 +60,27 @@ class ReconcileOverlayTests(unittest.TestCase):
                 self.assertIsNone(archive.testzip())
             self.assertEqual(json.loads(report.read_text(encoding="utf-8"))["output"]["zip_crc"], "PASS")
 
+    def test_reconciliation_archive_is_byte_reproducible(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            base = root / "base.zip"
+            patch = root / "patch.zip"
+            out_a = root / "out-a.zip"
+            out_b = root / "out-b.zip"
+            report_a = root / "report-a.json"
+            report_b = root / "report-b.json"
+            self.write_zip(base, self.base_entries())
+            self.write_zip(patch, {
+                "overlay/assets/deathforth/boot.df": b'"GAME-MARKER" $anew\\n',
+                "overlay/assets/deathforth/events/common/common4.df": b': sample \'original-handler "hello" ;\\n',
+            })
+            result_a = reconcile(base, [patch], out_a, report_a)
+            result_b = reconcile(base, [patch], out_b, report_b)
+            self.assertEqual(result_a["output"]["sha256"], result_b["output"]["sha256"])
+            self.assertEqual(out_a.read_bytes(), out_b.read_bytes())
+            with zipfile.ZipFile(out_a) as archive:
+                self.assertTrue(all(info.date_time == (1980, 1, 1, 0, 0, 0) for info in archive.infolist()))
+
     def test_wrong_expected_base_hash_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
