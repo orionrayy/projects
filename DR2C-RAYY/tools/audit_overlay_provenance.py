@@ -47,14 +47,24 @@ def infer_prefix(names: list[str], overlay: bool) -> str:
             roots.append(before + marker)
     if not roots:
         raise ProvenanceAuditError("cannot infer assets/deathforth path prefix")
-    return Counter(roots).most_common(1)[0][0]
+    unique_roots = sorted(set(roots))
+    if len(unique_roots) != 1:
+        raise ProvenanceAuditError(
+            f"ambiguous assets/deathforth path prefixes ({'overlay' if overlay else 'base'}): {unique_roots}"
+        )
+    prefix = unique_roots[0]
+    safe_relative(prefix.rstrip("/"), "archive root prefix")
+    return prefix
 
 def safe_relative(raw: str, label: str) -> str:
     if "\\" in raw:
         raise ProvenanceAuditError(f"backslash path in {label}: {raw}")
+    raw_parts = raw.split("/")
+    if any(part in ("", ".", "..") for part in raw_parts):
+        raise ProvenanceAuditError(f"unsafe or noncanonical logical path in {label}: {raw}")
     p = PurePosixPath(raw)
-    if p.is_absolute() or not p.parts or any(x in ("", ".", "..") for x in p.parts) or ":" in p.parts[0]:
-        raise ProvenanceAuditError(f"unsafe logical path in {label}: {raw}")
+    if p.is_absolute() or not p.parts or ":" in p.parts[0] or p.as_posix() != raw:
+        raise ProvenanceAuditError(f"unsafe or noncanonical logical path in {label}: {raw}")
     return p.as_posix()
 
 def index_df(z, names: list[str], prefix: str, label: str) -> dict[str, str]:
