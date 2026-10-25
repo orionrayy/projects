@@ -1,0 +1,38 @@
+name: DQ native function semantics audit v60
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_FUNCTION_SEMANTICS_V60.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V60_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_native_function_semantics_v60.py"
+      - "DQ-Reverse-Engineering/tests/test_native_function_semantics_v60.py"
+      - ".github/workflows/dq-native-function-semantics-v60.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_FUNCTION_SEMANTICS_V60.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V60_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_native_function_semantics_v60.py"
+      - "DQ-Reverse-Engineering/tests/test_native_function_semantics_v60.py"
+      - ".github/workflows/dq-native-function-semantics-v60.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-native-function-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/validate_native_function_semantics_v60.py DQ-Reverse-Engineering/tests/test_native_function_semantics_v60.py
+      - name: Validate function/handler evidence report
+        run: python DQ-Reverse-Engineering/tools/validate_native_function_semantics_v60.py DQ-Reverse-Engineering/docs/NATIVE_FUNCTION_SEMANTICS_V60.json
+      - name: Test fail-closed classifications
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_native_function_semantics_v60.py' -v
