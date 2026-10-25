@@ -24,6 +24,7 @@ jobs:
   android-build:
     name: Test and build Android debug APK
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -86,16 +87,30 @@ jobs:
           echo "sha256=$(sha256sum "$APK" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
           echo "size=$(stat -c%s "$APK")" >> "$GITHUB_OUTPUT"
       - name: Exercise APK on Android API 35 emulator
+        id: emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           arch: x86_64
           profile: pixel_2
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -memory 2048 -cores 2
           disable-animations: true
           script: |
-            gradle -p "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness" --no-daemon --stacktrace connectedDebugAndroidTest
-            test -s "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness/app/build/outputs/apk/debug/app-debug.apk"
-            adb install -r "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness/app/build/outputs/apk/debug/app-debug.apk"
+            set +e
+            adb logcat -c
+            gradle -p "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness" --no-daemon --stacktrace connectedDebugAndroidTest > "$RUNNER_TEMP/dq-connected-tests.log" 2>&1
+            TEST_STATUS=$?
+            adb logcat -d -v threadtime -t 10000 > "$RUNNER_TEMP/dq-emulator-logcat.txt" 2>&1
+            cat "$RUNNER_TEMP/dq-connected-tests.log"
+            if [ "$TEST_STATUS" -ne 0 ]; then
+              echo "Instrumentation failed; diagnostic log excerpts follow."
+              grep -E -i "FATAL EXCEPTION|AndroidRuntime|am_crash|Process: dev\\.dqdebug|INSTRUMENTATION_FAILED|AssertionError|Caused by:|Test run failed|OutOfMemory|SIGABRT|SIGSEGV" "$RUNNER_TEMP/dq-emulator-logcat.txt" | tail -n 160 || true
+              exit "$TEST_STATUS"
+            fi
+            set -e
+            APK="$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness/app/build/outputs/apk/debug/app-debug.apk"
+            test -s "$APK"
+            adb install -r "$APK"
             adb shell am force-stop dev.dqdebug.sandboxharness
             adb shell am start -W -n dev.dqdebug.sandboxharness/.MainActivity
             adb shell uiautomator dump /sdcard/dq-harness-window.xml >/dev/null
@@ -103,14 +118,28 @@ jobs:
             grep -q "Cheats Sandbox" "$RUNNER_TEMP/dq-harness-window.xml"
             grep -q "GAME LINK" "$RUNNER_TEMP/dq-harness-window.xml"
             echo "PASS: APK installed, launcher Activity started, and disconnected-state UI appeared."
-      - name: Upload build artifact
+            adb logcat -d -v threadtime -t 10000 > "$RUNNER_TEMP/dq-emulator-logcat.txt" 2>&1 || true
+      - name: Upload APK artifact
+        if: always() && steps.apk.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: dq-cheats-sandbox-harness-debug-apk
           path: DQ-Reverse-Engineering/cheats-harness/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30
+      - name: Upload emulator diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dq-cheats-sandbox-harness-emulator-diagnostics
+          path: |
+            ${{ runner.temp }}/dq-connected-tests.log
+            ${{ runner.temp }}/dq-emulator-logcat.txt
+            ${{ runner.temp }}/dq-harness-window.xml
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Add build receipt to job summary
+        if: always() && steps.apk.outcome == 'success'
         shell: bash
         run: |
           {
@@ -118,6 +147,7 @@ jobs:
             echo "- Artifact: dq-cheats-sandbox-harness-debug-apk"
             echo "- SHA-256: ${{ steps.apk.outputs.sha256 }}"
             echo "- Size: ${{ steps.apk.outputs.size }} bytes"
+            echo "- Emulator instrumentation: ${{ steps.emulator.outcome }}"
             echo "- Build: Android API 35 / AGP 8.7.3 / Gradle 8.9 / JDK 17"
             echo "- Validation: JVM unit tests + Android instrumentation test + emulator install/launch/UI smoke check"
             echo "- Boundary: standalone UI harness; not patched into Dungeon Quest."
