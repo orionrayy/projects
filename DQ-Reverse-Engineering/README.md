@@ -4,6 +4,14 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## Pause → Options one-row candidate — v50
+
+- [Separate-output Pause HUD candidate builder](tools/build_pause_options_gold_row_v50.py)
+- [Synthetic regression tests](tests/test_pause_options_gold_row_v50.py)
+- [Local asset/STK evidence and runtime limits](docs/PAUSE_OPTIONS_GOLD_ROW_CANDIDATE_V50.md)
+
+The v50 candidate places one Gold +100K button in the existing Gameplay tab, in the empty right-hand slot beside the Pickup button. It directly uses the already-observed uai_gp_hud.onDebug(6.0) action-call shape; native disassembly identifies that branch as RewardGold(100000.0). Locally, the candidate STK decodes cleanly and only Resources/HUD/pause.hud differs. Runtime dispatch is still unverified; no APK was built, and this is not the 222-row menu.
+
 ## Native Options tab limit — v49
 
 - [Four-tab native selection contract](docs/OPTIONS_TAB_NATIVE_LIMIT_V49.md)
