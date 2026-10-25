@@ -69,7 +69,9 @@ class PatchDexLifecycleV67Tests(unittest.TestCase):
             dex.write_bytes(b"synthetic identity fixture")
             out = root / "overlay"
             with mock.patch("patch_dex_lifecycle_smali_v67.PINNED_DEX_SHA256",
-                            hashlib.sha256(dex.read_bytes()).hexdigest()):
+                            hashlib.sha256(dex.read_bytes()).hexdigest()), mock.patch(
+                            "patch_dex_lifecycle_smali_v67.PINNED_RENDERER_SMALI_SHA256",
+                            hashlib.sha256(source_bytes).hexdigest()):
                 report = create_overlay(source_root, out, dex)
             self.assertEqual((source_root / RENDERER).read_bytes(), source_bytes)
             self.assertTrue((out / PROBE).is_file())
@@ -85,8 +87,11 @@ class PatchDexLifecycleV67Tests(unittest.TestCase):
             dex.write_bytes(b"synthetic identity fixture")
             out = root / "overlay"
             out.mkdir()
+            source_bytes = (source_root / RENDERER).read_bytes()
             with mock.patch("patch_dex_lifecycle_smali_v67.PINNED_DEX_SHA256",
-                            hashlib.sha256(dex.read_bytes()).hexdigest()):
+                            hashlib.sha256(dex.read_bytes()).hexdigest()), mock.patch(
+                            "patch_dex_lifecycle_smali_v67.PINNED_RENDERER_SMALI_SHA256",
+                            hashlib.sha256(source_bytes).hexdigest()):
                 with self.assertRaisesRegex(PatchError, "refusing overwrite"):
                     create_overlay(source_root, out, dex)
 
@@ -100,6 +105,20 @@ class PatchDexLifecycleV67Tests(unittest.TestCase):
             out = root / "overlay"
             with self.assertRaisesRegex(PatchError, "source DEX hash mismatch"):
                 create_overlay(source_root, out, dex)
+            self.assertFalse(out.exists())
+
+    def test_wrong_source_renderer_hash_fails_before_output(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            source_root = root / "source"
+            shutil.copytree(FIXTURE, source_root)
+            dex = root / "classes.dex"
+            dex.write_bytes(b"synthetic identity fixture")
+            out = root / "overlay"
+            with mock.patch("patch_dex_lifecycle_smali_v67.PINNED_DEX_SHA256",
+                            hashlib.sha256(dex.read_bytes()).hexdigest()):
+                with self.assertRaisesRegex(PatchError, "source renderer smali SHA-256 mismatch"):
+                    create_overlay(source_root, out, dex)
             self.assertFalse(out.exists())
 
     def test_source_method_and_probe_routes_are_pinned(self):
