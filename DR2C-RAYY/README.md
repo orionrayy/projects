@@ -20,6 +20,13 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - **No APK rebuilt**: matching v2.46 test signing key is absent; a new key would conflict with in-place update. Device runtime and the actual Deathforth interpreter are not tested.
 - [Full v2.47 batch report](docs/LOCALIZATION_BATCH_ABCDEF_v2.47.md) · [Machine-readable audit](audit/localization_batch_abcdef_v2.47.json)
 
+## v2.49 Batch I — gameplay and encounter localization
+
+- Added 203 translation operations across 14 previously uncovered scripts: RPG class descriptions and choices, toilet/zombie-line/drag-race events, gym/chess scenes, alien/anime rare locations, bandit encounters, recruit CYOA options, and weapon/trader descriptions.
+- Cumulative source overlay now contains 73 of 509 `.df` scripts. Static checks: 0 quote-parity failures, 0 escaped-double-quote regressions, 0 executable-skeleton differences, 0 unmatched mapping keys. ZIP CRC PASS; 77 entries, no duplicates.
+- Source-only patch. No APK was rebuilt and no device-side runtime test was performed. Some dynamic sentences remain English when their grammar depends on a placeholder across literal boundaries; translating only one fragment would be incorrect.
+- [Batch I report](docs/LOCALIZATION_BATCH_I_v2.49.md) · [Validation JSON](audit/localization_batch_i_v2.49.json)
+
 ## v2.48 Batch H — residual event localization
 
 - Cumulative source overlay now contains 59 script files, including prior batches A–G and new Batch H edits. Batch H touches 39 files: 37 literal-map files plus display-template refactors.
