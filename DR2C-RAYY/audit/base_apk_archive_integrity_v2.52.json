@@ -1,0 +1,39 @@
+{
+  "project": "DR2C VORENYX",
+  "audit_date": "2026-10-25",
+  "artifact": "DR2C-v1.8.2-full-apkvision.apk",
+  "provenance_note": "Library base candidate inspected for archive integrity only; it is an APKVISION-repackaged package, not a clean publisher base and not the installed APK.",
+  "bytes": 109011456,
+  "sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15",
+  "zip_entries": 1014,
+  "zip_crc": "PASS",
+  "duplicate_paths": 0,
+  "required_entries_present": [
+    "AndroidManifest.xml",
+    "resources.arsc",
+    "classes.dex",
+    "classes2.dex",
+    "classes3.dex"
+  ],
+  "native_library_count": 16,
+  "signature_metadata_entries": [
+    "META-INF/CERT.RSA",
+    "META-INF/CERT.SF",
+    "META-INF/MANIFEST.MF"
+  ],
+  "signing_certificate_verified": false,
+  "package_manifest_parsed": false,
+  "apk_build_performed": false,
+  "install_or_runtime_test_performed": false,
+  "toolchain_available": {
+    "apksigner": false,
+    "zipalign": false,
+    "apktool": false,
+    "adb": false
+  },
+  "decisions": [
+    "Archive-level ZIP integrity passes; this does not establish APK signature validity or Android installability.",
+    "The presence of APKVISION signature metadata and this filename identify the supplied input as a distributor-repackaged candidate; do not describe it as a clean authorized base.",
+    "Do not remove distributor/license-check code or bypass anti-tamper. Use a clean authorized base and compatible signing provenance for a distributable build."
+  ]
+}
