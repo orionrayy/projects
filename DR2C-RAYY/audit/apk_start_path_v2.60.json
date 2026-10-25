@@ -1,0 +1,64 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.60 APK-to-APK Start/tutorial static audit",
+  "date": "2026-10-25",
+  "status": "BLOCKED_REVIEW_REQUIRED",
+  "base": {
+    "file": "DR2C-v1.8.2-full-apkvision.apk",
+    "bytes": 109011456,
+    "sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15",
+    "zip_entries": 1014,
+    "zip_crc": "PASS",
+    "duplicate_paths": 0
+  },
+  "candidate": {
+    "file": "DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk",
+    "bytes": 115615585,
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7",
+    "zip_entries": 1015,
+    "zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "extra_paths": [
+      "META-INF/DR2C-VOR.RSA",
+      "META-INF/DR2C-VOR.SF",
+      "assets/gfx/ui/vorenyx_title_screen.png"
+    ],
+    "removed_paths": [
+      "META-INF/CERT.RSA",
+      "META-INF/CERT.SF"
+    ]
+  },
+  "checks": {
+    "route_files_checked": 12,
+    "route_files_static_pass": 11,
+    "route_files_review_code_drift": 1,
+    "route_files_static_fail": 0,
+    "canonical_GAME_MARKER": true,
+    "required_start_symbols_present": true,
+    "tutorial_handlers_preserved": [
+      "tutorchat-1",
+      "tutorchat-2",
+      "tutorchat-3"
+    ],
+    "candidate_deathforth_escaped_quote_paths": [],
+    "runtime_install": "NOT_TESTED",
+    "runtime_start_dispatch": "NOT_TESTED",
+    "embedded_deathforth_vm": "NOT_TESTED",
+    "gameplay_ui_save_load_stability": "NOT_TESTED"
+  },
+  "review_target": {
+    "path": "assets/deathforth/events/tutorial.df",
+    "status": "REVIEW_CODE_DRIFT",
+    "changes": {
+      "chim_to_cname": 4,
+      "removed_expression_tokens": [
+        "bHe",
+        "bhim",
+        "bhe"
+      ]
+    },
+    "interpretation": "Needs semantic/runtime review; not a proven Start root cause."
+  },
+  "release_ready": false,
+  "public_repository_boundary": "Only sanitized audit summary and audit tooling are committed; APKs and extracted game scripts remain local."
+}

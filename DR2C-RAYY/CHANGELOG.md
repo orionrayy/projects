@@ -1,4 +1,12 @@
-# Changelog — DR2C VORENYX
+# Changelog
+## v2.60 engineering audit — 25 October 2026 (not a game/APK version)
+- Added tools/audit_apk_start_path.py to compare the provided base APK against a candidate APK using ZIP CRC/duplicate checks, all 12 Start/tutorial route files, normalized code-token streams, handler identifiers, string closure, escaped-quote scanning and the canonical boot marker.
+- Added six regression tests for presentation-only translation, dynamic identifier drift, required-handler loss, missing route files, duplicate ZIP paths and code-token deltas independent of string text.
+- Exact comparison: base APK hash d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15; candidate hash a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7. ZIP CRC passes for both, no duplicate paths, 12 route scripts present, 11 strict static passes, and one tutorial code-token drift remains for review.
+- No runtime cause is claimed. The tutorial display-expression changes may be intentional Indonesian rewrites; Start, install, gameplay, UI fit, save/load and stability remain NOT TESTED. Not release-ready.
+- See DR2C-RAYY/docs/APK_START_PATH_AUDIT_v2.60.md and DR2C-RAYY/audit/apk_start_path_v2.60.json.
+
+ — DR2C VORENYX
 
 ## v2.57 Android 11 signature-fix derivative — 25 October 2026 (test only)
 

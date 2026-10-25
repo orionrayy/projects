@@ -1,5 +1,12 @@
 # PROJECT_MEMORY — DR2C VORENYX
 
+## Active engineering checkpoint — v2.60 APK-to-APK Start-path audit (25 October 2026)
+- Compared the exact supplied base APK against the latest available v2.57 signature-fix derivative. Both ZIP CRC checks pass, duplicate-path count is zero, and all 12 critical route scripts are present.
+- Static route outcome: 11/12 strict passes; assets/deathforth/events/tutorial.df requires review because four chim references became cname and bHe/bhim/bhe expression tokens were removed from translated responses. This could be intentional display rewriting, so do not call it a confirmed syntax defect or Start root cause.
+- Added reproducible APK-to-APK audit tooling and six synthetic regression tests. Public metadata/checkpoint files record exact base/candidate hashes; APKs and extracted proprietary payloads remain local-only.
+- Runtime gate is still blocked: no device, ADB/logcat, emulator or embedded Deathforth VM. Install, Start dispatch, gameplay, UI fit and save/load are NOT TESTED. Do not create a release claim from static results alone.
+- Evidence: DR2C-RAYY/docs/APK_START_PATH_AUDIT_v2.60.md and DR2C-RAYY/audit/apk_start_path_v2.60.json.
+
 ## Canonical identity
 - Base game: Death Road to Canada. Project name: DR2C VORENYX.
 - Current scope: Indonesian localization and replacement title identity; larger expansions remain deferred.

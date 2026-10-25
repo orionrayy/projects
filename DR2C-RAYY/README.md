@@ -1,5 +1,13 @@
 # DR2C VORENYX — Indonesian Localization
 
+## Latest engineering checkpoint — v2.60 Start-path audit (25 October 2026)
+
+- Exact base/candidate APK comparison completed: base SHA-256 d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15; v2.57 signature-fix candidate SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7.
+- Both APK ZIP archives pass CRC and have no duplicate paths. Twelve Start/tutorial route scripts are present; 11 pass strict static contract checks and one tutorial file requires review for expression-token drift (chim → cname, with bHe/bhim/bhe interpolation tokens removed in rewritten responses).
+- This is not a proven runtime root cause. Install, Start dispatch, embedded Deathforth execution, gameplay, UI fit and save/load remain NOT TESTED; release readiness remains false.
+- Reproducible audit tool and six synthetic regression tests: DR2C-RAYY/tools/audit_apk_start_path.py and DR2C-RAYY/tests/test_audit_apk_start_path.py. The base APK, candidate APK and extracted game payloads remain outside public GitHub.
+- Details: DR2C-RAYY/docs/APK_START_PATH_AUDIT_v2.60.md and DR2C-RAYY/audit/apk_start_path_v2.60.json.
+
 **Latest documented localization batch: v2.51 Batch K · source-lineage unresolved · v2.58 localization APK runtime NOT VERIFIED · v2.57 Android 11 signature-fix derivative available for install testing · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
