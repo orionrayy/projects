@@ -1,0 +1,37 @@
+name: DQ native template-row precedent audit v57
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_TEMPLATE_ROW_PRECEDENT_AUDIT_V57.*"
+      - "DQ-Reverse-Engineering/tools/validate_native_template_row_precedents_v57.py"
+      - "DQ-Reverse-Engineering/tests/test_native_template_row_precedents_v57.py"
+      - ".github/workflows/dq-native-template-row-audit-v57.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_TEMPLATE_ROW_PRECEDENT_AUDIT_V57.*"
+      - "DQ-Reverse-Engineering/tools/validate_native_template_row_precedents_v57.py"
+      - "DQ-Reverse-Engineering/tests/test_native_template_row_precedents_v57.py"
+      - ".github/workflows/dq-native-template-row-audit-v57.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-native-row-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: |
+          python -m py_compile DQ-Reverse-Engineering/tools/validate_native_template_row_precedents_v57.py DQ-Reverse-Engineering/tests/test_native_template_row_precedents_v57.py
+      - name: Validate native row-precedent report
+        run: python DQ-Reverse-Engineering/tools/validate_native_template_row_precedents_v57.py DQ-Reverse-Engineering/docs/NATIVE_TEMPLATE_ROW_PRECEDENT_AUDIT_V57.json
+      - name: Test fail-closed integration boundaries
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_native_template_row_precedents_v57.py' -v

@@ -1,0 +1,110 @@
+{
+  "schema": "dq-native-template-row-precedent-v57",
+  "audit_status": "STATIC_MODEL_SPECIFIC_PRECEDENTS_CONFIRMED_GENERIC_DISPATCH_UNPROVEN",
+  "target": {
+    "game_version": "3.3.2.0",
+    "package_id": "com.shinybox.smash",
+    "stock_xapk_sha256": "3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "stock_stk_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "native_library": "libS3DClient.so",
+    "native_library_sha256": "0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
+    "abi": "arm64-v8a"
+  },
+  "source_inventory": {
+    "aim_files_parsed": 162,
+    "aim_files_failed": 0,
+    "top_level_parser_scope": "version-10 AIM framing and first record-name strings only; remaining record payloads are opaque",
+    "model_sha256": {
+      "uai_gp_codex.aim": "7b44c0c01091e5c59182c1599c8e0734ca985881ebb0ecdb0864fe04df1c7dc0",
+      "uai_gp_legendex.aim": "2aa297031402a9796be6f044f4cdbf4018085217856ef9016dd2cedb84fec180",
+      "uai_gp_hud.aim": "66607a46a23eeaab4fa2dac02772adbea5ab71e65d4e446e49396c6af6a451cb",
+      "uai_gp_options.aim": "294dc84260b1a58dcbf6cf8fe939c107e8c0ae2bacc7ffe11b34ac62a54b5625",
+      "uai_gp_debug.aim": "e41094fd055ca250f282862e383506c3a0fb04c2bb3e2f09d7e139e51570bd59"
+    }
+  },
+  "model_precedents": [
+    {
+      "model": "uai_gp_codex",
+      "aim_counts": {"variables": 16, "functions": 25, "states": 0, "handlers": 10},
+      "key_variables": ["tTemplates", "nCurrentItem", "nScrollValue", "nCurrentItems", "nCurrentItemID", "nCurrentItemCost"],
+      "key_function_names_observed": ["CreateLegendItem", "SelectFeatItem", "SelectLegendItem", "SelectMythicItem", "SelectEternalItem", "SelectDictionaryItem", "GetItemAffix"],
+      "key_handler_names_observed": ["onOpen", "onClose", "onChoose", "onIdentify"],
+      "native_methods": [
+        {"symbol": "uai_gp_codex::CreateLegendItem(S3DX::AIVariable,S3DX::AIVariable,S3DX::AIVariable)", "va": "0x541d98", "size_bytes": 3884},
+        {"symbol": "uai_gp_codex::onOpen(int,S3DX::AIVariable const*,S3DX::AIVariable*)", "va": "0x557cdc", "size_bytes": 27236},
+        {"symbol": "uai_gp_codex::SelectLegendItem(S3DX::AIVariable)", "va": "0x550c7c", "size_bytes": 11752},
+        {"symbol": "uai_gp_codex::SelectFeatItem(S3DX::AIVariable)", "va": "0x5505ac", "size_bytes": 1744},
+        {"symbol": "uai_gp_codex::SelectMythicItem(S3DX::AIVariable)", "va": "0x553a64", "size_bytes": 4564},
+        {"symbol": "uai_gp_codex::SelectEternalItem(S3DX::AIVariable)", "va": "0x54d738", "size_bytes": 11892},
+        {"symbol": "uai_gp_codex::SelectDictionaryItem(S3DX::AIVariable)", "va": "0x54c6b4", "size_bytes": 4116}
+      ],
+      "model_specificity_evidence": [
+        "Codex-specific selectors and navigation helpers are present in the model/native symbol inventory.",
+        "The onOpen disassembly calls category/domain helpers including HasRead, IsFound, GetMythicStatus, IsEternalUnlocked, OpenFeatPage, OpenDictionaryPage, and OpenMythicPage.",
+        "The library contains codex.legend_btn, codex.legend_spell, codex.legend_element, codex.legend_title, codex.legend_desc, codex.legend_craft_cost, codex.legend_craft_btn, and codex.legend_icon string references."
+      ],
+      "generic_cheat_dispatch_proven": false
+    },
+    {
+      "model": "uai_gp_legendex",
+      "aim_counts": {"variables": 4, "functions": 10, "states": 2, "handlers": 5},
+      "key_variables": ["tTemplates", "nScrollValue"],
+      "key_function_names_observed": ["CreateLegendItem", "UpdateList", "GetItemAffix"],
+      "key_handler_names_observed": ["onOpen", "onClose", "onChoose", "onClicked", "onIdentify"],
+      "native_methods": [
+        {"symbol": "uai_gp_legendex::CreateLegendItem(S3DX::AIVariable,S3DX::AIVariable,S3DX::AIVariable)", "va": "0x76868c", "size_bytes": 3888},
+        {"symbol": "uai_gp_legendex::UpdateList()", "va": "0x76bc80", "size_bytes": 3388},
+        {"symbol": "uai_gp_legendex::onOpen(int,S3DX::AIVariable const*,S3DX::AIVariable*)", "va": "0x76f1c0", "size_bytes": 2008},
+        {"symbol": "uai_gp_legendex::onChoose(int,S3DX::AIVariable const*,S3DX::AIVariable*)", "va": "0x76c9bc", "size_bytes": 896},
+        {"symbol": "uai_gp_legendex::onClicked(int,S3DX::AIVariable const*,S3DX::AIVariable*)", "va": "0x76cd3c", "size_bytes": 6804}
+      ],
+      "model_specificity_evidence": [
+        "CreateLegendItem generates names from the legend_ prefix plus an item identifier and references the listitem_legend template and legendex.list container.",
+        "UpdateList operates on the LegendEx model's own template/scroll state, collection, and item-specific data.",
+        "The inspected functions are AOT methods of uai_gp_legendex; no direct call to the generic exported HUD List wrapper family was identified in the inspected function bodies. Indirect AI/model calls remain possible and are not decoded as a generic contract."
+      ],
+      "generic_cheat_dispatch_proven": false
+    },
+    {
+      "model": "uai_gp_hud",
+      "aim_counts": {"variables": 142, "functions": 133, "states": 4, "handlers": 240},
+      "key_variables": ["nScrollValue", "nSelectedItem", "nSelectedSlot", "nSelectedBag", "nSelectedShopItem", "nSelectedGearTab"],
+      "key_function_names_observed": ["CreateSlot", "UpdateSlots", "RemoveItem", "RefreshInventoryItem", "InventorySellItem", "GetShopItem", "ShowInventoryItem"],
+      "native_methods": [],
+      "model_specificity_evidence": [
+        "The named functions/handlers belong to the existing inventory, shop, gear, character, and gameplay HUD paths.",
+        "Name inventory does not establish a generic route accepting an arbitrary stable cheat ID with typed parameters."
+      ],
+      "generic_cheat_dispatch_proven": false
+    }
+  ],
+  "exported_native_list_wrappers": [
+    {"symbol": "hud_addListItem", "va": "0x87a980", "observed_contract": "Resolves engine-managed HUD element and adds a text item; returns new index on success."},
+    {"symbol": "hud_setListItemTextAt", "va": "0x8c77e0", "observed_contract": "Sets text at list item and column indices."},
+    {"symbol": "hud_setListOnSelectionChangedAction", "va": "0x862458", "observed_contract": "Binds a HUDAction reference as the selection-change action."},
+    {"symbol": "hud_getListSelectedItemAt", "va": "0x8a7f04", "observed_contract": "Reads selected item index from an engine-managed List."},
+    {"symbol": "hud_getListSelectedItemCount", "va": "0x862258", "observed_contract": "Reads selected item count."},
+    {"symbol": "hud_enableListFingerScrolling", "va": "0x8620a8", "observed_contract": "Enables/disables finger scrolling."},
+    {"symbol": "hud_enableListSmoothScrolling", "va": "0x861fd0", "observed_contract": "Enables/disables smooth scrolling."},
+    {"symbol": "hud_enableListSingleSelection", "va": "0x861d48", "observed_contract": "Enables/disables single selection."}
+  ],
+  "integration_gate": {
+    "catalog_items": 222,
+    "catalog_categories": 14,
+    "catalog_routes_assigned": 0,
+    "runtime_verified_catalog_effects": 0,
+    "candidate_native_actions": 1,
+    "runtime_verified_candidate_actions": 0,
+    "generic_in_engine_row_population_proven": false,
+    "stable_id_selection_dispatch_proven": false,
+    "typed_allow_list_handler_contract_proven": false,
+    "status": "BLOCKED",
+    "decision": "Do not clone or repoint Codex/LegendEx callbacks into a cheat list. Recover the model-to-engine callback contract or obtain a documented/authorized native extension point; keep unmapped controls disabled."
+  },
+  "scope_limitations": [
+    "AIM inventory parses v10 top-level framing and first record-name strings; opaque payload semantics are not decoded.",
+    "Native addresses are virtual addresses from the pinned ARM64 library image; they are not JNI entry points for a separate Android Activity.",
+    "Static evidence does not prove UI reachability, touch behavior, gameplay mutation, persistence, or safe compatibility with user saves.",
+    "No game asset, native library, APK or XAPK was changed or built in this increment."
+  ]
+}
