@@ -146,10 +146,10 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 
 ## Active checkpoint — v2.54 provenance audit (25 October 2026)
 
-- Added `tools/audit_overlay_provenance.py` to compare ZIP CRC, archive SHA-256, Deathforth `.df` path inventories, byte-identical/different script counts, missing overlay paths, and explicit targets. Added unit tests and wired the tool into CI.
+- Added `tools/audit_overlay_provenance.py` to compare ZIP CRC, archive SHA-256, Deathforth `.df` path inventories, byte-identical/different script counts, missing overlay paths, and explicit targets. Hardened path validation to reject ambiguous source roots and noncanonical dot segments. The two suites have 12 unit tests, and CI run #40166720059 passed.
 - Verified against the available local inputs: base `DR2C-RAYY(2).zip` has 509 `.df` scripts; v2.43 overlay has 269 `.df` payloads, all 269 byte-different from base; 240 base scripts have no overlay payload; no overlay-only script paths exist.
 - Batch K v2.51 metadata names nine scripts; all nine already exist and differ from base within the available v2.43 overlay, including the three called “new” in the Batch K report. That is a lineage/evidence discrepancy, not proof that a specific archive is wrong.
-- Exact v2.46 baseline and v2.47–v2.51 binary patch ZIPs are unavailable for byte-level comparison. PR description mentions v2.50 Batch J, but no corresponding report/JSON is in the PR changed-file list or current accessible artifact set.
+- Exact v2.46 baseline APK and v2.47–v2.51 binary patch ZIPs are unavailable for byte-level comparison; an enumeration of 299 Library ZIP artifacts found no v2.47–v2.51 binaries, although the v2.47 checksum sidecar exists. PR description mentions v2.50 Batch J, but no corresponding report/JSON is in the PR changed-file list or current accessible artifact set.
 - Do not auto-merge the available 269-script v2.43 lineage with the later 77/509 report, do not reconstruct missing translations by inference, and do not claim v2.51 integration. Obtain exact baseline + v2.50/v2.51 ZIPs with checksum sidecars first.
 - No APK build, signature/install verification, Deathforth full parse, device runtime, UI-fit, gameplay, or save/load test was performed in this checkpoint.
 - See `docs/BATCH_K_PROVENANCE_RECONCILIATION_v2.54.md`, `audit/batch_k_provenance_v2.54.json`, and `tools/audit_overlay_provenance.py`.
