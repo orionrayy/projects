@@ -4,6 +4,15 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## Latest safe HUD investigation — v41
+
+- [Version-12 element record probe](tools/hud_elements_probe_v41.py)
+- [Synthetic type-schema regression tests](tests/test_hud_elements_probe_v41.py)
+- [Element and reciprocal SaveElements audit](docs/HUD_ELEMENT_RECORD_AUDIT_V41.md)
+
+The read-only probe is validated locally against 68 extracted source HUDs (4,956 element records, zero unconsumed record bytes) and covers the element schemas observed in v12. The source contains one native List record, in \`match_result_anim.hud\`; neither \`pause.hud\` nor \`debug.hud\` contains one. The writer field order is now cross-referenced statically, but no production serializer, new row callback, or in-game 222-row menu has been implemented. The parser's synthetic tests are included in static CI; check the current PR run before treating CI as green. No game APK/XAPK is built by this v41 increment.
+
+
 ## Artifact scope — read this before comparing ZIPs
 
 | Artifact | Scope | Explicit exclusions |
