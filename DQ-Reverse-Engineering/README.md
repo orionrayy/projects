@@ -4,6 +4,12 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## Native Options tab limit — v49
+
+- [Four-tab native selection contract](docs/OPTIONS_TAB_NATIVE_LIMIT_V49.md)
+
+Static ARM64 disassembly of \`uai_gp_options::onShowTab\` (VA \`0x788890\`) shows branches for tab arguments 1–4 only: Gameplay, Controls, Social/IAP and Credits. A fifth-tab callback is not supported by this function. Group visibility can be controlled by HUD action records independently, but adding a fifth tab still needs explicit selected-tab state/layout and on-device validation. No native binary or source asset was changed.
+
 ## Reproducible STK single-asset verification — v48
 
 - [Fail-closed archive delta verifier](tools/verify_stk_single_asset_delta_v48.py)
