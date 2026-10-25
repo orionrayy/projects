@@ -1,0 +1,82 @@
+{
+  "schema": "dq-target-dex-lifecycle-overlay-v70",
+  "status": "TARGET_DEX_ASSEMBLY_AND_ROUNDTRIP_PASS_RUNTIME_NOT_VERIFIED",
+  "source_dex": {
+    "file": "classes_stock_v3.3.2.0.dex",
+    "sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "size_bytes": 6996484,
+    "method_source_sha256": "6509e64a2f3836bbe59a4ab56fde889192dfff80793ff86ead7699561ea01642"
+  },
+  "tools": {
+    "baksmali_smali_version": "2.5.2",
+    "api_level": 28,
+    "input_classes": 10768
+  },
+  "baseline_reassemble": {
+    "output_sha256": "298386037aa3c2c91dd0992ac7a0ee94658d629bced2a7facc369d9ac0092292",
+    "output_size_bytes": 7005996,
+    "source_disassembly_files_changed": 17,
+    "changed_files": [
+      "com/google/android/gms/common/GooglePlayServicesUtilLight.smali",
+      "com/google/android/gms/common/internal/GmsClientSupervisor.smali",
+      "com/google/android/gms/internal/ads/zzamr.smali",
+      "com/google/android/gms/internal/ads/zzcfh.smali",
+      "com/google/android/gms/internal/ads/zzgka.smali",
+      "com/google/android/gms/internal/drive/zzit.smali",
+      "com/google/android/gms/internal/drive/zzjx.smali",
+      "com/google/android/gms/internal/measurement/zzjo.smali",
+      "com/google/android/gms/internal/play_billing/zzcd.smali",
+      "com/shinybox/smash/S3DConfigChooserGLES1.smali",
+      "com/shinybox/smash/Smash.smali",
+      "e0/d0$c.smali",
+      "e0/d0$g.smali",
+      "e0/f.smali",
+      "k/b1.smali",
+      "o0/b.smali",
+      "v/f.smali"
+    ],
+    "changes_only_static_default_field_initializers": true,
+    "non_field_differences": []
+  },
+  "patched_dex": {
+    "file": "classes_v69_probe_patched.dex",
+    "sha256": "2c05a2fb599024659b4784086d295fe0b3090dad073c847bbdec3b0964d1ea90",
+    "size_bytes": 7006620,
+    "dex_magic": "dex\n039\u0000",
+    "classes_in_roundtrip": 10769,
+    "added_classes": [
+      "com/shinybox/smash/DqNativeProbe.smali"
+    ],
+    "changed_classes_vs_baseline": [
+      "com/shinybox/smash/DqNativeProbe.smali",
+      "com/shinybox/smash/S3DRenderer.smali"
+    ],
+    "missing_classes": []
+  },
+  "lifecycle_checks": {
+    "register_only_after_true_init_result": true,
+    "shutdown_hook_order": [
+      {
+        "method": ".method public onDrawFrame(Ljavax/microedition/khronos/opengles/GL10;)V",
+        "unregister_count": 1,
+        "shutdown_count": 1,
+        "unregister_precedes_shutdown": true
+      },
+      {
+        "method": ".method public onShutdown()V",
+        "unregister_count": 1,
+        "shutdown_count": 1,
+        "unregister_precedes_shutdown": true
+      }
+    ]
+  },
+  "apk_or_xapk_built": false,
+  "installed_or_run_in_game": false,
+  "gold_runtime_checks_passed": 0,
+  "gold_runtime_checks_total": 9,
+  "catalog_routes_assigned": 0,
+  "catalog_runtime_verified_effects": 0,
+  "catalog_items": 222,
+  "promotion_allowed": false,
+  "note": "The DEX was assembled and re-disassembled locally from the exact pinned original DEX. It has not been packaged or executed in Dungeon Quest. The 17 baseline syntax changes are explicit static-field defaults (false/null) omitted by the smali assembler; method bodies remain unchanged. The probe call is source-level diagnostic only."
+}
