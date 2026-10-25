@@ -1,5 +1,14 @@
 # Changelog — DR2C VORENYX
 
+## Start-route static audit v2.56 — 25 October 2026 (not a game/APK version)
+
+- Added `tools/audit_start_route.py` and three unit tests for localized display strings, missing Start tokens, and executable skeleton drift.
+- Static audit of 12 route-related scripts: 12/12 pass; preserved route-code skeleton and ordered Forth symbol stream for the key overlaid route files; required Start/tutorial tokens are present.
+- `boot.df` localization helper and READY → SIAP label are present; canonical boot marker and Forth symbol stream remain preserved.
+- No full Deathforth parse or APK/runtime testing. Start-button reachability, touch input, UI fit, gameplay and save/load remain unverified. The patch is still not v2.51.
+- See `docs/START_ROUTE_STATIC_AUDIT_v2.56.md` and `audit/start_route_static_contract_v2.56.json`.
+
+
 ## Reproducible source packaging v2.55 — 25 October 2026 (not a game/APK version)
 
 - Root cause of the prior v2.53 rebuild hash mismatch was ZIP metadata: the 274 member payloads were byte-identical, but timestamps/default file modes differed.
