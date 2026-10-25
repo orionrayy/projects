@@ -1,5 +1,14 @@
 # Changelog — DR2C VORENYX
 
+## Reproducible source packaging v2.55 — 25 October 2026 (not a game/APK version)
+
+- Root cause of the prior v2.53 rebuild hash mismatch was ZIP metadata: the 274 member payloads were byte-identical, but timestamps/default file modes differed.
+- Updated `tools/reconcile_overlay.py` to normalize entry timestamps and Unix file modes; added a regression test that builds the same inputs twice and asserts archive bytes and SHA-256 match.
+- Rebuilt the available base + v2.43 + v2.45 corrective + v2.45 Startfix layers three times. All outputs matched SHA-256 `95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d`.
+- Local tests: 7 source-reconciler + 6 provenance = 13/13 PASS. Output remains a source patch, not an APK and not v2.51. Runtime, UI fit, Start input and save/load remain untested.
+- See `docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md` and `audit/reproducible_source_patch_v2.55_summary.json`.
+
+
 ## Source provenance audit v2.54 — 25 October 2026 (not a game/APK version)
 
 - Added a standard-library-only byte-level provenance auditor and unit tests; the CI workflow compiles it and discovers both audit/reconciliation test suites. Hardened path validation to reject ambiguous Deathforth roots and noncanonical dot segments. The two suites contain 12 tests.
