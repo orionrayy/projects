@@ -1,0 +1,113 @@
+{
+  "schema":"dq-native-client-function-call-dispatch-v62",
+  "audit_status":"REGISTER_LOOKUP_AND_TYPED_CALLBACK_DISPATCH_CONFIRMED_STATIC_BOOTSTRAP_AND_HUD_CALLSITE_UNPROVEN",
+  "target":{
+    "game_version":"3.3.2.0",
+    "package_id":"com.shinybox.smash",
+    "stock_xapk_sha256":"3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "stock_stk_sha256":"340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "native_library":"libS3DClient.so",
+    "native_library_sha256":"0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
+    "abi":"arm64-v8a"
+  },
+  "registration_entrypoints":{
+    "register":{
+      "symbol":"S3DClient_RegisterFunction",
+      "va":"0x7aec14",
+      "size_bytes":188,
+      "internal_target":"Pandora::EngineCore::Kernel::RegisterClientFunction(String const&, S3DX::AIFunction const*)",
+      "internal_target_va":"0x82cccc",
+      "internal_target_size_bytes":600,
+      "confirmed":true
+    },
+    "unregister":{
+      "symbol":"S3DClient_UnregisterFunction",
+      "va":"0x7aecd0",
+      "size_bytes":132,
+      "internal_target":"Pandora::EngineCore::Kernel::UnregisterClientFunction(String const&)",
+      "internal_target_va":"0x828628",
+      "internal_target_size_bytes":164,
+      "confirmed":true
+    },
+    "lookup":{
+      "symbol":"Pandora::EngineCore::Kernel::GetClientFunction(Pandora::EngineCore::String const&) const",
+      "va":"0x8285dc",
+      "size_bytes":76,
+      "confirmed":true
+    }
+  },
+  "script_dispatch_entrypoint":{
+    "symbol":"S3DX_AIScriptAPI_system_callClientFunction(int, S3DX::AIVariable const*, S3DX::AIVariable*)",
+    "va":"0x892bd8",
+    "size_bytes":1556,
+    "observed_control_flow":[
+      "Reads the first AIVariable's type code; the type-2 branch loads its string pointer from the variable payload at offset +8.",
+      "Passes that string to Kernel::GetClientFunction and receives a registered S3DX::AIFunction pointer.",
+      "Checks the registered function pointer and takes its callback field from offset +8.",
+      "Converts/copies subsequent input AIVariable values into a bounded local argument array, preserving supported value types through explicit type branches.",
+      "Caps the input array length at 33 total entries including the function-name argument, so the inspected path passes no more than 32 AIVariable inputs to the callback.",
+      "Calls the callback pointer with (input_count, input_array, output_array) using the ARM64 argument registers.",
+      "Uses the callback's integer return value as the output-value count and copies that many output AIVariable entries to the caller's output array."
+    ],
+    "callback_pointer_offset_in_registered_function":8,
+    "function_name_is_first_argument":true,
+    "max_callback_input_count_in_this_path":32,
+    "typed_aivariable_marshalling_static_only":true,
+    "callback_runtime_tested":false
+  },
+  "callback_abi_corroboration":{
+    "source_url":"https://gist.github.com/juaxix/5906458",
+    "source_last_active":"2015-12-19",
+    "source_lines":[77,91,216,226],
+    "observed_legacy_callback_shape":"int callback(int input_count, const S3DX::AIVariable* inputs, S3DX::AIVariable* outputs)",
+    "observed_legacy_function_initializer":"{ name, callback, output-parameter names, input-parameter names, description, flags }",
+    "corroboration_only":true,
+    "exact_target_sdk_header_available":false,
+    "exact_target_struct_size_and_all_field_offsets_verified":false,
+    "calling_convention_and_lifetime_contract_fully_verified":false
+  },
+  "hud_action_separation":{
+    "symbol":"Pandora::ClientCore::GameManager::CallHUDAction(char const*, unsigned short, char const**)",
+    "va":"0xa5e5c0",
+    "size_bytes":844,
+    "observed_role":"queues named HUD action data and arguments",
+    "directly_invokes_registered_client_function":false,
+    "generic_HUD_action_to_new_client_function_route_proven":false,
+    "interpretation":"system.callClientFunction is a distinct script API that can resolve a registered function by name; the queueing HUD API is not itself the native callback."
+  },
+  "application_bootstrap":{
+    "valid_initialization_hook_for_new_registration_proven":false,
+    "registration_after_engine_initialization_proven":false,
+    "unregistration_before_unload_proven":false,
+    "thread_affinity_and_reentrancy_contract_proven":false,
+    "matching_authorized_sdk_or_native_client_source_available":false,
+    "benign_no_side_effect_callback_tested":false
+  },
+  "gameplay_bridge":{
+    "edited_HUD_or_AIM_callsite_for_new_registered_function_proven":false,
+    "new_function_to_typed_allow_list_handler_proven":false,
+    "gameplay_state_readback_contract_proven":false,
+    "save_reload_and_rollback_contract_proven":false,
+    "catalog_items":222,
+    "catalog_categories":14,
+    "catalog_routes_assigned":0,
+    "runtime_verified_catalog_effects":0,
+    "separate_native_candidate_actions":1,
+    "runtime_verified_candidate_actions":0,
+    "v50_runtime_checks_passed":0,
+    "v50_runtime_checks_total":9,
+    "status":"BLOCKED"
+  },
+  "next_gates":[
+    "Obtain an exact-build authorized S3DX header/SDK or client source project and verify S3DX::AIFunction layout, callback signature, allocator/string ownership, and lifecycle rules.",
+    "Find a supported app initialization hook that registers and unregisters a no-op function after the kernel is ready and before native resources unload.",
+    "Demonstrate an AIM/script call to system.callClientFunction for that no-op function using the real authoring/serialization path; prove argument and output mapping end-to-end.",
+    "Only after the no-op bridge is proven, design one bounded allow-listed gameplay adapter with authoritative state read-back, save/reload, rollback, and regression checks."
+  ],
+  "scope_limitations":[
+    "Static ARM64 disassembly and a historical public ShiVa SDK example only; no game runtime invocation or native library/APK/XAPK modification was performed.",
+    "The public callback example corroborates the apparent ABI shape but is not the exact SDK header from Dungeon Quest 3.3.2.0.",
+    "The engine's callClientFunction implementation is evidence of lookup and indirect callback dispatch, not proof the packaged app contains a safe point to register additional callbacks.",
+    "No current catalog item is promoted and no gameplay cheat is enabled."
+  ]
+}

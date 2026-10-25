@@ -1,0 +1,38 @@
+name: DQ native client-function dispatch audit v62
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_CLIENT_FUNCTION_CALL_DISPATCH_V62.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V62_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_native_client_function_call_dispatch_v62.py"
+      - "DQ-Reverse-Engineering/tests/test_native_client_function_call_dispatch_v62.py"
+      - ".github/workflows/dq-native-client-function-call-dispatch-v62.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_CLIENT_FUNCTION_CALL_DISPATCH_V62.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V62_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_native_client_function_call_dispatch_v62.py"
+      - "DQ-Reverse-Engineering/tests/test_native_client_function_call_dispatch_v62.py"
+      - ".github/workflows/dq-native-client-function-call-dispatch-v62.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-client-function-dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/validate_native_client_function_call_dispatch_v62.py DQ-Reverse-Engineering/tests/test_native_client_function_call_dispatch_v62.py
+      - name: Validate static callback-dispatch report
+        run: python DQ-Reverse-Engineering/tools/validate_native_client_function_call_dispatch_v62.py DQ-Reverse-Engineering/docs/NATIVE_CLIENT_FUNCTION_CALL_DISPATCH_V62.json
+      - name: Exercise fail-closed dispatch boundaries
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_native_client_function_call_dispatch_v62.py' -v
