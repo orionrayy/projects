@@ -4,6 +4,14 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## HUD codec source round-trip — v42
+
+- [Field-preserving v12 HUD element codec](tools/hud_elements_codec_v42.py)
+- [Synthetic serializer regression tests](tests/test_hud_elements_codec_v42.py)
+- [Source round-trip and integration boundary report](docs/HUD_ELEMENT_CODEC_V42.md)
+
+Local verification reconstructed all 68 HUD assets from the matching v3.3.2.0 source pack byte-identically after parse/encode, covering 4,956 records with zero unconsumed element bytes. Five synthetic tests pass locally, including length-changing label edits, exact no-op serialization, legacy string bytes, scalar bounds, and malformed-input rejection. The test suite is wired into the existing static-validation workflow, but remote CI still needs a fresh confirmed result. This remains a format-level tool: no new List was inserted into the game and no gameplay handler is connected.
+
 ## Latest HUD investigation — v41
 
 - [Version-12 element record probe](tools/hud_elements_probe_v41.py)
