@@ -1,6 +1,12 @@
 name: Build DQ Cheats Sandbox Harness APK
 
 on:
+  push:
+    branches:
+      - "feat/dq-iap-debug-cheats-modkit-v7"
+    paths:
+      - "DQ-Reverse-Engineering/cheats-harness/**"
+      - ".github/workflows/dq-cheats-harness-android.yml"
   pull_request:
     paths:
       - "DQ-Reverse-Engineering/cheats-harness/**"
@@ -21,6 +27,39 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+      - name: Validate bundled 222-entry catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import math
+          from pathlib import Path
+          source = Path("DQ-Reverse-Engineering/cheats-sandbox/debug_cheats_catalog_v39.json")
+          asset = Path("DQ-Reverse-Engineering/cheats-harness/app/src/main/assets/debug_cheats_catalog_v39.json")
+          assert source.read_bytes() == asset.read_bytes(), "Android asset is stale versus canonical catalog"
+          catalog = json.loads(asset.read_text(encoding="utf-8"))
+          cheats, categories = catalog.get("cheats", []), catalog.get("categories", [])
+          assert len(cheats) == catalog.get("count") == 222, "catalog must contain exactly 222 entries"
+          assert len(categories) == 14, "catalog must contain exactly 14 categories"
+          ids = [item.get("id") for item in cheats]
+          assert len(set(ids)) == 222 and all(isinstance(x, str) and x for x in ids), "IDs must be non-empty and unique"
+          allowed = {"toggle", "slider", "range", "select", "action"}
+          assert all(item.get("control") in allowed for item in cheats), "unsupported control"
+          assert all(item.get("category") in categories for item in cheats), "entry has unknown category"
+          for item in cheats:
+              control = item["control"]
+              if control in ("slider", "range"):
+                  lo, hi, step = item.get("min"), item.get("max"), item.get("step")
+                  assert all(isinstance(v, (int, float)) and math.isfinite(v) for v in (lo, hi, step)), item["id"]
+                  assert lo <= hi and step > 0, item["id"]
+                  defaults = [item["default"]] if control == "slider" else [item["default"]["min"], item["default"]["max"]]
+                  assert all(lo <= value <= hi and abs((value-lo)/step-round((value-lo)/step)) < 1e-5 for value in defaults), item["id"]
+                  if control == "range": assert item["default"]["min"] <= item["default"]["max"], item["id"]
+              elif control == "select":
+                  assert item.get("options") and item["default"] in item["options"], item["id"]
+          print("PASS: 222 unique catalog IDs, 14 categories, source/asset bytes identical, control defaults valid.")
+          PY
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
