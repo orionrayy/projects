@@ -15,7 +15,7 @@
 
 ## Gold +100K HUD candidate
 
-The candidate `pause.hud` contains 127 elements and 65 actions, compared with 126 elements and 64 actions in the source. The new element is `gold_reward_100k_btn`, a Button in `GameplayMenu` with geometry `x=0.660, y=-0.700, w=1.000, h=0.300`. It mirrors the existing `pickup_btn` at `x=-0.660, y=-0.700`; this is a static geometry comparison, not proof of rendering or touch hit-testing.
+The candidate `pause.hud` contains 127 elements and 65 actions, compared with 126 elements and 64 actions in the source. The new element is `gold_reward_100k_btn`, a Button in `GameplayMenu` with display label `Gold +100K`, click-action field `onAddGold100K`, and geometry `x=0.660, y=-0.700, w=1.000, h=0.300`. It mirrors the existing `pickup_btn` at `x=-0.660, y=-0.700` with the same dimensions. The serialized binding points to the new `onAddGold100K` action, whose static payload calls `uai_gp_hud.onDebug(6.0)`; this confirms binary-level wiring, not proof of rendering or touch hit-testing in the game.
 
 The added action record is `onAddGold100K`, with the existing static call shape `uai_gp_hud.onDebug(6.0)`. Static ARM64 disassembly maps dispatch code `6.0` to `RewardGold(100000.0)`. This supports the intended route but does not prove the pause screen uses the edited HUD in the installed game or that the branch executes when the button is tapped.
 
