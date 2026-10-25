@@ -7,6 +7,14 @@
 - Target voice: natural colloquial Indonesian, blunt and sarcastic with occasional profanity, distinct NPC personas, and context-sensitive community slang.
 - Target: 100% of player-visible text reviewed and localized; **not achieved yet**.
 
+## Active checkpoint — v2.58 APK test candidate (25 October 2026)
+
+- Local test APK built: `DR2C_VORENYX_v2.58_TEST_CANDIDATE.apk`; SHA-256 `11ddc0e41df162837f74c676d602403952c3f6c875f4f6dacd91db68adbb41b0`.
+- Added 38 curated next-wave localization rows producing 41 literal replacements across three display-text scripts. “SIEGE ALERT!” is localized as “AWAS PENGEPUNGAN!” after semantic correction.
+- Static tests: 13/13 builder/localization tests pass; archive CRC/duplicate-path checks, native UI slots, orientation and alignment checks pass; JAR/v1 signature verifies.
+- Release blockers: no APK v2 signature verification (`apksigner` unavailable), no device/runtime tests, new local self-signed signer, and the exact v2.46 APK plus actual v2.47–v2.51 patch payloads are unavailable. This is not full v2.51 integration and is not release-ready.
+- Do not remove licensing/security wrapper components. Back up saves before changing the installed app. See `docs/APK_CANDIDATE_BUILD_v2.58.md` and `audit/apk_candidate_v2.58_summary.json`.
+
 ## Historical checkpoint — v2.26 (24 October 2026)
 - Local patch artifact: `DR2C_VORENYX_ID_v2.26_localization_patch.zip`. The binary overlay and original archive remain outside public GitHub.
 - Scope: five special-character dialogue/emote profiles: `sc/beeman.df`, `sc/boxer.df`, `sc/caveman.df`, `sc/knight.df`, and `sc/ninja.df`.
