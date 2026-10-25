@@ -1,0 +1,88 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.54 batch provenance reconciliation",
+  "status": "SOURCE_LINEAGE_UNRESOLVED; DO_NOT_AUTO_MERGE",
+  "current_source_comparison": {
+    "base": {
+      "file": "DR2C-RAYY(2).zip",
+      "bytes": 13809097,
+      "sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1",
+      "zip_entries": 1119,
+      "df_scripts": 509,
+      "crc": "PASS"
+    },
+    "overlay": {
+      "file": "DR2C_VORENYX_ID_v2.43_localization_patch.zip",
+      "bytes": 24350974,
+      "sha256": "00ff7866242e8b3aca4fc749e93455ba1c795c4eec99fd15baa07ab483aca024",
+      "zip_entries": 444,
+      "df_payloads": 269,
+      "crc": "PASS"
+    },
+    "comparison": {
+      "matching_paths": 269,
+      "byte_identical": 0,
+      "byte_different": 269,
+      "base_without_overlay": 240,
+      "overlay_paths_missing_from_base": 0,
+      "duplicate_paths": 0
+    }
+  },
+  "batch_k_targets": {
+    "reported_count": 9,
+    "present_in_v243_overlay": 9,
+    "byte_different_from_base": 9,
+    "reported_as_new_in_v251": [
+      "blurb/sc/cupid.df",
+      "blurb/sc/santa.df",
+      "don/events/common/001-sasquatch.df"
+    ],
+    "those_three_also_present_in_v243_overlay": true
+  },
+  "later_report_metadata": {
+    "v247": {
+      "reported_v246_baseline_sha256": "6d4e2f3df07d199807c08418ae5d30b9927e5b2e36c780a51858045336b29313",
+      "reported_zip_bytes": 69656,
+      "reported_zip_sha256": "08731efd0d451332a7d0af5f4587d7bc524f291d4700c720cf483d230a0158cc",
+      "reported_changed_scripts": 8
+    },
+    "v248": {
+      "reported_cumulative_df": 59,
+      "reported_zip_bytes": 331975,
+      "reported_entries": 61,
+      "reported_sha256": "062d2506cdebcccfc1fa2022b2ff597882f5b8d5e18e53f9a9605ad97152d5d5"
+    },
+    "v249": {
+      "reported_cumulative_df": 73,
+      "reported_zip_bytes": 429369,
+      "reported_entries": 77,
+      "reported_sha256": "926278b87eac76a5329e7ce16c04993dd127cc296a78fc6dedb56cd791562ced"
+    },
+    "v250": {
+      "batch_j_scope_from_pr_description": [
+        "supplies/barter",
+        "baked-cod event"
+      ],
+      "report_in_pr_changed_files": false,
+      "zip_available": false
+    },
+    "v251": {
+      "reported_cumulative_df": 77,
+      "reported_zip_bytes": 460379,
+      "reported_entries": 85,
+      "reported_sha256": "e265c7d2789e6936aadea49a42c4b5c87799c202945f8cfa4bee7291a8a40046",
+      "actual_zip_available": false
+    }
+  },
+  "interpretation": "The available artifacts do not establish a single byte-level overlay lineage. This does not prove which report/archive is incorrect because the v2.46 baseline and v2.47-v2.51 ZIP bytes are unavailable.",
+  "release_blockers": [
+    "Obtain exact v2.46 baseline.",
+    "Obtain actual v2.50 Batch J and v2.51 Batch K ZIPs plus checksum sidecars.",
+    "Reconcile each layer against the exact baseline before APK build or runtime claims."
+  ],
+  "limits": [
+    "Byte difference is not a localization-quality metric.",
+    "No full Deathforth interpreter parse was run.",
+    "No APK build, signing, install, device runtime, UI-fit or save/load test was run."
+  ]
+}
