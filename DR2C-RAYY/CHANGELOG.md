@@ -2,10 +2,10 @@
 
 ## Source provenance audit v2.54 — 25 October 2026 (not a game/APK version)
 
-- Added a standard-library-only byte-level provenance auditor and unit tests; the CI workflow compiles it and discovers both audit/reconciliation test suites.
+- Added a standard-library-only byte-level provenance auditor and unit tests; the CI workflow compiles it and discovers both audit/reconciliation test suites. Hardened path validation to reject ambiguous Deathforth roots and noncanonical dot segments. The two suites contain 12 tests.
 - Independently compared the available base archive and v2.43 overlay: 509 base `.df` scripts, 269 overlay payloads, 269/269 matching paths byte-different, 240 base scripts without overlay payload, and zero overlay paths missing from base.
 - The nine target paths listed by Batch K v2.51 are all present and byte-different in the available v2.43 archive. This includes three files described by Batch K metadata as newly added.
-- The v2.46 baseline and the real v2.47–v2.51 ZIP bytes remain unavailable, and no v2.50 Batch J report is in the current PR change set. Result: **lineage unresolved; do not auto-merge or make release claims**.
+- Rechecked 299 Library ZIP artifacts: the actual v2.47–v2.51 ZIPs are absent (the v2.47 checksum sidecar exists separately); the reported v2.46 APK is not available as a file, and no v2.50 Batch J report is in the current PR change set. Result: **lineage unresolved; do not auto-merge or make release claims**.
 - No APK was built or runtime-tested. See `docs/BATCH_K_PROVENANCE_RECONCILIATION_v2.54.md` and `audit/batch_k_provenance_v2.54.json`.
 
 ## Source contract gate v2.53 — 25 October 2026 (not a game/APK version)
