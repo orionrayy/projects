@@ -34,7 +34,6 @@ jobs:
           printf '%s\n' 'Android SDK Build Tools 35.0.1 apksigner, zipalign, aapt, aapt2, and required runtime libraries; Google archive SHA-256 verified.' > apksigner-bundle/NOTICE.txt
           "$APKSIGNER" version
           apksigner-bundle/build-tools/35.0.1/zipalign -h >/dev/null 2>&1
-          apksigner-bundle/build-tools/35.0.1/aapt version
       - name: Upload signer tool bundle (no game files)
         uses: actions/upload-artifact@v4
         with:
