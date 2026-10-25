@@ -134,3 +134,12 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - v2.44 has package `com.noodlecake.drtc`, versionCode 57, and a local signing certificate, not the existing APKVISION/release signer. Android will refuse an in-place update if the currently installed package is signed by a different certificate; old app may remain active. This is a probable deployment blocker, not a confirmed device diagnosis.
 - APKVISION namespaces remain in `classes3.dex` and `libstub.so`; v2.44 did not remove the wrapper, so the watermark issue is not fixed.
 - Status: hotfix **not verified and user reports no change**. No further blind build. First need the installer result, safe save backup status before any uninstall, and a new recording/log from a confirmed installed candidate.
+
+
+## Active checkpoint — v2.53 source contract reconciliation (25 October 2026; not an APK version)
+- Reconciled local source-only patch from DR2C-RAYY(2).zip + v2.43 localization patch + v2.45 corrective patch + v2.45 Start quote-fix patch.
+- Output DR2C_VORENYX_v2.45_RECONCILED_SOURCE_PATCH_v2.53.zip: 7,515,735 bytes, SHA-256 73c9f60cd1a88a6d121843f3bdc6304262d47c01b2cdc36237015b7d083583d7; ZIP CRC PASS, 274 entries, 0 duplicate paths, 272 paths/269 .df payloads, 18 later-layer path overrides.
+- New static contracts: source-hash pin; overlay paths exist in source; canonical GAME-MARKER; no escaped backslash-quotes; no unclosed strings in overlay scripts; ordered single-quoted Forth symbol sequence preserved in all 269 overlay scripts; canonical Jack of All Trades perk key; main-event-do-select, select-start, select-boot, and tutorchat-1 are present. Static checks PASS; 6/6 unit tests pass.
+- Scope remains v2.43 + v2.45 corrective + v2.45 quote fix, not v2.51 and not an APK. Exact v2.47–v2.51 patch ZIPs remain unavailable for byte-level integration, so the report's 77/509 script count is not reconciled against the available v2.43 patch's 269 .df payloads.
+- APK build/sign/install/runtime, UI fit, gameplay, save/load and stability remain NOT RUN / NOT VERIFIED. Current available APK base is APKVISION-repackaged; Android build tools are not installed here and no license/security wrapper bypass is attempted.
+- See docs/SOURCE_RECONCILIATION_GATE_v2.53.md, audit/source_reconciliation_v2.53.json, and tools/reconcile_overlay.py.
