@@ -36,6 +36,11 @@ jobs:
           cd DQ-Reverse-Engineering
           python -m py_compile tools/hud_elements_probe_v41.py tests/test_hud_elements_probe_v41.py
           python -m unittest discover -s tests -p 'test_hud_elements_probe_v41.py' -v
+      - name: Run v41 canonical HUD serializer regressions
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m py_compile tools/hud_elements_serializer_v41.py tests/test_hud_elements_serializer_v41.py
+          python -m unittest discover -s tests -p 'test_hud_elements_serializer_v41.py' -v
       - name: Run STK packer and cosmetic patch regression tests
         run: |
           python DQ-Reverse-Engineering/tests/test_stk_packer.py
