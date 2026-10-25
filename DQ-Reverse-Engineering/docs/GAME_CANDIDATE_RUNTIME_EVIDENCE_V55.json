@@ -1,0 +1,37 @@
+{
+  "schema": "dq.game-candidate-runtime-evidence.v55",
+  "status": "blocked",
+  "candidate": {
+    "package_id": "com.shinybox.smash",
+    "version_name": "3.3.2.0",
+    "apk_sha256": "f6cd9ed0011b2c7f72dff506397d24194e3ed7d3fb7aa58adea9f8e939ab6dfa",
+    "xapk_sha256": "680dd37d23c6ea6ee318e5d08c82dca7cee8bb82e6a8baae75ed7912710c6430",
+    "stk_sha256": "e17884a13c775c9aac3afce3c0003eb9ed54a3b9a32ef4a6b89bf72e6ef9f52e"
+  },
+  "device": {
+    "platform": "not_run",
+    "model": null,
+    "api_level": null,
+    "profile": "not_run",
+    "offline_confirmed": false,
+    "backup_restore_verified": false
+  },
+  "checks": {
+    "install": "not_run",
+    "launch": "not_run",
+    "pause_hud": "not_run",
+    "button_visible": "not_run",
+    "button_tap": "not_run",
+    "exact_gold_delta": "not_run",
+    "save_reload": "not_run",
+    "no_crash": "not_run",
+    "regression": "not_run"
+  },
+  "observations": {
+    "gold_before": null,
+    "gold_after": null,
+    "gold_after_reload": null,
+    "crash_count": null
+  },
+  "evidence": []
+}

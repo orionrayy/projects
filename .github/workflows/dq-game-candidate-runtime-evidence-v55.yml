@@ -1,0 +1,43 @@
+name: DQ game-candidate runtime evidence gate v55
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/GAME_CANDIDATE_RUNTIME_EVIDENCE_V55.json"
+      - "DQ-Reverse-Engineering/docs/GAME_CANDIDATE_RUNTIME_GATE_V55.md"
+      - "DQ-Reverse-Engineering/tools/validate_game_candidate_runtime_evidence_v55.py"
+      - "DQ-Reverse-Engineering/tests/test_game_candidate_runtime_evidence_v55.py"
+      - ".github/workflows/dq-game-candidate-runtime-evidence-v55.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/GAME_CANDIDATE_RUNTIME_EVIDENCE_V55.json"
+      - "DQ-Reverse-Engineering/docs/GAME_CANDIDATE_RUNTIME_GATE_V55.md"
+      - "DQ-Reverse-Engineering/tools/validate_game_candidate_runtime_evidence_v55.py"
+      - "DQ-Reverse-Engineering/tests/test_game_candidate_runtime_evidence_v55.py"
+      - ".github/workflows/dq-game-candidate-runtime-evidence-v55.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-runtime-evidence-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile gate validator and tests
+        run: |
+          python -m py_compile DQ-Reverse-Engineering/tools/validate_game_candidate_runtime_evidence_v55.py DQ-Reverse-Engineering/tests/test_game_candidate_runtime_evidence_v55.py
+      - name: Validate current evidence manifest
+        run: |
+          cd DQ-Reverse-Engineering
+          python tools/validate_game_candidate_runtime_evidence_v55.py docs/GAME_CANDIDATE_RUNTIME_EVIDENCE_V55.json --evidence-root .
+      - name: Exercise fail-closed cases with synthetic fixtures
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_game_candidate_runtime_evidence_v55.py' -v
