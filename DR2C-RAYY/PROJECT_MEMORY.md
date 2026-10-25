@@ -170,3 +170,13 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - boot.df adds id-name-localize, translates visible READY. to SIAP., and retains canonical GAME-MARKER. Static checks do not prove helper execution or runtime boot success.
 - This is not an APK build or a runtime test. Actual Start-button navigation, touch input, UI fit, gameplay, event loading and save/load remain unverified. v2.47-v2.51 patch binaries and exact v2.46 baseline remain unavailable.
 - See tools/audit_start_route.py, tests/test_audit_start_route.py, docs/START_ROUTE_STATIC_AUDIT_v2.56.md, and audit/start_route_static_contract_v2.56.json.
+
+## Active checkpoint — v2.57 local APK test candidate (25 October 2026)
+
+- Built local test APK `DR2C_VORENYX_v2.57_TEST_CANDIDATE.apk` from base source + v2.43 localization overlay + v2.45 corrective patch + v2.45 Startfix; not v2.51 integration.
+- SHA-256 `ef66364da7e3d8862b460348d67d397e8132896aaa80f70a9243589d934435e5`, 115,614,035 bytes, 1,015 entries, ZIP CRC PASS, no duplicate paths, 509 .df scripts, zero escaped quote regressions.
+- Static gates: resources.arsc uncompressed/4-byte aligned; stored-entry alignment checks pass; seven uncompressed native .so files per ABI page-aligned; both game activities landscape; 13 native UI label slots per ABI preserved; PairIP libs identical to base; tutorial handlers/symbol stream preserved.
+- Synchronized splash badge from V0.3 to the existing title-art badge V2.43. Visible title/splash assets do not contain the literal APKVISION string; classes3.dex and both libstub.so files still contain wrapper identifiers (13, 16, 16 hits). Do not delete or alter these wrapper identifiers speculatively; no license/security bypass.
+- Local test builder suite 8/8 passes. JAR/v1 signature verifies using a local self-signed test certificate; APK v2 signature was not generated/verified because apksigner is unavailable. No Android device/ADB/emulator test was run.
+- Exact v2.46 baseline APK and actual v2.47–v2.51 source patch ZIPs remain unavailable. Do not claim v2.51 integration, release stability, or runtime success. Candidate's local signer differs from publisher/current install; do not uninstall existing app without save backup.
+- See docs/APK_CANDIDATE_BUILD_v2.57.md and audit/apk_candidate_v2.57_summary.json.
