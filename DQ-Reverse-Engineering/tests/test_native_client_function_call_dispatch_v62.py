@@ -25,7 +25,7 @@ class NativeClientFunctionCallDispatchV62Tests(unittest.TestCase):
   with self.assertRaisesRegex(AuditError,"callback argument cap drift"):validate(data)
  def test_legacy_gist_cannot_be_claimed_as_exact_target_header(self):
   data=copy.deepcopy(self.base);data["callback_abi_corroboration"]["exact_target_struct_size_and_all_field_offsets_verified"]=True
-  with self.assertRaisesRegex(AuditError,"historical SDK example"):validate(data)
+  with self.assertRaisesRegex(AuditError,"target SDK ABI cannot be presented as recovered"):validate(data)
  def test_hud_action_queue_is_not_same_as_client_function_dispatch(self):
   data=copy.deepcopy(self.base);data["hud_action_separation"]["directly_invokes_registered_client_function"]=True
   with self.assertRaisesRegex(AuditError,"HUD queue"):validate(data)
