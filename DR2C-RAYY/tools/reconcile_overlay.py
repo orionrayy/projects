@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 import zipfile
 from collections import Counter
@@ -12,8 +13,10 @@ from typing import Any
 
 ESCAPED_QUOTE = bytes((0x5C, 0x22))
 
+
 class ReconcileError(RuntimeError):
     pass
+
 
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
@@ -21,6 +24,7 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: f.read(1024 * 1024), b''):
             h.update(block)
     return h.hexdigest()
+
 
 def checked_zip(path: Path) -> tuple[zipfile.ZipFile, list[str]]:
     if not path.is_file():
@@ -40,6 +44,7 @@ def checked_zip(path: Path) -> tuple[zipfile.ZipFile, list[str]]:
         raise ReconcileError(f'CRC failure in {path.name}: {bad}')
     return z, names
 
+
 def safe_path(raw: str, archive: str) -> str:
     if '\\' in raw:
         raise ReconcileError(f'backslash path in {archive}: {raw}')
@@ -47,6 +52,7 @@ def safe_path(raw: str, archive: str) -> str:
     if p.is_absolute() or not p.parts or any(x in ('', '.', '..') for x in p.parts) or ':' in p.parts[0]:
         raise ReconcileError(f'unsafe overlay path in {archive}: {raw}')
     return p.as_posix()
+
 
 def read_overlay(path: Path) -> dict[str, bytes]:
     z, names = checked_zip(path)
@@ -71,6 +77,7 @@ def read_overlay(path: Path) -> dict[str, bytes]:
         raise ReconcileError(f'no overlay payload found in {path.name}')
     return payload
 
+
 def source_index(names: list[str]) -> tuple[str, dict[str, str]]:
     candidates = [n for n in names if '/assets/deathforth/' in n]
     if not candidates:
@@ -80,6 +87,46 @@ def source_index(names: list[str]) -> tuple[str, dict[str, str]]:
     if 'assets/deathforth/boot.df' not in mapping:
         raise ReconcileError('cannot resolve source root: assets/deathforth/boot.df missing')
     return prefix, mapping
+
+
+def mask_strings_and_comments(text: str) -> tuple[str, bool]:
+    """Mask display strings and // comments without changing code positions.
+
+    Deathforth source in this project does not support C/JSON-style escaped quote
+    sequences inside display strings. Those are rejected separately before this
+    lexer is used. Returns (masked source, has_unclosed_string).
+    """
+    out = list(text)
+    i = 0
+    in_string = False
+    while i < len(text):
+        if in_string:
+            if text[i] == '"':
+                out[i] = ' '
+                in_string = False
+                i += 1
+                continue
+            if text[i] not in '\r\n':
+                out[i] = ' '
+            i += 1
+            continue
+        if text[i:i + 2] == '//':
+            while i < len(text) and text[i] not in '\r\n':
+                out[i] = ' '
+                i += 1
+            continue
+        if text[i] == '"':
+            out[i] = ' '
+            in_string = True
+        i += 1
+    return ''.join(out), in_string
+
+
+def single_quoted_symbol_stream(text: str) -> tuple[list[str], bool]:
+    """Return the ordered stream of Forth-style single-quoted symbols."""
+    masked, unclosed = mask_strings_and_comments(text)
+    return re.findall(r"'\s*([A-Za-z_][A-Za-z0-9_-]*)", masked), unclosed
+
 
 def reconcile(base: Path, patches: list[Path], out: Path, report_path: Path,
               expected_base_sha256: str | None = None, fail_on_overrides: bool = False) -> dict[str, Any]:
@@ -125,15 +172,68 @@ def reconcile(base: Path, patches: list[Path], out: Path, report_path: Path,
         input_reports.append({'role': f'overlay_layer_{order}', 'file': patch.name,
                               'bytes': patch.stat().st_size, 'sha256': digest,
                               'payload_count': len(payload)})
+
     boot = effective.get('assets/deathforth/boot.df', b'')
     marker_ok = b'"GAME-MARKER" $anew' in boot and b'"PENANDA-GAME" $anew' not in boot
-    quote_files = sorted(p for p, b in effective.items() if p.startswith('assets/deathforth/') and p.endswith('.df') and ESCAPED_QUOTE in b)
+    escaped_quote_files = sorted(p for p, b in effective.items() if p.startswith('assets/deathforth/') and p.endswith('.df') and ESCAPED_QUOTE in b)
     source_df_count = sum(1 for p in source_data if p.startswith('assets/deathforth/') and p.endswith('.df'))
-    overlay_df_count = sum(1 for p in final if p.startswith('assets/deathforth/') and p.endswith('.df'))
+    overlay_df_paths = sorted(p for p in final if p.startswith('assets/deathforth/') and p.endswith('.df'))
+    overlay_df_count = len(overlay_df_paths)
+
+    unclosed_quote_files = []
+    for path, payload in final.items():
+        if path.startswith('assets/deathforth/') and path.endswith('.df'):
+            _, unclosed = mask_strings_and_comments(payload.decode('utf-8', 'replace'))
+            if unclosed:
+                unclosed_quote_files.append(path)
+
+    symbol_stream_differences = []
+    for path in overlay_df_paths:
+        before = source_data.get(path)
+        after = final[path]
+        if before is None:
+            continue
+        old_symbols, old_unclosed = single_quoted_symbol_stream(before.decode('utf-8', 'replace'))
+        new_symbols, new_unclosed = single_quoted_symbol_stream(after.decode('utf-8', 'replace'))
+        if old_unclosed or new_unclosed or old_symbols != new_symbols:
+            first_difference = next((i for i, pair in enumerate(zip(old_symbols, new_symbols)) if pair[0] != pair[1]), min(len(old_symbols), len(new_symbols)))
+            symbol_stream_differences.append({
+                'path': path,
+                'source_symbol_count': len(old_symbols),
+                'overlay_symbol_count': len(new_symbols),
+                'first_difference_index': first_difference,
+                'source_window': old_symbols[max(0, first_difference - 2):first_difference + 3],
+                'overlay_window': new_symbols[max(0, first_difference - 2):first_difference + 3],
+            })
+
+    perkdef = effective.get('assets/deathforth/perkdef.df', b'')
+    canonical_perk_key_ok = b'"Jack of All Trades" $perk' in perkdef and b'"Serba Bisa" $perk' not in perkdef
+
+    required_contracts = {
+        'assets/deathforth/events.df': [b'main-event-do-select'],
+        'assets/deathforth/game-select.df': [b'main-event-do-select', b'select-start', b'select-boot'],
+        'assets/deathforth/events/tutorial.df': [b'tutorchat-1'],
+    }
+    missing_contracts = []
+    for path, needles in required_contracts.items():
+        payload = effective.get(path, b'')
+        for needle in needles:
+            if needle not in payload:
+                missing_contracts.append({'path': path, 'required_token': needle.decode('ascii')})
+
     if not marker_ok:
         raise ReconcileError('canonical GAME-MARKER invariant failed')
-    if quote_files:
-        raise ReconcileError(f'escaped backslash-quote remains in .df files: {quote_files[:10]}')
+    if escaped_quote_files:
+        raise ReconcileError(f'escaped backslash-quote remains in .df files: {escaped_quote_files[:10]}')
+    if unclosed_quote_files:
+        raise ReconcileError(f'unclosed display string detected in overlay .df files: {unclosed_quote_files[:10]}')
+    if symbol_stream_differences:
+        raise ReconcileError(f'overlay changed single-quoted code-symbol sequence: {symbol_stream_differences[:5]}')
+    if not canonical_perk_key_ok:
+        raise ReconcileError('canonical perk data key "Jack of All Trades" was altered')
+    if missing_contracts:
+        raise ReconcileError(f'critical Start/tutorial dispatch contract missing: {missing_contracts}')
+
     manifest: dict[str, Any] = {
         'project': 'DR2C VORENYX',
         'artifact_type': 'normalized cumulative source overlay patch; NOT an APK',
@@ -146,12 +246,24 @@ def reconcile(base: Path, patches: list[Path], out: Path, report_path: Path,
             'override_history': {p: h for p, h in sorted(history.items()) if len(h) > 1},
         },
         'checks': {
-            'input_zip_crc': 'PASS', 'duplicate_input_paths': 0,
+            'input_zip_crc': 'PASS',
+            'duplicate_input_paths': 0,
             'all_overlay_df_paths_resolve_to_source': True,
-            'canonical_boot_marker': 'PASS', 'escaped_backslash_quote_files': quote_files,
-            'source_df_files_detected': source_df_count, 'overlay_df_files_after_reconciliation': overlay_df_count,
-            'global_localization_coverage': 'NOT COMPUTED', 'deathforth_full_parse': 'NOT RUN',
-            'apk_build': 'NOT PERFORMED', 'android_runtime': 'NOT TESTED', 'save_load_test': 'NOT TESTED',
+            'canonical_boot_marker': 'PASS',
+            'escaped_backslash_quote_files': escaped_quote_files,
+            'closed_display_strings_all_overlay_df_files': 'PASS',
+            'single_quoted_code_symbol_sequences_preserved': 'PASS',
+            'single_quoted_code_symbol_sequence_differences': symbol_stream_differences,
+            'canonical_perk_data_key': 'PASS',
+            'critical_start_tutorial_dispatch_contracts': 'PASS',
+            'missing_critical_contracts': missing_contracts,
+            'source_df_files_detected': source_df_count,
+            'overlay_df_files_after_reconciliation': overlay_df_count,
+            'global_localization_coverage': 'NOT COMPUTED',
+            'deathforth_full_parse': 'NOT RUN',
+            'apk_build': 'NOT PERFORMED',
+            'android_runtime': 'NOT TESTED',
+            'save_load_test': 'NOT TESTED',
         },
         'limitations': [
             'Only the supplied patch layers are included; missing newer patch ZIPs must not be inferred from documentation.',
@@ -177,6 +289,7 @@ def reconcile(base: Path, patches: list[Path], out: Path, report_path: Path,
     report_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     return manifest
 
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--base-source', required=True, type=Path)
@@ -191,14 +304,24 @@ def main(argv: list[str] | None = None) -> int:
     except (ReconcileError, OSError, ValueError) as e:
         print(json.dumps({'status': 'FAIL', 'error': str(e)}, indent=2), file=sys.stderr)
         return 2
-    print(json.dumps({'status': 'PASS', 'output': r['output'], 'overlay_paths': r['final_overlay']['unique_paths'],
-                      'overrides': sum(len(x['overridden_paths']) for x in r['layers']),
-                      'source_df_files': r['checks']['source_df_files_detected'],
-                      'overlay_df_files': r['checks']['overlay_df_files_after_reconciliation'],
-                      'boot_marker': r['checks']['canonical_boot_marker'],
-                      'escaped_quote_scan': 'PASS' if not r['checks']['escaped_backslash_quote_files'] else 'FAIL',
-                      'apk_build': r['checks']['apk_build'], 'android_runtime': r['checks']['android_runtime']}, indent=2))
+    print(json.dumps({
+        'status': 'PASS',
+        'output': r['output'],
+        'overlay_paths': r['final_overlay']['unique_paths'],
+        'overrides': sum(len(x['overridden_paths']) for x in r['layers']),
+        'source_df_files': r['checks']['source_df_files_detected'],
+        'overlay_df_files': r['checks']['overlay_df_files_after_reconciliation'],
+        'boot_marker': r['checks']['canonical_boot_marker'],
+        'escaped_quote_scan': 'PASS' if not r['checks']['escaped_backslash_quote_files'] else 'FAIL',
+        'closed_string_scan': r['checks']['closed_display_strings_all_overlay_df_files'],
+        'code_symbol_contract': r['checks']['single_quoted_code_symbol_sequences_preserved'],
+        'perk_key_contract': r['checks']['canonical_perk_data_key'],
+        'start_dispatch_contract': r['checks']['critical_start_tutorial_dispatch_contracts'],
+        'apk_build': r['checks']['apk_build'],
+        'android_runtime': r['checks']['android_runtime'],
+    }, indent=2))
     return 0
+
 
 if __name__ == '__main__':
     raise SystemExit(main())
