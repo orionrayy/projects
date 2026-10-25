@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-25",
+  "target": "Dungeon Quest 3.3.2.0 ARM64 libS3DClient.so",
+  "status": "read-only native HUD feasibility audit; no APK/XAPK built",
+  "native_scroll_symbols": [
+    {
+      "symbol": "HUDElement::ListEnableSmoothScrolling(bool)",
+      "va": "0x95c45c"
+    },
+    {
+      "symbol": "HUDElement::ListEnableFingerScrolling(bool)",
+      "va": "0x95c48c"
+    },
+    {
+      "symbol": "HUDElement::ListEnableMouseScrollWheel(bool)",
+      "va": "0x95c4bc"
+    },
+    {
+      "symbol": "HUDElement::ListEnableScrollBarsAutoHiding(bool)",
+      "va": "0x95c51c"
+    },
+    {
+      "symbol": "HUDElement::ListSetItemsHeight(float)",
+      "va": "0x95c204"
+    },
+    {
+      "symbol": "HUDElement::ListAddItem(String const&, GFXTexture*)",
+      "va": "0x95b560"
+    },
+    {
+      "symbol": "HUDElement::ListSetItemTextAt(...)",
+      "va": "0x95bc98"
+    },
+    {
+      "symbol": "HUDElement::ListSetItemChildAt(...)",
+      "va": "0x95d980"
+    },
+    {
+      "symbol": "HUDElement::ListScrollUp()",
+      "va": "0x95cc4c"
+    },
+    {
+      "symbol": "HUDElement::ListScrollDown()",
+      "va": "0x95cc84"
+    },
+    {
+      "symbol": "HUDElement::SetType(Type)",
+      "va": "0x95c9e4"
+    }
+  ],
+  "list_type_id": 3,
+  "list_runtime_population_required": true,
+  "keyboard_symbols": [
+    {
+      "symbol": "uai_gp_hud::onKeyboard",
+      "va": "0x703154"
+    },
+    {
+      "symbol": "uai_gp_hud::onKeyboardEnter",
+      "va": "0x705940"
+    },
+    {
+      "symbol": "uai_gp_hud::onKeyboardDelete",
+      "va": "0x7055c0"
+    },
+    {
+      "symbol": "uai_gp_hud::onKeyboardClose",
+      "va": "0x704ba4"
+    },
+    {
+      "symbol": "uai_gp_hud::onKeyboardCaps",
+      "va": "0x703708"
+    },
+    {
+      "symbol": "uai_gp_hud::onGetGold",
+      "va": "0x6e8e00"
+    },
+    {
+      "symbol": "uai_gp_hud::onGetGoldClose",
+      "va": "0x6e93b0"
+    },
+    {
+      "symbol": "uai_gp_hud::onSetGold",
+      "va": "0x74ff84"
+    }
+  ],
+  "keyboard_state_symbols": [
+    "sKeyboardDirect",
+    "bKeyboardOpen"
+  ],
+  "onSetGold_semantics": "References hud.gold, converts an AIVariable through NumberToString and formats/concatenates it. Consistent with display/UI formatting; not proof of keyboard opening or authoritative Gold mutation.",
+  "hud_assets": [
+    {
+      "name": "Resources/HUD/debug.hud",
+      "elements": 71,
+      "actions": 13
+    },
+    {
+      "name": "Resources/HUD/keyboard.hud",
+      "elements": 58,
+      "actions": 4
+    },
+    {
+      "name": "Resources/HUD/inventory.hud",
+      "elements": 375,
+      "actions": 72
+    },
+    {
+      "name": "Resources/HUD/shop.hud",
+      "elements": 210,
+      "actions": 40
+    },
+    {
+      "name": "Resources/HUD/profile.hud",
+      "elements": 260,
+      "actions": 28
+    }
+  ],
+  "workbench_v36": {
+    "file": "Dungeon_Quest_Cheats_Sandbox_Workbench_v36_SCROLLABLE.html",
+    "sha256": "8bf8d37347563854104484f1b7cd58efda270aadaad0a0ae70f61dda2cea6f81",
+    "size_bytes": 131617,
+    "catalog_entries": 222,
+    "unique_ids": 222,
+    "categories": 14,
+    "tested_viewports": [
+      "360x740",
+      "430x900",
+      "1536x675"
+    ],
+    "internally_scrollable": true,
+    "outer_document_scroll": false,
+    "gold_keypad": "Button-built, local draft only; does not invoke system keyboard.",
+    "generic_numeric_controls": [
+      "-10",
+      "-1",
+      "+1",
+      "+10"
+    ],
+    "game_integration": "DISCONNECTED",
+    "apk_built": false
+  },
+  "remaining_gates": [
+    "Lossless parser/serializer for type-3 List element records",
+    "Runtime/AIM route to populate all 222 entries and select stable IDs",
+    "Verified internal keyboard open/commit flow and authoritative Gold setter",
+    "Per-cheat native handler, bounds, sandbox gates, state readback, rollback"
+  ],
+  "next_step": "Continue native UI/model format analysis and tests; no APK until the requested UI integration gate is complete."
+}
