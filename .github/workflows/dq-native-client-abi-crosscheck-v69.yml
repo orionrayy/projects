@@ -1,0 +1,42 @@
+name: DQ native client ABI binary cross-check v69
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_CLIENT_ABI_BINARY_CROSSCHECK_V69.json"
+      - "DQ-Reverse-Engineering/docs/NATIVE_CLIENT_ABI_BINARY_CROSSCHECK_V69.md"
+      - "DQ-Reverse-Engineering/tools/validate_native_client_abi_binary_crosscheck_v69.py"
+      - "DQ-Reverse-Engineering/tests/test_native_client_abi_binary_crosscheck_v69.py"
+      - ".github/workflows/dq-native-client-abi-crosscheck-v69.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_CLIENT_ABI_BINARY_CROSSCHECK_V69.json"
+      - "DQ-Reverse-Engineering/docs/NATIVE_CLIENT_ABI_BINARY_CROSSCHECK_V69.md"
+      - "DQ-Reverse-Engineering/tools/validate_native_client_abi_binary_crosscheck_v69.py"
+      - "DQ-Reverse-Engineering/tests/test_native_client_abi_binary_crosscheck_v69.py"
+      - ".github/workflows/dq-native-client-abi-crosscheck-v69.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-static-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: |
+          set -eu
+          python -m py_compile \
+            DQ-Reverse-Engineering/tools/validate_native_client_abi_binary_crosscheck_v69.py \
+            DQ-Reverse-Engineering/tests/test_native_client_abi_binary_crosscheck_v69.py
+      - name: Validate pinned cross-check manifest
+        working-directory: DQ-Reverse-Engineering
+        run: python tools/validate_native_client_abi_binary_crosscheck_v69.py docs/NATIVE_CLIENT_ABI_BINARY_CROSSCHECK_V69.json
+      - name: Run fail-closed regressions
+        working-directory: DQ-Reverse-Engineering
+        run: python -m unittest discover -s tests -p 'test_native_client_abi_binary_crosscheck_v69.py' -v
