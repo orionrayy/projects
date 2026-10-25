@@ -1,0 +1,43 @@
+{
+  "project": "DR2C VORENYX",
+  "version": "v2.51 Batch K",
+  "status": "cumulative source patch only; no APK build; no device runtime test",
+  "source_df_files": 509,
+  "cumulative_overlay_df_files": 77,
+  "batch_k": {
+    "files_touched": 9,
+    "new_overlay_files": 3,
+    "translation_template_records": 206,
+    "literal_occurrences": 211,
+    "files": [
+      "blurb/sc/cupid.df",
+      "blurb/sc/santa.df",
+      "don/events/common/001-sasquatch.df",
+      "events/finale/end-of-the-road.df",
+      "events/inner/gymloc.df",
+      "events/rareloc/cemetery.df",
+      "events/rareloc/johnny.df",
+      "events/sc/madsci.df",
+      "events/sc/ninja.df"
+    ]
+  },
+  "checks": {
+    "lexical_failures": 0,
+    "escaped_double_quote_regressions": 0,
+    "executable_skeleton_differences": 0,
+    "handler_sequence_differences": 0,
+    "unexpected_unmatched_mapping_keys": 0,
+    "keys_already_localized_by_prior_batch": 11,
+    "zip_crc": "PASS",
+    "zip_entries": 85,
+    "duplicate_paths": 0,
+    "zip_bytes": 460379,
+    "zip_sha256": "e265c7d2789e6936aadea49a42c4b5c87799c202945f8cfa4bee7291a8a40046"
+  },
+  "limitations": [
+    "Static lexical validation is not a full Deathforth parse.",
+    "No APK built or device runtime tested.",
+    "Global Indonesian localization remains incomplete.",
+    "Overlay must be reconciled with native UI localization and Startfix changes before a future APK build."
+  ]
+}
