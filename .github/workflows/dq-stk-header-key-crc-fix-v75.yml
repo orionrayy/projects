@@ -1,0 +1,43 @@
+name: DQ v75 STK header-key CRC report gate
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/STK_HEADER_KEY_CRC_FIX_V75.json"
+      - "DQ-Reverse-Engineering/docs/STK_HEADER_KEY_CRC_FIX_V75.md"
+      - "DQ-Reverse-Engineering/docs/PHONE_ONLY_TEST_V75.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V75_2026-10-26.md"
+      - "DQ-Reverse-Engineering/tools/patch_stk_header_key_crc_v75.py"
+      - "DQ-Reverse-Engineering/tools/validate_stk_header_key_crc_apk_v75.py"
+      - "DQ-Reverse-Engineering/tests/test_stk_header_key_crc_v75.py"
+      - ".github/workflows/dq-stk-header-key-crc-fix-v75.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/STK_HEADER_KEY_CRC_FIX_V75.json"
+      - "DQ-Reverse-Engineering/docs/STK_HEADER_KEY_CRC_FIX_V75.md"
+      - "DQ-Reverse-Engineering/docs/PHONE_ONLY_TEST_V75.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V75_2026-10-26.md"
+      - "DQ-Reverse-Engineering/tools/patch_stk_header_key_crc_v75.py"
+      - "DQ-Reverse-Engineering/tools/validate_stk_header_key_crc_apk_v75.py"
+      - "DQ-Reverse-Engineering/tests/test_stk_header_key_crc_v75.py"
+      - ".github/workflows/dq-stk-header-key-crc-fix-v75.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-v75-stk-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile patcher, validator, and tests
+        run: |
+          set -eu
+          python -m py_compile DQ-Reverse-Engineering/tools/patch_stk_header_key_crc_v75.py DQ-Reverse-Engineering/tools/validate_stk_header_key_crc_apk_v75.py DQ-Reverse-Engineering/tests/test_stk_header_key_crc_v75.py
+      - name: Validate static evidence report
+        working-directory: DQ-Reverse-Engineering
+        run: python tools/validate_stk_header_key_crc_apk_v75.py docs/STK_HEADER_KEY_CRC_FIX_V75.json
+      - name: Run v75 STK header/key regression suite
+        working-directory: DQ-Reverse-Engineering
+        run: python -m unittest discover -s tests -p 'test_stk_header_key_crc_v75.py' -v
