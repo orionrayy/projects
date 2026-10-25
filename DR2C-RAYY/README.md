@@ -27,6 +27,15 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Source-only patch. No APK was rebuilt and no device-side runtime test was performed. Some dynamic sentences remain English when their grammar depends on a placeholder across literal boundaries; translating only one fragment would be incorrect.
 - [Batch I report](docs/LOCALIZATION_BATCH_I_v2.49.md) · [Validation JSON](audit/localization_batch_i_v2.49.json)
 
+## v2.51 Batch K — character, encounter and endgame localization
+
+- Applies 206 curated translation/template records across 9 scripts, affecting 211 literal occurrences. Three new active overlays were added: Sasquatch encounter, Santa blurbs, and Cupid blurbs.
+- Additional fixes cover cemetery/Dracula/mausoleum events, mad scientist and ninja scenes, gym strings, Johnny encounter, and end-of-road completion/streak/credits.
+- Cumulative overlay: 77 of 509 source `.df` scripts. Static checks: 0 lexical errors, 0 escaped-quote regressions, 0 executable-skeleton differences, 0 handler-sequence differences, 0 unexpected missing mapping keys. ZIP CRC PASS; 85 entries; no duplicates.
+- ZIP SHA-256: `e265c7d2789e6936aadea49a42c4b5c87799c202945f8cfa4bee7291a8a40046`.
+- Source patch only; no APK built or device test. Global localization remains incomplete.
+- [Batch K report](docs/LOCALIZATION_BATCH_K_v2.51.md) · [Validation JSON](audit/localization_batch_k_v2.51.json)
+
 ## v2.48 Batch H — residual event localization
 
 - Cumulative source overlay now contains 59 script files, including prior batches A–G and new Batch H edits. Batch H touches 39 files: 37 literal-map files plus display-template refactors.
