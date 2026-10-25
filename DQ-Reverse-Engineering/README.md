@@ -4,6 +4,12 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## Native List script-API contract audit — v44
+
+- [Native List wrapper disassembly and call-shape audit](docs/NATIVE_LIST_API_CONTRACT_AUDIT_V44.md)
+
+The ARM64 export wrappers confirm native APIs to add list items, set item text, bind a selection-changed action, read selected indices/counts, and enable scrolling/single-selection. This narrows the remaining issue to the compiled AIM/model-side population and stable-ID dispatch logic; the native List itself does not create 222 actionable control rows. No game assets or package were changed.
+
 ## Native AIM model framing audit — v43
 
 - [Read-only AIM v10 probe](tools/aim_model_probe_v43.py)
