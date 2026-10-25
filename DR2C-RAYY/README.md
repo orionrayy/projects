@@ -1,10 +1,16 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest documented localization batch: v2.51 Batch K · source-lineage unresolved · v2.58 test APK candidate built but runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest documented localization batch: v2.51 Batch K · source-lineage unresolved · v2.58 localization APK runtime NOT VERIFIED · v2.57 Android 11 signature-fix derivative available for install testing · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
 
+
+## Install-failure investigation — v2.57 signature-fix derivative (25 October 2026; test only)
+
+- The user reported that v2.57 still failed to install after uninstalling the old package. Inspection confirmed `targetSdkVersion=35` with JAR/v1-only signing; Android 11/API 30 requires APK Signature Scheme v2 or higher for apps targeting API 30+. See [the diagnostic report](docs/APK_SIGNATURE_FIX_v2.57.md).
+- Built a signature-fix derivative of the v2.57 localization payload: `DR2C_VORENYX_v2.57_SIGNATURE_FIX.apk`, SHA-256 `a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7`. This is **not** the separate v2.58 localization candidate described below.
+- JAR/v1 and the local v2 structural/cryptographic verifier pass; ZIP CRC, DEX internal checksums and stored-entry alignment pass. Official `apksigner` and device installation/runtime remain untested. The APK uses a new local test certificate; PairIP/licensing was not modified.
 
 ## Local APK test candidate — v2.58 checkpoint (25 October 2026; not a release)
 
