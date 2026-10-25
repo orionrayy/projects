@@ -1,0 +1,36 @@
+name: DQ native debug/catalog compatibility v58
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_DEBUG_CATALOG_COMPATIBILITY_V58.*"
+      - "DQ-Reverse-Engineering/tools/validate_native_debug_catalog_compatibility_v58.py"
+      - "DQ-Reverse-Engineering/tests/test_native_debug_catalog_compatibility_v58.py"
+      - ".github/workflows/dq-native-debug-catalog-compatibility-v58.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_DEBUG_CATALOG_COMPATIBILITY_V58.*"
+      - "DQ-Reverse-Engineering/tools/validate_native_debug_catalog_compatibility_v58.py"
+      - "DQ-Reverse-Engineering/tests/test_native_debug_catalog_compatibility_v58.py"
+      - ".github/workflows/dq-native-debug-catalog-compatibility-v58.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-debug-catalog-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/validate_native_debug_catalog_compatibility_v58.py DQ-Reverse-Engineering/tests/test_native_debug_catalog_compatibility_v58.py
+      - name: Validate static native-debug/catalog semantics
+        run: python DQ-Reverse-Engineering/tools/validate_native_debug_catalog_compatibility_v58.py DQ-Reverse-Engineering/docs/NATIVE_DEBUG_CATALOG_COMPATIBILITY_V58.json --catalog DQ-Reverse-Engineering/cheats-sandbox/debug_cheats_catalog_v32.json
+      - name: Test fail-closed semantic-mismatch guards
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_native_debug_catalog_compatibility_v58.py' -v
