@@ -39,9 +39,11 @@ public final class MainActivitySmokeTest {
                 EditText search = findEditTextByTag(activity.getWindow().getDecorView(), "catalog-search");
                 assertNotNull("Search field must be present", search);
                 search.setText("economy.currency_override");
+                clickButton(activity, "Search");
                 assertEquals(1, activity.getVisibleCount());
                 assertTextPresent(activity.getWindow().getDecorView(), "Debug Gold Balance");
                 search.setText("");
+                clickButton(activity, "Search");
                 assertEquals(222, activity.getVisibleCount());
 
                 clickCategory(activity, "Player & Survival");
