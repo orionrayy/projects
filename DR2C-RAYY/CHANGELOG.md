@@ -1,5 +1,17 @@
 # Changelog — DR2C VORENYX
 
+## Local APK test candidate v2.58 — 25 October 2026 (not a release APK)
+
+- Built `DR2C_VORENYX_v2.58_TEST_CANDIDATE.apk` with a curated 38-row next-wave localization queue: 41 literal occurrences across three scripts.
+- Corrected “SIEGE ALERT!” from the semantically wrong “pengelompokan” to “pengepungan”.
+- APK SHA-256: `11ddc0e41df162837f74c676d602403952c3f6c875f4f6dacd91db68adbb41b0`; 115,614,035 bytes; 1,015 entries; ZIP CRC PASS; no duplicate paths; 509 Deathforth scripts; 13/13 builder/localization tests pass.
+- Native UI slots 26/26 pass; primary activities landscape; resource/stored-entry/native-library alignment checks pass; PairIP libraries are unchanged.
+- JAR/v1 signature verifies; APK v2 signing was not generated or verified because `apksigner` is unavailable. A fresh local self-signed test certificate was used, not the installed/publisher signer.
+- Source lineage remains incomplete: the actual v2.47 A–F patch, v2.48–v2.51 patch ZIPs and exact v2.46 baseline APK are still unavailable. Do not call this v2.51 integration.
+- No Android install, Start-button, UI-fit, gameplay, event loading, save/load or runtime stability tests were run. This is not a release APK.
+- See `docs/APK_CANDIDATE_BUILD_v2.58.md` and `audit/apk_candidate_v2.58_summary.json`.
+
+
 ## Local APK test candidate v2.57 — 25 October 2026 (not a release APK)
 
 - Built `DR2C_VORENYX_v2.57_TEST_CANDIDATE.apk` from the available base + v2.43 overlay + v2.45 corrective + v2.45 Startfix layers.
