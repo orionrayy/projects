@@ -7,7 +7,7 @@ Status: Static call-path evidence only. No HUD asset modified and no APK/XAPK bu
 ## Source assets and binary
 
 - \`Resources/HUD/debug.hud\`: SHA-256 \`02ed5420fceacaba5bc614596fddc52646abf04914446e26bc240806930f15b6\`, 71 elements.
-- \`Resources/AIModels/uai_gp_hud.aim\`: SHA-256 \`bd11e1bd5c4ae66ec5a88d1d0c7c13fbcd0e3fbf4c7e1e42d60ac5edcfc9d4f3\` (source asset hash recorded from the local extracted source pack).
+- \`Resources/AIModels/uai_gp_hud.aim\`: SHA-256 \`66607a46a23eeaab4fa2dac02772adbea5ab71e65d4e446e49396c6af6a451cb\` (source asset hash recorded from the local extracted source pack).
 - \`libS3DClient.so\`: SHA-256 \`0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083\`.
 - Native dispatch method: \`uai_gp_hud::onDebug(int, S3DX::AIVariable const*, S3DX::AIVariable*)\`, VA \`0x6d5048\).
 
