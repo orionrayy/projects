@@ -160,7 +160,9 @@
   "tests": {
     "new_start_route_unit_tests": "3/3 PASS",
     "combined_ci_test_count": 16,
-    "ci_run_to_be_verified": true
+    "ci_run_id": 40168006045,
+    "ci_conclusion": "SUCCESS",
+    "ci_url": "https://github.com/orionrayy/projects/actions/runs/40168006045"
   },
   "limitations": [
     "Not a full Deathforth parser.",
