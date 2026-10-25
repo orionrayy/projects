@@ -9,12 +9,22 @@ on:
       - "DR2C-RAYY/tools/**"
       - "DR2C-RAYY/tests/**"
       - "DR2C-RAYY/audit/source_reconciliation_v2.52.json"
+      - "DR2C-RAYY/audit/source_reconciliation_v2.53.json"
+      - "DR2C-RAYY/docs/SOURCE_RECONCILIATION_GATE_v2.53.md"
+      - "DR2C-RAYY/README.md"
+      - "DR2C-RAYY/CHANGELOG.md"
+      - "DR2C-RAYY/PROJECT_MEMORY.md"
       - ".github/workflows/dr2c-source-reconciler.yml"
   pull_request:
     paths:
       - "DR2C-RAYY/tools/**"
       - "DR2C-RAYY/tests/**"
       - "DR2C-RAYY/audit/source_reconciliation_v2.52.json"
+      - "DR2C-RAYY/audit/source_reconciliation_v2.53.json"
+      - "DR2C-RAYY/docs/SOURCE_RECONCILIATION_GATE_v2.53.md"
+      - "DR2C-RAYY/README.md"
+      - "DR2C-RAYY/CHANGELOG.md"
+      - "DR2C-RAYY/PROJECT_MEMORY.md"
       - ".github/workflows/dr2c-source-reconciler.yml"
   workflow_dispatch:
 
