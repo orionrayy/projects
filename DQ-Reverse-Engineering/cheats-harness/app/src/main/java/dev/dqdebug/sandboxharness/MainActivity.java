@@ -47,11 +47,14 @@ public final class MainActivity extends Activity {
     private static final int MUTED = Color.rgb(154, 168, 188);
     private static final int WARN = Color.rgb(255, 203, 102);
     private static final String CATALOG_ASSET = "debug_cheats_catalog_v39.json";
+    private static final int RENDER_BATCH_SIZE = 20;
 
     private final List<CatalogEntry> catalog = new ArrayList<>();
+    private final List<CatalogEntry> filteredEntries = new ArrayList<>();
     private final List<String> categories = new ArrayList<>();
     private final Set<String> favorites = new HashSet<>();
     private SandboxState state;
+    private ScrollView pageScroll;
     private LinearLayout content;
     private LinearLayout categoryBar;
     private TextView countText;
@@ -60,6 +63,7 @@ public final class MainActivity extends Activity {
     private String currentCategory = "All";
     private String query = "";
     private int visibleCount;
+    private int renderedCount;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +105,8 @@ public final class MainActivity extends Activity {
     }
 
     private void buildUi() {
-        ScrollView pageScroll = new ScrollView(this);
+        pageScroll = new ScrollView(this);
+        pageScroll.setTag("catalog-scroll");
         pageScroll.setFillViewport(true);
         pageScroll.setBackgroundColor(BG);
         LinearLayout page = vertical();
@@ -181,6 +186,12 @@ public final class MainActivity extends Activity {
         content = vertical();
         page.addView(content, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        pageScroll.setOnScrollChangeListener((view, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            View child = pageScroll.getChildAt(0);
+            if (child != null && scrollY + pageScroll.getHeight() >= child.getHeight() - dp(600)) {
+                appendNextBatch();
+            }
+        });
 
         LinearLayout eventPanel = panel();
         eventPanel.addView(text("Recent local event log", 15, TEXT, true));
@@ -227,23 +238,42 @@ public final class MainActivity extends Activity {
 
     private void renderEntries() {
         if (content == null || state == null) return;
+        if (pageScroll != null) pageScroll.scrollTo(0, 0);
         content.removeAllViews();
-        int shown = 0;
+        filteredEntries.clear();
         for (CatalogEntry entry : catalog) {
-            if (!matches(entry)) continue;
-            content.addView(buildCard(entry), marginBottomSmall());
-            shown++;
+            if (matches(entry)) filteredEntries.add(entry);
         }
-        visibleCount = shown;
-        if (shown == 0) {
+        visibleCount = filteredEntries.size();
+        renderedCount = 0;
+        if (visibleCount == 0) {
             LinearLayout empty = panel();
             empty.addView(text("No matching catalog entries.", 14, MUTED, false));
             content.addView(empty);
+        } else {
+            appendNextBatch();
         }
-        countText.setText("Showing " + shown + " / 222 items  ·  " + currentCategory);
+        updateCountText();
         stagedText.setText(state.stagedCount() + " staged local settings · 0 runtime-connected cheats · all game effects disabled");
         refreshCategoryButtons();
         refreshEventLog();
+    }
+
+    private void appendNextBatch() {
+        if (content == null || renderedCount >= filteredEntries.size()) return;
+        int end = Math.min(filteredEntries.size(), renderedCount + RENDER_BATCH_SIZE);
+        while (renderedCount < end) {
+            CatalogEntry entry = filteredEntries.get(renderedCount);
+            content.addView(buildCard(entry), marginBottomSmall());
+            renderedCount++;
+        }
+        updateCountText();
+    }
+
+    private void updateCountText() {
+        if (countText == null) return;
+        countText.setText("Matched " + visibleCount + " / 222 items · Loaded "
+                + renderedCount + " · " + currentCategory);
     }
 
     private boolean matches(CatalogEntry entry) {
@@ -583,6 +613,7 @@ public final class MainActivity extends Activity {
 
     public int getCatalogCount() { return catalog.size(); }
     public int getVisibleCount() { return visibleCount; }
+    public int getRenderedCount() { return renderedCount; }
     public SandboxState getSandboxState() { return state; }
 
     private void showCatalogError(Exception error) {
