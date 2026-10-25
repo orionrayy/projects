@@ -142,3 +142,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - Runtime status remains blocked pending execution on a Windows PC connected to the Android device via authorized ADB. No actual Start tap trace has been collected in this environment.
 - Current APK candidate reference remains the v2.57 signature-fix APK (SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7); the Library artifact named v2.58 is byte-identical. This is not a runtime-verified release; local signing certificate is not the publisher's key.
 - Next gate: collect trace → classify input/Deathforth/native/integrity failure → make a narrow fix → rerun package/source checks → device test install, Start, events, UI and save/load. Do not build blindly or risk existing saves.
+
+
+## Active checkpoint — 26 October 2026, v2.65 install/start trace toolkit
+- Latest diagnostic artifact: DR2C_VORENYX_v2.65_INSTALL_START_TRACE_TOOLKIT.zip; SHA-256 b67f81776e96a2d96d1cfc04015247aaf85bb7477672a504a7e2698feb48da27. ZIP CRC PASS, duplicate paths 0, static assertions 17/17 PASS.
+- Two modes: INSTALL_ATTEMPT (works even if the app package is absent and filters PackageManager/signature/install failures) and START_BUTTON (requires installed com.noodlecake.drtc and records crash/native/Deathforth/integrity lines).
+- Collector never clears Android log buffers, does not auto-install/uninstall, does not modify saves or bypass signing/licensing, uses a 90-second cap, records before/after package state, and deletes the temporary raw log before packaging.
+- Actual installation failure and Start no-op remain undiagnosed until a device trace is captured. No runtime stability or release claim is made.
+- Next gate: if package absent, run INSTALL_ATTEMPT and manually repeat installation once; if installed, run START_BUTTON and tap Start once. Classify the trace before another APK rebuild.
