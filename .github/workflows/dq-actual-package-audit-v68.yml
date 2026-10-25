@@ -1,0 +1,40 @@
+name: DQ actual package audit v68 (synthetic tests)
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/tools/audit_actual_v50_packages_v68.py"
+      - "DQ-Reverse-Engineering/tests/test_audit_actual_v50_packages_v68.py"
+      - ".github/workflows/dq-actual-package-audit-v68.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/tools/audit_actual_v50_packages_v68.py"
+      - "DQ-Reverse-Engineering/tests/test_audit_actual_v50_packages_v68.py"
+      - ".github/workflows/dq-actual-package-audit-v68.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-tool-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile audit and dependencies
+        run: |
+          set -eu
+          python -m py_compile \
+            DQ-Reverse-Engineering/tools/audit_actual_v50_packages_v68.py \
+            DQ-Reverse-Engineering/tools/dq_install_preflight_v56.py \
+            DQ-Reverse-Engineering/tools/stk_packer.py \
+            DQ-Reverse-Engineering/tests/test_audit_actual_v50_packages_v68.py
+      - name: Run synthetic fail-closed regressions
+        working-directory: DQ-Reverse-Engineering
+        run: python -m unittest discover -s tests -p 'test_audit_actual_v50_packages_v68.py' -v
+      - name: Run existing STK single-delta regression suite
+        working-directory: DQ-Reverse-Engineering
+        run: python -m unittest discover -s tests -p 'test_stk_single_asset_delta_v48.py' -v
