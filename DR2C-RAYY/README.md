@@ -6,6 +6,14 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 
 
 
+## Latest source-lineage gate — v2.54 audit (25 October 2026; not a game/APK version)
+
+- Added `tools/audit_overlay_provenance.py` with unit tests for ZIP CRC/duplicate-path failures, source/overlay script counts, byte-level differences and explicit target paths.
+- The available v2.43 patch contains 269 `.df` payloads; all 269 differ byte-for-byte from the 509-script base archive, with 240 base scripts lacking overlay payloads.
+- All nine source paths named by the v2.51 Batch K report are present and byte-different in the available v2.43 overlay. Three paths described as newly added in v2.51 are already present in that v2.43 archive.
+- Exact v2.46 baseline and v2.47–v2.51 ZIP bytes remain unavailable; v2.50 Batch J has no report/JSON in this PR change set. Source lineage is unresolved and must not be auto-merged.
+- This is a provenance finding, not evidence of localization completeness or runtime stability. APK build/install/runtime, UI fit, gameplay and save/load remain unverified. See `docs/BATCH_K_PROVENANCE_RECONCILIATION_v2.54.md` and `audit/batch_k_provenance_v2.54.json`.
+
 ## Latest static contract gate — v2.53 (25 October 2026)
 
 - Reconciled source-only patch SHA-256: 73c9f60cd1a88a6d121843f3bdc6304262d47c01b2cdc36237015b7d083583d7; ZIP CRC PASS, 274 entries, 0 duplicate paths.
