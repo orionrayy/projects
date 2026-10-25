@@ -1,0 +1,78 @@
+{
+  "schema": "dq-diagnostic-arm64-apk-build-v70",
+  "date": "2026-10-25",
+  "status": "BUILT_STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_VERIFIED",
+  "artifact": {
+    "file_name": "DQ_ModKit_v70_ABI_Probe_DIAGNOSTIC_ARM64.apk",
+    "size_bytes": 57717702,
+    "sha256": "07898a4997b1f470728087d6c4bcd22660980be6d0670217d6d64c2b1769d0e8",
+    "package_id": "com.shinybox.dqv70",
+    "version_name": "3.3.2.0",
+    "launcher_label": "DQ v70 Tester",
+    "abi": "arm64-v8a",
+    "split_count": 1,
+    "purpose": "side-by-side diagnostic package containing the v50 Gold +100K HUD candidate, v70 target DEX probe overlay, and side-effect-free libdqbridge.so"
+  },
+  "inputs": {
+    "source_candidate_apk_sha256": "f6cd9ed0011b2c7f72dff506397d24194e3ed7d3fb7aa58adea9f8e939ab6dfa",
+    "source_stk_sha256": "e17884a13c775c9aac3afce3c0003eb9ed54a3b9a32ef4a6b89bf72e6ef9f52e",
+    "patched_dex_sha256": "2c05a2fb599024659b4784086d295fe0b3090dad073c847bbdec3b0964d1ea90",
+    "bridge_sha256": "82f19bbe8aec8ac95030a5e0f773168f0b3a5bfde76e1fe334f103415f8e0fd5",
+    "source_candidate_package_id": "com.shinybox.smash",
+    "source_candidate_signature": "local test-signed v50 candidate",
+    "source_stk_changed_entries": [
+      "Resources/HUD/pause.hud"
+    ]
+  },
+  "package_transform": {
+    "target_package_id": "com.shinybox.dqv70",
+    "application_id_length_preserved": true,
+    "resources_package_name_updated": true,
+    "launcher_label_before": "Dungeon Quest",
+    "launcher_label_after": "DQ v70 Tester",
+    "unresolved_icon_attributes_removed": true,
+    "source_app_id_preserved": "com.shinybox.smash",
+    "original_apk_modified_in_place": false,
+    "original_xapk_modified_in_place": false
+  },
+  "validation": {
+    "outer_zip_crc": "PASS",
+    "all_apk_zip_entries_crc": "PASS",
+    "zipalign_pre_sign_16k_native": "PASS",
+    "zipalign_post_sign_16k_native": "PASS",
+    "apksigner_verify_v1": "PASS",
+    "apksigner_verify_v2": "PASS",
+    "apksigner_verify_v3": "PASS",
+    "aapt_dump_badging": "PASS",
+    "package_id_verified_by_aapt": true,
+    "launchable_activity_found": "com.shinybox.smash.Smash",
+    "signer": {
+      "kind": "local diagnostic test certificate",
+      "certificate_sha256": "b8f8b624ce1368dca48e3413b4433e81d117fb3cbab904e11ec308ecc79ad60c",
+      "matches_official_signer": false,
+      "private_key_in_repository": false,
+      "private_key_shared": false
+    }
+  },
+  "runtime_gate": {
+    "installed_on_device": false,
+    "launched_on_device": false,
+    "offline_tested": false,
+    "native_probe_roundtrip_21_to_42_verified": false,
+    "shutdown_unregister_verified": false,
+    "gold_runtime_checks_passed": 0,
+    "gold_runtime_checks_total": 9,
+    "catalog_items": 222,
+    "catalog_routes_assigned": 0,
+    "catalog_runtime_verified_effects": 0,
+    "promotion_allowed": false
+  },
+  "limitations": [
+    "The package was structurally validated only. No Android Package Manager install or game launch was performed in this environment.",
+    "A local test certificate is used. This package is a distinct app ID and is not an update to the official app.",
+    "The game code still contains its original purchase/account/cloud logic; this build does not bypass licensing or integrity checks.",
+    "The native callback ABI and engine-thread/lifetime behavior remain unverified in the running game. The probe can fail or expose a runtime defect, so this is a diagnostic build rather than a stable release.",
+    "All 222 catalogue effects remain disconnected; the Gold +100K candidate itself remains 0/9 runtime-verified."
+  ],
+  "promotion_allowed": false
+}
