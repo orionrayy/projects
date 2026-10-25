@@ -10,8 +10,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.inputmethod.EditorInfo;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,6 +141,7 @@ public final class MainActivity extends Activity {
 
         EditText search = new EditText(this);
         search.setSingleLine(true);
+        search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         search.setTextSize(15);
         search.setTextColor(TEXT);
         search.setHintTextColor(MUTED);
@@ -149,14 +149,17 @@ public final class MainActivity extends Activity {
         search.setTag("catalog-search");
         search.setPadding(dp(12), dp(8), dp(12), dp(8));
         search.setBackground(roundRect(PANEL, BORDER, 12));
-        page.addView(search, marginBottomSmall());
-        search.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                query = s == null ? "" : s.toString().trim().toLowerCase(Locale.ROOT);
-                renderEntries();
+        LinearLayout searchRow = horizontal();
+        searchRow.addView(search, new LinearLayout.LayoutParams(0, dp(50), 1f));
+        searchRow.addView(button("Search", v -> applySearch(search)),
+                new LinearLayout.LayoutParams(dp(92), dp(48)));
+        page.addView(searchRow, marginBottomSmall());
+        search.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                applySearch(search);
+                return true;
             }
-            @Override public void afterTextChanged(Editable s) {}
+            return false;
         });
 
         HorizontalScrollView categoryScroll = new HorizontalScrollView(this);
@@ -215,6 +218,11 @@ public final class MainActivity extends Activity {
             button.setBackground(roundRect(active ? ACCENT : PANEL, active ? ACCENT : BORDER, 18));
             button.setTextColor(active ? BG : TEXT);
         }
+    }
+
+    private void applySearch(EditText search) {
+        query = search.getText() == null ? "" : search.getText().toString().trim().toLowerCase(Locale.ROOT);
+        renderEntries();
     }
 
     private void renderEntries() {
