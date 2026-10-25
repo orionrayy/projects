@@ -9,6 +9,7 @@ import shutil
 from pathlib import Path
 
 PINNED_DEX_SHA256 = "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b"
+PINNED_RENDERER_SMALI_SHA256 = "6509e64a2f3836bbe59a4ab56fde889192dfff80793ff86ead7699561ea01642"
 RENDERER = Path("com/shinybox/smash/S3DRenderer.smali")
 PROBE = Path("com/shinybox/smash/DqNativeProbe.smali")
 DRAW = "onDrawFrame(Ljavax/microedition/khronos/opengles/GL10;)V"
@@ -196,6 +197,12 @@ def create_overlay(source_root: Path, output_root: Path, source_dex: Path) -> di
     if probe.exists():
         raise PatchError(f"probe class already exists in source tree: {probe}")
     before = renderer.read_bytes()
+    renderer_hash = sha(before)
+    if renderer_hash != PINNED_RENDERER_SMALI_SHA256:
+        raise PatchError(
+            "source renderer smali SHA-256 mismatch: "
+            f"expected {PINNED_RENDERER_SMALI_SHA256}, got {renderer_hash}"
+        )
     patched, patch_report = patch_renderer(before.decode("utf-8"))
     shutil.copytree(source_root, output_root)
     out_renderer = output_root / RENDERER
@@ -203,7 +210,7 @@ def create_overlay(source_root: Path, output_root: Path, source_dex: Path) -> di
     out_probe = output_root / PROBE
     out_probe.parent.mkdir(parents=True, exist_ok=True)
     out_probe.write_text(PROBE_SMALI, encoding="utf-8", newline="")
-    report = {"schema":"dq.dex-lifecycle-smali-patch.v67","source_dex_sha256":dex_hash,"source_renderer_sha256":sha(before),"patched_renderer_sha256":sha(out_renderer.read_bytes()),"probe_class_sha256":sha(out_probe.read_bytes()),"apk_or_dex_bytes_written":False,"dex_assembly_performed":False,"apk_or_xapk_built":False,**patch_report}
+    report = {"schema":"dq.dex-lifecycle-smali-patch.v67","source_dex_sha256":dex_hash,"source_renderer_sha256":renderer_hash,"patched_renderer_sha256":sha(out_renderer.read_bytes()),"probe_class_sha256":sha(out_probe.read_bytes()),"apk_or_dex_bytes_written":False,"dex_assembly_performed":False,"apk_or_xapk_built":False,**patch_report}
     (output_root / "dq-lifecycle-smali-patch-v67.json").write_text(json.dumps(report, indent=2)+"\n", encoding="utf-8")
     return report
 
