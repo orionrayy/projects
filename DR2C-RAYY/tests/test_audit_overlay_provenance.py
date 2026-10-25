@@ -53,7 +53,7 @@ class ProvenanceAuditTests(unittest.TestCase):
             base, overlay = root/"base.zip", root/"overlay.zip"
             self.write_zip(base, {"GAME/assets/deathforth/boot.df": b"x"})
             self.write_zip(overlay, {"P/overlay/assets/deathforth/../evil.df": b"x"})
-            with self.assertRaisesRegex(ProvenanceAuditError, "unsafe logical path"):
+            with self.assertRaisesRegex(ProvenanceAuditError, "unsafe or noncanonical logical path"):
                 compare_archives(base, overlay)
 
     def test_ambiguous_source_roots_fail_closed(self):
