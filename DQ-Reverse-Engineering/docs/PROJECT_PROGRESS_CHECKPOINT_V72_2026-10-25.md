@@ -34,7 +34,10 @@ Gold +100K runtime checks: 0/9.
 Catalogue runtime effects: 0/222.
 Stable promotion: BLOCKED.
 
-The native bridge returns success for nativeInvokeProbe only if the dispatcher returns exactly one numeric output equal to 42 for input 21. However, v72's marker has not yet been observed on a device. Static assembly and symbol checks cannot establish runtime ABI, engine-thread or object-lifetime safety. This remains diagnostic-only, not a stable release. Do not remove the official app, test production saves, or bypass purchase/licensing/integrity/cloud/account behavior.
+The native bridge returns success for nativeInvokeProbe only if the dispatcher returns exactly one numeric output equal to 42 for input 21.
+
+### Reproducibility boundary
+The APK builder pins the exact patched DEX SHA-256 (`1533a5858e8624f2dc615e5335d14afd6de983c0478271963acb985423eb4d48`) and refuses a different DEX. A generic reassembly of source smali can produce different binary DEX bytes due to ID/table layout or file ordering even when the re-disassembled class sources are identical. Do not substitute such a DEX; the source-overlay regression workflow does not claim byte-for-byte DEX reproduction. The candidate APK and private signing key remain local and are not uploaded to CI. However, v72's marker has not yet been observed on a device. Static assembly and symbol checks cannot establish runtime ABI, engine-thread or object-lifetime safety. This remains diagnostic-only, not a stable release. Do not remove the official app, test production saves, or bypass purchase/licensing/integrity/cloud/account behavior.
 
 Evidence:
 - DIAGNOSTIC_APK_BUILD_V72.md
