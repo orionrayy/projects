@@ -1,0 +1,30 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.57 candidate signature and package verification gap",
+  "date": "2026-10-26",
+  "candidate": {
+    "filename": "DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk",
+    "bytes": 115615585,
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7",
+    "target_sdk": 35,
+    "signer_cert_sha256": "f208dded25fc88b0c26293e5903cfa8beb117c06b8a623dc5b46a0804c645754"
+  },
+  "checks": {
+    "zip_crc": "PASS",
+    "zip_entries": 1015,
+    "duplicate_paths": 0,
+    "native_stored_entry_alignment_failures": 0,
+    "v1_jarsigner": "PASS with expected warnings for self-signed local test certificate and no timestamp",
+    "v2_local_verifier": "PASS as reported in prior build record; signer signature, certificate/public-key match, chunked content digest and signing-block geometry checked",
+    "official_apksigner": "NOT RUN: tool absent in current environment; outbound shell DNS/download unavailable",
+    "android_device_install": "NOT TESTED",
+    "runtime_start": "NOT TESTED"
+  },
+  "interpretation": [
+    "ZIP and v1 JAR signature checks can pass while Android package installation still fails.",
+    "The previous v2 verifier is project-local and is not equivalent to a run of official Android apksigner.",
+    "A different local signing certificate prevents in-place updates over a differently signed installed package, but it does not by itself explain a failed fresh install after the old package was uninstalled.",
+    "Do not assign root cause until official apksigner output and/or the device's PackageManager install failure code are collected."
+  ],
+  "next_gate": "Run official apksigner verify --verbose --print-certs on the exact candidate file. If that passes, capture the real installation failure via v2.65 mode 1 on the device. If the package installs and Start remains inert, use mode 2."
+}
