@@ -1,0 +1,97 @@
+{
+  "version": "v36",
+  "status": "PASS — UI prototype browser-tested; GAME LINK DISCONNECTED; no APK/XAPK built",
+  "file": "Dungeon_Quest_Cheats_Sandbox_Workbench_v36_SCROLLABLE.html",
+  "sha256": "8bf8d37347563854104484f1b7cd58efda270aadaad0a0ae70f61dda2cea6f81",
+  "size_bytes": 131617,
+  "catalog": {
+    "entries": 222,
+    "unique_ids": 222,
+    "categories": 14,
+    "category_counts": {
+      "Player & Survival": 27,
+      "Combat Lab": 24,
+      "Enemy AI": 20,
+      "Loot & RNG": 19,
+      "Economy Lab": 17,
+      "Progression Lab": 16,
+      "Inventory & Gear": 16,
+      "Spawn & Encounter Lab": 9,
+      "World & Physics": 22,
+      "Camera & Visuals": 15,
+      "UI & Accessibility": 3,
+      "Skills Lab": 9,
+      "Gear & Stats Lab": 7,
+      "Debug Tools": 18
+    }
+  },
+  "ux": {
+    "internal_scroll": "#cheatScroll overflow-y:auto",
+    "outer_document_scroll": false,
+    "sticky_controls": [
+      "header",
+      "search",
+      "category rail",
+      "risk/filter controls",
+      "bottom action dock"
+    ],
+    "gold": "custom button-built keypad, system keyboard not required; draft only",
+    "numeric_steppers": [
+      "-10",
+      "-1",
+      "+1",
+      "+10"
+    ],
+    "other_controls": [
+      "search",
+      "risk filter",
+      "category filter",
+      "favorites",
+      "changed/active/blocked views",
+      "details",
+      "presets",
+      "undo",
+      "reset",
+      "event log",
+      "JSON export"
+    ]
+  },
+  "browser_tests": [
+    {
+      "viewport": "360x740",
+      "cards": 222,
+      "outer_scroll": false,
+      "inner_scroll": true,
+      "js_errors": 0
+    },
+    {
+      "viewport": "430x900",
+      "cards": 222,
+      "outer_scroll": false,
+      "inner_scroll": true,
+      "js_errors": 0
+    },
+    {
+      "viewport": "1536x675",
+      "cards": 222,
+      "outer_scroll": false,
+      "inner_scroll": true,
+      "js_errors": 0
+    }
+  ],
+  "interaction_assertions": [
+    "custom Gold keypad entry 123 stages exactly 123",
+    "generic stepper on step 0.25: 1 +10 increments to 3.5",
+    "generic stepper +1 then increments to 3.75",
+    "category filter returns expected count",
+    "search returns matching stable-ID card",
+    "favorite/detail/preset/undo/reset interactions pass",
+    "filter clear restores all 222 cards"
+  ],
+  "game_integration": {
+    "connected": false,
+    "cheats_runtime_verified": 0
+  },
+  "native_audit": "HUD_NATIVE_LIST_KEYBOARD_AUDIT_V37.md",
+  "next_gate": "Do not build a new XAPK until the HUD List/AIM route and per-cheat adapters are validated."
+}
