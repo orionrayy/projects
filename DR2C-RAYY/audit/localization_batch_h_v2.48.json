@@ -1,0 +1,31 @@
+{
+  "project": "DR2C VORENYX",
+  "candidate": "v2.48 Batch H cumulative source overlay",
+  "status": "source-only; no APK built; no device runtime test",
+  "batch_h": {
+    "files_touched": 39,
+    "literal_map_files": 37,
+    "display_refactor_keys": 15,
+    "change_records": 258,
+    "literal_occurrences": 283
+  },
+  "coverage": {
+    "cumulative_overlay_df": 59,
+    "seed_queue_before": 49,
+    "exact_seed_phrases_remaining": 0,
+    "global_localization_complete": false
+  },
+  "validation": {
+    "quote_parity_errors": 0,
+    "escaped_quote_sequences_batch_h": 0,
+    "escaped_quote_sequences_cumulative_overlay": 0,
+    "handler_id_order_differences": 0,
+    "executable_skeleton_differences": 0,
+    "zip_crc": "PASS",
+    "zip_entries": 61,
+    "duplicate_paths": 0,
+    "zip_bytes": 331975,
+    "zip_sha256": "062d2506cdebcccfc1fa2022b2ff597882f5b8d5e18e53f9a9605ad97152d5d5"
+  },
+  "limitation": "Lightweight lexical checks do not replace the Deathforth parser or in-device runtime testing. Quote count changes can be intentional inside display-template refactors."
+}
