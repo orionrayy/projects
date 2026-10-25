@@ -1,10 +1,20 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest documented localization batch: v2.51 Batch K · source-lineage unresolved · v2.57 test APK candidate built but runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest documented localization batch: v2.51 Batch K · source-lineage unresolved · v2.58 test APK candidate built but runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
 
+
+## Local APK test candidate — v2.58 checkpoint (25 October 2026; not a release)
+
+- Built `DR2C_VORENYX_v2.58_TEST_CANDIDATE.apk` with a reviewed 38-row localization queue producing 41 literal changes across three scripts. The “SIEGE ALERT!” translation was corrected to “AWAS PENGEPUNGAN!”.
+- Candidate SHA-256: `11ddc0e41df162837f74c676d602403952c3f6c875f4f6dacd91db68adbb41b0`; 115,614,035 bytes; 1,015 ZIP entries; CRC PASS; 509 `.df` scripts; no duplicate paths or escaped-quote regressions.
+- Static gates: 13/13 builder/localization tests PASS; 26/26 native UI slots PASS; both primary activities landscape; stored resources and ZIP alignment checks PASS; seven uncompressed native libraries per ABI are page-aligned; PairIP libs unchanged from selected base.
+- JAR/v1 signature verifies; APK Signature Scheme v2 was not generated/verified because `apksigner` is unavailable. This uses a new local self-signed key, not the publisher or installed-app signer.
+- The actual v2.47 A–F ZIP, v2.48–v2.51 ZIPs and exact v2.46 baseline APK remain unavailable. This is not full v2.51 integration. No device install, Start tap, gameplay, save/load or runtime-stability test has run.
+- Original launcher banner and APKVision wrapper identifiers remain unchanged; no license/security bypass was attempted. Back up saves before changing the installed app.
+- See `docs/APK_CANDIDATE_BUILD_v2.58.md`, `audit/apk_candidate_v2.58_summary.json`, and `audit/next_wave_localization_v2.58.json`.
 
 ## Local APK test candidate — v2.57 checkpoint (25 October 2026; not a release)
 
