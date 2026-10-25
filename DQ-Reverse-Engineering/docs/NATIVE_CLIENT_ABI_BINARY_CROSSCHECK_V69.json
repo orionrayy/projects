@@ -1,0 +1,143 @@
+{
+  "schema": "dq-native-client-abi-binary-crosscheck-v69",
+  "checkpoint": "v69",
+  "date": "2026-10-25",
+  "repository": "orionrayy/projects",
+  "branch": "feat/dq-iap-debug-cheats-modkit-v7",
+  "status": "STATIC_ABI_CROSSCHECK_PASS_RUNTIME_NOT_VERIFIED",
+  "target": {
+    "package_id": "com.shinybox.smash",
+    "version_name": "3.3.2.0",
+    "abi": "arm64-v8a",
+    "library": {
+      "name": "libS3DClient.so",
+      "sha256": "0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
+      "size_bytes": 17029072,
+      "elf_class": "ELF64",
+      "elf_machine": "AArch64",
+      "library_was_extracted_from_stock_xapk": true,
+      "dlsym_symbols_present": true
+    }
+  },
+  "symbols": {
+    "register": {
+      "name": "S3DClient_RegisterFunction",
+      "address": "0x7aec14",
+      "size_bytes": 188,
+      "symbol_type": "FUNC",
+      "binding": "GLOBAL",
+      "visibility": "DEFAULT",
+      "argument_contract": "const char* name, const S3DX::AIFunction* function inferred from native call chain and historical header",
+      "return_contract": "boolean-like result supported by wrapper zero-failure paths and uxtb/mov return propagation",
+      "return_abi_verified_by_disassembly": true
+    },
+    "unregister": {
+      "name": "S3DClient_UnregisterFunction",
+      "address": "0x7aecd0",
+      "size_bytes": 132,
+      "symbol_type": "FUNC",
+      "binding": "GLOBAL",
+      "visibility": "DEFAULT",
+      "argument_contract": "const char* name",
+      "return_contract": "void-like; wrapper does not consume a return value",
+      "return_abi_verified_by_disassembly": true
+    },
+    "dispatcher": {
+      "name": "_Z42S3DX_AIScriptAPI_system_callClientFunctioniPKN4S3DX10AIVariableEPS0_",
+      "address": "0x892bd8",
+      "size_bytes": 1556,
+      "symbol_type": "FUNC",
+      "binding": "GLOBAL",
+      "visibility": "DEFAULT",
+      "argument_contract": "int argument_count, const S3DX::AIVariable* arguments, S3DX::AIVariable* outputs",
+      "callback_pointer_offset_bytes": 8,
+      "maximum_argument_records_including_function_name": 33,
+      "symbol_is_in_dynamic_symbol_table": true
+    }
+  },
+  "layout_evidence": {
+    "aifunction": {
+      "callback_field_offset_bytes": 8,
+      "assumed_arm64_size_bytes": 48,
+      "target_dispatcher_reads_callback_at_offset_8": true,
+      "size_source": "historical public ShiVa header; not the exact matched Dungeon Quest SDK header",
+      "exact_target_header_available": false
+    },
+    "aivariable": {
+      "type_field_offset_bytes": 0,
+      "payload_offset_bytes": 8,
+      "stride_bytes": 16,
+      "target_disassembly_reads_type_byte_at_offset_0": true,
+      "target_disassembly_uses_16_byte_record_stride": true,
+      "number_payload_float32": "consistent with historical public ShiVa header; exact target header unavailable"
+    }
+  },
+  "bridge_artifact": {
+    "build_workflow_run_id": 40205015193,
+    "build_workflow_conclusion": "success",
+    "artifact_id": 12603596515,
+    "artifact_name": "dq-native-client-probe-v64-arm64-source-only",
+    "file_name": "libdqbridge.so",
+    "sha256": "82f19bbe8aec8ac95030a5e0f773168f0b3a5bfde76e1fe334f103415f8e0fd5",
+    "size_bytes": 601112,
+    "elf_class": "ELF64",
+    "elf_machine": "AArch64",
+    "dynamic_dependencies": [
+      "libdl.so",
+      "libm.so",
+      "libc.so"
+    ],
+    "jni_exports": [
+      "Java_com_shinybox_smash_DqNativeProbe_nativeRegisterProbe",
+      "Java_com_shinybox_smash_DqNativeProbe_nativeInvokeProbe",
+      "Java_com_shinybox_smash_DqNativeProbe_nativeUnregisterProbe"
+    ],
+    "game_state_side_effects": false,
+    "packaged_into_game": false,
+    "runtime_invoked": false
+  },
+  "evidence": {
+    "tools": [
+      "readelf -h",
+      "readelf -d",
+      "readelf --dyn-syms --wide",
+      "llvm-objdump -d"
+    ],
+    "register_disassembly_observations": [
+      "invalid/null/not-ready paths return zero",
+      "internal RegisterClientFunction result is narrowed via uxtb and returned in w0"
+    ],
+    "unregister_disassembly_observations": [
+      "calls Kernel::UnregisterClientFunction with the named function",
+      "no return value is consumed or established"
+    ],
+    "dispatcher_disassembly_observations": [
+      "registered callback pointer is loaded at AIFunction offset +8",
+      "typed argument records are addressed with a 16-byte stride",
+      "input-count is bounded to at most 33 records including the function-name record",
+      "the callback return value is tested to decide whether output records are processed"
+    ],
+    "evidence_scope": "Static binary/symbol cross-check; no call was made into the live game process"
+  },
+  "runtime_gate": {
+    "status": "BLOCKED",
+    "physical_or_emulator_game_test": false,
+    "engine_thread_lifecycle_verified": false,
+    "callback_registration_runtime_verified": false,
+    "callback_roundtrip_21_to_42_runtime_verified": false,
+    "shutdown_unregister_runtime_verified": false,
+    "game_relaunch_regression_verified": false,
+    "gold_candidate_checks_passed": 0,
+    "gold_candidate_checks_total": 9,
+    "catalog_native_routes_assigned": 0,
+    "catalog_runtime_verified_effects": 0,
+    "catalog_items": 222,
+    "promotion_allowed": false
+  },
+  "known_blockers": [
+    "The exact target-build S3DX::AIFunction/AIVariable header and lifecycle contract are not available.",
+    "The bridge was compiled for ARM64 but has not been called inside Dungeon Quest.",
+    "The synthetic 21-to-42 mock tests do not prove the target engine accepts the callback ABI.",
+    "No modified game APK or XAPK was built or runtime-tested by this audit."
+  ]
+}
