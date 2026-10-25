@@ -6,6 +6,14 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 
 
 
+## Reproducible source packaging — v2.55 (25 October 2026; not a game/APK version)
+
+- Normalized ZIP member timestamps and file modes so repeat source builds are byte-reproducible. Three independent builds produced SHA-256 `95bfb426c802c0dacebb9d44586cf6deeef1aab5557e2c63ca5dff6f05edf64d`.
+- Output: `DR2C_VORENYX_REPRODUCIBLE_SOURCE_PATCH_v2.55.zip`, 7,515,735 bytes, 274 entries, zero duplicate paths; 272 overlay paths, 269 Deathforth `.df` files, and 18 later-layer overrides.
+- Reconciled artifact has exactly the same 274 member payloads as v2.53; the prior whole-ZIP hash difference came from archive metadata, not source payload changes.
+- Test coverage: 7/7 source-reconciler tests and 6/6 provenance tests pass. Exact v2.47–v2.51 ZIPs and the v2.46 baseline remain unavailable, so this is NOT v2.51 integration. APK build/runtime remain unverified.
+- See `docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md` and `audit/reproducible_source_patch_v2.55_summary.json`.
+
 ## Latest source-lineage gate — v2.54 audit (25 October 2026; not a game/APK version)
 
 - Added `tools/audit_overlay_provenance.py` with unit tests for ZIP CRC/duplicate-path failures, source/overlay script counts, byte-level differences and explicit target paths. Hardened it to fail closed on ambiguous source roots and noncanonical dot-segment paths; total source-audit/reconciler coverage is 12 unit tests.
