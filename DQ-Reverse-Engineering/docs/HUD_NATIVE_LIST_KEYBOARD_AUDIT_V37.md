@@ -84,3 +84,28 @@ Per the user's instruction, **no new APK/XAPK is produced at this stage**.
 6. Only after these design/integration gates are satisfied should another XAPK be built.
 
 Purchase receipt/paid entitlement, cloud save, leaderboard, achievement and account mutation paths are not part of this audit.
+
+
+## Additional wrapper-level proof — dynamic List APIs are registered
+
+A broader symbol-table search confirmed that the engine also exports the script-facing wrappers that let model code operate on native List controls:
+
+| Script API wrapper | Native VA |
+|---|---:|
+| S3DX_AIScriptAPI_hud_addListItem | 0x87a980 |
+| S3DX_AIScriptAPI_hud_enableListFingerScrolling | 0x8620a8 |
+| S3DX_AIScriptAPI_hud_enableListSmoothScrolling | 0x861fd0 |
+| S3DX_AIScriptAPI_hud_setListItemTextAt | 0x8c77e0 |
+| S3DX_AIScriptAPI_hud_setListOnSelectionChangedAction | 0x862458 |
+| S3DX_AIScriptAPI_hud_getListSelectedItemAt | 0x8a7f04 |
+| S3DX_AIScriptAPI_hud_getListSelectedItemCount | 0x862258 |
+| S3DX_AIScriptAPI_hud_enableListSingleSelection | 0x861d48 |
+| S3DX_AIScriptAPI_hud_enableListItemSelectionAt | 0x89ee24 |
+| S3DX_AIScriptAPI_hud_setListColumnWidthAt | 0x8b5938 |
+| S3DX_AIScriptAPI_hud_setListVerticalScrollPos | 0x8b8454 |
+
+This refines the integration conclusion: the runtime does expose a complete enough *family* of List APIs to build and select a scrollable catalog. A generic list is therefore technically feasible without hand-creating hundreds of HUD buttons. The blocker is the model logic that would call those APIs and dispatch selected stable IDs to safe cheat handlers. The recovered uai_gp_hud.aim file is a declaration/metadata resource paired with native uai_gp_hud implementations in libS3DClient.so; this workspace does not have the original ShiVa authoring project/compiler or a proven lossless method for adding new native model handlers. Merely adding strings to the AIM/HUD files cannot create this logic.
+
+## Gold keyboard decision
+
+Do not repurpose onGetGold or onSetGold as the custom numeric mutation without proving their contract. onSetGold's static body formats a numeric AIVariable for the hud.gold presentation field. onKeyboardEnter reads sKeyboardDirect, but the exact UI-open/focus/commit sequence and a balance mutation API have not yet been fully mapped. The next research pass should identify the call graph between onKeyboard, keyboard.hud visibility, sKeyboardDirect assignment, and any authoritative Gold state write, then add evidence before changing assets.
