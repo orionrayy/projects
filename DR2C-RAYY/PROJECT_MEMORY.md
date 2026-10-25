@@ -162,3 +162,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - Test suites: source reconciler 7/7 PASS, provenance 6/6 PASS. Combined 13/13 PASS.
 - Scope explicitly remains v2.43 + v2.45 corrective + v2.45 quote-fix, NOT v2.51. Exact v2.46 APK baseline and actual v2.47–v2.51 ZIPs remain unavailable. No APK build/sign/install/runtime, full interpreter parse, UI fit, Start input, gameplay or save/load test has been performed.
 - See `docs/REPRODUCIBLE_SOURCE_PATCH_v2.55.md`, `audit/reproducible_source_patch_v2.55_summary.json`, and provenance gate v2.54.
+
+## Active checkpoint — v2.56 Start-route static audit (25 October 2026)
+
+- Added a static route audit tool and three unit tests. The audit covers 12 route-related .df files against the original base and available v2.55 source-only overlay.
+- Static results: 12/12 route files pass; key overlaid route files preserve normalized executable code skeleton and ordered single-quoted Forth symbol sequence. main-event-do-select, select-start, select-boot, game-start-new, and tutorchat-1 through tutorchat-3 are present.
+- boot.df adds id-name-localize, translates visible READY. to SIAP., and retains canonical GAME-MARKER. Static checks do not prove helper execution or runtime boot success.
+- This is not an APK build or a runtime test. Actual Start-button navigation, touch input, UI fit, gameplay, event loading and save/load remain unverified. v2.47-v2.51 patch binaries and exact v2.46 baseline remain unavailable.
+- See tools/audit_start_route.py, tests/test_audit_start_route.py, docs/START_ROUTE_STATIC_AUDIT_v2.56.md, and audit/start_route_static_contract_v2.56.json.
