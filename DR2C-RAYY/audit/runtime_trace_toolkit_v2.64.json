@@ -1,0 +1,31 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.64 Start Runtime Trace Toolkit hardening",
+  "date": "2026-10-26",
+  "status": "TOOLKIT_STATIC_CHECKS_PASS_RUNTIME_BLOCKED_PENDING_DEVICE_TRACE",
+  "artifact": {
+    "filename": "DR2C_VORENYX_v2.64_START_RUNTIME_TRACE_TOOLKIT.zip",
+    "bytes": 4880,
+    "sha256": "50545f6e2cf61b48e067910781e2996ae822895fef073a61859d9b249020a",
+    "zip_crc": "PASS",
+    "duplicate_paths": 0
+  },
+  "checks": {
+    "passed": 11,
+    "total": 11
+  },
+  "changes": [
+    "Removed destructive logcat buffer clearing.",
+    "Starts logcat capture near the live edge with -T 1.",
+    "Enforces a 90-second automatic capture limit.",
+    "Detects early logcat process exit.",
+    "Removes separate crash-buffer dump to avoid mixing stale crash records.",
+    "BAT wrapper reports and propagates failure status."
+  ],
+  "limitations": [
+    "No Windows PowerShell runtime or Android/ADB device was available for execution; no Start tap was captured.",
+    "No install, uninstall, save modification, signing bypass or licensing bypass is performed.",
+    "Game runtime, Start, gameplay, UI fit, save/load and stability remain unverified."
+  ],
+  "next_gate": "Run the toolkit on the user's Windows PC connected to the phone, tap Start once while capture is active, then inspect the filtered trace before rebuilding."
+}
