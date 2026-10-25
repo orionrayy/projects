@@ -50,8 +50,7 @@ public final class CatalogEntry {
             throw new IllegalArgumentException("Unsupported control type: " + control);
         }
         if (("slider".equals(control) || "range".equals(control))
-                && (!Double.isFinite(min) || !Double.isFinite(max) || !Double.isFinite(step)
-                || min > max || step <= 0.0)) {
+                && (!finite(min) || !finite(max) || !finite(step) || min > max || step <= 0.0)) {
             throw new IllegalArgumentException("Invalid numeric contract for " + id);
         }
         if ("select".equals(control) && this.options.isEmpty()) {
@@ -83,19 +82,13 @@ public final class CatalogEntry {
     }
 
     private static String defaultText(JSONObject object, String control) throws JSONException {
-        if ("toggle".equals(control)) {
-            return Boolean.toString(object.optBoolean("default", false));
-        }
-        if ("slider".equals(control)) {
-            return numberText(object.getDouble("default"));
-        }
+        if ("toggle".equals(control)) return Boolean.toString(object.optBoolean("default", false));
+        if ("slider".equals(control)) return numberText(object.getDouble("default"));
         if ("range".equals(control)) {
             JSONObject value = object.getJSONObject("default");
             return numberText(value.getDouble("min")) + ":" + numberText(value.getDouble("max"));
         }
-        if ("select".equals(control)) {
-            return object.getString("default");
-        }
+        if ("select".equals(control)) return object.getString("default");
         return "";
     }
 
@@ -126,11 +119,19 @@ public final class CatalogEntry {
             JSONArray allowed = p.optJSONArray("options");
             if (allowed != null && allowed.length() > 0) {
                 List<String> opts = strings(allowed);
-                s.append(" · ").append(String.join("/", opts));
+                s.append(" · ");
+                for (int k = 0; k < opts.size(); k++) {
+                    if (k > 0) s.append('/');
+                    s.append(opts.get(k));
+                }
             }
             values.add(s.toString());
         }
         return values;
+    }
+
+    private static boolean finite(double value) {
+        return !Double.isNaN(value) && !Double.isInfinite(value);
     }
 
     private static String requireText(String value, String field) {
