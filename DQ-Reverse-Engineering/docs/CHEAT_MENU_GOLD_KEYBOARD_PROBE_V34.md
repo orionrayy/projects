@@ -59,3 +59,19 @@ No billing receipt, paid entitlement, cloud-save, achievement, or leaderboard lo
 ## Workbench source in the repository
 
 The corrected, single-file catalog workbench is committed at [cheats_options_workbench_v35.html](../cheats-sandbox/cheats_options_workbench_v35.html). It contains all 222 catalog entries, button-only steppers for ordinary numeric settings, and the custom button-built Gold keypad. It remains an offline/local staging tool, not a game adapter or an in-game APK feature.
+
+
+## Important correction — APK v2 signature encoding
+
+The user's installer screenshot showed `INSTALL_PARSE_FAILED_NO_CERTIFICATES` and `No supported signatures found`. This was a real defect in the first generated v34 artifact, not a keyboard/HUD failure. The APK v2 signer-sequence value was missing one required length-prefixed layer. The local v2 verifier had the same parsing assumption and therefore incorrectly accepted the malformed encoding.
+
+**Do not install** the earlier file `Dungeon_Quest_3.3.2.0_CheatMenu_SetGoldKeyboardProbe_v34.xapk` (SHA-256 `799577cfe1ed0c910f5b21d5c3df4ab6b6d373fe0d4719244214c05ac6d5b008`).
+
+A corrected build has been produced as:
+- `Dungeon_Quest_3.3.2.0_CheatMenu_SetGoldKeyboardProbe_v34_SIGNFIX.xapk`
+- SHA-256: `2cb1502410873003d2178eb1b94e44e5decf8150371f116fc456a82aac3820b0`
+- Same certificate SHA-256 as the failed v34 build: `6ba5a7ebddfccc1fde12c0b7538bd390dad51bc3b963d03c68e7545b961917b0`
+
+The corrected independent structural check reads the two required signer-sequence length prefixes, then validates the signed-data, signature, public key, certificate, digest record, SHA-256 content digest, and RSA signature fields. All 20 APK splits pass this stricter local verifier, their inner ZIP CRC checks pass, and the XAPK outer CRC passes. This is not an official Android SDK `apksigner` result; device installation remains the final check.
+
+The old malformed file was not installed, so proceed with the corrected SIGNFIX file using the previously stated safe test steps. It keeps the same v34 certificate; the diagnostic app still must be uninstalled if the installed v31/v33 build has a different signer. Never uninstall the original store app `com.shinybox.smash`.
