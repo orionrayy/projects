@@ -25,10 +25,9 @@ class StartRuntimeTraceToolkitTests(unittest.TestCase):
 
     def test_no_destructive_adb_package_or_save_commands(self):
         forbidden = re.compile(
-            r"^\\s*&?\\s*\\$?adbPath\\b.*\\b(?:install|uninstall|clear|disable|enable|grant|revoke)\\b"
-            r"|^\\s*&?\\s*\\$?adbPath\\b.*\\bam\\s+force-stop\\b"
-            r"|^\\s*&?\\s*\\$?adbPath\\b.*\\brun-as\\b",
-            re.IGNORECASE | re.MULTILINE,
+            r"(?im)^\s*&\s*\$adbPath\s+.*\b(?:install|uninstall|clear|disable|enable|grant|revoke)\b"
+            r"|^\s*&\s*\$adbPath\s+.*\bam\s+force-stop\b"
+            r"|^\s*&\s*\$adbPath\s+.*\brun-as\b"
         )
         self.assertIsNone(forbidden.search(self.script))
 
