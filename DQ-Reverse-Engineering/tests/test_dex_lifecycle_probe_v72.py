@@ -39,6 +39,7 @@ class ProbeV72Tests(unittest.TestCase):
 .super Ljava/lang/Object;
 .method public onDrawFrame(Ljavax/microedition/khronos/opengles/GL10;)V
     .locals 1
+    invoke-virtual {p0}, Lcom/shinybox/smash/S3DRenderer;->engineShutdown()V
     invoke-virtual {p0}, Lcom/shinybox/smash/S3DRenderer;->engineInitialize()Z
     iput-boolean v0, p0, Lcom/shinybox/smash/S3DRenderer;->bInitialized:Z
     return-void
