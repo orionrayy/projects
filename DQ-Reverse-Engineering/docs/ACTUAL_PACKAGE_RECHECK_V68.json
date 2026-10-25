@@ -1,0 +1,86 @@
+{
+  "schema": "dq-v50-actual-package-audit-v68",
+  "audit_date": "2026-10-25",
+  "status": "PASS_STATIC_ONLY",
+  "runtime_status": "NOT_TESTED",
+  "source": {
+    "file": "Dungeon+Quest_3.3.2.0_APKPure.xapk",
+    "sha256": "3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "package_id": "com.shinybox.smash",
+    "version_name": "3.3.2.0",
+    "size_bytes": 57802446,
+    "split_count": 20,
+    "outer_zip_crc": "PASS",
+    "base_apk_signer_sha256": "9A:28:A9:91:71:C8:F6:3F:34:11:E2:91:F6:D9:6F:13:D5:D9:C1:73:62:06:A0:CF:95:EB:EE:99:BC:31:42:1D"
+  },
+  "candidate_xapk": {
+    "file": "DQ_ModKit_v50_Gold100K_CANDIDATE.xapk",
+    "sha256": "680dd37d23c6ea6ee318e5d08c82dca7cee8bb82e6a8baae75ed7912710c6430",
+    "package_id": "com.shinybox.smash",
+    "version_name": "3.3.2.0",
+    "size_bytes": 57623091,
+    "split_count": 20,
+    "outer_zip_crc": "PASS",
+    "base_apk_signer_sha256": "BF:94:D4:AC:89:C5:1D:D6:32:43:8F:E2:C9:A3:0D:41:59:FE:FF:42:14:66:7B:AB:1C:EF:E3:38:1F:3F:22:90"
+  },
+  "candidate_standalone_apk": {
+    "file": "DQ_ModKit_v50_Gold100K_CANDIDATE_ARM64.apk",
+    "sha256": "f6cd9ed0011b2c7f72dff506397d24194e3ed7d3fb7aa58adea9f8e939ab6dfa",
+    "package_id": "com.shinybox.smash",
+    "version_name": "3.3.2.0",
+    "size_bytes": 57085374,
+    "zip_crc": "PASS",
+    "jarsigner_v1": "PASS",
+    "signer_matches_candidate_xapk": true
+  },
+  "package_structure": {
+    "same_split_names": true,
+    "split_payload_differences_excluding_meta_inf_signing_entries": {
+      "com.shinybox.smash.apk": ["assets/S3DMain.smf"]
+    },
+    "classes_dex_sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "classes_dex_equal_across_source_candidate_xapk_and_standalone_apk": true,
+    "arm64_native_libraries_match_candidate_split": true
+  },
+  "stk": {
+    "source_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "candidate_sha256": "e17884a13c775c9aac3afce3c0003eb9ed54a3b9a32ef4a6b89bf72e6ef9f52e",
+    "version": 6,
+    "entry_count": 5630,
+    "decoded_entries_checked": 5630,
+    "decoded_source_bytes": 94513994,
+    "changed_decoded_entries": [{
+      "path": "Resources/HUD/pause.hud",
+      "source_bytes": 29446,
+      "candidate_bytes": 29731,
+      "source_sha256": "12499b08c49b4a5bb34649468b910b62ba1a64adfd831bd638d13d420af9f395",
+      "candidate_sha256": "785ec813d316a833805ea7fe2c24ad8b3460774d978a07c6e065559a4a33c7af"
+    }],
+    "all_unchanged_entries_identical": true
+  },
+  "installation_assessment": {
+    "stock_and_candidate_package_id_same": true,
+    "stock_and_candidate_signer_same": false,
+    "in_place_update_over_official_signed_install_expected_to_be_rejected": true,
+    "reason": "The candidate is test-signed with a different certificate; this is not proof of a clean-install failure or a runtime failure.",
+    "apksigner_v2_v3_verified": false
+  },
+  "runtime_gates": {
+    "install": false,
+    "launch": false,
+    "gold_button_visible": false,
+    "touch_dispatch": false,
+    "exact_gold_delta": false,
+    "save_reload": false,
+    "save_recovery": false,
+    "crash_regression": false,
+    "catalog_routes_integrated": 0,
+    "catalog_effects_runtime_verified": 0,
+    "catalog_total": 222
+  },
+  "limitations": [
+    "Static content verification only; no install or gameplay runtime was executed.",
+    "JAR/v1 signature inspection is not official Android apksigner verification of v2/v3.",
+    "The standalone Cheats Sandbox harness is not connected to Dungeon Quest game state."
+  ]
+}
