@@ -19,6 +19,10 @@ The v2.51 Batch K report says the cumulative overlay covers 77 of 509 .df script
 
 The generated artifact comprises v2.43 + v2.45 corrective + v2.45 quote-fix. It is not v2.51 and is not an APK. The v2.47 through v2.51 patch ZIPs were unavailable during this run.
 
+## Base APK archive inventory
+
+The Library artifact named DR2C-v1.8.2-full-apkvision.apk was checked read-only: 109,011,456 bytes; SHA-256 d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15; 1,014 ZIP entries; ZIP CRC PASS; zero duplicate paths; three DEX entries and 16 native libraries present. It includes META-INF/CERT.RSA and related signing metadata, but its signature was not cryptographically verified because apksigner is unavailable. This is a repackaged APKVISION candidate, not a clean publisher base and not confirmed to be the installed package. See audit/base_apk_archive_integrity_v2.52.json.
+
 ## Still blocked
 
 No Android build toolchain is installed in the current execution environment: apksigner, zipalign, apktool and adb are not found. No APK was built, signed, installed or runtime-tested. The current device package version and signing identity are unknown. Do not uninstall the existing app or claim Start/UI fixed until there is a save backup, a confirmed installation outcome and post-install runtime evidence.
