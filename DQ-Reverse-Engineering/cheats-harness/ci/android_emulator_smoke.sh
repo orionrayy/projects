@@ -9,13 +9,12 @@ PROJECT="$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness"
 APK="$RUNNER_TEMP/dq-harness-artifact/app-debug.apk"
 TEST_LOG="$RUNNER_TEMP/dq-connected-tests.log"
 LOGCAT="$RUNNER_TEMP/dq-emulator-logcat.txt"
-UI_DUMP="$RUNNER_TEMP/dq-harness-window.xml"
+ACTIVITY_DUMP="$RUNNER_TEMP/dq-harness-activities.txt"
 
 TEST_STATUS=0
 INSTALL_STATUS=1
 START_STATUS=1
-TITLE_STATUS=1
-BOUNDARY_STATUS=1
+ACTIVITY_STATUS=1
 
 capture_logcat() {
   timeout 15s adb logcat -d -v threadtime -t 10000 > "$LOGCAT" 2>&1 || true
@@ -42,22 +41,21 @@ if [ "$INSTALL_STATUS" -eq 0 ]; then
 fi
 
 if [ "$START_STATUS" -eq 0 ]; then
-  timeout 30s adb shell uiautomator dump /sdcard/dq-harness-window.xml >/dev/null 2>&1
-  DUMP_STATUS=$?
-  if [ "$DUMP_STATUS" -eq 0 ]; then
-    timeout 20s adb shell cat /sdcard/dq-harness-window.xml > "$UI_DUMP"
-    grep -q "Cheats Sandbox" "$UI_DUMP"
-    TITLE_STATUS=$?
-    grep -q "GAME LINK" "$UI_DUMP"
-    BOUNDARY_STATUS=$?
+  # The instrumented ActivityScenario test already verifies the title and disconnected banner.
+  # Avoid UIAutomator's hierarchy dump: on slow API 28 emulators it can trigger a System UI ANR.
+  timeout 30s adb shell dumpsys activity activities > "$ACTIVITY_DUMP" 2>&1
+  if [ "$?" -eq 0 ] && grep -q "dev.dqdebug.sandboxharness" "$ACTIVITY_DUMP" \
+      && grep -q "MainActivity" "$ACTIVITY_DUMP"; then
+    ACTIVITY_STATUS=0
   fi
+  cat "$ACTIVITY_DUMP" || true
 fi
 
 capture_logcat
-if [ "$TEST_STATUS" -ne 0 ] || [ "$INSTALL_STATUS" -ne 0 ] || [ "$START_STATUS" -ne 0 ] || [ "$TITLE_STATUS" -ne 0 ] || [ "$BOUNDARY_STATUS" -ne 0 ]; then
-  echo "FAIL: instrumentation=$TEST_STATUS install=$INSTALL_STATUS launch=$START_STATUS title=$TITLE_STATUS disconnected-boundary=$BOUNDARY_STATUS"
+if [ "$TEST_STATUS" -ne 0 ] || [ "$INSTALL_STATUS" -ne 0 ] || [ "$START_STATUS" -ne 0 ] || [ "$ACTIVITY_STATUS" -ne 0 ]; then
+  echo "FAIL: instrumentation=$TEST_STATUS install=$INSTALL_STATUS launch=$START_STATUS activity-present=$ACTIVITY_STATUS"
   grep -E -i "FATAL EXCEPTION|AndroidRuntime|am_crash|Process: dev\\.dqdebug|INSTRUMENTATION_FAILED|AssertionError|Caused by:|Test run failed|OutOfMemory|SIGABRT|SIGSEGV" "$LOGCAT" | tail -n 160 || true
   exit 1
 fi
 
-echo "PASS: instrumentation, APK install, launcher Activity, and disconnected-state UI."
+echo "PASS: instrumentation assertions, APK install, and launcher Activity verification; instrumentation checks the title and disconnected-state boundary."
