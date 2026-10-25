@@ -1,0 +1,70 @@
+{
+  "schema": "dq-no-native-probe-comparator-v73",
+  "date": "2026-10-26",
+  "status": "STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_TESTED",
+  "artifact": {
+    "file_name": "DQ_ModKit_v73_NO_NATIVE_PROBE_ARM64.apk",
+    "size_bytes": 57078652,
+    "sha256": "53799adf3e9d8b3efca062c9a8c97489a050196ad4f9aafcc84acf86d2ad0e49",
+    "package_id": "com.shinybox.dqv73",
+    "launcher_label": "DQ v73 Tester",
+    "abi": "arm64-v8a",
+    "version_name": "3.3.2.0",
+    "split_count": 1
+  },
+  "inputs": {
+    "v72_base_sha256": "6261d077092098986094ebcf79522b767143467b7b3bc074341b2da6700098b6",
+    "v50_candidate_apk_sha256": "f6cd9ed0011b2c7f72dff506397d24194e3ed7d3fb7aa58adea9f8e939ab6dfa",
+    "stock_dex_sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "stk_sha256": "e17884a13c775c9aac3afce3c0003eb9ed54a3b9a32ef4a6b89bf72e6ef9f52e",
+    "v72_bridge_sha256_removed": "82f19bbe8aec8ac95030a5e0f773168f0b3a5bfde76e1fe334f103415f8e0fd5"
+  },
+  "isolation_changes": {
+    "stock_classes_dex_restored": true,
+    "stock_dex_sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "libdqbridge_removed": true,
+    "native_probe_jni_invocations_present": false,
+    "gold_hud_stk_preserved": true,
+    "application_id_is_separate": true,
+    "package_id_changed_from_v72": "com.shinybox.dqv72"
+  },
+  "static_validation": {
+    "zip_crc": "PASS",
+    "zipalign_16k_pre_sign": "PASS",
+    "zipalign_16k_post_sign": "PASS",
+    "apksigner_v1": "PASS",
+    "apksigner_v2": "PASS",
+    "apksigner_v3": "PASS",
+    "aapt_badging": "PASS",
+    "package_id": "PASS",
+    "launcher_label": "PASS",
+    "stock_dex_sha256": "PASS",
+    "bridge_absent": "PASS",
+    "stk_hash_preserved": "PASS"
+  },
+  "signing": {
+    "kind": "local diagnostic test certificate",
+    "certificate_sha256": "f797c412ba5b96e7ec85d5deb36a0b2905c9c1c45ba354328ab54e1ee3579616",
+    "matches_official_signer": false,
+    "private_key_in_repository": false,
+    "private_key_shared": false
+  },
+  "runtime": {
+    "device_install_tested": false,
+    "device_start_tested": false,
+    "force_close_reproduced_or_cleared": false,
+    "native_callback_invoked": false,
+    "gold_plus_100k_runtime_checks": "0/9",
+    "catalog_runtime_verified": "0/222",
+    "promotion_allowed": false
+  },
+  "diagnostic_purpose": "A/B isolation build for force-close after v72: restores exact stock classes.dex and removes libdqbridge.so while preserving the same v50 Gold +100K HUD/STK candidate. A successful v73 start while v72 force-closes supports, but does not alone prove, a probe-path regression. A v73 force-close requires investigation of other packaging, resource, device or game-content causes.",
+  "limitations": [
+    "No physical-device install or launch was performed by this build environment.",
+    "Static validation does not prove installability or runtime stability.",
+    "The package is signed with a local test key and cannot update the publisher-signed application.",
+    "Gold +100K remains unverified; catalogue routes/effects remain 0/222.",
+    "The force-close cause is not confirmed until an A/B device result or crash log is available."
+  ],
+  "promotion_allowed": false
+}
