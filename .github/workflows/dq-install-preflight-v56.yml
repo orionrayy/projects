@@ -1,0 +1,52 @@
+name: DQ package install preflight v56
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/tools/dq_install_preflight_v56.py"
+      - "DQ-Reverse-Engineering/tests/test_dq_install_preflight_v56.py"
+      - "DQ-Reverse-Engineering/docs/DQ_INSTALL_PREFLIGHT_V56.json"
+      - "DQ-Reverse-Engineering/docs/PACKAGE_INSTALL_DIAGNOSIS_V56.md"
+      - ".github/workflows/dq-install-preflight-v56.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/tools/dq_install_preflight_v56.py"
+      - "DQ-Reverse-Engineering/tests/test_dq_install_preflight_v56.py"
+      - "DQ-Reverse-Engineering/docs/DQ_INSTALL_PREFLIGHT_V56.json"
+      - "DQ-Reverse-Engineering/docs/PACKAGE_INSTALL_DIAGNOSIS_V56.md"
+      - ".github/workflows/dq-install-preflight-v56.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile preflight tool and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/dq_install_preflight_v56.py DQ-Reverse-Engineering/tests/test_dq_install_preflight_v56.py
+      - name: Run synthetic classifier tests
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_dq_install_preflight_v56.py' -v
+      - name: Verify checked-in audit summary is internally consistent
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("DQ-Reverse-Engineering/docs/DQ_INSTALL_PREFLIGHT_V56.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          assert data["schema"] == "dq-install-preflight-v56"
+          assert data["assessment"] == "IN_PLACE_UPDATE_REJECTED_SIGNATURE_MISMATCH_EXPECTED"
+          assert data["stock"]["package_id"] == data["candidate"]["package_id"] == "com.shinybox.smash"
+          assert data["stock"]["signer_fingerprints"] != data["candidate"]["signer_fingerprints"]
+          assert data["stock"]["split_count"] == data["candidate"]["split_count"] == 20
+          assert data["stock"]["all_splits_same_package"] and data["candidate"]["all_splits_same_package"]
+          assert data["stock"]["all_splits_same_signer"] and data["candidate"]["all_splits_same_signer"]
+          print("PASS: static preflight report package/signer consistency")
+          PY

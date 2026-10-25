@@ -1,0 +1,40 @@
+{
+  "schema": "dq-install-preflight-v56",
+  "stock": {
+    "artifact": "Dungeon+Quest_3.3.2.0_APKPure.xapk",
+    "artifact_type": "xapk",
+    "size_bytes": 57802446,
+    "sha256": "3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "package_id": "com.shinybox.smash",
+    "version_name": "3.3.2.0",
+    "manifest_split_count": 20,
+    "outer_zip_crc": "PASS",
+    "split_count": 20,
+    "all_splits_same_package": true,
+    "all_splits_same_signer": true,
+    "split_manifest_package_ids": ["com.shinybox.smash"],
+    "signer_fingerprints": ["9A:28:A9:91:71:C8:F6:3F:34:11:E2:91:F6:D9:6F:13:D5:D9:C1:73:62:06:A0:CF:95:EB:EE:99:BC:31:42:1D"]
+  },
+  "candidate": {
+    "artifact": "DQ_ModKit_v50_Gold100K_CANDIDATE.xapk",
+    "artifact_type": "xapk",
+    "size_bytes": 57623091,
+    "sha256": "680dd37d23c6ea6ee318e5d08c82dca7cee8bb82e6a8baae75ed7912710c6430",
+    "package_id": "com.shinybox.smash",
+    "version_name": "3.3.2.0",
+    "manifest_split_count": 20,
+    "outer_zip_crc": "PASS",
+    "split_count": 20,
+    "all_splits_same_package": true,
+    "all_splits_same_signer": true,
+    "split_manifest_package_ids": ["com.shinybox.smash"],
+    "signer_fingerprints": ["BF:94:D4:AC:89:C5:1D:D6:32:43:8F:E2:C9:A3:0D:41:59:FE:FF:42:14:66:7B:AB:1C:EF:E3:38:1F:3F:22:90"]
+  },
+  "assessment": "IN_PLACE_UPDATE_REJECTED_SIGNATURE_MISMATCH_EXPECTED",
+  "note": "Same package ID but different signer certificate. If the official app is already installed, Android is expected to reject an in-place update; use a separate package ID for a diagnostic build. Do not uninstall the official app or treat this as an APK parse failure.",
+  "limits": [
+    "keytool/jarsigner cover the JAR/v1 verification path, not APK Signature Scheme v2/v3.",
+    "A matching signer does not prove install, launch, HUD, gameplay, or save behavior.",
+    "Do not publish runtime status without device/emulator evidence."
+  ]
+}
