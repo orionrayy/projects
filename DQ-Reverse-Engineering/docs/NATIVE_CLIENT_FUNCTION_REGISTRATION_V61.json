@@ -1,0 +1,143 @@
+{
+  "schema":"dq-native-client-function-registration-v61",
+  "audit_status":"CLIENT_FUNCTION_REGISTRATION_API_FOUND_CALLBACK_ABI_AND_GAME_INTEGRATION_UNPROVEN",
+  "target":{
+    "game_version":"3.3.2.0",
+    "package_id":"com.shinybox.smash",
+    "stock_xapk_sha256":"3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b",
+    "stock_stk_sha256":"340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "native_library":"libS3DClient.so",
+    "native_library_sha256":"0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
+    "abi":"arm64-v8a"
+  },
+  "native_entrypoints":[
+    {
+      "symbol":"S3DClient_RegisterFunction",
+      "va":"0x7aec14",
+      "size_bytes":188,
+      "declared_by_demangled_internal_call":"Kernel::RegisterClientFunction(String const&, S3DX::AIFunction const*)",
+      "observed_behavior":[
+        "Rejects a null or empty function name.",
+        "Requires the engine instance and CoreKernel to be available.",
+        "Constructs an engine String from the supplied name.",
+        "Passes that name and the supplied S3DX::AIFunction pointer into Kernel::RegisterClientFunction.",
+        "Returns the internal registration success flag as a boolean-like integer."
+      ],
+      "callback_struct_layout_known":false,
+      "callback_calling_convention_verified":false,
+      "lifecycle_thread_contract_known":false,
+      "runtime_tested":false
+    },
+    {
+      "symbol":"S3DClient_UnregisterFunction",
+      "va":"0x7aecd0",
+      "size_bytes":132,
+      "declared_by_demangled_internal_call":"Kernel::UnregisterClientFunction(String const&)",
+      "observed_behavior":[
+        "Rejects a null or empty function name.",
+        "Obtains CoreKernel and forwards the name to Kernel::UnregisterClientFunction."
+      ],
+      "callback_lifetime_and_inflight_call_contract_known":false,
+      "runtime_tested":false
+    },
+    {
+      "symbol":"S3DClient_CallHUDAction",
+      "va":"0x7ae594",
+      "size_bytes":112,
+      "declared_by_demangled_internal_call":"GameManager::CallHUDAction(char const*, unsigned short, char const**)",
+      "observed_behavior":[
+        "Obtains the current GameManager from the client engine.",
+        "Passes the provided action name, 16-bit argument count and string-array pointer to GameManager::CallHUDAction.",
+        "Does not directly call RewardGold, RewardDust, SpendGold or another named uai_gp_hud model function in this wrapper body."
+      ],
+      "runtime_tested":false
+    }
+  ],
+  "internal_registration_path":{
+    "register_kernel_method":{
+      "symbol":"Pandora::EngineCore::Kernel::RegisterClientFunction(String const&, S3DX::AIFunction const*)",
+      "va":"0x82cccc",
+      "size_bytes":600,
+      "observed_behavior":[
+        "Uses a kernel-owned string hash table and parallel pointer storage for client AIFunction registrations.",
+        "Looks up the name before inserting/replacing its pointer entry.",
+        "Requires a valid initialized kernel registry."
+      ],
+      "proves_custom_callback_can_be_declared_as_safe_gameplay_handler":false
+    },
+    "unregister_kernel_method":{
+      "symbol":"Pandora::EngineCore::Kernel::UnregisterClientFunction(String const&)",
+      "va":"0x828628",
+      "size_bytes":164
+    },
+    "client_call_method":{
+      "symbol":"Pandora::ClientCore::GameManager::CallHUDAction(char const*, unsigned short, char const**)",
+      "va":"0xa5e5c0",
+      "size_bytes":844,
+      "observed_behavior":[
+        "Rejects a null or empty action name.",
+        "Appends a fixed-size action/argument record to an internal GameManager-owned queue at an object-relative location (this + 0x200).",
+        "The inspected copy path has four explicit string-argument slots; behavior for argument counts beyond four is not validated and must be treated as unsupported.",
+        "The inspected function does not itself perform a direct AIFunction lookup or invoke a named RewardGold/model function."
+      ],
+      "queue_processing_and_model_callback_resolution_fully_recovered":false,
+      "runtime_tested":false
+    }
+  },
+  "related_engine_functions":{
+    "ai_model_add_function":{
+      "symbol":"Pandora::EngineCore::AIModel::AddFunction(String const&, String const&, String const&)",
+      "va":"0x83b6bc",
+      "size_bytes":824,
+      "observed_role":"Creates/resolves an engine AIFunction resource, registers its script on an AIModel resource, and marks resource modified.",
+      "is_a_client_extension_entrypoint":false
+    },
+    "ai_model_add_handler":{
+      "symbol":"Pandora::EngineCore::AIModel::AddHandler(String const&, String const&, bool, String const&, String const&)",
+      "va":"0x83bd98",
+      "size_bytes":896,
+      "observed_role":"Creates/resolves an engine AIHandler resource, configures handler/script state, and marks the model resource modified.",
+      "is_a_client_extension_entrypoint":false
+    }
+  },
+  "function_handler_and_catalog_boundary":{
+    "gold_model_function":"uai_gp_hud::RewardGold(S3DX::AIVariable)",
+    "gold_handler":"uai_gp_hud::onSetGold(int, S3DX::AIVariable const*, S3DX::AIVariable*)",
+    "gold_function_and_handler_proven_equivalent":false,
+    "custom_client_function_registration_path_exists_statically":true,
+    "custom_function_called_from_new_HUD_action_proven":false,
+    "new_HUD_action_can_supply_typed_AIVariable_to_client_function_proven":false,
+    "gameplay_state_readback_and_save_contract_proven":false
+  },
+  "public_reference":{
+    "url":"https://vps.trisymphony.com/shivatutorials/pages/android-plugins-part-4-no-plugins/index.html",
+    "published_date":"2020-10-12",
+    "summary":"A legacy ShiVa tutorial describes integrating native callbacks by changing the native client project and registering AI-event hooks. It is contextual background for the native-client integration boundary, not proof this compiled Dungeon Quest build exposes the same editable project or callback ABI."
+  },
+  "integration_gate":{
+    "catalog_items":222,
+    "catalog_categories":14,
+    "catalog_routes_assigned":0,
+    "runtime_verified_catalog_effects":0,
+    "separate_native_candidate_actions":1,
+    "runtime_verified_candidate_actions":0,
+    "client_function_registration_API_seen":true,
+    "S3DX_AIFunction_ABI_recovered":false,
+    "function_lifecycle_thread_contract_recovered":false,
+    "new_HUD_action_to_registered_function_call_contract_proven":false,
+    "status":"BLOCKED"
+  },
+  "next_gates":[
+    "Locate the exact-build S3DX/AIFunction declaration and its callback/user-data layout from an authorized matching SDK/header or source project.",
+    "Determine whether the application provides an authorized native initialization hook for registering and unregistering a client function and establish callback lifetime/thread rules.",
+    "Use a benign no-side-effect test callback in an isolated development build to prove registration, invocation and unregister behavior before considering any game-state handler.",
+    "Only after the native callback contract is proven should a bounded, allow-listed adapter be designed; preserve the runtime read-back, save/reload, recovery and regression gates."
+  ],
+  "scope_limitations":[
+    "Static ARM64 disassembly only; no live invocation, injection, APK mutation or gameplay mutation was performed.",
+    "The public tutorial is older and describes an author-controlled ShiVa Android Studio project; it is not a guarantee of compatibility with Dungeon Quest's packaged runtime.",
+    "S3DX::AIFunction is accepted as an opaque pointer by the exported registration entrypoint; its exact layout and ABI have not been recovered in this pass.",
+    "A registered client function API does not itself prove that the packaged game contains a hook to register a new function or that an arbitrary HUD action can call it.",
+    "The catalog remains fail-closed; no cheat route is assigned or runtime verified."
+  ]
+}

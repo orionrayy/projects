@@ -1,0 +1,38 @@
+name: DQ native client-function registration audit v61
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_CLIENT_FUNCTION_REGISTRATION_V61.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V61_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_native_client_function_registration_v61.py"
+      - "DQ-Reverse-Engineering/tests/test_native_client_function_registration_v61.py"
+      - ".github/workflows/dq-native-client-function-registration-v61.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NATIVE_CLIENT_FUNCTION_REGISTRATION_V61.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V61_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_native_client_function_registration_v61.py"
+      - "DQ-Reverse-Engineering/tests/test_native_client_function_registration_v61.py"
+      - ".github/workflows/dq-native-client-function-registration-v61.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-client-function-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/validate_native_client_function_registration_v61.py DQ-Reverse-Engineering/tests/test_native_client_function_registration_v61.py
+      - name: Validate client-function API report
+        run: python DQ-Reverse-Engineering/tools/validate_native_client_function_registration_v61.py DQ-Reverse-Engineering/docs/NATIVE_CLIENT_FUNCTION_REGISTRATION_V61.json
+      - name: Test fail-closed API-boundary decisions
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_native_client_function_registration_v61.py' -v
