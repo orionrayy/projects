@@ -181,3 +181,9 @@ jobs:
 
       - name: Validate Android emulator smoke script syntax
         run: bash -n DQ-Reverse-Engineering/cheats-harness/ci/android_emulator_smoke.sh
+
+      - name: Validate v53 HUD List serialization audit tool
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m py_compile tools/hud_list_audit_v53.py tests/test_hud_list_audit_v53.py
+          python -m unittest discover -s tests -p 'test_hud_list_audit_v53.py' -v

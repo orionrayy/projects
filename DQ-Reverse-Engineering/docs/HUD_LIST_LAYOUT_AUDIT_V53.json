@@ -1,0 +1,48 @@
+{
+  "schema": "hud-list-layout-evidence-v53",
+  "target": {
+    "package_id": "com.shinybox.smash",
+    "version": "3.3.2.0",
+    "abi": "arm64-v8a"
+  },
+  "files": [
+    {
+      "path": "Resources/HUD/pause.hud",
+      "sha256": "12499b08c49b4a5bb34649468b910b62ba1a64adfd831bd638d13d420af9f395",
+      "element_count": 126,
+      "type3_list_count": 0
+    },
+    {
+      "path": "Resources/HUD/debug.hud",
+      "sha256": "02ed5420fceacaba5bc614596fddc52646abf04914446e26bc240806930f15b6",
+      "element_count": 71,
+      "type3_list_count": 0
+    },
+    {
+      "path": "Resources/HUD/match_result_anim.hud",
+      "sha256": "fec7d9b18c906d4d75904205f58b3eb3205540c04aefb9fc651c6d2ac2cf9402",
+      "element_count": 108,
+      "type3_list_count": 1,
+      "list_elements": [
+        {
+          "index": 0,
+          "name": "list",
+          "label": "rank_up_player_container",
+          "serialized_record_bytes": 237,
+          "position": {
+            "x": 0.5161999464035034,
+            "y": -2.2351741790771484e-8,
+            "width": 0.4527999758720398,
+            "height": 2
+          },
+          "list_flag_1f4": 14,
+          "nonempty_resource_fields": [],
+          "row_template_resource_present": false
+        }
+      ]
+    }
+  ],
+  "all_inspected_stock_huds_type3_list_count": 1,
+  "interpretation": "Static schema only; no generic row population, selection callback, or stable-ID dispatch inferred.",
+  "runtime_verified_cheat_menu": false
+}
