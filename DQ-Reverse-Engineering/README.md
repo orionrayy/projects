@@ -4,6 +4,12 @@
 
 Analyzed build: package `com.shinybox.smash`, version `3.3.2.0` (version code `1423433200`). The original APK, raw DEX, original pack, native libraries, and credential-bearing asset contents are excluded from this public source tree.
 
+## Pause → Options → Cheats route blocker — v47
+
+- [Read-only route evidence and remaining native requirements](docs/PAUSE_OPTIONS_CHEATS_ROUTE_AUDIT_V47.md)
+
+The source Pause button calls uai_gp_options.onShowOptions; the options model has no onShowCheats handler, and uai_gp_debug is a shader-diagnostics model rather than the controller for debug.hud. The 222-row HTML workbench is scrollable but remains disconnected from game state: the current matrix is 0 fully integrated, 0 runtime verified, 3 unverified native candidates and 219 requiring a verified adapter. No guessed callback was added to the source Pause HUD.
+
 ## HUD action serializer and one-row debug candidate — v46
 
 - [Field-preserving action encoder](tools/hud_action_serializer_v46.py)
