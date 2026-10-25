@@ -1,0 +1,49 @@
+name: DQ v73 no-native-probe comparator report gate
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NO_NATIVE_PROBE_COMPARATOR_V73.json"
+      - "DQ-Reverse-Engineering/docs/NO_NATIVE_PROBE_COMPARATOR_V73.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V73_2026-10-26.md"
+      - "DQ-Reverse-Engineering/docs/NO_NATIVE_PROBE_COMPARATOR_RUNTIME_GUIDE_V73.md"
+      - "DQ-Reverse-Engineering/tools/validate_no_native_probe_comparator_v73.py"
+      - "DQ-Reverse-Engineering/tools/build_no_native_probe_comparator_v73.py"
+      - "DQ-Reverse-Engineering/tests/test_no_native_probe_comparator_v73.py"
+      - ".github/workflows/dq-no-native-probe-comparator-v73.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/NO_NATIVE_PROBE_COMPARATOR_V73.json"
+      - "DQ-Reverse-Engineering/docs/NO_NATIVE_PROBE_COMPARATOR_V73.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V73_2026-10-26.md"
+      - "DQ-Reverse-Engineering/docs/NO_NATIVE_PROBE_COMPARATOR_RUNTIME_GUIDE_V73.md"
+      - "DQ-Reverse-Engineering/tools/validate_no_native_probe_comparator_v73.py"
+      - "DQ-Reverse-Engineering/tools/build_no_native_probe_comparator_v73.py"
+      - "DQ-Reverse-Engineering/tests/test_no_native_probe_comparator_v73.py"
+      - ".github/workflows/dq-no-native-probe-comparator-v73.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-v73-comparator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile source, validator and tests
+        run: |
+          set -eu
+          python -m py_compile \
+            DQ-Reverse-Engineering/tools/validate_no_native_probe_comparator_v73.py \
+            DQ-Reverse-Engineering/tools/build_no_native_probe_comparator_v73.py \
+            DQ-Reverse-Engineering/tests/test_no_native_probe_comparator_v73.py
+      - name: Validate pinned static report
+        working-directory: DQ-Reverse-Engineering
+        run: python tools/validate_no_native_probe_comparator_v73.py docs/NO_NATIVE_PROBE_COMPARATOR_V73.json
+      - name: Run fail-closed report regression tests
+        working-directory: DQ-Reverse-Engineering
+        run: python -m unittest discover -s tests -p 'test_no_native_probe_comparator_v73.py' -v
