@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
@@ -30,6 +31,7 @@ public final class MainActivitySmokeTest {
                 assertTextPresent(decor, "does not modify Dungeon Quest");
                 assertEquals(222, activity.getCatalogCount());
                 assertEquals(222, activity.getVisibleCount());
+                assertEquals(20, activity.getRenderedCount());
 
                 clickCategory(activity, "Economy Lab");
                 assertEquals(17, activity.getVisibleCount());
@@ -50,6 +52,12 @@ public final class MainActivitySmokeTest {
 
                 clickCategory(activity, "All");
                 assertEquals(222, activity.getVisibleCount());
+                assertEquals(20, activity.getRenderedCount());
+                ScrollView listScroll = findScrollViewByTag(activity.getWindow().getDecorView(), "catalog-scroll");
+                assertNotNull("Catalog must be in a scrollable container", listScroll);
+                listScroll.scrollTo(0, 100000);
+                assertTrue("Scrolling near the bottom must append another batch",
+                        activity.getRenderedCount() > 20);
                 EditText search = findEditTextByTag(activity.getWindow().getDecorView(), "catalog-search");
                 assertNotNull("Search field must be present", search);
                 search.setText("economy.currency_override");
@@ -95,6 +103,18 @@ public final class MainActivitySmokeTest {
         Button button = findButton(activity.getWindow().getDecorView(), label);
         assertNotNull("Expected button: " + label, button);
         button.performClick();
+    }
+
+    private static ScrollView findScrollViewByTag(View view, String tag) {
+        if (view instanceof ScrollView && tag.equals(view.getTag())) return (ScrollView) view;
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                ScrollView found = findScrollViewByTag(group.getChildAt(i), tag);
+                if (found != null) return found;
+            }
+        }
+        return null;
     }
 
     private static EditText findEditTextByTag(View view, String tag) {
