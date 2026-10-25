@@ -10,13 +10,13 @@ Previous checkpoint: v66
 - Added a fail-closed source-only smali overlay tool for one pinned classes.dex build.
 - The overlay consumes engineInitialize()'s boolean return and only calls the harmless ABI probe on success, while preserving the existing bInitialized assignment.
 - Added helper class source for lazy library loading, side-effect-free 21 → 42 registration/invocation, and unregister-before-shutdown at both lifecycle sites.
-- Added eight regression tests, a synthetic smali fixture builder, and a CI assembler/re-disassembler gate.
+- Added nine regression tests, a synthetic smali fixture builder, and a CI assembler/re-disassembler gate.
 - The tool refuses a mismatched source DEX hash, changed/ambiguous method shape, duplicate hooks or overwrite of an existing output directory.
 
 ## Verification matrix
 
-- Source patcher regression tests: 8 cases authored; pending CI confirmation in this GitHub increment.
-- Synthetic smali assemble/re-disassemble: pending CI.
+- Source patcher regression tests: **9/9 passed** in GitHub Actions run [40206173884](https://github.com/orionrayy/projects/actions/runs/40206173884).
+- Synthetic smali assemble/re-disassemble: **PASS** in the same workflow run; synthetic fixture only.
 - Actual source DEX transformed: no.
 - Native bridge packaged into Dungeon Quest: no.
 - Original-game installation, startup and in-game callback: not verified.
