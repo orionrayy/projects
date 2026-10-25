@@ -1,5 +1,14 @@
 # Changelog — DR2C VORENYX
 
+## Source reconciliation checkpoint — 25 October 2026 (not a release version)
+
+- Added `tools/reconcile_overlay.py` and four unit tests to reconcile ordered overlay layers with strict base SHA-256 pinning, ZIP CRC and duplicate-path checks, unsafe-path rejection, source-path validation, the canonical `GAME-MARKER` invariant, and escaped-quote scanning.
+- Independently reconciled the available base source archive + v2.43 localization patch + v2.45 corrective source patch + v2.45 Start quote-fix source patch. Result: 272 overlay paths (269 Deathforth `.df` payloads), 18 later-layer path overrides, ZIP CRC PASS, no duplicate paths, canonical boot marker PASS, escaped-quote scan PASS; four unit tests PASS.
+- Artifact SHA-256: `faebba3ee0d14dd0cee668fe132fa95c8ba21f08963f627f59e5364c02658c0f`. This is a normalized **v2.43 + v2.45** source patch, not v2.51 and not an APK.
+- The actual v2.47–v2.51 binary patch ZIPs were unavailable for this execution, so the discrepancy between the v2.51 report's 77/509 script count and the available v2.43 ZIP's 269 `.df` payloads remains unresolved. Neither number is treated as a localization percentage.
+- APK build/sign/install/runtime: NOT PERFORMED. The available environment lacks `apksigner`, `zipalign`, `apktool`, and `adb`. Do not label the project release-ready until the exact newer patch archive is reconciled and device-level Start/UI/gameplay/save-load tests pass.
+
+
 - **v2.51 Batch K — character, encounter and endgame localization:** 206 curated translation/template records across 9 scripts (211 literal occurrences), including new Sasquatch/Santa/Cupid overlays, plus cemetery/Dracula, mad scientist, ninja, gym, Johnny, and endgame/credits strings. Cumulative overlay: 77/509 script files. Static checks: 0 lexical errors, escaped-quote regressions, executable-skeleton differences, handler-order differences, or unexpected missing mappings; ZIP CRC PASS, 85 entries, no duplicate paths. Source-only; no APK/device test. SHA-256: `e265c7d2789e6936aadea49a42c4b5c87799c202945f8cfa4bee7291a8a40046`. See [report](docs/LOCALIZATION_BATCH_K_v2.51.md).
 
 - **v2.49 Batch I — gameplay and encounter localization:** 203 translation operations applied across 14 additional `.df` scripts, covering RPG class descriptions/options, toilet and drag-race scenes, gym/chess, alien/anime events, bandit encounters, recruit CYOA, and trader/weapon descriptions. Cumulative source overlay: 73/509 scripts. Static checks: 0 quote-parity failures, 0 escaped quote regressions, 0 executable-skeleton differences, 0 unmatched mappings; ZIP CRC PASS (77 entries, no duplicates). Source-only; no APK build/runtime test. See [report](docs/LOCALIZATION_BATCH_I_v2.49.md).
