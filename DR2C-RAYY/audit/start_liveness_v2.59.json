@@ -1,0 +1,97 @@
+{
+  "project": "DR2C VORENYX",
+  "audit": "Start-liveness static re-audit after user-reported Start no-op",
+  "date": "2026-10-25",
+  "status": "STATIC_ROUTE_WIRING_PRESENT_RUNTIME_ROOT_CAUSE_UNRESOLVED",
+  "candidate": {
+    "file": "DR2C_VORENYX_v2.57_SIGNATURE_FIX.apk",
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7",
+    "note": "Signature-fix derivative has the same Deathforth script payloads as v2.57."
+  },
+  "routeFiles": [
+    {
+      "path": "assets/deathforth/boot-end.df",
+      "maskedCodeSkeletonMatchesBase": true,
+      "orderedForthSymbolsMatch": true
+    },
+    {
+      "path": "assets/deathforth/events.df",
+      "byteIdenticalToBase": true,
+      "maskedCodeSkeletonMatchesBase": true,
+      "orderedForthSymbolsMatch": true
+    },
+    {
+      "path": "assets/deathforth/game-info.df",
+      "maskedCodeSkeletonMatchesBase": true,
+      "orderedForthSymbolsMatch": true
+    },
+    {
+      "path": "assets/deathforth/game-select.df",
+      "maskedCodeSkeletonMatchesBase": true,
+      "orderedForthSymbolsMatch": true
+    },
+    {
+      "path": "assets/deathforth/game-start.df",
+      "maskedCodeSkeletonMatchesBase": true,
+      "orderedForthSymbolsMatch": true
+    },
+    {
+      "path": "assets/deathforth/game-load.df",
+      "byteIdenticalToBase": true,
+      "maskedCodeSkeletonMatchesBase": true,
+      "orderedForthSymbolsMatch": true
+    },
+    {
+      "path": "assets/deathforth/game-save.df",
+      "byteIdenticalToBase": true,
+      "maskedCodeSkeletonMatchesBase": true,
+      "orderedForthSymbolsMatch": true
+    },
+    {
+      "path": "assets/deathforth/minimenu.df",
+      "byteIdenticalToBase": true,
+      "maskedCodeSkeletonMatchesBase": true,
+      "orderedForthSymbolsMatch": true
+    },
+    {
+      "path": "assets/deathforth/events/tutorial.df",
+      "maskedCodeSkeletonMatchesBase": false,
+      "orderedForthSymbolsMatch": true,
+      "differences": [
+        "four `chim` display-expression references changed to `cname`",
+        "pronoun-expression tokens `bHe`, `bhim`, `bhe` removed from two translated outcomes"
+      ],
+      "handlerIdsPreserved": [
+        "tutorchat-1",
+        "tutorchat-2",
+        "tutorchat-3"
+      ]
+    }
+  ],
+  "invariants": {
+    "bootMarkerPresent": "\"GAME-MARKER\" $anew",
+    "finalBootMarkerTextPresent": "\"SIAP.\" print",
+    "mainEventSelectAssignmentPresent": "last to main-event-do-select",
+    "selectStartDeferredAndAssigned": true,
+    "selectBootDefinitionPresent": true,
+    "gameStartNewDefinitionPresent": true,
+    "mainEventNewSessionAssignmentPresent": true,
+    "initialNewSaveRoute": "If tutorial-done is false, select-boot loads assets/deathforth/events/tutorial.df."
+  },
+  "findings": [
+    "The signature-fix derivative did not modify script payloads and therefore did not fix Start dispatch/runtime state.",
+    "Static route wiring is present. The tutorial is the next script loaded on Start for a new/unfinished tutorial state; its display-expression identifier tokens differ slightly from the base, though single-quoted handler symbols remain preserved.",
+    "Because no embedded Deathforth runtime ran, this is an isolation target rather than proof of a syntax fault.",
+    "PairIP/licensing libraries remain byte-identical to base while package/assets/signing differ. Native integrity/licensing refusal remains a possible alternative; no bypass attempted."
+  ],
+  "unverified": [
+    "Device runtime and input dispatch",
+    "Whether select-boot is entered when Start is tapped",
+    "Whether events/tutorial.df compiles/loads on device",
+    "Logcat/compiler exception or PairIP/licensing runtime outcome",
+    "Gameplay, save/load and stability"
+  ],
+  "environmentLimitations": [
+    "No ADB, emulator, official apksigner, apktool, aapt or Deathforth VM available in audit environment."
+  ]
+}
