@@ -21,6 +21,12 @@ Locally, the parser validated 68 source HUD resources (4,956 element records), a
 
 The source ARM64 library shows the existing LegendEx model calling its native CreateLegendItem and UpdateList methods from onOpen. CreateLegendItem references the listitem_legend template, generated legend_ instance names, the legendex.list container and the model's own click callback. This is concrete evidence of an AOT-implemented, template-based row pattern, not a reusable 222-cheat dispatcher. The model is tied to LegendEx data and native code in libS3DClient.so; editing AIM/HUD declarations alone does not add new native handler bodies. The next gate remains a generic, allow-listed action bridge plus one-row runtime proof in a parallel package. No game asset or native library was modified and no APK/XAPK was built by v42.
 
+## Latest native Debug HUD command audit — v43
+
+- [Existing debug command map and fixed Gold reward candidate](docs/DEBUG_HUD_COMMAND_MAP_V43.md)
+
+Static disassembly confirms that an unexposed `uai_gp_hud::onDebug(6.0)` branch calls `RewardGold` with the numeric argument 100000.0. This is a candidate for a fixed +100,000 Gold sandbox action using an existing native dispatch route; it remains NOT-RUNTIME-VERIFIED and no UI row or asset change was made. The neighboring command 7 is contextual to LegendEx state and must not be treated as a generic spend control. The 222-cheat menu remains blocked on native row population/allow-listed dispatch; no APK/XAPK was built.
+
 ## Artifact scope — read this before comparing ZIPs
 
 | Artifact | Scope | Explicit exclusions |
