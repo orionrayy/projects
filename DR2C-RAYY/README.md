@@ -1,6 +1,6 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint (26 October 2026): v2.64 Start Runtime Trace Toolkit hardened · 11/11 static assertions PASS · Android runtime BLOCKED pending device trace · Full localization NOT COMPLETE**
+**Latest checkpoint (26 October 2026): v2.65 Install/Start Runtime Trace Toolkit · 17/17 static assertions PASS · Android runtime pending device trace · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
@@ -63,6 +63,16 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - Full project archive v2.5: **105,064,456 bytes**; SHA-256 `cc0e7818dd87f0fe508692ae0545343ad89c727c401c81ad00f703377962fa97`; 185 entries; 184 manifest entries; CRC PASS; zero manifest hash failures; zero unmanifested files; zero duplicate paths.
 - The binary patch and full source archive are **not hosted in this public repository**. SHA-256 sidecars accompany the local release artifacts.
 
+
+
+## Latest diagnostic checkpoint — v2.65 (26 October 2026)
+
+A dual-mode trace collector now covers both failed APK installation and an unresponsive Start button. It no longer clears device log buffers, captures from the live edge, stops after 90 seconds, records package metadata before and after, and removes temporary raw logs. Static checks are PASS; no actual install or Start tap has been traced in this environment. Do not build another APK until the trace identifies the failing stage.
+
+- [v2.65 checkpoint](docs/INSTALL_START_TRACE_TOOLKIT_v2.65.md)
+- [Sanitized validation JSON](audit/install_start_trace_toolkit_v2.65.json)
+- [PowerShell collector](tools/runtime_trace_v2.65/Collect-DR2CTrace.ps1)
+- [Toolkit README](tools/runtime_trace_v2.65/README.md)
 
 ## Latest diagnostic checkpoint — v2.64 (26 October 2026)
 
