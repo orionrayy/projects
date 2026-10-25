@@ -1,0 +1,65 @@
+{
+  "schema": "dq-provider-authority-fix-v74",
+  "date": "2026-10-26",
+  "status": "STATIC_VALIDATION_PASS_DEVICE_INSTALL_NOT_TESTED",
+  "artifact": {
+    "file_name": "DQ_ModKit_v74_PROVIDER_AUTHORITY_FIX_ARM64.apk",
+    "size_bytes": 57078652,
+    "sha256": "6185a5f85eaf80ec3cc290cc10e2f0539a5e4ef9eb43ea51b1bae7b4feceda8e",
+    "package_id": "com.shinybox.dqv74",
+    "launcher_label": "DQ v74 Tester",
+    "version_name": "3.3.2.0",
+    "abi": "arm64-v8a",
+    "split_count": 1
+  },
+  "inputs": {
+    "v73_apk_sha256": "53799adf3e9d8b3efca062c9a8c97489a050196ad4f9aafcc84acf86d2ad0e49",
+    "stock_dex_sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "stk_sha256": "e17884a13c775c9aac3afce3c0003eb9ed54a3b9a32ef4a6b89bf72e6ef9f52e"
+  },
+  "manifest_fix": {
+    "renamed_package_id": true,
+    "renamed_authorities": {
+      "com.shinybox.smash.mobileadsinitprovider": "com.shinybox.dqv74.mobileadsinitprovider",
+      "com.shinybox.smash.androidx-startup": "com.shinybox.dqv74.androidx-startup"
+    },
+    "old_official_authorities_remaining": false,
+    "new_authorities_unique": true
+  },
+  "static_validation": {
+    "zip_crc": "PASS",
+    "zipalign_16k_pre_sign": "PASS",
+    "zipalign_16k_post_sign": "PASS",
+    "apksigner_v1": "PASS",
+    "apksigner_v2": "PASS",
+    "apksigner_v3": "PASS",
+    "aapt_package_and_label": "PASS",
+    "aapt_provider_authorities": "PASS",
+    "stock_dex_hash": "PASS",
+    "stk_hash": "PASS",
+    "probe_bridge_absent": "PASS"
+  },
+  "signing": {
+    "kind": "local diagnostic test certificate",
+    "certificate_sha256": "3fb6da2754270acdbb0cfdb70a012c5ab6007ece1efdd73adef9028fca25df7a",
+    "matches_official_signer": false,
+    "private_key_in_repository": false,
+    "private_key_shared": false
+  },
+  "runtime": {
+    "device_install_tested": false,
+    "device_launch_tested": false,
+    "provider_conflict_on_device_confirmed": false,
+    "gold_runtime_checks": "0/9",
+    "catalog_runtime_verified": "0/222",
+    "promotion_allowed": false
+  },
+  "limitations": [
+    "The v73 manifest retained two ContentProvider authorities under the official package namespace; these would conflict if the official game is installed. This is a high-confidence install-failure hypothesis, not yet confirmed by an on-device PackageManager code.",
+    "v74 changes those two authorities to unique names and uses a separate package ID.",
+    "No physical-device install or launch was run in this build environment.",
+    "A local test signer is used, not the official publisher certificate.",
+    "Gold +100K and the 222-entry catalogue remain unverified."
+  ],
+  "promotion_allowed": false
+}
