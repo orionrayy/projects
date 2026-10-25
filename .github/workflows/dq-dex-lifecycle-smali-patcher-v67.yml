@@ -83,6 +83,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dq-v67-smali-toolchain
-          path: ${{ runner.temp }}/smali-tools/lib/*.jar
+          path: |
+            ${{ runner.temp }}/smali-tools/lib/*.jar
+            DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v67.py
           if-no-files-found: error
           retention-days: 1
