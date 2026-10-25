@@ -7,6 +7,11 @@
 - Target voice: natural colloquial Indonesian, blunt and sarcastic with occasional profanity, distinct NPC personas, and context-sensitive community slang.
 - Target: 100% of player-visible text reviewed and localized; **not achieved yet**.
 
+## Install-failure investigation — v2.57 signature-fix derivative (25 October 2026)
+- User reported v2.57 still failed to install after uninstalling the previous package. Confirmed manifest target SDK 35 plus JAR/v1-only signing; Android 11 requires APK Signature Scheme v2 or higher for apps targeting API 30+.
+- Separate test derivative `DR2C_VORENYX_v2.57_SIGNATURE_FIX.apk`, SHA-256 `a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7`; local v1 and v2 verification passes, but official `apksigner` and device runtime are not tested. This does not replace or include the separately documented v2.58 localization batch.
+- Report: `docs/APK_SIGNATURE_FIX_v2.57.md`. PairIP/license components remain unchanged; no bypass was attempted.
+
 ## Active checkpoint — v2.58 APK test candidate (25 October 2026)
 
 - Local test APK built: `DR2C_VORENYX_v2.58_TEST_CANDIDATE.apk`; SHA-256 `11ddc0e41df162837f74c676d602403952c3f6c875f4f6dacd91db68adbb41b0`.
