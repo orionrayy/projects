@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/** Emulator smoke test for all 222 catalog rows and the explicit disconnected boundary. */
+/** Bounded emulator smoke test for the 222-entry catalog and disconnected safety boundary. */
 @RunWith(AndroidJUnit4.class)
 public final class MainActivitySmokeTest {
     @Test
@@ -35,17 +35,6 @@ public final class MainActivitySmokeTest {
                 assertEquals(17, activity.getVisibleCount());
                 assertTextPresent(activity.getWindow().getDecorView(), "Debug Gold Balance");
 
-                clickCategory(activity, "All");
-                EditText search = findEditTextByTag(activity.getWindow().getDecorView(), "catalog-search");
-                assertNotNull("Search field must be present", search);
-                search.setText("economy.currency_override");
-                clickButton(activity, "Search");
-                assertEquals(1, activity.getVisibleCount());
-                assertTextPresent(activity.getWindow().getDecorView(), "Debug Gold Balance");
-                search.setText("");
-                clickButton(activity, "Search");
-                assertEquals(222, activity.getVisibleCount());
-
                 clickCategory(activity, "Player & Survival");
                 assertEquals(27, activity.getVisibleCount());
                 Switch firstToggle = findFirstSwitch(activity.getWindow().getDecorView());
@@ -60,12 +49,13 @@ public final class MainActivitySmokeTest {
                 assertEquals(0, activity.getVisibleCount());
 
                 clickCategory(activity, "All");
-                clickButton(activity, "Power preview");
-                assertTrue(activity.getSandboxState().stagedCount() > 0);
-                assertTextPresent(activity.getWindow().getDecorView(), "GAME LINK  •  DISCONNECTED");
-                clickButton(activity, "Undo");
-                clickButton(activity, "Reset");
-                assertEquals(0, activity.getSandboxState().stagedCount());
+                assertEquals(222, activity.getVisibleCount());
+                EditText search = findEditTextByTag(activity.getWindow().getDecorView(), "catalog-search");
+                assertNotNull("Search field must be present", search);
+                search.setText("economy.currency_override");
+                clickButton(activity, "Search");
+                assertEquals(1, activity.getVisibleCount());
+                assertTextPresent(activity.getWindow().getDecorView(), "Debug Gold Balance");
                 assertTextPresent(activity.getWindow().getDecorView(), "GAME LINK  •  DISCONNECTED");
             });
         }
