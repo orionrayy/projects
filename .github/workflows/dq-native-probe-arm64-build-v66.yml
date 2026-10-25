@@ -1,0 +1,56 @@
+name: DQ native client probe ARM64 build v66
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/native-client-probe-v64/**"
+      - "DQ-Reverse-Engineering/ci/build_native_probe_arm64_v66.sh"
+      - "DQ-Reverse-Engineering/docs/DQ_NATIVE_PROBE_ARM64_BUILD_V66.md"
+      - ".github/workflows/dq-native-probe-arm64-build-v66.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/native-client-probe-v64/**"
+      - "DQ-Reverse-Engineering/ci/build_native_probe_arm64_v66.sh"
+      - "DQ-Reverse-Engineering/docs/DQ_NATIVE_PROBE_ARM64_BUILD_V66.md"
+      - ".github/workflows/dq-native-probe-arm64-build-v66.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-arm64-probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: android-actions/setup-android@v3
+      - name: Install pinned Android NDK and CMake
+        run: |
+          sdkmanager --install "ndk;27.2.12479018" "cmake;3.22.1"
+          echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.2.12479018" >> "$GITHUB_ENV"
+      - name: Build source-only ARM64 shared library
+        run: |
+          chmod +x DQ-Reverse-Engineering/ci/build_native_probe_arm64_v66.sh
+          cd DQ-Reverse-Engineering
+          ci/build_native_probe_arm64_v66.sh native-client-probe-v64/build-arm64
+      - name: Run source-only C++ mock tests
+        run: |
+          set -eu
+          cd DQ-Reverse-Engineering/native-client-probe-v64
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude src/bridge_core.cpp tests/test_probe_core.cpp -o /tmp/dq_probe_test
+          /tmp/dq_probe_test
+      - name: Validate probe boundary manifest
+        run: python DQ-Reverse-Engineering/tools/validate_dq_native_client_probe_v64.py DQ-Reverse-Engineering/docs/DQ_NATIVE_CLIENT_PROBE_V64.json
+      - name: Upload native library only
+        uses: actions/upload-artifact@v4
+        with:
+          name: dq-native-client-probe-v64-arm64-source-only
+          path: |
+            DQ-Reverse-Engineering/native-client-probe-v64/build-arm64/libdqbridge.so
+            DQ-Reverse-Engineering/native-client-probe-v64/build-arm64/build-manifest.json
+          if-no-files-found: error
+          retention-days: 14
