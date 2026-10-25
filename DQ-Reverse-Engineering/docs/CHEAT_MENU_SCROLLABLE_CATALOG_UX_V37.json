@@ -1,0 +1,86 @@
+{
+  "version": "v37",
+  "status": "STATIC_SYNTAX_AND_DATA_CONTRACT_PASS; INTERACTIVE_BROWSER_RETEST_BLOCKED; NOT_AN_APK",
+  "artifact": {
+    "html": "Dungeon_Quest_Cheats_Sandbox_Workbench_v37_SCROLLABLE.html",
+    "sha256": "a0faae2306ba150d26b7bb5b5bc972bd7814289407008cf8dd1025c10479b1d2",
+    "size_bytes": 171809,
+    "catalog_json": "debug_cheats_catalog_v37.json"
+  },
+  "catalog": {
+    "entries": 222,
+    "unique_ids": 222,
+    "category_count": 14,
+    "category_counts": {
+      "Player & Survival": 27,
+      "Combat Lab": 24,
+      "Enemy AI": 20,
+      "Loot & RNG": 19,
+      "Economy Lab": 17,
+      "Progression Lab": 16,
+      "Inventory & Gear": 16,
+      "Spawn & Encounter Lab": 9,
+      "World & Physics": 22,
+      "Camera & Visuals": 15,
+      "UI & Accessibility": 3,
+      "Skills Lab": 9,
+      "Gear & Stats Lab": 7,
+      "Debug Tools": 18
+    },
+    "all_have_descriptions": true,
+    "all_have_tags": true,
+    "all_runtime_status_requires_adapter": true
+  },
+  "ux": {
+    "internally_scrollable": true,
+    "document_scroll_disabled": true,
+    "gold_custom_button_keypad": true,
+    "gold_system_keyboard_required": false,
+    "generic_numeric_buttons": [
+      "-10",
+      "-1",
+      "+1",
+      "+10"
+    ],
+    "numeric_buttons_use_display_units": true,
+    "normalized_percent_stepper_points": true,
+    "values_clamped_to_bounds": true,
+    "values_snapped_to_valid_step": true,
+    "details_include": [
+      "type",
+      "default",
+      "bounds",
+      "step",
+      "unit",
+      "parameters",
+      "allowed options",
+      "conflict group",
+      "scope",
+      "adapter status"
+    ],
+    "game_adapter_connected": false
+  },
+  "numeric_contract_tests": {
+    "health_1_plus1": 2,
+    "health_1_plus10": 11,
+    "crit_chance_5_percent_plus1_point": 0.06,
+    "crit_chance_5_percent_plus10_points": 0.15,
+    "rarity_bonus_0_plus1_point": 1,
+    "gold_target_123_draft_exact": true
+  },
+  "validation": {
+    "node_check": "PASS",
+    "catalog_id_unique_test": "PASS",
+    "browser_interactive_retest": "BLOCKED_BY_ADMINISTRATOR",
+    "v36_browser_tests": "previously passed at 360x740, 430x900, 1536x675",
+    "apk_built": false,
+    "xapk_built": false
+  },
+  "runtime": {
+    "in_game_menu_rows": 0,
+    "runtime_cheats_verified": 0,
+    "native_list_supported": true,
+    "native_model_to_populate_catalog": "NOT_IMPLEMENTED",
+    "gold_keyboard_commit_balance_path": "NOT_VERIFIED"
+  }
+}
