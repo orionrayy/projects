@@ -178,3 +178,6 @@ jobs:
           cd DQ-Reverse-Engineering
           python tools/validate_native_cheat_adapter_registry_v52.py
           python -m unittest discover -s tests -p 'test_native_cheat_adapter_registry_v52.py' -v
+
+      - name: Validate Android emulator smoke script syntax
+        run: bash -n DQ-Reverse-Engineering/cheats-harness/ci/android_emulator_smoke.sh

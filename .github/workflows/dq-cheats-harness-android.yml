@@ -146,40 +146,7 @@ jobs:
           emulator-boot-timeout: 300
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
           disable-animations: true
-          script: |
-            set +e
-            adb logcat -c
-            gradle -p "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness" --no-daemon --stacktrace connectedDebugAndroidTest > "$RUNNER_TEMP/dq-connected-tests.log" 2>&1
-            TEST_STATUS=$?
-            cat "$RUNNER_TEMP/dq-connected-tests.log"
-            APK="$RUNNER_TEMP/dq-harness-artifact/app-debug.apk"
-            adb install -r "$APK"
-            INSTALL_STATUS=$?
-            if [ "$INSTALL_STATUS" -eq 0 ]; then
-              adb shell am force-stop dev.dqdebug.sandboxharness
-              adb shell am start -W -n dev.dqdebug.sandboxharness/.MainActivity
-              START_STATUS=$?
-            else
-              START_STATUS=1
-            fi
-            if [ "$START_STATUS" -eq 0 ]; then
-              adb shell uiautomator dump /sdcard/dq-harness-window.xml >/dev/null
-              adb shell cat /sdcard/dq-harness-window.xml > "$RUNNER_TEMP/dq-harness-window.xml"
-              grep -q "Cheats Sandbox" "$RUNNER_TEMP/dq-harness-window.xml"
-              TITLE_STATUS=$?
-              grep -q "GAME LINK" "$RUNNER_TEMP/dq-harness-window.xml"
-              BOUNDARY_STATUS=$?
-            else
-              TITLE_STATUS=1
-              BOUNDARY_STATUS=1
-            fi
-            adb logcat -d -v threadtime -t 10000 > "$RUNNER_TEMP/dq-emulator-logcat.txt" 2>&1
-            if [ "$TEST_STATUS" -ne 0 ] || [ "$INSTALL_STATUS" -ne 0 ] || [ "$START_STATUS" -ne 0 ] || [ "$TITLE_STATUS" -ne 0 ] || [ "$BOUNDARY_STATUS" -ne 0 ]; then
-              echo "FAIL: test=$TEST_STATUS install=$INSTALL_STATUS start=$START_STATUS title=$TITLE_STATUS boundary=$BOUNDARY_STATUS"
-              grep -E -i "FATAL EXCEPTION|AndroidRuntime|am_crash|Process: dev\\.dqdebug|INSTRUMENTATION_FAILED|AssertionError|Caused by:|Test run failed|OutOfMemory|SIGABRT|SIGSEGV" "$RUNNER_TEMP/dq-emulator-logcat.txt" | tail -n 160 || true
-              exit 1
-            fi
-            echo "PASS: instrumentation tests, artifact install, launch, and disconnected-state UI."
+          script: bash "$GITHUB_WORKSPACE/DQ-Reverse-Engineering/cheats-harness/ci/android_emulator_smoke.sh"
       - name: Upload emulator diagnostics
         if: always()
         uses: actions/upload-artifact@v4
