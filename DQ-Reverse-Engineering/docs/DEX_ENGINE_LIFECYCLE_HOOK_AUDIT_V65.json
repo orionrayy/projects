@@ -1,0 +1,99 @@
+{
+  "schema":"dq-android-engine-lifecycle-hook-audit-v65",
+  "audit_status":"DEX_LIFECYCLE_HOOK_CANDIDATE_FOUND_INIT_RESULT_IGNORED_PATCH_NOT_IMPLEMENTED",
+  "target":{
+    "package_id":"com.shinybox.smash",
+    "version_name":"3.3.2.0",
+    "base_apk_sha256":"c7bd6ab38ed2827a3aadd4f415ffc994eb366fc1ce9d66742077d6ef5e954abc",
+    "classes_dex_sha256":"bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "base_apk_member":"com.shinybox.smash.apk",
+    "source_xapk_sha256":"3035e3fcb1d5325ac844323208815c654af96074438c0d93f819f79453e6597b"
+  },
+  "renderer_init":{
+    "method":"void com.shinybox.smash.S3DRenderer.onDrawFrame(javax.microedition.khronos.opengles.GL10)",
+    "code_item_offset_decimal":4487320,
+    "code_item_offset_hex":"0x447898",
+    "registers_size":7,
+    "ins_size":2,
+    "outs_size":4,
+    "instruction_code_units":157,
+    "logic":[
+      {"offset_code_unit":0,"instruction":"iget-boolean","field":"S3DRenderer.bAllowInit"},
+      {"offset_code_unit":2,"instruction":"const/4","register":"v1","value":1},
+      {"offset_code_unit":3,"instruction":"if-eqz","branch_target_code_unit":17,"meaning":"skip init block if bAllowInit is false"},
+      {"offset_code_unit":5,"instruction":"iget-boolean","field":"S3DRenderer.bInitialized"},
+      {"offset_code_unit":7,"instruction":"if-nez","branch_target_code_unit":17,"meaning":"skip init block if already initialized"},
+      {"offset_code_unit":9,"instruction":"invoke-virtual","target":"S3DRenderer.engineShutdown()"},
+      {"offset_code_unit":12,"instruction":"invoke-virtual","target":"S3DRenderer.engineInitialize()","return_type":"boolean"},
+      {"offset_code_unit":15,"instruction":"iput-boolean","field":"S3DRenderer.bInitialized","value_register":"v1"},
+      {"offset_code_unit":17,"instruction":"iget-boolean","field":"S3DRenderer.bInitialized"},
+      {"offset_code_unit":19,"instruction":"if-eqz","branch_target_code_unit":156},
+      {"offset_code_unit":25,"instruction":"invoke-virtual","target":"S3DRenderer.engineRunOneFrame()","return_type":"boolean"}
+    ],
+    "critical_observation":"The native boolean result from engineInitialize() is not consumed by a move-result instruction. The code writes bInitialized=true unconditionally after the call; a probe registration must not assume successful initialization solely from that field.",
+    "execution_context":"onDrawFrame is the GLSurfaceView.Renderer frame callback; a future integration must still prove the exact engine/kernel readiness and callback lifecycle at the target build."
+  },
+  "shutdown_path":{
+    "renderer_shutdown_method":{
+      "method":"void com.shinybox.smash.S3DRenderer.onShutdown()",
+      "code_item_offset_decimal":4487880,
+      "code_item_offset_hex":"0x447ac8",
+      "instruction_code_units":4,
+      "call_at_code_unit":0,
+      "target":"S3DRenderer.engineShutdown()"
+    },
+    "surface_terminate_method":{
+      "method":"void com.shinybox.smash.S3DSurfaceView.onTerminate()",
+      "code_item_offset_decimal":4491948,
+      "code_item_offset_hex":"0x448b0c",
+      "instruction_code_units":9,
+      "call_at_code_unit":5,
+      "target":"android.opengl.GLSurfaceView.queueEvent(java.lang.Runnable)"
+    },
+    "queued_shutdown_runnable":{
+      "method":"void com.shinybox.smash.S3DSurfaceView$4.run()",
+      "code_item_offset_decimal":4488904,
+      "code_item_offset_hex":"0x447ec8",
+      "call_at_code_unit":14,
+      "target":"S3DRenderer.onShutdown()"
+    },
+    "activity_destroy":{
+      "method":"void com.shinybox.smash.Smash.onDestroy()",
+      "code_item_offset_decimal":4497660,
+      "call_target":"S3DSurfaceView.onTerminate()",
+      "call_code_unit":38
+    },
+    "shutdown_is_queued_through_glsurfaceview":true,
+    "native_probe_unregistration_present":false
+  },
+  "integration_hook_plan":{
+    "candidate_register_location":"after engineInitialize returns and only on a proven successful initialization path",
+    "candidate_unregister_location":"on the same engine-owning/render thread immediately before engineShutdown",
+    "idempotence_required":true,
+    "initialization_success_gate_required":true,
+    "retry_after_failed_initialization_required":true,
+    "engine_restart_and_surface_recreation_tests_required":true,
+    "DEX_patch_applied":false,
+    "new_probe_class_in_game_dex":false,
+    "native_probe_library_in_game_package":false
+  },
+  "status":{
+    "catalog_items":222,
+    "catalog_categories":14,
+    "native_routes_assigned":0,
+    "runtime_verified_catalog_effects":0,
+    "gold_candidate_runtime_verified":false,
+    "v50_runtime_checks_passed":0,
+    "v50_runtime_checks_total":9,
+    "next_required_artifact":"source-only DEX callsite patcher with instruction/branch relocation tests and a no-op-only integration plan",
+    "game_apk_built":false,
+    "status":"BLOCKED"
+  },
+  "scope_limitations":[
+    "DEX bytecode was parsed read-only; no classes.dex, AndroidManifest.xml, resources.arsc, STK or native library was modified.",
+    "The callsite offsets are code-unit offsets inside the pinned DEX CodeItem, not file byte offsets for blind patching.",
+    "The actual app execution context and exact result/failure behavior of engineInitialize were not device-tested.",
+    "A Java callsite alone cannot create or package the new native library; the prototype still requires an authorized development build and correct split packaging.",
+    "No feature APK/XAPK was built."
+  ]
+}

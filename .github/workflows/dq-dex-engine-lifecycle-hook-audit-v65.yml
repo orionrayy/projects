@@ -1,0 +1,38 @@
+name: DQ DEX engine lifecycle hook audit v65
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/DEX_ENGINE_LIFECYCLE_HOOK_AUDIT_V65.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V65_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_dex_engine_lifecycle_hook_audit_v65.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_engine_lifecycle_hook_audit_v65.py"
+      - ".github/workflows/dq-dex-engine-lifecycle-hook-audit-v65.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/DEX_ENGINE_LIFECYCLE_HOOK_AUDIT_V65.*"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V65_2026-10-25.md"
+      - "DQ-Reverse-Engineering/tools/validate_dex_engine_lifecycle_hook_audit_v65.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_engine_lifecycle_hook_audit_v65.py"
+      - ".github/workflows/dq-dex-engine-lifecycle-hook-audit-v65.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-dex-lifecycle-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/validate_dex_engine_lifecycle_hook_audit_v65.py DQ-Reverse-Engineering/tests/test_dex_engine_lifecycle_hook_audit_v65.py
+      - name: Validate pinned DEX lifecycle evidence
+        run: python DQ-Reverse-Engineering/tools/validate_dex_engine_lifecycle_hook_audit_v65.py DQ-Reverse-Engineering/docs/DEX_ENGINE_LIFECYCLE_HOOK_AUDIT_V65.json
+      - name: Test lifecycle and runtime boundaries
+        run: |
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_dex_engine_lifecycle_hook_audit_v65.py' -v
