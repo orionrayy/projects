@@ -1,0 +1,123 @@
+{
+  "project": "DR2C VORENYX",
+  "audit": "Deep static installability and Start-route audit",
+  "checkpoint": "v2.66 audit toolkit; NOT an APK version",
+  "date": "2026-10-26",
+  "status": "STATIC_CHECKS_PASS_RUNTIME_AND_OFFICIAL_APKSIGNER_NOT_VERIFIED",
+  "base_apk": {
+    "file": "DR2C-v1.8.2-full-apkvision.apk",
+    "bytes": 109011456,
+    "sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15",
+    "zip_entries": 1014,
+    "crc": "PASS",
+    "duplicates": 0
+  },
+  "candidate_apk": {
+    "file": "DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk",
+    "bytes": 115615585,
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7",
+    "zip_entries": 1015,
+    "crc": "PASS",
+    "duplicates": 0
+  },
+  "source_lineage": {
+    "base_deathforth_scripts": 509,
+    "candidate_deathforth_scripts": 509,
+    "byte_exact_matches": 509,
+    "missing": 0,
+    "extra": 0,
+    "mismatches": 0,
+    "status": "PASS",
+    "layers": [
+      "v2.43 localization (269 script payloads)",
+      "v2.45 corrective source patch (12)",
+      "v2.45 Startfix patch (6)",
+      "v2.61 tutorial source-sync supplement (1)"
+    ]
+  },
+  "package_diff": {
+    "common_entries": 1012,
+    "byte_identical_common_entries": 737,
+    "changed_common_entries": 275,
+    "changed_paths_categories": [
+      "269 Deathforth scripts",
+      "AndroidManifest.xml",
+      "META-INF/MANIFEST.MF",
+      "two ABI copies of libmain.so",
+      "title/splash artwork"
+    ],
+    "base_only": [
+      "META-INF/CERT.RSA",
+      "META-INF/CERT.SF"
+    ],
+    "candidate_only": [
+      "META-INF/DR2C-VOR.RSA",
+      "META-INF/DR2C-VOR.SF",
+      "assets/gfx/ui/vorenyx_title_screen.png"
+    ]
+  },
+  "manifest": {
+    "structural_parse": "PASS",
+    "package": "com.noodlecake.drtc",
+    "version_code": 57,
+    "version_name": "1.8.2",
+    "min_sdk": 23,
+    "target_sdk": 35,
+    "SplashActivity_orientation": 0,
+    "DrtcGameActivity_orientation": 0,
+    "application_class": "com.pairip.application.Application"
+  },
+  "android_11_install_constraints": {
+    "resources_arsc_method": "STORED_UNCOMPRESSED",
+    "resources_arsc_bytes": 150088,
+    "resources_arsc_offset": 115340884,
+    "offset_mod4": 0,
+    "status": "PASS",
+    "stored_native_libs": 14,
+    "compressed_native_libs": [
+      "lib/arm64-v8a/libstub.so",
+      "lib/armeabi-v7a/libstub.so"
+    ],
+    "stored_native_lib_alignment_failures": []
+  },
+  "signature": {
+    "v1_jarsigner": "PASS_WITH_EXPECTED_SELF_SIGNED_NO_TIMESTAMP_WARNINGS",
+    "v2_independent_crypto": "PASS",
+    "v2_signing_block_pair_ids": [
+      "0x7109871a"
+    ],
+    "v2_signing_block_total_bytes": 1554,
+    "algorithm_id": "0x0103 RSA PKCS#1 v1.5 with SHA-256",
+    "signed_data_signature_valid": true,
+    "content_digest_valid": true,
+    "public_key_matches_leaf_certificate": true,
+    "certificate_sha256": "f208dded25fc88b0c26293e5903cfa8beb117c06b8a623dc5b46a0804c645754",
+    "official_apksigner": "NOT RUN; unavailable in current environment"
+  },
+  "start_route": {
+    "select_start_registered": true,
+    "select_boot_present": true,
+    "main_event_do_select_registered": true,
+    "game_start_new_present": true,
+    "canonical_GAME_MARKER": true,
+    "normalized_core_control_streams_match": [
+      "events.df",
+      "game-select.df",
+      "game-start.df",
+      "game-info.df",
+      "boot-end.df"
+    ],
+    "tutorial_choice_label_diff": "chim -> cname is within player-visible choice-label expressions; tutorchat-1/2/3 callbacks remain. Not a proven Start root cause.",
+    "boot_localizer": "One id-name-localize helper is added and referenced by text-fill/perk display scripts; core boot token stream matches after removing only this definition."
+  },
+  "runtime": {
+    "package_manager_install": "NOT TESTED",
+    "start_tap": "NOT TESTED",
+    "Deathforth_VM": "NOT TESTED",
+    "gameplay": "NOT TESTED",
+    "UI_fit": "NOT TESTED",
+    "save_load": "NOT TESTED",
+    "release_ready": false
+  },
+  "conclusion": "Static checks narrow candidate installability risk and show source payloads are synchronized, but do not prove Android accepts the package. The exact fresh-install failure remains undiagnosed; capture PackageManager's error on-device using v2.65 INSTALL_ATTEMPT. If installed, capture START_BUTTON before another binary change."
+}
