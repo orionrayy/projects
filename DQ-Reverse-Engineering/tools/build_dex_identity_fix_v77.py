@@ -22,7 +22,7 @@ def run(args: list[str | Path], label: str) -> str:
 
 def patch_dex(dex: bytes) -> tuple[bytes, dict]:
     new_id = NEW_ID.encode("ascii")
-    if not dex.startswith(b"dex\\n") or len(dex) < 0x70:
+    if not dex.startswith(b"dex\n") or len(dex) < 0x70:
         raise ValueError("invalid DEX header")
     if len(OLD_DEX_ID) != len(new_id):
         raise ValueError("the DEX literal replacement must preserve byte length")
@@ -136,7 +136,7 @@ def main() -> int:
           "runtime":{"device_install_tested":False,"device_launch_tested":False,
             "force_close_fixed_on_device":False,"promotion_allowed":False},"promotion_allowed":False}
         report_path.parent.mkdir(parents=True,exist_ok=True)
-        report_path.write_text(json.dumps(report,indent=2)+"\\n",encoding="utf-8")
+        report_path.write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
         print(json.dumps(report,indent=2))
         return 0
     finally:
