@@ -1,0 +1,43 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.68-source-repair",
+  "date": "2026-10-26",
+  "patch_archive_sha256": "7f991123bbf1a14e553945ea88b20a57d41327436d86c2dffd2feb431df19938",
+  "title_artwork_sha256": "255fc4e1c38a55d2e48cbe184d08121fdbc0216351252d6b6c5835d5b755573f",
+  "apk_built": false,
+  "runtime_verified": false,
+  "changes": [
+    {
+      "path": "assets/deathforth/boot.df",
+      "kind": "display-only label",
+      "before": "dup \"fitness\" $= if drop \"fisik\" exit then",
+      "after": "dup \"fitness\" $= if drop \"bugar\" exit then",
+      "canonical_key_changed": false
+    },
+    {
+      "path": "assets/deathforth/paul/camping-region.df",
+      "kind": "missing include fallback",
+      "before": "uses paul/camping-tent-events.df",
+      "after": "load? paul/camping-tent-events.df",
+      "limitation": "missing event content not recreated; main-route reachability not established"
+    },
+    {
+      "path": "assets/gfx/ui/vorenyx_title_screen.png",
+      "kind": "cosmetic asset",
+      "before": "LOKALISASI INDONESIA // V2.43",
+      "after": "LOKALISASI INDONESIA // VORENYX",
+      "asset_loader_confirmed": false
+    }
+  ],
+  "tests": {
+    "overlay_source_assertions": "PASS",
+    "patcher_fixture_backup_and_idempotency": "PASS",
+    "title_png_decode_and_geometry": "PASS",
+    "title_asset_generator_byte_identical": "PASS",
+    "zip_integrity": "PASS",
+    "official_apksigner": "NOT RUN",
+    "android_install": "NOT RUN",
+    "start_runtime_logcat": "NOT RUN",
+    "gameplay_and_save_load": "NOT RUN"
+  }
+}
