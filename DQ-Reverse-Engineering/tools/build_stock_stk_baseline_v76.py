@@ -8,7 +8,7 @@ from __future__ import annotations
 import argparse, hashlib, json, os, re, subprocess, tempfile, zipfile
 from pathlib import Path
 
-EXPECTED_V74_SHA = "6185a5f85eaf1e?INVALID"
+EXPECTED_V74_SHA = "6185a5f85eaf80ec3cc290cc10e2f0539a5e4ef9eb43ea51b1bae7b4feceda8e"
 EXPECTED_STOCK_STK_SHA = "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3"
 EXPECTED_STOCK_DEX_SHA = "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b"
 OLD_ID, NEW_ID = "com.shinybox.dqv74", "com.shinybox.dqv76"
