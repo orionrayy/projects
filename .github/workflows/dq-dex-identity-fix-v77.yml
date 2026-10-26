@@ -40,7 +40,7 @@ jobs:
           p = "DQ-Reverse-Engineering/docs/DQ_V77_DEX_IDENTITY_FIX_REPORT.json"
           d = json.load(open(p, encoding="utf-8"))
           assert d["schema"] == "dq-v77-dex-package-identity-fix"
-          assert d["artifact"]["sha256"] == "63c49f92821e173bc270ddb6caea1a9e489afd331b2bd0257dc62ab04960b09e"
+          assert d["artifact"]["sha256"] == "77dac9fe85f1e9519424b78690261074be2fafd26afac521fdab50fdd9198cb9"
           assert d["dex_patch"]["literal_old_after"] == 0
           assert d["dex_patch"]["literal_new_after"] == 1
           assert d["static_validation"]["dex_header_sha1_adler32"] == "PASS"
