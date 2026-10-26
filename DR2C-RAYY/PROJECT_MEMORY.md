@@ -184,3 +184,12 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - A separate v2.68 local test APK is now built: SHA-256 `9ad55289ff5189727cdd43ca39105db49f38c5aa8b6186d6794b19a45aa38cff`, 115,639,068 bytes. JAR/v1 and local v2 signature verifiers PASS; ZIP CRC, path uniqueness, alignment and exact target payload comparison PASS.
 - Official Google apksigner, Android install, Start/Logcat, gameplay and save/load remain NOT TESTED. The APK uses a new local test cert, not publisher key; may require uninstall of a differently signed app and could lose local saves. PairIP/license code unchanged. Not a stable release.
 - Build report: `docs/APK_TEST_BUILD_v2.68.md`; sanitized report: `audit/apk_test_build_v2.68.json`. The source patch ZIP remains an overlay, not an APK.
+
+
+## Active checkpoint — 27 October 2026, v2.68 local test APK build
+
+- Locally built test APK: `DR2C_VORENYX_v2.68_TEST_CANDIDATE.apk`, 115,639,063 bytes, SHA-256 `4028b0ada13ab650ba3625bfe7bf495455bb5816040847f0999ac591f1ecd384`.
+- JAR/v1 verification and local APK v2 verifier PASS; ZIP CRC/no-duplicates and alignment of 264 stored entries PASS; four intended payloads match source overlay byte-for-byte; no other non-signature payload changed.
+- New local test certificate SHA-256: `c46d4af342ad0ecb63a771613e245ab4088597520a27aaf2719c8ea03d6dd15c`. The key and password are not in GitHub.
+- Official apksigner unavailable. PackageManager install, Start/Logcat, gameplay, tutorial, save/load and stability NOT TESTED. PairIP/licensing/native components unchanged. Do not call this a stable release.
+- Build report at `docs/APK_TEST_BUILD_v2.68.md` and sanitized metadata at `audit/apk_test_build_v2.68.json`. Binary APK excluded from public GitHub.
