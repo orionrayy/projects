@@ -1,0 +1,128 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.67 whole-project deep static audit",
+  "date": "2026-10-26",
+  "runtime_verified": false,
+  "apk": {
+    "filename": "DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk",
+    "sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7",
+    "bytes": 115615585,
+    "zip_entries": 1015,
+    "crc": "PASS",
+    "duplicates": 0,
+    "official_apksigner": "NOT RUN",
+    "device_install": "NOT TESTED",
+    "start_runtime": "NOT TESTED"
+  },
+  "base_apk": {
+    "filename": "DR2C-v1.8.2-full-apkvision.apk",
+    "sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15",
+    "bytes": 109011456,
+    "zip_entries": 1014,
+    "crc": "PASS",
+    "duplicates": 0
+  },
+  "source_lineage": {
+    "base_source_zip_sha256": "14f44400c3314a6d9b7e5428077c199c846367235e379199618f7b11288f4eb1",
+    "scripts_base": 509,
+    "scripts_candidate": 509,
+    "exact_match_after_patches": 509,
+    "missing": 0,
+    "extra": 0,
+    "mismatched": 0,
+    "patch_order": [
+      "v2.43 localization",
+      "v2.45 corrective",
+      "v2.45 Startfix",
+      "v2.61 tutorial sync"
+    ],
+    "changed_from_base": 269,
+    "unchanged_from_base": 240
+  },
+  "cyoa_declarations": {
+    "base": {
+      "cyoa:": 823,
+      "cyoa-choice:": 928,
+      "cyoa-blank:": 100,
+      "cyoa-bridge:": 190
+    },
+    "candidate": {
+      "cyoa:": 823,
+      "cyoa-choice:": 928,
+      "cyoa-blank:": 100,
+      "cyoa-bridge:": 190
+    },
+    "counts_match": true,
+    "method": "heuristic source token scan, not full Deathforth parser"
+  },
+  "native_libs": [
+    {
+      "path": "lib/arm64-v8a/libmain.so",
+      "changed_bytes": 89,
+      "changed_ranges": 13,
+      "sections": "ELF .rodata",
+      "machine_code_byte_change_detected": false
+    },
+    {
+      "path": "lib/armeabi-v7a/libmain.so",
+      "changed_bytes": 89,
+      "changed_ranges": 13,
+      "sections": "ELF .rodata",
+      "machine_code_byte_change_detected": false
+    }
+  ],
+  "findings": [
+    {
+      "id": "ASSET-001",
+      "severity": "MEDIUM",
+      "status": "CONFIRMED",
+      "finding": "Splash PNG displays V2.43 although candidate is named v2.57 and report checkpoint is v2.67",
+      "impact": "stale visual identity, not a proven runtime fault"
+    },
+    {
+      "id": "ASSET-002",
+      "severity": "MEDIUM",
+      "status": "LIKELY_ORPHAN_NOT_PROVEN",
+      "finding": "assets/gfx/ui/vorenyx_title_screen.png has V2.43 badge and no literal use found in script/DEX/resource/native string scans",
+      "impact": "may never be displayed; dynamic loader could still load it"
+    },
+    {
+      "id": "TEXT-001",
+      "severity": "LOW_MEDIUM",
+      "status": "CONFIRMED_LABEL_INCONSISTENCY",
+      "finding": "native library maps fitness to bugar while boot.df id-name-localize maps fitness to fisik",
+      "impact": "inconsistent visible attribute naming; no gameplay-state corruption proven"
+    },
+    {
+      "id": "FLOW-001",
+      "severity": "HIGH",
+      "status": "UNRESOLVED_RUNTIME",
+      "finding": "Start button behavior cannot be diagnosed from static source alone",
+      "impact": "requires PackageManager install trace and logcat of one Start tap"
+    },
+    {
+      "id": "SOURCE-001",
+      "severity": "LOW",
+      "status": "LEGACY_REFERENCE_DORMANT_LIKELY",
+      "finding": "paul/camping-region.df references absent paul/camping-tent-events.df; no boot-path use found",
+      "impact": "potential dormant region failure if loaded directly"
+    },
+    {
+      "id": "ASSET-003",
+      "severity": "INFO",
+      "status": "PASS",
+      "finding": "167 PNGs and 21 MP3s decode/probe successfully",
+      "impact": "no corrupted PNG/MP3 detected in reviewed set"
+    }
+  ],
+  "unresolved": {
+    "installer_root_cause": "UNKNOWN pending device PackageManager trace",
+    "start_root_cause": "UNKNOWN pending device Logcat trace",
+    "release_stability": "NOT VERIFIED"
+  },
+  "artifacts": {
+    "report": "DR2C_VORENYX_WHOLE_PROJECT_AUDIT_v2.67.md",
+    "tool": "DR2C_VORENYX_WHOLE_PROJECT_AUDIT_v2.67.py",
+    "toolkit": "DR2C_VORENYX_WHOLE_PROJECT_AUDIT_v2.67_TOOLKIT.zip"
+  }
+}
