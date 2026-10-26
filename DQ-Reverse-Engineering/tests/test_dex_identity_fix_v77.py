@@ -7,7 +7,7 @@ from build_dex_identity_fix_v77 import patch_dex
 class DexIdentityPatchTests(unittest.TestCase):
     def synthetic_dex(self, literal=b"com.shinybox.smash"):
         data=bytearray(160)
-        data[:8]=b"dex\\n035\\0"
+        data[:8]=b"dex\n035\0"
         struct.pack_into("<I",data,32,len(data))
         struct.pack_into("<I",data,36,0x70)
         data[48:48+len(literal)]=literal
