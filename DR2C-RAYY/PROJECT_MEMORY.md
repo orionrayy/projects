@@ -193,3 +193,13 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - New local test certificate SHA-256: `c46d4af342ad0ecb63a771613e245ab4088597520a27aaf2719c8ea03d6dd15c`. The key and password are not in GitHub.
 - Official apksigner unavailable. PackageManager install, Start/Logcat, gameplay, tutorial, save/load and stability NOT TESTED. PairIP/licensing/native components unchanged. Do not call this a stable release.
 - Build report at `docs/APK_TEST_BUILD_v2.68.md` and sanitized metadata at `audit/apk_test_build_v2.68.json`. Binary APK excluded from public GitHub.
+
+
+## Active checkpoint — 27 October 2026, v2.69 Start runtime diagnosis
+
+- User reports the locally signed v2.68 APK installs but Start does not proceed.
+- Static audit: `events.df` byte-identical to base; normalized control-token streams of `game-select.df`, `game-start.df` and `boot-end.df` match base. `events/tutorial.df` has known code-token differences within translated expressions that remain untested; not proven to cause initial Start no-op.
+- Corrected earlier note: `id-name-localize` has call sites in trait/perk UI files, but these are not on the initial select-boot route.
+- Added `docs/START_ROUTE_STATIC_AUDIT_v2.69.md`, `audit/start_route_static_audit_v2.69.json`, `tools/audit_start_route_v2.69.py`, and `tools/collect_start_trace_termux_v2.69.sh` to branch `dr2c-v268-source-repair` and draft PR #32.
+- Local trace toolkit ZIP SHA-256: `8460aaf92bd732189d38cb39cc127415d72110bbf1f29c3b5bb10cc35ae0648a`. Shell syntax and ZIP CRC PASS. Trace collector uses Android 11 Wireless debugging/ADB, asks before clearing log buffer, does not upload automatically and does not touch game saves.
+- No APK rebuilt. Root cause remains unknown until dispatch/callback/tutorial/native process logs from the device are reviewed.
