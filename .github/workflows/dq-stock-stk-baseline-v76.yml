@@ -12,6 +12,7 @@ on:
       - "DQ-Reverse-Engineering/docs/DQ_V76_STOCK_STK_BASELINE_REPORT.json"
       - "DQ-Reverse-Engineering/docs/PHONE_ONLY_TEST_V76.md"
       - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V76_2026-10-26.md"
+      - "DQ-Reverse-Engineering/tools/build_stock_stk_baseline_v76.py"
       - ".github/workflows/dq-stock-stk-baseline-v76.yml"
   workflow_dispatch:
 permissions:
