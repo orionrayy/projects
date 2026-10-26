@@ -1,0 +1,51 @@
+name: DQ v77 DEX app identity gate
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/tools/build_dex_identity_fix_v77.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_identity_fix_v77.py"
+      - "DQ-Reverse-Engineering/docs/DQ_V77_DEX_IDENTITY_FIX_REPORT.json"
+      - "DQ-Reverse-Engineering/docs/PHONE_ONLY_TEST_V77.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V77_2026-10-26.md"
+      - ".github/workflows/dq-dex-identity-fix-v77.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/tools/build_dex_identity_fix_v77.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_identity_fix_v77.py"
+      - "DQ-Reverse-Engineering/docs/DQ_V77_DEX_IDENTITY_FIX_REPORT.json"
+      - "DQ-Reverse-Engineering/docs/PHONE_ONLY_TEST_V77.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V77_2026-10-26.md"
+      - ".github/workflows/dq-dex-identity-fix-v77.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  v77-static-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile patcher and tests
+        run: python -m py_compile DQ-Reverse-Engineering/tools/build_dex_identity_fix_v77.py DQ-Reverse-Engineering/tests/test_dex_identity_fix_v77.py
+      - name: Run regression tests
+        working-directory: DQ-Reverse-Engineering
+        run: python -m unittest discover -s tests -p 'test_dex_identity_fix_v77.py' -v
+      - name: Validate static report and unverified runtime boundary
+        run: |
+          python -m json.tool DQ-Reverse-Engineering/docs/DQ_V77_DEX_IDENTITY_FIX_REPORT.json > /dev/null
+          python - <<'PY'
+          import json
+          p = "DQ-Reverse-Engineering/docs/DQ_V77_DEX_IDENTITY_FIX_REPORT.json"
+          d = json.load(open(p, encoding="utf-8"))
+          assert d["schema"] == "dq-v77-dex-package-identity-fix"
+          assert d["artifact"]["sha256"] == "63c49f92821e173bc270ddb6caea1a9e489afd331b2bd0257dc62ab04960b09e"
+          assert d["dex_patch"]["literal_old_after"] == 0
+          assert d["dex_patch"]["literal_new_after"] == 1
+          assert d["static_validation"]["dex_header_sha1_adler32"] == "PASS"
+          assert d["runtime"]["device_launch_tested"] is False
+          assert d["runtime"]["force_close_fixed_on_device"] is False
+          assert d["promotion_allowed"] is False
+          print("PASS: DEX identity report valid; device runtime remains unverified")
+          PY
