@@ -154,3 +154,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 
 
 - Supplemental source diff cross-check on 26 October: events.df is byte-identical between base/candidate; normalized tokens match in game-select.df, game-info.df and boot-end.df after masking strings/comments. boot.df's additional code is the id-name-localize helper; removing it makes its normalized token stream match the base. tutorial.df remains an unresolved code-token exception (chim → cname and removed bHe/bhim/bhe expressions); it is not proven to cause Start failure. Details: audit/start_route_source_diff_v2.65.json.
+
+
+## Active checkpoint — 26 October 2026, v2.66 deep installability audit (NOT an APK build)
+- Exact candidate audited: DR2C_VORENYX_v2.57_SIGNATURE_FIX_REDELIVERED_20261025.apk, SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7.
+- ZIP CRC, binary manifest structure, Android 11 resources.arsc storage/alignment, stored native-entry page alignment, jarsigner v1, and independent v2 signer-signature/content-digest checks pass. Official Android apksigner remains NOT RUN; device install/runtime remains NOT TESTED.
+- Source lineage reproduces all 509/509 Deathforth scripts byte-for-byte from the available base and ordered patch layers; no missing/extra/mismatched script paths. Core Start/menu control-token streams match after masking display strings/choice labels. The tutorial chim→cname change is inside player-visible choice labels and retains tutorchat-1/2/3 callbacks; it is not a proven Start root cause.
+- Static checks narrow possible corruption causes but do not establish PackageManager acceptance. A fresh-install failure remains undiagnosed without the exact device-side install code. Use v2.65 INSTALL_ATTEMPT; if it installs, use START_BUTTON. No speculative rebuild/reinstall loop.
+- See docs/INSTALLABILITY_AUDIT_v2.66.md and audit/installability_audit_v2.66.json.
