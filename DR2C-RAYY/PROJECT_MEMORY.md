@@ -177,7 +177,8 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 
 ## Active checkpoint — 26 October 2026, v2.68 source repair
 
-- Source-only patch created; local archive SHA-256: `8a6d34cc1ec20be3747cf2f31b06ec84c45b9e86b119e77302044918c2733f98`.
-- Changes: `boot.df` display-only alias `fitness` -> `bugar` (canonical ID unchanged); camping-region missing include changed to `load?` (does not recreate missing event content); extra title art label changed from `V2.43` to version-independent `VORENYX` branding.
-- Local tests PASS: overlay assertions, patcher fixture/backup/idempotency, PNG decoding/geometry, byte-identical asset regeneration, ZIP integrity, and exact payload replay on reconstructed prior source lineage. Script and report saved to `tools/apply_source_repair_v2.68.py`, `tools/test_source_repair_v2.68.py`, `docs/SOURCE_REPAIR_v2.68.md`, and `audit/source_repair_v2.68.json`.
-- No APK built. Official apksigner, Android install, Start/Logcat, gameplay and save/load not run. Install failure and Start no-op remain unresolved pending device evidence.
+- Source/asset patch only; latest local ZIP SHA-256: `e6bf40a2ca8f69b4c55f7b50592b1cb201b8660ff285f6862a1c96e8b645690d`.
+- Four changes: `boot.df` display-only alias `fitness` -> `bugar`; missing camping event include changed to `load?`; additional title artwork no longer says V2.43; source-overlay splash no longer says V0.3. Candidate APK binary itself remains unchanged and its splash still says V2.43.
+- Local tests PASS: source assertions; patcher fixture/backup/idempotency; title and splash PNG validation; byte-identical artwork generation; exact four-payload replay on reconstructed source lineage; ZIP integrity and checksums.
+- Files: `docs/SOURCE_REPAIR_v2.68.md`, `audit/source_repair_v2.68.json`, `tools/apply_source_repair_v2.68.py`, `tools/repair_title_artwork_v2.68.py`, `tools/test_source_repair_v2.68.py`.
+- No APK built. Official apksigner, Android install, Start/Logcat, gameplay and save/load not run. Install failure and Start no-op remain unresolved.
