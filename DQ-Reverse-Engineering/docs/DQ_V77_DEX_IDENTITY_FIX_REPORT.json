@@ -1,0 +1,64 @@
+{
+  "schema": "dq-v77-dex-package-identity-fix",
+  "status": "STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_TESTED",
+  "artifact": {
+    "file_name": "DQ_ModKit_v77_DEX_IDENTITY_FIX_ARM64.apk",
+    "size_bytes": 57045884,
+    "sha256": "63c49f92821e173bc270ddb6caea1a9e489afd331b2bd0257dc62ab04960b09e",
+    "package_id": "com.shinybox.dqv77",
+    "launcher_label": "DQ v77 Tester",
+    "abi": "arm64-v8a",
+    "version_name": "3.3.2.0"
+  },
+  "root_cause_finding": {
+    "finding": "v76 manifest/package ID was com.shinybox.dqv76 while DEX static fields BuildConfig.APPLICATION_ID and Globals.sPackageName were initialized from com.shinybox.smash.",
+    "runtime_use": "Smash reads Globals.sPackageName for cache/pack paths and PackageManager.getApplicationInfo(sPackageName, 0).",
+    "confidence": "high-confidence static inconsistency; causal relation to force-close unproven until phone test."
+  },
+  "dex_patch": {
+    "input_dex_sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b",
+    "output_dex_sha256": "375779dd935427cf172450b082e40f8c96d48af52122a17addf87f2bb7e852a1",
+    "literal_before": 1,
+    "literal_old_after": 0,
+    "literal_new_after": 1,
+    "replacement": "com.shinybox.smash -> com.shinybox.dqv77",
+    "sha1_recomputed": true,
+    "adler32_recomputed": true,
+    "class_descriptors_preserved": true
+  },
+  "isolation": {
+    "stock_stk_preserved": true,
+    "stock_java_class_descriptors_preserved": true,
+    "native_library_bytes_unchanged": true,
+    "native_probe_bridge_absent": true,
+    "manifest_package_and_provider_authorities_updated": true,
+    "resources_package_and_label_updated": true
+  },
+  "static_validation": {
+    "zip_crc": "PASS",
+    "zipalign_16k_pre_sign": "PASS",
+    "zipalign_16k_post_sign": "PASS",
+    "apksigner_v1": "PASS",
+    "apksigner_v2": "PASS",
+    "apksigner_v3": "PASS",
+    "aapt_package_label": "PASS",
+    "stock_stk_hash": "PASS",
+    "dex_header_sha1_adler32": "PASS",
+    "manifest_resource_identity": "PASS",
+    "stale_dex_app_id_literal_absent": "PASS"
+  },
+  "signing": {
+    "kind": "local diagnostic test certificate",
+    "certificate_sha256": "fe625d3bc0bbfe087885db78ca3d0d61c6bdd5b988d2f58efa627774e9f14e70",
+    "matches_official_signer": false,
+    "private_key_shared": false
+  },
+  "runtime": {
+    "device_install_tested": false,
+    "device_launch_tested": false,
+    "force_close_fixed_on_device": false,
+    "gold_runtime_checks": "not attempted",
+    "promotion_allowed": false
+  },
+  "promotion_allowed": false
+}
