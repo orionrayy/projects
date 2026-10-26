@@ -1,0 +1,44 @@
+name: DQ v76 stock STK baseline report gate
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/docs/DQ_V76_STOCK_STK_BASELINE_REPORT.json"
+      - "DQ-Reverse-Engineering/docs/PHONE_ONLY_TEST_V76.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V76_2026-10-26.md"
+      - ".github/workflows/dq-stock-stk-baseline-v76.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/docs/DQ_V76_STOCK_STK_BASELINE_REPORT.json"
+      - "DQ-Reverse-Engineering/docs/PHONE_ONLY_TEST_V76.md"
+      - "DQ-Reverse-Engineering/docs/PROJECT_PROGRESS_CHECKPOINT_V76_2026-10-26.md"
+      - ".github/workflows/dq-stock-stk-baseline-v76.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-v76-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Validate JSON schema and fixed evidence
+        run: |
+          python -m json.tool DQ-Reverse-Engineering/docs/DQ_V76_STOCK_STK_BASELINE_REPORT.json > /dev/null
+          python - <<'PY'
+          import json
+          p = "DQ-Reverse-Engineering/docs/DQ_V76_STOCK_STK_BASELINE_REPORT.json"
+          d = json.load(open(p, encoding="utf-8"))
+          assert d["schema"] == "dq-v76-stock-stk-startup-isolation"
+          assert d["status"] == "STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_TESTED"
+          assert d["artifact"]["package_id"] == "com.shinybox.dqv76"
+          assert d["artifact"]["sha256"] == "c726c1d1ae6ddb834ffcae6f59b2797e05b752174865a44239c9abcd22b9bb8d"
+          assert d["isolation"]["S3DMain_smf_is_exact_official_stock_copy"] is True
+          assert d["static_validation"]["exact_stock_stk_hash"] == "PASS"
+          assert d["runtime"]["device_install_tested"] is False
+          assert d["runtime"]["device_launch_tested"] is False
+          assert d["runtime"]["force_close_fixed_on_device"] is False
+          assert d["promotion_allowed"] is False
+          print("PASS: v76 static evidence consistent; device runtime correctly remains unverified")
+          PY
