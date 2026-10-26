@@ -173,3 +173,11 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - 167 PNG and 21 MP3 assets pass decode/probe. A missing include paul/camping-tent-events.df is referenced by the apparent dormant paul/camping-region.df; no boot-path reference was found, so it is not classified as startup root cause.
 - Official Android apksigner, device install, live Start tap, menu/gameplay/save-load and stability have NOT been verified. Root causes for installation failure and Start no-op remain UNKNOWN until PackageManager/Logcat traces arrive.
 - Reports/tool saved in docs/WHOLE_PROJECT_AUDIT_v2.67.md, audit/whole_project_audit_v2.67.json, and tools/whole_project_audit_v2.67.py. Full local toolkit SHA-256: e66d10df8068d547b1af9f8770ce21a88c15ca85b26f91a72a1842187e89bbea.
+
+
+## Active checkpoint — 26 October 2026, v2.68 source repair
+
+- Source-only patch created; local archive SHA-256: `7f991123bbf1a14e553945ea88b20a57d41327436d86c2dffd2feb431df19938`.
+- Changes: `boot.df` display-only alias `fitness` -> `bugar` (canonical ID unchanged); camping-region missing include changed to `load?` (does not recreate missing event content); extra title art label changed from `V2.43` to version-independent `VORENYX` branding.
+- Local tests PASS: overlay assertions, patcher fixture/backup/idempotency, PNG decoding/geometry, byte-identical asset regeneration, ZIP integrity. Script and report saved to `tools/apply_source_repair_v2.68.py`, `tools/test_source_repair_v2.68.py`, `docs/SOURCE_REPAIR_v2.68.md`, and `audit/source_repair_v2.68.json`.
+- No APK built. Official apksigner, Android install, Start/Logcat, gameplay and save/load not run. Install failure and Start no-op remain unresolved pending device evidence.
