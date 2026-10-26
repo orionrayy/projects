@@ -13,7 +13,7 @@ Disassembly of v76 `classes.dex` showed both `BuildConfig.APPLICATION_ID` and `G
 
 ## v77 candidate
 - APK: `DQ_ModKit_v77_DEX_IDENTITY_FIX_ARM64.apk`
-- SHA-256: `63c49f92821e173bc270ddb6caea1a9e489afd331b2bd0257dc62ab04960b09e`
+- SHA-256: `77dac9fe85f1e9519424b78690261074be2fafd26afac521fdab50fdd9198cb9`
 - Size: 57,045,884 bytes
 - Package / label: `com.shinybox.dqv77` / `DQ v77 Tester`
 - DEX SHA-256: `375779dd935427cf172450b082e40f8c96d48af52122a17addf87f2bb7e852a1`
