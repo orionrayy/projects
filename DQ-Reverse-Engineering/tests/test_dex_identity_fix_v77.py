@@ -11,6 +11,8 @@ class DexIdentityPatchTests(unittest.TestCase):
         struct.pack_into("<I",data,32,len(data))
         struct.pack_into("<I",data,36,0x70)
         data[48:48+len(literal)]=literal
+        descriptor=b"Lcom/shinybox/smash/"
+        data[100:100+len(descriptor)]=descriptor
         return bytes(data)
 
     def test_patch_replaces_literal_and_recomputes_header(self):
