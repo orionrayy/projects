@@ -1,0 +1,62 @@
+{
+  "schema": "dq-v76-stock-stk-startup-isolation",
+  "status": "STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_TESTED",
+  "artifact": {
+    "file_name": "DQ_ModKit_v76_STOCK_STK_BASELINE_ARM64.apk",
+    "size_bytes": 57045884,
+    "sha256": "c726c1d1ae6ddb834ffcae6f59b2797e05b752174865a44239c9abcd22b9bb8d",
+    "package_id": "com.shinybox.dqv76",
+    "launcher_label": "DQ v76 Tester",
+    "abi": "arm64-v8a",
+    "version_name": "3.3.2.0"
+  },
+  "inputs": {
+    "v74_base_sha256": "6185a5f85eaf80ec3cc290cc10e2f0539a5e4ef9eb43ea51b1bae7b4feceda8e",
+    "stock_source_apk_sha256": "1e82932d93da9e02f94298bfd8555b65ff0bc2e679ab78500fa35f5b99fc04a9",
+    "stock_stk_sha256": "340df84310eefc21555fdd3616ad8bc4cec16aa4ed71ee9a57e7e18c3fe737e3",
+    "stock_dex_sha256": "bcfe58e6380c9360128b474e80c8744f955ad998dfa9863424a662190f27fe6b"
+  },
+  "isolation": {
+    "S3DMain_smf_is_exact_official_stock_copy": true,
+    "gold_hud_patch_removed": true,
+    "package_id_updated_from_v74": true,
+    "all_3_manifest_id_authority_strings_updated": true,
+    "resource_table_package_updated": true,
+    "launcher_label_updated": true,
+    "native_probe_bridge_absent": true
+  },
+  "static_validation": {
+    "zip_crc": "PASS",
+    "zipalign_16k_pre_sign": "PASS",
+    "zipalign_16k_post_sign": "PASS",
+    "apksigner_v1": "PASS",
+    "apksigner_v2": "PASS",
+    "apksigner_v3": "PASS",
+    "aapt_package_label": "PASS",
+    "stock_dex_hash": "PASS",
+    "exact_stock_stk_hash": "PASS"
+  },
+  "signing": {
+    "kind": "local diagnostic test certificate",
+    "certificate_sha256": "fe625d3bc0bbfe087885db78ca3d0d61c6bdd5b988d2f58efa627774e9f14e70",
+    "matches_official_signer": false,
+    "private_key_in_repository": false,
+    "private_key_shared": false
+  },
+  "runtime": {
+    "device_install_tested": false,
+    "device_launch_tested": false,
+    "force_close_fixed_on_device": false,
+    "gold_runtime_checks": "not attempted",
+    "promotion_allowed": false
+  },
+  "purpose": "A/B isolate the modified v50 pause HUD payload from package/manifest/provider and stock DEX variables.",
+  "limitations": [
+    "Diagnostic baseline only; restores the exact official S3DMain.smf.",
+    "Gold +100K is not implemented or validated in this candidate.",
+    "Physical-device installation/launch has not been performed by the build environment.",
+    "Local test signing differs from publisher signing and cannot update the official app.",
+    "If v76 also force-closes, the modified pause HUD payload alone is not sufficient to explain the failure."
+  ],
+  "promotion_allowed": false
+}
