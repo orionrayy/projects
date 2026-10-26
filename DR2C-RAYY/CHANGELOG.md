@@ -1,5 +1,7 @@
 # Changelog — DR2C VORENYX
 
+- **v2.68 source repair (26 October 2026; source overlay only, no APK):** aligned the visible `fitness` alias with existing native wording `bugar` without changing the canonical key; changed the absent `paul/camping-tent-events.df` include to optional load in the camping developer/test region; removed the stale `V2.43` suffix from the extra title image. Regression tests, PNG verification and ZIP integrity PASS. Official apksigner, installation and runtime remain NOT TESTED. See [source repair report](docs/SOURCE_REPAIR_v2.68.md) and [validation JSON](audit/source_repair_v2.68.json).
+
 - **v2.67 whole-project deep static audit (26 October 2026; audit only, no new APK):** candidate v2.57 has 509/509 Deathforth source scripts matching reconstructed patch lineage; core CYOA declaration counts match base; reviewed 167 PNG and 21 MP3 assets pass decode/probe. Confirmed stale V2.43 splash badge and inconsistent fitness label (native bugar versus boot helper fisik); additional title artwork may be unused. No static evidence of Start handler deletion. Official apksigner, installation and runtime remain NOT TESTED. See [whole-project audit](docs/WHOLE_PROJECT_AUDIT_v2.67.md), [JSON](audit/whole_project_audit_v2.67.json), and [tool](tools/whole_project_audit_v2.67.py).
 
 
