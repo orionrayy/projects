@@ -7,8 +7,8 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 
 ## Active checkpoint — v2.68 source repair (26 October 2026; NOT an APK)
 
-- Three low-risk source/asset repairs prepared: the display-only `fitness` alias now returns `bugar`; the absent camping-event include is optionalized in the developer/test camping region; and the additional title artwork no longer carries a stale `V2.43` suffix.
-- Local source assertions, patcher fixture/backup/idempotency tests, PNG validation and ZIP integrity all PASS. The title artwork generator reproduces its packaged PNG byte-for-byte.
+- Four low-risk source/asset repairs prepared: the display-only `fitness` alias now returns `bugar`; the missing camping-event include is optionalized in the developer/test region; the extra title art no longer carries `V2.43`; and the source-overlay splash no longer carries `V0.3`. The recovered candidate APK still has `V2.43` in its splash because no APK was rebuilt.
+- Source assertions, patcher fixture/backup/idempotency, both PNG checks, exact generation of title/splash art, four-payload source-overlay replay, ZIP integrity and SHA-256 sums all PASS. Repair ZIP SHA-256: `e6bf40a2ca8f69b4c55f7b50592b1cb201b8660ff285f6862a1c96e8b645690d`.
 - This is an overlay ZIP, not an installable APK. Official apksigner, Android install, Start tap/Logcat, gameplay and save/load remain NOT TESTED. Do not mark installation or Start as fixed.
 - See [source repair report](docs/SOURCE_REPAIR_v2.68.md), [sanitized validation JSON](audit/source_repair_v2.68.json), and [safe source patcher](tools/apply_source_repair_v2.68.py).
 
