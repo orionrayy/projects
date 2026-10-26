@@ -15,7 +15,8 @@
 - Synthetic fixture for patcher, backup generation and repeat/idempotent application: **PASS**.
 - PNG decode/dimensions/cleared text-zone assertions: **PASS**.
 - Title-image repair script reproduced the packaged PNG byte-for-byte: **PASS**.
-- ZIP integrity test: **PASS**; archive SHA-256: `7f991123bbf1a14e553945ea88b20a57d41327436d86c2dffd2feb431df19938`.
+- Replayed the patcher against a reconstructed base + v2.43 + v2.45 corrective + v2.45 Startfix source tree; all three outputs matched packaged overlay payloads byte-for-byte: **PASS**.
+- ZIP integrity test: **PASS**; archive SHA-256: `8a6d34cc1ec20be3747cf2f31b06ec84c45b9e86b119e77302044918c2733f98`.
 - Official `apksigner`, APK build, Android PackageManager install, Start tap/Logcat, gameplay and save/load: **NOT RUN**.
 
 ## Files and boundaries
