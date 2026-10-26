@@ -1,8 +1,16 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint (26 October 2026): v2.66 deep static installability audit (NOT a new APK) · 509/509 source payloads match · local v1/v2 checks PASS · official apksigner/device runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest checkpoint (26 October 2026): v2.67 whole-project deep static audit (NOT a new APK) · 509/509 source payloads match · local v1/v2 checks PASS · official apksigner/device runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
+
+
+## v2.67 whole-project audit — 26 October 2026
+
+- Deep static review compares the exact v2.57 APK against the base APK and the available 509-script source lineage. Source reconstruction matches 509/509; core CYOA declaration counts are unchanged.
+- Confirmed stale V2.43 badge on splash artwork; likely-unused extra title artwork also retains V2.43. A label inconsistency remains: native library string fitness → bugar versus the boot helper fitness → fisik.
+- All reviewed 167 PNG and 21 MP3 assets decode/probe successfully. No static evidence that the Start handler was deleted, but Start and install failures remain unverified until Android logs are captured.
+- No APK was built in v2.67. Official Android apksigner, PackageManager installation and live gameplay were not run. See [whole-project audit](docs/WHOLE_PROJECT_AUDIT_v2.67.md), [JSON findings](audit/whole_project_audit_v2.67.json), and [rerunnable tool](tools/whole_project_audit_v2.67.py).
 
 ## Post-install result: v2.44 symptoms unchanged
 
