@@ -162,3 +162,14 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - Source lineage reproduces all 509/509 Deathforth scripts byte-for-byte from the available base and ordered patch layers; no missing/extra/mismatched script paths. Core Start/menu control-token streams match after masking display strings/choice labels. The tutorial chim→cname change is inside player-visible choice labels and retains tutorchat-1/2/3 callbacks; it is not a proven Start root cause.
 - Static checks narrow possible corruption causes but do not establish PackageManager acceptance. A fresh-install failure remains undiagnosed without the exact device-side install code. Use v2.65 INSTALL_ATTEMPT; if it installs, use START_BUTTON. No speculative rebuild/reinstall loop.
 - See docs/INSTALLABILITY_AUDIT_v2.66.md and audit/installability_audit_v2.66.json.
+
+
+## Active checkpoint — 26 October 2026, v2.67 whole-project audit
+
+- Exact candidate under review: v2.57 APK SHA-256 a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7; this is an audit checkpoint, not a new APK.
+- Patch lineage reconstructs the candidate's 509/509 Deathforth scripts byte-for-byte. CYOA declaration counts match base; no clear deletion of the Start control path is indicated by heuristic static scan.
+- Confirmed stale V2.43 badge remains on splash artwork. Additional vorenyx_title_screen.png also carries V2.43 and no literal loader reference was found; possible orphan asset, not proven.
+- Native libmain.so copies for both ABIs each differ in 89 bytes within ELF .rodata, not in observed code-byte ranges. fitness appears as bugar in native strings but fisik in the Deathforth display helper. Treat as visible-label inconsistency; no gameplay-state corruption is proven.
+- 167 PNG and 21 MP3 assets pass decode/probe. A missing include paul/camping-tent-events.df is referenced by the apparent dormant paul/camping-region.df; no boot-path reference was found, so it is not classified as startup root cause.
+- Official Android apksigner, device install, live Start tap, menu/gameplay/save-load and stability have NOT been verified. Root causes for installation failure and Start no-op remain UNKNOWN until PackageManager/Logcat traces arrive.
+- Reports/tool saved in docs/WHOLE_PROJECT_AUDIT_v2.67.md, audit/whole_project_audit_v2.67.json, and tools/whole_project_audit_v2.67.py. Full local toolkit SHA-256: e66d10df8068d547b1af9f8770ce21a88c15ca85b26f91a72a1842187e89bbea.
