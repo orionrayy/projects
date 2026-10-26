@@ -1,6 +1,6 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint (26 October 2026): v2.65 Install/Start Runtime Trace Toolkit · 17/17 static assertions PASS · Android runtime pending device trace · Full localization NOT COMPLETE**
+**Latest checkpoint (26 October 2026): v2.66 deep static installability audit (NOT a new APK) · 509/509 source payloads match · local v1/v2 checks PASS · official apksigner/device runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
@@ -64,6 +64,16 @@ DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Dea
 - The binary patch and full source archive are **not hosted in this public repository**. SHA-256 sidecars accompany the local release artifacts.
 
 
+
+
+## Latest deep analysis — v2.66 audit (26 October 2026; not an APK release)
+
+A local audit of the exact v2.57 candidate verifies ZIP/manifest/alignment, independently validates its v2 signing signature and content digest, passes the JAR/v1 check, and reproduces all 509 Deathforth scripts from the locally available source/patch lineage byte-for-byte. The normalized code tokens in the primary Start/menu routing files match after display text is masked. This narrows—but does not prove—installability. Official Android `apksigner` and device installation/runtime remain unverified. Do not make another speculative APK build before capturing PackageManager's exact failure code.
+
+- [v2.66 deep installability audit](docs/INSTALLABILITY_AUDIT_v2.66.md)
+- [Sanitized machine-readable results](audit/installability_audit_v2.66.json)
+- [Compact offline audit script](tools/installability_audit_v2.66.py)
+- [v2.65 Install/Start Trace Toolkit](docs/INSTALL_START_TRACE_TOOLKIT_v2.65.md)
 
 ## Latest diagnostic checkpoint — v2.65 (26 October 2026)
 
