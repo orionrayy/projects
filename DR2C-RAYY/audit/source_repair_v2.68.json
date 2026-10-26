@@ -2,7 +2,7 @@
   "project": "DR2C VORENYX",
   "checkpoint": "v2.68-source-repair",
   "date": "2026-10-26",
-  "patch_archive_sha256": "7f991123bbf1a14e553945ea88b20a57d41327436d86c2dffd2feb431df19938",
+  "patch_archive_sha256": "8a6d34cc1ec20be3747cf2f31b06ec84c45b9e86b119e77302044918c2733f98",
   "title_artwork_sha256": "255fc4e1c38a55d2e48cbe184d08121fdbc0216351252d6b6c5835d5b755573f",
   "apk_built": false,
   "runtime_verified": false,
@@ -38,6 +38,7 @@
     "official_apksigner": "NOT RUN",
     "android_install": "NOT RUN",
     "start_runtime_logcat": "NOT RUN",
-    "gameplay_and_save_load": "NOT RUN"
+    "gameplay_and_save_load": "NOT RUN",
+    "full_overlay_replay": "PASS; patcher output matched all three packaged overlay files byte-for-byte on reconstructed prior source lineage"
   }
 }
