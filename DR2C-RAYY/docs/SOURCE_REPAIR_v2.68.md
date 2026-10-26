@@ -1,7 +1,7 @@
 # DR2C VORENYX — Source Repair v2.68
 
 **Date:** 26 October 2026  
-**State:** source-only repair patch; no APK built. Android install, Start-button runtime, gameplay and save/load remain unverified.
+**State:** the source repair archive is an overlay, not an APK. A separate locally signed v2.68 test APK has since been built; see [APK test build report](APK_TEST_BUILD_v2.68.md). Android install, Start-button runtime, gameplay and save/load remain unverified.
 
 ## Applied repairs
 
