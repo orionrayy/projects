@@ -173,3 +173,33 @@ Public GitHub stores project-authored documentation, research and sanitized audi
 - 167 PNG and 21 MP3 assets pass decode/probe. A missing include paul/camping-tent-events.df is referenced by the apparent dormant paul/camping-region.df; no boot-path reference was found, so it is not classified as startup root cause.
 - Official Android apksigner, device install, live Start tap, menu/gameplay/save-load and stability have NOT been verified. Root causes for installation failure and Start no-op remain UNKNOWN until PackageManager/Logcat traces arrive.
 - Reports/tool saved in docs/WHOLE_PROJECT_AUDIT_v2.67.md, audit/whole_project_audit_v2.67.json, and tools/whole_project_audit_v2.67.py. Full local toolkit SHA-256: e66d10df8068d547b1af9f8770ce21a88c15ca85b26f91a72a1842187e89bbea.
+
+
+## Active checkpoint — 26 October 2026, v2.68 source repair
+
+- Source/asset patch only; latest local ZIP SHA-256: `e6bf40a2ca8f69b4c55f7b50592b1cb201b8660ff285f6862a1c96e8b645690d`.
+- Four changes: `boot.df` display-only alias `fitness` -> `bugar`; missing camping event include changed to `load?`; additional title artwork no longer says V2.43; source-overlay splash no longer says V0.3. Candidate APK binary itself remains unchanged and its splash still says V2.43.
+- Local tests PASS: source assertions; patcher fixture/backup/idempotency; title and splash PNG validation; byte-identical artwork generation; exact four-payload replay on reconstructed source lineage; ZIP integrity and checksums.
+- Files: `docs/SOURCE_REPAIR_v2.68.md`, `audit/source_repair_v2.68.json`, `tools/apply_source_repair_v2.68.py`, `tools/repair_title_artwork_v2.68.py`, `tools/test_source_repair_v2.68.py`.
+- A separate v2.68 local test APK is now built: SHA-256 `9ad55289ff5189727cdd43ca39105db49f38c5aa8b6186d6794b19a45aa38cff`, 115,639,068 bytes. JAR/v1 and local v2 signature verifiers PASS; ZIP CRC, path uniqueness, alignment and exact target payload comparison PASS.
+- Official Google apksigner, Android install, Start/Logcat, gameplay and save/load remain NOT TESTED. The APK uses a new local test cert, not publisher key; may require uninstall of a differently signed app and could lose local saves. PairIP/license code unchanged. Not a stable release.
+- Build report: `docs/APK_TEST_BUILD_v2.68.md`; sanitized report: `audit/apk_test_build_v2.68.json`. The source patch ZIP remains an overlay, not an APK.
+
+
+## Active checkpoint — 27 October 2026, v2.68 local test APK build
+
+- Locally built test APK: `DR2C_VORENYX_v2.68_TEST_CANDIDATE.apk`, 115,639,063 bytes, SHA-256 `4028b0ada13ab650ba3625bfe7bf495455bb5816040847f0999ac591f1ecd384`.
+- JAR/v1 verification and local APK v2 verifier PASS; ZIP CRC/no-duplicates and alignment of 264 stored entries PASS; four intended payloads match source overlay byte-for-byte; no other non-signature payload changed.
+- New local test certificate SHA-256: `c46d4af342ad0ecb63a771613e245ab4088597520a27aaf2719c8ea03d6dd15c`. The key and password are not in GitHub.
+- Official apksigner unavailable. PackageManager install, Start/Logcat, gameplay, tutorial, save/load and stability NOT TESTED. PairIP/licensing/native components unchanged. Do not call this a stable release.
+- Build report at `docs/APK_TEST_BUILD_v2.68.md` and sanitized metadata at `audit/apk_test_build_v2.68.json`. Binary APK excluded from public GitHub.
+
+
+## Active checkpoint — 27 October 2026, v2.69 Start runtime diagnosis
+
+- User reports the locally signed v2.68 APK installs but Start does not proceed.
+- Static audit: `events.df` byte-identical to base; normalized control-token streams of `game-select.df`, `game-start.df` and `boot-end.df` match base. `events/tutorial.df` has known code-token differences within translated expressions that remain untested; not proven to cause initial Start no-op.
+- Corrected earlier note: `id-name-localize` has call sites in trait/perk UI files, but these are not on the initial select-boot route.
+- Added `docs/START_ROUTE_STATIC_AUDIT_v2.69.md`, `audit/start_route_static_audit_v2.69.json`, `tools/audit_start_route_v2.69.py`, and `tools/collect_start_trace_termux_v2.69.sh` to branch `dr2c-v268-source-repair` and draft PR #32.
+- Local trace toolkit ZIP SHA-256: `8460aaf92bd732189d38cb39cc127415d72110bbf1f29c3b5bb10cc35ae0648a`. Shell syntax and ZIP CRC PASS. Trace collector uses Android 11 Wireless debugging/ADB, asks before clearing log buffer, does not upload automatically and does not touch game saves.
+- No APK rebuilt. Root cause remains unknown until dispatch/callback/tutorial/native process logs from the device are reviewed.

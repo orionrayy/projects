@@ -1,0 +1,43 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.68-local-test-apk",
+  "date": "2026-10-27",
+  "output": "DR2C_VORENYX_v2.68_TEST_CANDIDATE.apk",
+  "output_bytes": 115639063,
+  "output_sha256": "4028b0ada13ab650ba3625bfe7bf495455bb5816040847f0999ac591f1ecd384",
+  "package": "com.noodlecake.drtc",
+  "versionCode": 57,
+  "versionName": "1.8.2",
+  "candidate_apk_sha256": "a1f566d35b9b3cd7c5513cc72f19c5aca9e5fed881394df4c3ef66eb05a474a7",
+  "source_patch_zip_sha256": "e6bf40a2ca8f69b4c55f7b50592b1cb201b8660ff285f6862a1c96e8b645690d",
+  "test_certificate_sha256": "c46d4af342ad0ecb63a771613e245ab4088597520a27aaf2719c8ea03d6dd15c",
+  "apk_built": true,
+  "locally_re_signed": true,
+  "publisher_signature": false,
+  "validation": {
+    "jarsigner_v1": "PASS",
+    "apk_signature_scheme_v2": "PASS with local verifier; official Google apksigner unavailable",
+    "zip_crc": "PASS",
+    "duplicate_paths": 0,
+    "stored_entries_checked": 264,
+    "native_so_4096_aligned": 14,
+    "other_stored_entries_4byte_aligned": 250,
+    "four_target_payloads_match_overlay_byte_for_byte": true,
+    "other_non_signature_payload_changes": [],
+    "android_package_manager_install": "NOT TESTED",
+    "start_button_logcat": "NOT TESTED",
+    "gameplay_tutorial_save_load": "NOT TESTED"
+  },
+  "patched_payload_sha256": {
+    "assets/deathforth/boot.df": "7e41364a818b24df753820047b7df25e9fd154ce839235cdcf48faab60b52079",
+    "assets/deathforth/paul/camping-region.df": "10a3ef3f49edf566da53678305aa4bfb4cc6117fa08832fb99b42e3ff0006be5",
+    "assets/gfx/ui/vorenyx_title_screen.png": "255fc4e1c38a55d2e48cbe184d08121fdbc0216351252d6b6c5835d5b755573f",
+    "res/drawable-xxhdpi-v4/splash.png": "95e49bbcf22e073cc0bfd7b314ba729d561bccdcc2e262dadbdb3d02a6d257b9"
+  },
+  "limits": [
+    "Test key is not the publisher key; upgrades over differently signed installs may fail.",
+    "Do not uninstall an existing copy without backing up local saves.",
+    "PairIP/licensing/native components are unchanged and may reject app startup.",
+    "This is a test candidate, not a stable release."
+  ]
+}

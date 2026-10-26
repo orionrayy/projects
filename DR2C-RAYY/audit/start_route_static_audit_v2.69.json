@@ -1,0 +1,34 @@
+{
+  "project": "DR2C VORENYX",
+  "checkpoint": "v2.69 start-route static audit",
+  "date": "2026-10-27",
+  "status": "STATIC_HANDLER_PRESENT_RUNTIME_REQUIRED",
+  "base_apk_sha256": "d4b509d899df572d80de553c8545c850ff2122c2d99fae5cfad2532159d35c15",
+  "candidate_apk_sha256": "4028b0ada13ab650ba3625bfe7bf495455bb5816040847f0999ac591f1ecd384",
+  "findings": {
+    "events_df_byte_identical": true,
+    "game_select_control_tokens_match_base": true,
+    "game_start_control_tokens_match_base": true,
+    "boot_end_control_tokens_match_base": true,
+    "tutorial_token_drift_requires_runtime_review": true,
+    "fitness_label_helper_used_on_trait_perk_ui_paths": true,
+    "v268_repair_targets_intersect_start_route": false
+  },
+  "id_name_localize_references": [
+    "assets/deathforth/boot.df",
+    "assets/deathforth/charstats-textfill.df",
+    "assets/deathforth/events/4jerksmode.df",
+    "assets/deathforth/events/inner/region/scepter-range.df",
+    "assets/deathforth/events/trade/camp-recruit.df",
+    "assets/deathforth/events/trade/familiar-recruit.df",
+    "assets/deathforth/events/unlock/perktrait.df"
+  ],
+  "runtime": {
+    "android_install": "USER_REPORTED_SUCCESS",
+    "button_dispatch": "NOT TESTED",
+    "select_boot": "NOT TESTED",
+    "tutorial_load": "NOT TESTED",
+    "gameplay_save_load": "NOT TESTED"
+  },
+  "conclusion": "Do not rewrite Start handlers blindly. Capture Logcat on one tap and classify the failure stage first."
+}

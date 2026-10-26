@@ -1,11 +1,20 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint (26 October 2026): v2.67 whole-project deep static audit (NOT a new APK) · 509/509 source payloads match · local v1/v2 checks PASS · official apksigner/device runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest checkpoint (26 October 2026): v2.68 locally signed APK test candidate built · JAR/v1 and local v2 checks PASS · device runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
 
-## v2.67 whole-project audit — 26 October 2026
+## Active checkpoint — v2.68 source repair and APK test build (26 October 2026)
+
+- Four low-risk source/asset repairs prepared: the display-only `fitness` alias now returns `bugar`; the missing camping-event include is optionalized in the developer/test region; the extra title art no longer carries `V2.43`; and the source-overlay splash no longer carries `V0.3`. The recovered candidate APK still has `V2.43` in its splash because no APK was rebuilt.
+- Source assertions, patcher fixture/backup/idempotency, both PNG checks, exact generation of title/splash art, four-payload source-overlay replay, ZIP integrity and SHA-256 sums all PASS. Repair ZIP SHA-256: `e6bf40a2ca8f69b4c55f7b50592b1cb201b8660ff285f6862a1c96e8b645690d`.
+- Separate APK test candidate built from the patched source overlay: `DR2C_VORENYX_v2.68_TEST_CANDIDATE.apk`, SHA-256 `9ad55289ff5189727cdd43ca39105db49f38c5aa8b6186d6794b19a45aa38cff` (115,639,068 bytes). JAR/v1 and local APK v2 signature checks PASS; ZIP CRC, duplicate-path, alignment and targeted payload checks PASS.
+- This APK uses a new local test certificate. Official Google apksigner and target-device install/runtime remain NOT TESTED; install may require uninstalling a differently signed copy, which can erase local saves. PairIP/licensing was not bypassed. Treat as a test candidate, not a stable release.
+- See [APK test build report](docs/APK_TEST_BUILD_v2.68.md) and [sanitized build audit JSON](audit/apk_test_build_v2.68.json).
+- See [source repair report](docs/SOURCE_REPAIR_v2.68.md), [sanitized validation JSON](audit/source_repair_v2.68.json), and [safe source patcher](tools/apply_source_repair_v2.68.py).
+
+## Previous checkpoint — v2.67 whole-project audit (26 October 2026)
 
 - Deep static review compares the exact v2.57 APK against the base APK and the available 509-script source lineage. Source reconstruction matches 509/509; core CYOA declaration counts are unchanged.
 - Confirmed stale V2.43 badge on splash artwork; likely-unused extra title artwork also retains V2.43. A label inconsistency remains: native library string fitness → bugar versus the boot helper fitness → fisik.
@@ -141,4 +150,4 @@ Runtime gameplay/event-path, actual UI fit/overflow, save/load, Android install 
 - [v2.40 localization summary](audit/v2.40_localization_summary.json)
 - [Version history](audit/version_history.json)
 
-Public GitHub contains project-authored documentation and sanitized audit metadata only. Do not commit the original APK/archive, complete extracted scripts, literal inventory, or binary overlay.
+Public GitHub contains project-authored documentation/tools and sanitized audit metadata only. Do not commit the original APK/archive, complete extracted scripts, literal inventory, or binary overlay.
