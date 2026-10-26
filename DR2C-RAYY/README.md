@@ -1,11 +1,18 @@
 # DR2C VORENYX — Indonesian Localization
 
-**Latest checkpoint (26 October 2026): v2.67 whole-project deep static audit (NOT a new APK) · 509/509 source payloads match · local v1/v2 checks PASS · official apksigner/device runtime NOT VERIFIED · Full localization NOT COMPLETE**
+**Latest checkpoint (26 October 2026): v2.68 source-repair patch (NOT an APK) · source regression tests PASS · official apksigner/device runtime NOT VERIFIED · Full localization NOT COMPLETE**
 
 DR2C VORENYX is a fan-made Indonesian localization/data-overlay project for *Death Road to Canada*. The target is natural, context-aware Indonesian with distinct character voices and blunt sarcasm. Original campaign flow, machine identifiers, branch conditions, route IDs, and game-state effects are invariants.
 
 
-## v2.67 whole-project audit — 26 October 2026
+## Active checkpoint — v2.68 source repair (26 October 2026; NOT an APK)
+
+- Three low-risk source/asset repairs prepared: the display-only `fitness` alias now returns `bugar`; the absent camping-event include is optionalized in the developer/test camping region; and the additional title artwork no longer carries a stale `V2.43` suffix.
+- Local source assertions, patcher fixture/backup/idempotency tests, PNG validation and ZIP integrity all PASS. The title artwork generator reproduces its packaged PNG byte-for-byte.
+- This is an overlay ZIP, not an installable APK. Official apksigner, Android install, Start tap/Logcat, gameplay and save/load remain NOT TESTED. Do not mark installation or Start as fixed.
+- See [source repair report](docs/SOURCE_REPAIR_v2.68.md), [sanitized validation JSON](audit/source_repair_v2.68.json), and [safe source patcher](tools/apply_source_repair_v2.68.py).
+
+## Previous checkpoint — v2.67 whole-project audit (26 October 2026)
 
 - Deep static review compares the exact v2.57 APK against the base APK and the available 509-script source lineage. Source reconstruction matches 509/509; core CYOA declaration counts are unchanged.
 - Confirmed stale V2.43 badge on splash artwork; likely-unused extra title artwork also retains V2.43. A label inconsistency remains: native library string fitness → bugar versus the boot helper fitness → fisik.
@@ -141,4 +148,4 @@ Runtime gameplay/event-path, actual UI fit/overflow, save/load, Android install 
 - [v2.40 localization summary](audit/v2.40_localization_summary.json)
 - [Version history](audit/version_history.json)
 
-Public GitHub contains project-authored documentation and sanitized audit metadata only. Do not commit the original APK/archive, complete extracted scripts, literal inventory, or binary overlay.
+Public GitHub contains project-authored documentation/tools and sanitized audit metadata only. Do not commit the original APK/archive, complete extracted scripts, literal inventory, or binary overlay.
