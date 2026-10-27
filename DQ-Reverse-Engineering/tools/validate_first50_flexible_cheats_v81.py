@@ -62,6 +62,8 @@ def validate(path: Path) -> dict:
         raise ValueError("duplicate No Cooldowns / Level Up options reintroduced")
     if "player.auto_heal" not in by_id or by_id["player.auto_heal_threshold"].get("requires") != ["player.auto_heal"]:
         raise ValueError("Auto Heal threshold dependency missing")
+    if by_id["player.auto_heal"].get("requires"):
+        raise ValueError("Auto Heal toggle must not depend on its own threshold; dependency direction is threshold -> toggle")
     gold = by_id["economy.gold_reward_amount"]
     if gold.get("native_route_candidate") is not None or gold.get("nearby_route_mismatch") != "uai_gp_hud.onDebug(6.0)":
         raise ValueError("flexible Gold amount incorrectly mapped to fixed +100K")
