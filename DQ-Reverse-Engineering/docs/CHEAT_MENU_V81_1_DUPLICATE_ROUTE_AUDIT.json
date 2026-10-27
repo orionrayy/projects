@@ -1,0 +1,69 @@
+{
+  "schema": "dq-cheat-menu-audit-v81.1",
+  "result": "STATIC_ASSET_AUDIT_PASS_IN_GAME_RUNTIME_NOT_TESTED",
+  "target": "Dungeon Quest Android 3.3.2.0 ARM64",
+  "source": {
+    "artifact": "v79-based v80 source STK",
+    "sha256": "e6d82116849cd46b38b068f042327c8a6be7a05322304008551112df173b6c72"
+  },
+  "hud_inventory": {
+    "main_hud": {
+      "elements": 637,
+      "actions": 219
+    },
+    "debug_hud": {
+      "elements": 71,
+      "actions": 13
+    },
+    "pause_hud": {
+      "elements": 127,
+      "actions": 65
+    },
+    "stk_entries": 5630
+  },
+  "confirmed_duplicates": [
+    {
+      "key": "gold_fixed_reward",
+      "existing_control": "goldUp/onDebugGold",
+      "route": "uai_gp_hud.onDebug(6.0)",
+      "finding": "Fixed +100000 Gold; duplicate of v80 Quick Actions Gold +100K.",
+      "recommendation": "Remove one duplicate; never map this route to custom amount/target."
+    },
+    {
+      "key": "level_up",
+      "existing_control": "levelUp/onLevelUp",
+      "route": "uai_gp_hud.onShortcut(\"levelup\", 1)",
+      "finding": "Same route as v80 Quick Actions Level Up.",
+      "recommendation": "Remove extra Level Up row."
+    },
+    {
+      "key": "level_up_debug",
+      "existing_control": "levelUpCheat/onDebugLevel",
+      "route": "uai_gp_hud.onDebug(5.0)",
+      "finding": "An additional stock debug level path exists.",
+      "recommendation": "Do not confuse this with a parameterized level target."
+    },
+    {
+      "key": "gold_down",
+      "existing_control": "goldDown/onDebugGoldDown",
+      "route": "uai_gp_hud.onDebug(7.0)",
+      "finding": "SpendGold branch has unresolved context.",
+      "recommendation": "Keep unavailable until contract/read-back/recovery pass."
+    }
+  ],
+  "debug_page_controls": [
+    "Floor: level picker (1–200), Goto Level, Is Boss",
+    "Add: Add Levels, Add Battle, Add Heroic",
+    "CS/MS/Feat/Legends: existing fixture/reward actions and Crystal/Eternal controls"
+  ],
+  "roster": {
+    "count": 50,
+    "unique_ids": 50,
+    "unique_labels": 50,
+    "unique_effect_keys": 50,
+    "static_route_candidates": 11,
+    "fully_integrated": 0,
+    "runtime_verified": 0
+  },
+  "integration_boundary": "Native List population and stable-ID selection dispatcher remain unproven; this report does not claim a 50-cheat XAPK."
+}
