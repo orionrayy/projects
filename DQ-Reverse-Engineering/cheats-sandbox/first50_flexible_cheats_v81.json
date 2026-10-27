@@ -151,9 +151,7 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "requires": [
-        "player.auto_heal_threshold"
-      ],
+      "requires": [],
       "notes": "Needs an exact callback to monitor current health and trigger healing; threshold control is inert until this toggle and its adapter are available.",
       "conflict_group": null
     },
