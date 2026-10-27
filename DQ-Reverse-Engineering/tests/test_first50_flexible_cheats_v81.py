@@ -47,6 +47,7 @@ class First50FlexibleCheatsV81Tests(unittest.TestCase):
         self.assertNotIn("player.no_cooldowns", self.by_id)
         self.assertNotIn("progression.level_up_one", self.by_id)
         self.assertEqual(self.by_id["player.auto_heal_threshold"]["requires"], ["player.auto_heal"])
+        self.assertEqual(self.by_id["player.auto_heal"]["requires"], [])
 
     def test_static_candidates_are_not_reported_as_live_handlers(self):
         candidates = [item for item in self.doc["cheats"] if item.get("native_route_candidate")]
