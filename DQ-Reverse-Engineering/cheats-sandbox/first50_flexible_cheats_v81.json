@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "schema": "dq-first50-flexible-cheat-registry-v81",
+  "schema": "dq-first50-flexible-cheat-registry-v81.1",
   "project": "Dungeon Quest ModKit",
-  "status": "50_ITEM_REGISTRY_VALIDATED_GAME_ADAPTER_INTEGRATION_BLOCKED",
+  "status": "50_ITEM_REGISTRY_VALIDATED_DEDUPED_GAME_ADAPTER_INTEGRATION_BLOCKED",
   "target": "Dungeon Quest Android 3.3.2.0 ARM64",
   "source_build": "DQ_ModKit_v80_IMPROVED_CHEAT_MENU_ARM64.xapk",
   "total": 50,
@@ -12,11 +12,12 @@
   "fully_integrated": 0,
   "runtime_verified": 0,
   "rules": [
-    "Unique stable IDs/effect keys; do not infer identity from UI labels.",
-    "Only enable an option after exact-build handler, typed argument contract, preconditions, authoritative read-back, save/reload, and recovery tests pass.",
-    "Native HUD/debug routes are static candidates, not proof of runtime gameplay effects.",
-    "Never modify billing receipts/paid entitlements, cloud saves, leaderboards, or achievement submissions.",
-    "Unmapped cheats remain unavailable; no placeholder controls are presented as working."
+    "Unique stable IDs and effect keys; do not infer identity from UI labels.",
+    "Only enable an option after exact-build handler, typed arguments, bounds, preconditions, authoritative state read-back, save/reload and recovery pass.",
+    "Native HUD/debug routes are static candidates, not proof that a flexible control matches their semantics.",
+    "Related controls must declare dependencies or conflict groups to avoid duplicate effects.",
+    "Unmapped cheats remain unavailable; no placeholder controls are presented as working.",
+    "All tests must use an offline disposable profile. Do not touch paid entitlements, purchase receipts, cloud saves, leaderboards or achievement writes."
   ],
   "cheats": [
     {
@@ -37,7 +38,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "player.infinite_mana",
@@ -57,27 +60,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
-    },
-    {
-      "id": "player.no_cooldowns",
-      "label": "No Skill Cooldowns",
-      "category": "Player & Survival",
-      "control": "toggle",
-      "value_type": "boolean",
-      "default": false,
-      "min": null,
-      "max": null,
-      "step": null,
-      "unit": null,
-      "options": null,
-      "risk": "medium",
-      "effect_key": "player.no_cooldowns",
-      "native_route_candidate": null,
-      "adapter_status": "requires_verified_adapter",
-      "runtime_verified": false,
-      "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "player.ignore_debuffs",
@@ -97,7 +82,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "player.no_knockback",
@@ -117,7 +104,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "player.auto_heal_threshold",
@@ -137,7 +126,36 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "Threshold percentage, meaningful only while player.auto_heal is enabled; health read-back and heal callback remain unverified.",
+      "conflict_group": null,
+      "requires": [
+        "player.auto_heal"
+      ]
+    },
+    {
+      "id": "player.auto_heal",
+      "label": "Auto Heal",
+      "category": "Player & Survival",
+      "control": "toggle",
+      "value_type": "boolean",
+      "default": false,
+      "min": null,
+      "max": null,
+      "step": null,
+      "unit": null,
+      "options": null,
+      "risk": "medium",
+      "effect_key": "player.auto_heal",
+      "native_route_candidate": null,
+      "nearby_route_mismatch": null,
+      "adapter_status": "requires_verified_adapter",
+      "runtime_verified": false,
+      "scope": "offline_disposable_profile_only",
+      "requires": [
+        "player.auto_heal_threshold"
+      ],
+      "notes": "Needs an exact callback to monitor current health and trigger healing; threshold control is inert until this toggle and its adapter are available.",
+      "conflict_group": null
     },
     {
       "id": "player.health_multiplier",
@@ -157,7 +175,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "player.movement_multiplier",
@@ -177,7 +197,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "player.attack_speed_multiplier",
@@ -197,7 +219,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "combat.damage_multiplier",
@@ -217,7 +241,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "combat.crit_chance",
@@ -237,7 +263,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "combat.crit_damage_multiplier",
@@ -257,7 +285,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "combat.armor_multiplier",
@@ -277,7 +307,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "combat.lifesteal",
@@ -297,7 +329,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "enemy.health_multiplier",
@@ -317,7 +351,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "enemy.damage_multiplier",
@@ -337,7 +373,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "enemy.move_speed_multiplier",
@@ -357,7 +395,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "enemy.freeze_ai",
@@ -377,7 +417,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "enemy.boss_variant",
@@ -398,11 +440,14 @@
       ],
       "risk": "high",
       "effect_key": "enemy.boss_variant",
-      "native_route_candidate": "uai_gp_hud.onDebug(3.0)",
-      "adapter_status": "existing_ui_route_static_only",
+      "native_route_candidate": null,
+      "adapter_status": "fixed_action_mismatch",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Opens stock boss-related debug path; arbitrary variant mapping is unproven."
+      "notes": "Existing command 3 is a fixed boss/debug flow, not a proven select-based arbitrary encounter variant.",
+      "nearby_route_mismatch": "uai_gp_hud.onDebug(3.0)",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "loot.drop_multiplier",
@@ -422,7 +467,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "loot.rarity_floor",
@@ -447,7 +494,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "loot.guaranteed_drop",
@@ -467,7 +516,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "economy.gold_reward_multiplier",
@@ -487,7 +538,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "economy.gold_balance_target",
@@ -507,7 +560,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "Must mutate authoritative Gold balance; display-only onSetGold and fixed +100K are not accepted handlers.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "economy.gold_reward_amount",
@@ -523,11 +578,14 @@
       "options": null,
       "risk": "medium",
       "effect_key": "economy.gold_reward_amount",
-      "native_route_candidate": "uai_gp_hud.onDebug(6.0)",
-      "adapter_status": "fixed_reward_mismatch",
+      "native_route_candidate": null,
+      "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Existing command is a fixed +100000 Gold reward, not an amount setter."
+      "notes": "Custom increment amount requires a typed amount handler. Existing onDebug(6.0) is fixed at +100,000 Gold and must not be wired to this control.",
+      "nearby_route_mismatch": "uai_gp_hud.onDebug(6.0)",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "economy.dust_reward_amount",
@@ -547,7 +605,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "progression.player_level",
@@ -567,7 +627,9 @@
       "adapter_status": "existing_ui_route_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Stock set-level debug flow; slider-to-authoritative-level mapping is not proven."
+      "notes": "Stock set-level debug flow; slider-to-authoritative-level mapping is not proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "progression.floor_target",
@@ -587,7 +649,9 @@
       "adapter_status": "existing_ui_route_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Stock floor navigation flow; exact target setter is not proven."
+      "notes": "Stock floor navigation flow; exact target setter is not proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "progression.xp_multiplier",
@@ -607,7 +671,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "progression.add_levels",
@@ -627,7 +693,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Fixed existing debug action; exact delta/persistence require device read-back."
+      "notes": "Existing fixed debug action candidate. Exact delta and persistence need read-back; do not add a separate Level Up +1 button alongside it.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "progression.difficulty_override",
@@ -653,27 +721,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
-    },
-    {
-      "id": "progression.level_up_one",
-      "label": "Level Up +1",
-      "category": "Progression Lab",
-      "control": "action",
-      "value_type": "none",
-      "default": null,
-      "min": null,
-      "max": null,
-      "step": null,
-      "unit": null,
-      "options": null,
-      "risk": "medium",
-      "effect_key": "progression.level_up_one",
-      "native_route_candidate": "uai_gp_hud.onShortcut(\"levelup\", 1)",
-      "adapter_status": "existing_action_static_only",
-      "runtime_verified": false,
-      "scope": "offline_disposable_profile_only",
-      "notes": "Original HUD route; runtime effect in current candidate still needs attribution."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "skills.cooldown_multiplier",
@@ -693,7 +743,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "A multiplier of 0 requests no cooldown; keep this as the single configurable cooldown control rather than adding a duplicate No Skill Cooldowns toggle.",
+      "conflict_group": "cooldown_behavior",
+      "requires": []
     },
     {
       "id": "skills.mana_cost_multiplier",
@@ -713,7 +765,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "skills.damage_multiplier",
@@ -733,7 +787,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "skills.free_points",
@@ -753,7 +809,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "inventory.capacity_bonus",
@@ -773,7 +831,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "inventory.auto_identify",
@@ -793,7 +853,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "inventory.rarity_override",
@@ -818,7 +880,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "inventory.affix_reroll_count",
@@ -838,7 +902,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "inventory.grant_legend_fixture",
@@ -858,7 +924,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Fixed fixture, not arbitrary item-ID grant."
+      "notes": "Fixed fixture, not arbitrary item-ID grant.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "inventory.grant_mythstone_fixture",
@@ -878,7 +946,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Fixed fixture, not arbitrary item-ID grant."
+      "notes": "Fixed fixture, not arbitrary item-ID grant.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "inventory.grant_character_stone_fixture",
@@ -898,7 +968,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Fixed fixture, not arbitrary item-ID grant."
+      "notes": "Fixed fixture, not arbitrary item-ID grant.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "inventory.grant_feat_fixture",
@@ -918,7 +990,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Fixed fixture; item count/persistence need device read-back."
+      "notes": "Fixed fixture; item count/persistence need device read-back.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "rewards.add_battle",
@@ -938,7 +1012,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Stock debug route; exact effect and persistence remain unverified."
+      "notes": "Stock debug route; exact effect and persistence remain unverified.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "rewards.add_heroic",
@@ -958,7 +1034,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Stock debug route; exact effect and persistence remain unverified."
+      "notes": "Stock debug route; exact effect and persistence remain unverified.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "rewards.add_crystal",
@@ -978,7 +1056,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Stock debug route; exact effect/account scope are not inferred from the label."
+      "notes": "Stock debug route; exact effect/account scope are not inferred from the label.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "rewards.add_eternal",
@@ -998,7 +1078,9 @@
       "adapter_status": "existing_action_static_only",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "Stock debug route; exact effect/account scope are not inferred from the label."
+      "notes": "Stock debug route; exact effect/account scope are not inferred from the label.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "debug.snapshot",
@@ -1018,7 +1100,9 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven.",
+      "conflict_group": null,
+      "requires": []
     },
     {
       "id": "debug.undo_last_action",
@@ -1038,7 +1122,60 @@
       "adapter_status": "requires_verified_adapter",
       "runtime_verified": false,
       "scope": "offline_disposable_profile_only",
-      "notes": "No exact-build handler contract has passed runtime validation; keep unavailable until adapter and read-back are proven."
+      "notes": "Requires a real before-state snapshot and reversible adapter; remain unavailable until rollback is implemented.",
+      "conflict_group": null,
+      "requires": []
+    },
+    {
+      "id": "progression.quest_stage_target",
+      "label": "Quest Stage Target",
+      "category": "Progression Lab",
+      "control": "number",
+      "value_type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 9999,
+      "step": 1,
+      "unit": null,
+      "options": null,
+      "risk": "high",
+      "effect_key": "progression.quest_stage_target",
+      "native_route_candidate": null,
+      "nearby_route_mismatch": null,
+      "adapter_status": "requires_verified_adapter",
+      "runtime_verified": false,
+      "scope": "offline_disposable_profile_only",
+      "requires": [],
+      "notes": "Requires a verified quest-stage mutator and read-back; the floor-navigation debug route does not prove quest-stage mutation.",
+      "conflict_group": null
     }
+  ],
+  "categories": {
+    "Player & Survival": 9,
+    "Combat Lab": 5,
+    "Enemy AI": 5,
+    "Loot & RNG": 3,
+    "Economy Lab": 6,
+    "Progression Lab": 8,
+    "Skills Lab": 4,
+    "Inventory & Gear": 8,
+    "Debug Tools": 2
+  },
+  "controls": {
+    "toggle": 8,
+    "slider": 20,
+    "select": 4,
+    "number": 7,
+    "action": 11
+  },
+  "existing_native_route_candidates": 11,
+  "notes": [
+    "This is a deduplicated implementation roster, not a claim that 50 cheats are already active in the game.",
+    "v80 added Level Up and Gold +100K rows that duplicate existing native HUD routes; these are excluded as separate catalog features.",
+    "The fixed Gold +100K route is kept separate from a configurable Gold amount or balance target. The Gold-down route is not exposed because its call context is unresolved.",
+    "The No Skill Cooldowns toggle is omitted in favor of the configurable Skill Cooldown multiplier; Auto Heal and its threshold are now a coherent paired control.",
+    "Static routes are candidates only; no control is marked runtime-verified because user-reported outcomes have not been attributed to specific actions.",
+    "The game-side stable-ID dispatcher and typed adapters remain unimplemented. Controls without handlers must remain unavailable rather than appearing functional.",
+    "Paid entitlements, purchase receipts, online account state, cloud saves, leaderboards and achievement writes are out of scope."
   ]
 }
