@@ -13,6 +13,7 @@ class First50FlexibleCheatsV81Tests(unittest.TestCase):
     def setUpClass(cls):
         cls.catalog = ROOT / "cheats-sandbox" / "first50_flexible_cheats_v81.json"
         cls.doc = json.loads(cls.catalog.read_text(encoding="utf-8"))
+        cls.by_id = {item["id"]: item for item in cls.doc["cheats"]}
 
     def test_registry_schema_and_uniqueness(self):
         result = validate(self.catalog)
@@ -28,20 +29,29 @@ class First50FlexibleCheatsV81Tests(unittest.TestCase):
         self.assertTrue(all(item["runtime_verified"] is False for item in self.doc["cheats"]))
 
     def test_every_cheat_is_sandbox_scoped(self):
-        self.assertTrue(all(
-            item["scope"] == "offline_disposable_profile_only"
-            for item in self.doc["cheats"]
-        ))
+        self.assertTrue(all(item["scope"] == "offline_disposable_profile_only" for item in self.doc["cheats"]))
 
     def test_configurable_gold_amount_does_not_claim_fixed_gold_route(self):
-        item = next(x for x in self.doc["cheats"] if x["id"] == "economy.gold_reward_amount")
-        self.assertEqual(item["adapter_status"], "fixed_reward_mismatch")
-        self.assertIn("fixed +100,000 Gold", item["notes"])
+        item = self.by_id["economy.gold_reward_amount"]
+        self.assertEqual(item["adapter_status"], "requires_verified_adapter")
+        self.assertIsNone(item["native_route_candidate"])
+        self.assertEqual(item["nearby_route_mismatch"], "uai_gp_hud.onDebug(6.0)")
+        self.assertIn("fixed at +100,000 Gold", item["notes"])
+
+    def test_boss_variant_is_not_bound_to_fixed_route(self):
+        item = self.by_id["enemy.boss_variant"]
+        self.assertEqual(item["adapter_status"], "fixed_action_mismatch")
+        self.assertIsNone(item["native_route_candidate"])
+
+    def test_duplicate_controls_are_absent_and_dependencies_valid(self):
+        self.assertNotIn("player.no_cooldowns", self.by_id)
+        self.assertNotIn("progression.level_up_one", self.by_id)
+        self.assertEqual(self.by_id["player.auto_heal_threshold"]["requires"], ["player.auto_heal"])
 
     def test_static_candidates_are_not_reported_as_live_handlers(self):
-        candidates = [x for x in self.doc["cheats"] if x["native_route_candidate"]]
-        self.assertEqual(len(candidates), 14)
-        self.assertTrue(all(x["runtime_verified"] is False for x in candidates))
+        candidates = [item for item in self.doc["cheats"] if item.get("native_route_candidate")]
+        self.assertEqual(len(candidates), 11)
+        self.assertTrue(all(item["runtime_verified"] is False for item in candidates))
 
 
 if __name__ == "__main__":
