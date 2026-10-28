@@ -1,0 +1,138 @@
+{
+  "schema": "dq-modkit-v82-flexible-reward-presets-build",
+  "status": "STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_TESTED",
+  "build_date": "2026-10-28",
+  "artifact": {
+    "file_name": "DQ_ModKit_v82_FLEXIBLE_REWARDS_ARM64.xapk",
+    "size_bytes": 57732234,
+    "sha256": "208302002c967ba6462cd5c027ac25a085355c8f64aa4a55d08352a85c4c50fc",
+    "package_id": "com.shinybox.dqv82",
+    "version_name": "3.3.2.0",
+    "split_count": 20,
+    "signer_sha256": "79718291efed7f9ad6124132265eba415c65831da7aa15856c88d539a7ed49c9"
+  },
+  "hud": {
+    "source_elements": 73,
+    "candidate_elements": 82,
+    "source_actions": 15,
+    "candidate_actions": 24,
+    "removed_duplicate_elements": [
+      "levelup_btn_v80",
+      "gold100k_btn_v80"
+    ],
+    "removed_duplicate_actions": [
+      "onLevelUp",
+      "onDebugGold"
+    ],
+    "retained_core_actions": [
+      "Add Levels",
+      "Add Battle",
+      "Add Heroic"
+    ],
+    "new_reward_presets": 11,
+    "new_call_targets": [
+      "uai_gp_hud.RewardGold",
+      "uai_gp_hud.RewardDust"
+    ],
+    "runtime_verified_actions": 0
+  },
+  "controls": [
+    {
+      "id": "gold_plus_1_v82",
+      "label": "Gold +1",
+      "function": "RewardGold",
+      "amount": 1
+    },
+    {
+      "id": "gold_plus_10_v82",
+      "label": "Gold +10",
+      "function": "RewardGold",
+      "amount": 10
+    },
+    {
+      "id": "gold_plus_100_v82",
+      "label": "Gold +100",
+      "function": "RewardGold",
+      "amount": 100
+    },
+    {
+      "id": "gold_plus_1k_v82",
+      "label": "Gold +1K",
+      "function": "RewardGold",
+      "amount": 1000
+    },
+    {
+      "id": "gold_plus_10k_v82",
+      "label": "Gold +10K",
+      "function": "RewardGold",
+      "amount": 10000
+    },
+    {
+      "id": "dust_plus_1_v82",
+      "label": "Dust +1",
+      "function": "RewardDust",
+      "amount": 1
+    },
+    {
+      "id": "dust_plus_10_v82",
+      "label": "Dust +10",
+      "function": "RewardDust",
+      "amount": 10
+    },
+    {
+      "id": "dust_plus_100_v82",
+      "label": "Dust +100",
+      "function": "RewardDust",
+      "amount": 100
+    },
+    {
+      "id": "dust_plus_1k_v82",
+      "label": "Dust +1K",
+      "function": "RewardDust",
+      "amount": 1000
+    },
+    {
+      "id": "dust_plus_10k_v82",
+      "label": "Dust +10K",
+      "function": "RewardDust",
+      "amount": 10000
+    },
+    {
+      "id": "dust_plus_100k_v82",
+      "label": "Dust +100K",
+      "function": "RewardDust",
+      "amount": 100000
+    }
+  ],
+  "static_validation": {
+    "stk_entries": 5630,
+    "stk_all_entry_crc_and_decode": "PASS",
+    "stk_header_key_matches_table_crc": "PASS",
+    "hud_roundtrip": "PASS",
+    "new_action_serialization": "PASS_11_OF_11",
+    "xapk_outer_zip_crc": "PASS",
+    "all_inner_apk_zip_crc": "PASS",
+    "all_split_package_ids_match": "PASS_20_OF_20",
+    "all_split_signer_certificates_match": "PASS_20_OF_20",
+    "apksigner_v1_v2_v3_verify": "PASS_20_OF_20",
+    "zipalign_native_16k": "PASS_20_OF_20",
+    "dex_checksum_repair": "PASS"
+  },
+  "runtime": {
+    "device_install_tested": false,
+    "device_launch_tested": false,
+    "reward_gold_delta_verified": false,
+    "reward_dust_delta_verified": false,
+    "save_reload_verified": false,
+    "force_close_status": "NOT_TESTED",
+    "full_50_catalog_integrated": false,
+    "runtime_verified_catalog_entries": 0,
+    "promotion_allowed": false
+  },
+  "limits": [
+    "Partial implementation: 11 reward amount presets, not 50 distinct fully integrated cheat features.",
+    "Direct RewardGold/RewardDust call sites are statically checked but not runtime tested.",
+    "Generic List/stable-ID selection dispatcher and most catalog handlers remain unresolved.",
+    "Package uses a local test signer and cannot update the publisher-signed official app."
+  ]
+}
