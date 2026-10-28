@@ -1,0 +1,58 @@
+{
+  "schema": "dq-modkit-v83-full50-native-dispatch",
+  "build_date": "2026-10-28",
+  "status": "STATIC_VALIDATION_PASS_DEVICE_RUNTIME_NOT_TESTED",
+  "artifact": {
+    "file_name": "DQ_ModKit_v83_FULL50_NATIVE_DISPATCH_ARM64.xapk",
+    "package_id": "com.shinybox.dqv83",
+    "version_name": "3.3.2.0",
+    "split_count": 20,
+    "size_bytes": 57748612,
+    "sha256": "24aa51a8f48adf823a199ed43bcb168a708dba2c17e17f186801bef3c8df60f1",
+    "signer_sha256": "2f44aa207dc4e7542b25998ebee18c02690307bda2bfcbd3376b4bc957480b5a"
+  },
+  "hud": {
+    "stk_entries": 5630,
+    "unique_buttons": 50,
+    "unique_callbacks": 50,
+    "native_command_ids": [
+      100,
+      149
+    ],
+    "pages": [
+      "Add",
+      "CS",
+      "MS",
+      "Floor",
+      "Feat",
+      "Legends"
+    ],
+    "ui_type": "one-tap presets, not configurable sliders/numeric fields/selects"
+  },
+  "static_validation": {
+    "stk_entry_decode_crc": "PASS",
+    "stk_header_key_crc": "PASS",
+    "hud_roundtrip": "PASS",
+    "command_binding_100_149": "PASS",
+    "native_payload_hash": "PASS",
+    "outer_xapk_crc": "PASS",
+    "inner_apk_zip_crc": "PASS_ALL_20",
+    "package_signer_zipalign_checks": "PASS_DURING_BUILD",
+    "base_native_signature_package_alignment_spotcheck": "PASS"
+  },
+  "runtime": {
+    "device_install": false,
+    "device_launch": false,
+    "verified_effects": 0,
+    "persistence_save_reload": false,
+    "rollback": false,
+    "force_close_status": "NOT_TESTED",
+    "release_ready": false
+  },
+  "known_risks": [
+    "Native hook changes the onDebug path for custom command IDs 100-149.",
+    "Several model variable names/numeric scales are unverified at runtime.",
+    "Enemy target object writes and affix-limit mapping are unverified.",
+    "Snapshot/undo may not cover newly spawned or untracked state."
+  ]
+}
