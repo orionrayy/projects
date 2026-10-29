@@ -1,66 +1,79 @@
 {
-  "schema":"dq-native-client-probe-v64",
-  "status":"SOURCE_PROTOTYPE_ONLY_NOT_CONNECTED_TO_GAME",
-  "purpose":"side-effect-free client-function ABI/dispatcher probe; not a cheat",
-  "target":{
-    "package_id":"com.shinybox.smash",
-    "game_version":"3.3.2.0",
-    "native_library":"libS3DClient.so",
-    "native_library_sha256":"0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
-    "abi":"arm64-v8a"
+  "schema": "dq-native-client-probe-v64",
+  "status": "SOURCE_PROTOTYPE_ONLY_NOT_CONNECTED_TO_GAME",
+  "purpose": "side-effect-free client-function ABI/dispatcher probe; not a cheat",
+  "target": {
+    "package_id": "com.shinybox.smash",
+    "game_version": "3.3.2.0",
+    "native_library": "libS3DClient.so",
+    "native_library_sha256": "0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
+    "abi": "arm64-v8a"
   },
-  "symbols":{
-    "register":{"name":"S3DClient_RegisterFunction","va":"0x7aec14","size_bytes":188},
-    "unregister":{"name":"S3DClient_UnregisterFunction","va":"0x7aecd0","size_bytes":132},
-    "script_dispatch":{"name":"_Z42S3DX_AIScriptAPI_system_callClientFunctioniPKN4S3DX10AIVariableEPS0_","va":"0x892bd8","size_bytes":1556}
+  "symbols": {
+    "register": {
+      "name": "S3DClient_RegisterFunction",
+      "va": "0x7aec14",
+      "size_bytes": 188
+    },
+    "unregister": {
+      "name": "S3DClient_UnregisterFunction",
+      "va": "0x7aecd0",
+      "size_bytes": 132
+    },
+    "script_dispatch": {
+      "name": "_Z42S3DX_AIScriptAPI_system_callClientFunctioniPKN4S3DX10AIVariableEPS0_",
+      "va": "0x892bd8",
+      "size_bytes": 1556
+    }
   },
-  "probe_contract":{
-    "function_name":"dq_native_probe_roundtrip_v64",
-    "side_effects":"none; does not read/write game state or files",
-    "input_count":1,
-    "input_type":"number",
-    "input_value":21,
-    "output_count":1,
-    "output_type":"number",
-    "output_value":42,
-    "number_storage":"float32",
-    "callback_return":"number of output AIVariable values",
-    "aifunction_callback_offset":8,
-    "aifunction_size_assumed_arm64":48,
-    "aivariable_size_assumed_arm64":16,
-    "all_layout_assumptions_compile_time_checked":true
+  "probe_contract": {
+    "function_name": "dq_native_probe_roundtrip_v64",
+    "side_effects": "none; does not read/write game state or files",
+    "input_count": 1,
+    "input_type": "number",
+    "input_value": 21,
+    "output_count": 1,
+    "output_type": "number",
+    "output_value": 42,
+    "number_storage": "float64",
+    "callback_return": "number of output AIVariable values",
+    "aifunction_callback_offset": 8,
+    "aifunction_size_assumed_arm64": 48,
+    "aivariable_size_assumed_arm64": 16,
+    "all_layout_assumptions_compile_time_checked": true,
+    "numeric_storage_evidence": "Pinned stock ARM64 libS3DClient.so: uai_gp_hud::onDebug entry VA 0x6d5048 loads the value at AIVariable offset +8 with LDR D8, and compares it using FP64 instructions. This supports a binary64 payload model but does not replace the absent SDK header or live callback test."
   },
-  "implementation":{
-    "registration_resolved_by_dlsym":true,
-    "dispatcher_resolved_by_mangled_symbol":true,
-    "unregister_explicit":true,
-    "static_name_storage":true,
-    "real_game_invocation_performed":false,
-    "actual_HUD_AIM_callsite_added":false,
-    "Java_Dex_loader_or_callsite_patched":false,
-    "APK_or_XAPK_built":false
+  "implementation": {
+    "registration_resolved_by_dlsym": true,
+    "dispatcher_resolved_by_mangled_symbol": true,
+    "unregister_explicit": true,
+    "static_name_storage": true,
+    "real_game_invocation_performed": false,
+    "actual_HUD_AIM_callsite_added": false,
+    "Java_Dex_loader_or_callsite_patched": false,
+    "APK_or_XAPK_built": false
   },
-  "validation":{
-    "host_unit_tests":"pending_ci",
-    "host_test_scope":"synthetic mock of registration, dispatch and unregister; no real engine",
-    "jni_syntax_check":"pending_ci",
-    "android_ndk_library_build":"not_run",
-    "android_emulator_or_device_test":"not_run"
+  "validation": {
+    "host_unit_tests": "pending_ci",
+    "host_test_scope": "synthetic mock of registration, dispatch and unregister; no real engine",
+    "jni_syntax_check": "pending_ci",
+    "android_ndk_library_build": "not_run",
+    "android_emulator_or_device_test": "not_run"
   },
-  "known_blockers":[
+  "known_blockers": [
     "No matching authorized native client source project is present for Dungeon Quest.",
     "The prototype Java class is not in the game DEX and no post-engineInitialize callsite is wired.",
     "The correct engine-owning thread and exact callback lifecycle for this target build remain unverified.",
     "Direct dispatcher invocation does not prove a HUD/AIM serialized action can call the registered function."
   ],
-  "gameplay_integration":{
-    "catalog_items":222,
-    "catalog_categories":14,
-    "catalog_routes_assigned":0,
-    "runtime_verified_catalog_effects":0,
-    "gold_candidate_runtime_verified":false,
-    "v50_runtime_checks_passed":0,
-    "v50_runtime_checks_total":9,
-    "status":"BLOCKED"
+  "gameplay_integration": {
+    "catalog_items": 222,
+    "catalog_categories": 14,
+    "catalog_routes_assigned": 0,
+    "runtime_verified_catalog_effects": 0,
+    "gold_candidate_runtime_verified": false,
+    "v50_runtime_checks_passed": 0,
+    "v50_runtime_checks_total": 9,
+    "status": "BLOCKED"
   }
 }
