@@ -62,7 +62,7 @@ constexpr CheatSpec kSpecs[] = {
 static_assert(sizeof(kSpecs) / sizeof(kSpecs[0]) == 50,
               "Native route gate must track exactly 50 registry IDs");
 
-dqprobe::AIVariableView make_number(float value) {
+dqprobe::AIVariableView make_number(double value) {
     dqprobe::AIVariableView result{};
     result.type = dqprobe::kNumberType;
     result.payload.number = value;
@@ -106,9 +106,9 @@ Status validate_value(const CheatSpec& spec, ValueKind actual_kind, double value
                 value > spec.max_value) {
                 return Status::OutOfRange;
             }
-            // AIVariable number payloads are float32. Above 2^24, consecutive
-            // integers are not all representable, so never silently round them.
-            if (std::abs(value) > kMaxExactFloat32Integer) {
+            // The observed target callback loads the payload as a 64-bit floating value.
+            // Reject integers outside the consecutive exact binary64 range.
+            if (std::abs(value) > kMaxExactDoubleInteger) {
                 return Status::PrecisionLoss;
             }
             return Status::ValidatedOnly;
@@ -201,15 +201,15 @@ int route_gate_callback(int input_count, const dqprobe::AIVariableView* inputs,
         inputs[2].type == dqprobe::kNumberType &&
         std::isfinite(inputs[1].payload.number) &&
         std::floor(inputs[1].payload.number) == inputs[1].payload.number &&
-        inputs[1].payload.number >= static_cast<float>(ValueKind::None) &&
-        inputs[1].payload.number <= static_cast<float>(ValueKind::Select)) {
+        inputs[1].payload.number >= static_cast<double>(ValueKind::None) &&
+        inputs[1].payload.number <= static_cast<double>(ValueKind::Select)) {
         const auto kind = static_cast<ValueKind>(
             static_cast<int>(inputs[1].payload.number));
         status = route_request(inputs[0].payload.string, kind,
                                static_cast<double>(inputs[2].payload.number));
     }
 
-    outputs[0] = make_number(static_cast<float>(status));
+    outputs[0] = make_number(static_cast<double>(status));
     return 1;
 }
 
@@ -244,7 +244,7 @@ bool invoke_route_gate_self_test(
     arguments[0].payload.string = kRouteGateFunctionName;
     arguments[1].type = dqprobe::kStringType;
     arguments[1].payload.string = "player.god_mode";
-    arguments[2] = make_number(static_cast<float>(ValueKind::Boolean));
+    arguments[2] = make_number(static_cast<double>(ValueKind::Boolean));
     arguments[3] = make_number(0.0f);
 
     dqprobe::AIVariableView output{};
@@ -252,8 +252,8 @@ bool invoke_route_gate_self_test(
     if (output_count != 1 || output.type != dqprobe::kNumberType ||
         !std::isfinite(output.payload.number) ||
         std::floor(output.payload.number) != output.payload.number ||
-        output.payload.number < static_cast<float>(Status::ValidatedOnly) ||
-        output.payload.number > static_cast<float>(Status::BackendUnavailable)) {
+        output.payload.number < static_cast<double>(Status::ValidatedOnly) ||
+        output.payload.number > static_cast<double>(Status::BackendUnavailable)) {
         return false;
     }
 
