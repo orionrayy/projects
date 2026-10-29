@@ -50,7 +50,8 @@ def validate(data: dict[str, Any]) -> dict[str, Any]:
          and contract.get("input_value") == 21, "input contract drift")
     need(contract.get("output_count") == 1 and contract.get("output_type") == "number"
          and contract.get("output_value") == 42, "output contract drift")
-    need(contract.get("number_storage") == "float32", "AIVariable numeric storage must remain float32")
+    need(contract.get("number_storage") == "float64", "AIVariable numeric storage must match the pinned binary64 disassembly evidence")
+    need("ldr d8" in contract.get("numeric_storage_evidence", "") and "0x6d5048" in contract.get("numeric_storage_evidence", ""), "binary64 disassembly evidence missing")
     need(contract.get("aifunction_callback_offset") == 8
          and contract.get("aifunction_size_assumed_arm64") == 48
          and contract.get("aivariable_size_assumed_arm64") == 16, "ABI layout assumptions drift")
