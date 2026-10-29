@@ -232,4 +232,35 @@ bool unregister_route_gate(dqprobe::UnregisterFunctionFn unregister_function) {
     return true;
 }
 
+
+bool invoke_route_gate_self_test(
+    dqprobe::CallClientFunctionFn call_client_function, Status* status_out) {
+    if (call_client_function == nullptr || status_out == nullptr) {
+        return false;
+    }
+
+    dqprobe::AIVariableView arguments[4]{};
+    arguments[0].type = dqprobe::kStringType;
+    arguments[0].payload.string = kRouteGateFunctionName;
+    arguments[1].type = dqprobe::kStringType;
+    arguments[1].payload.string = "player.god_mode";
+    arguments[2] = make_number(static_cast<float>(ValueKind::Boolean));
+    arguments[3] = make_number(0.0f);
+
+    dqprobe::AIVariableView output{};
+    const int output_count = call_client_function(4, arguments, &output);
+    if (output_count != 1 || output.type != dqprobe::kNumberType ||
+        !std::isfinite(output.payload.number) ||
+        std::floor(output.payload.number) != output.payload.number ||
+        output.payload.number < static_cast<float>(Status::ValidatedOnly) ||
+        output.payload.number > static_cast<float>(Status::BackendUnavailable)) {
+        return false;
+    }
+
+    *status_out = static_cast<Status>(static_cast<int>(output.payload.number));
+    // A valid request must still be blocked because no gameplay handler is
+    // proven. A success-like result would fail this probe.
+    return *status_out == Status::HandlerUnavailable;
+}
+
 }  // namespace dqroute
