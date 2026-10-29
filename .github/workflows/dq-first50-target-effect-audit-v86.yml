@@ -1,0 +1,32 @@
+name: Dungeon Quest first-50 target effect audit v86
+on:
+  push:
+    branches: [feat/dq-iap-debug-cheats-modkit-v7]
+    paths:
+      - 'DQ-Reverse-Engineering/tools/audit_first50_target_effects_v86.py'
+      - 'DQ-Reverse-Engineering/tests/test_audit_first50_target_effects_v86.py'
+      - 'DQ-Reverse-Engineering/cheats-sandbox/first50_flexible_cheats_v81.json'
+      - 'DQ-Reverse-Engineering/docs/FIRST50_TARGET_EFFECT_AUDIT_V86_2026-10-29.json'
+      - '.github/workflows/dq-first50-target-effect-audit-v86.yml'
+  pull_request:
+    paths:
+      - 'DQ-Reverse-Engineering/tools/audit_first50_target_effects_v86.py'
+      - 'DQ-Reverse-Engineering/tests/test_audit_first50_target_effects_v86.py'
+      - 'DQ-Reverse-Engineering/cheats-sandbox/first50_flexible_cheats_v81.json'
+      - 'DQ-Reverse-Engineering/docs/FIRST50_TARGET_EFFECT_AUDIT_V86_2026-10-29.json'
+      - '.github/workflows/dq-first50-target-effect-audit-v86.yml'
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests for strict HUD and ELF parsers
+        run: python -m unittest discover -s DQ-Reverse-Engineering/tests -p 'test_audit_first50_target_effects_v86.py' -v
+      - name: Validate canonical catalog
+        run: python DQ-Reverse-Engineering/tools/audit_first50_target_effects_v86.py --registry DQ-Reverse-Engineering/cheats-sandbox/first50_flexible_cheats_v81.json
+      - name: Ensure checked-in report does not promote unverified effects
+        run: |
+          python -c "import json; p=json.load(open('DQ-Reverse-Engineering/docs/FIRST50_TARGET_EFFECT_AUDIT_V86_2026-10-29.json')); assert p['catalog']['items']==50; assert p['catalog']['unique_ids']==50; assert p['runtime']['verified_effects']==0; assert p['runtime']['release_ready'] is False; assert len(p['routes'])==11"
