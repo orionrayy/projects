@@ -1,0 +1,157 @@
+{
+  "schema": "dq-first50-target-effect-audit-v86",
+  "build": "Dungeon Quest Android 3.3.2.0 ARM64",
+  "status": "STATIC_SOURCE_EVIDENCE_ONLY_RUNTIME_NOT_VERIFIED",
+  "sources": {
+    "stock_libS3DClient_sha256": "0424bd9c24d244847149fd89b5cca596629e7a06f62cdf68a3c5bdd996239083",
+    "aim_uai_gp_hud_sha256": "66607a46a23eeaab4fa2dac02772adbea5ab71e65d4e446e49396c6af6a451cb",
+    "hud_debug_sha256": "02ed5420fceacaba5bc614596fddc52646abf04914446e26bc240806930f15b6",
+    "hud_pause_sha256": "12499b08c49b4a5bb34649468b910b62ba1a64adfd831bd638d13d420af9f395"
+  },
+  "catalog": {
+    "items": 50,
+    "unique_ids": 50,
+    "fully_integrated": 0,
+    "runtime_verified": 0
+  },
+  "native_symbols": [
+    {
+      "name": "uai_gp_hud::onDebug",
+      "va": "0x6d5048",
+      "size": 5788
+    },
+    {
+      "name": "uai_gp_hud::RewardGold",
+      "va": "0x65feec",
+      "size": 1604
+    },
+    {
+      "name": "uai_gp_hud::RewardDust",
+      "va": "0x65eeec",
+      "size": 908
+    },
+    {
+      "name": "uai_gp_hud::onSetLevel",
+      "va": "0x7506a4",
+      "size": 232
+    },
+    {
+      "name": "uai_gp_hud::onSetGold",
+      "va": "0x74ff84",
+      "size": 288
+    },
+    {
+      "name": "uai_gp_hud::onSetHealth",
+      "va": "0x7500a4",
+      "size": 512
+    },
+    {
+      "name": "uai_gp_hud::onSetMana",
+      "va": "0x75090c",
+      "size": 512
+    }
+  ],
+  "observations": {
+    "debug_hud_action_count": 13,
+    "static_routes_matched": 11,
+    "reward_gold_fixed_command": 6,
+    "reward_gold_fixed_amount": 100000,
+    "reward_gold_callsite_va": "0x6d5a64",
+    "reward_gold_callsite_instruction_le_hex": "2229fe97",
+    "on_set_level_key": "hud.level",
+    "player_level_semantics_proven": false
+  },
+  "routes": [
+    {
+      "id": "progression.player_level",
+      "hud_action": "onSetLevel",
+      "argument": 4,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "progression.floor_target",
+      "hud_action": "onGotoLevel",
+      "argument": 2,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "progression.add_levels",
+      "hud_action": "onAddLevel",
+      "argument": 11,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "inventory.grant_legend_fixture",
+      "hud_action": "onCreateLegend",
+      "argument": 8,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "inventory.grant_mythstone_fixture",
+      "hud_action": "onCreateMS",
+      "argument": 9,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "inventory.grant_character_stone_fixture",
+      "hud_action": "onCreateCS",
+      "argument": 10,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "inventory.grant_feat_fixture",
+      "hud_action": "onCreateFeat",
+      "argument": 13,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "rewards.add_battle",
+      "hud_action": "onAddBattle",
+      "argument": 16,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "rewards.add_heroic",
+      "hud_action": "onAddHeroic",
+      "argument": 12,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "rewards.add_crystal",
+      "hud_action": "onSetCrystal",
+      "argument": 14,
+      "source_call_present": true,
+      "effect_verified": false
+    },
+    {
+      "id": "rewards.add_eternal",
+      "hud_action": "onSetEternal",
+      "argument": 15,
+      "source_call_present": true,
+      "effect_verified": false
+    }
+  ],
+  "runtime": {
+    "verified_effects": 0,
+    "save_reload_verified": 0,
+    "rollback_verified": 0,
+    "device_tested": false,
+    "apk_built": false,
+    "release_ready": false
+  },
+  "limits": [
+    "Static HUD/AIM calls do not prove authoritative gameplay-state read-back.",
+    "The fixed Gold command is not an arbitrary-amount adapter.",
+    "The remaining 39 catalog entries have no proven stable-ID game handler.",
+    "No APK/XAPK is built or advertised as ready for installation."
+  ]
+}
