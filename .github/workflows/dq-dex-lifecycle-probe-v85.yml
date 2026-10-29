@@ -1,0 +1,72 @@
+name: DQ DEX lifecycle native route-gate v85
+
+on:
+  push:
+    paths:
+      - "DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v85.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_lifecycle_probe_v85.py"
+      - "DQ-Reverse-Engineering/native-client-probe-v64/**"
+      - "DQ-Reverse-Engineering/cheats-sandbox/first50_flexible_cheats_v81.json"
+      - "DQ-Reverse-Engineering/tools/validate_native_cheat_router_v84.py"
+      - "DQ-Reverse-Engineering/docs/DEX_NATIVE_ROUTE_GATE_V85.md"
+      - ".github/workflows/dq-dex-lifecycle-probe-v85.yml"
+  pull_request:
+    paths:
+      - "DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v85.py"
+      - "DQ-Reverse-Engineering/tests/test_dex_lifecycle_probe_v85.py"
+      - "DQ-Reverse-Engineering/native-client-probe-v64/**"
+      - "DQ-Reverse-Engineering/cheats-sandbox/first50_flexible_cheats_v81.json"
+      - "DQ-Reverse-Engineering/tools/validate_native_cheat_router_v84.py"
+      - "DQ-Reverse-Engineering/docs/DEX_NATIVE_ROUTE_GATE_V85.md"
+      - ".github/workflows/dq-dex-lifecycle-probe-v85.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-lifecycle-route-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Compile and run v85 DEX lifecycle overlay tests
+        run: |
+          set -eu
+          python -m py_compile \
+            DQ-Reverse-Engineering/tools/patch_dex_lifecycle_smali_v85.py \
+            DQ-Reverse-Engineering/tests/test_dex_lifecycle_probe_v85.py
+          cd DQ-Reverse-Engineering
+          python -m unittest discover -s tests -p 'test_dex_lifecycle_probe_v85.py' -v
+      - name: Compile and run native route-gate tests
+        run: |
+          set -eu
+          cd DQ-Reverse-Engineering/native-client-probe-v64
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude \
+            src/native_cheat_router_v84.cpp tests/test_native_cheat_router_v84.cpp \
+            -o /tmp/dq_native_route_gate_v84
+          /tmp/dq_native_route_gate_v84
+      - name: Compile and run baseline ABI probe regression
+        run: |
+          set -eu
+          cd DQ-Reverse-Engineering/native-client-probe-v64
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude \
+            src/bridge_core.cpp tests/test_probe_core.cpp -o /tmp/dq_probe_test
+          /tmp/dq_probe_test
+      - name: Syntax-check JNI lifecycle integration
+        run: |
+          set -eu
+          cd DQ-Reverse-Engineering/native-client-probe-v64
+          g++ -std=c++17 -Wall -Wextra -Werror -fsyntax-only \
+            -Iinclude -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" src/jni_bridge.cpp
+      - name: Validate v84 native table against canonical first-50 registry
+        run: |
+          python DQ-Reverse-Engineering/tools/validate_native_cheat_router_v84.py \
+            DQ-Reverse-Engineering/cheats-sandbox/first50_flexible_cheats_v81.json \
+            DQ-Reverse-Engineering/native-client-probe-v64/src/native_cheat_router_v84.cpp
