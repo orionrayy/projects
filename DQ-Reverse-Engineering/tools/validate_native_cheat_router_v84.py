@@ -108,7 +108,7 @@ def main() -> int:
 
         source = args.native_source.read_text(encoding="utf-8")
         for required in (
-            "dq_cheat_route_gate_v84",
+            "kRouteGateFunctionName",
             "if (!spec->runtime_enabled)",
             "return Status::HandlerUnavailable;",
             "return Status::BackendUnavailable;",
