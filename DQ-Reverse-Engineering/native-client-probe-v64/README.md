@@ -19,7 +19,7 @@ This is still not a HUD/AIM integration. No serialized menu action calling \`sys
 
 ## ABI assumptions and guards
 
-Compile-time checks require a 16-byte AIVariable layout view with a type byte at offset 0 and payload at offset +8, and a 48-byte legacy ARM64 AIFunction view with callback at offset +8. Number storage is float32, matching the legacy ShiVa header. The exact target SDK header, allocator/string ownership, and native callback lifecycle remain unverified.
+Compile-time checks require a 16-byte AIVariable layout view with a type byte at offset 0 and payload at offset +8, and a 48-byte legacy ARM64 AIFunction view with callback at offset +8. The numeric payload is modeled as IEEE-754 binary64 because the exact-build ARM64 `uai_gp_hud::onDebug` entry at VA `0x6d5048` loads the payload at offset `+8` into a D-register (`ldr d8, [x2, #0x8]`). This is stronger static evidence than the earlier float32 assumption, but the proprietary SDK header and real callback invocation are still unavailable; runtime ABI compatibility remains unverified. The exact target SDK header, allocator/string ownership, and native callback lifecycle remain unverified.
 
 ## Strict runtime contract
 
