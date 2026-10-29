@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -110,6 +111,11 @@ int main() {
     check(!dqroute::register_route_gate(nullptr), "null registration API fails closed");
     check(dqroute::register_route_gate(&mock_register), "route gate registers by stable name");
     check(g_registry.size() == 1, "registry contains only the route gate in this test");
+    dqroute::Status self_test_status = dqroute::Status::InvalidRequest;
+    check(dqroute::invoke_route_gate_self_test(&mock_call, &self_test_status),
+          "named dispatcher reaches the route gate and returns blocked status");
+    check(self_test_status == dqroute::Status::HandlerUnavailable,
+          "self-test proves input validation only, not a gameplay effect");
 
     dqprobe::AIVariableView request[4]{};
     request[0].type = dqprobe::kStringType;
