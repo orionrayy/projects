@@ -38,7 +38,8 @@ struct CheatSpec {
 };
 
 inline constexpr char kRouteGateFunctionName[] = "dq_cheat_route_gate_v84";
-inline constexpr double kMaxExactFloat32Integer = 16777216.0;
+// Conservative upper limit for consecutive exact integers in IEEE-754 binary64.
+inline constexpr double kMaxExactDoubleInteger = 9007199254740991.0;
 
 std::size_t spec_count();
 const CheatSpec* spec_at(std::size_t index);
