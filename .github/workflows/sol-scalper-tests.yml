@@ -1,0 +1,27 @@
+name: SOL Scalper Monitor Tests
+
+on:
+  push:
+    paths:
+      - "sol-scalper/**"
+      - ".github/workflows/sol-scalper-tests.yml"
+  pull_request:
+    paths:
+      - "sol-scalper/**"
+      - ".github/workflows/sol-scalper-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run dependency-free tests
+        working-directory: sol-scalper
+        run: node --test worker.test.mjs
