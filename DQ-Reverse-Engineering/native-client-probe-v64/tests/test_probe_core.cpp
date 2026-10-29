@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <type_traits>
 #include <unordered_map>
 
 namespace {
@@ -52,6 +53,7 @@ void check(bool condition, const char* label) {
 
 int main() {
     static_assert(sizeof(dqprobe::AIVariableView) == 16);
+    static_assert(std::is_same_v<decltype(dqprobe::AIVariableView::Payload::number), double>);
     static_assert(sizeof(dqprobe::AIFunctionView) == 48);
     static_assert(offsetof(dqprobe::AIFunctionView, pCallback) == 8);
 
@@ -67,7 +69,7 @@ int main() {
               std::string(function->pName) == dqprobe::kProbeFunctionName,
           "static function name and storage remain stable");
     check(dqprobe::invoke_probe(&mock_call_client_function),
-          "typed input reaches callback and 21 returns as 42");
+          "binary64 numeric input reaches callback and 21 returns as 42");
 
     dqprobe::AIVariableView bad_input{};
     bad_input.type = dqprobe::kStringType;
