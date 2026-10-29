@@ -3,6 +3,7 @@ project(dqbridge LANGUAGES CXX)
 
 add_library(dqbridge SHARED
     src/bridge_core.cpp
+    src/native_cheat_router_v84.cpp
     src/jni_bridge.cpp
 )
 target_include_directories(dqbridge PRIVATE include)
