@@ -1,4 +1,5 @@
 #include "dq_native_probe_v64.h"
+#include "dq_native_cheat_router_v84.h"
 
 #include <jni.h>
 #include <dlfcn.h>
@@ -65,8 +66,20 @@ Java_com_shinybox_smash_DqNativeProbe_nativeRegisterProbe(JNIEnv*, jclass) {
     if (!resolve_engine_api()) {
         return JNI_FALSE;
     }
-    g_registered = dqprobe::register_probe(g_api.register_function);
-    return g_registered ? JNI_TRUE : JNI_FALSE;
+
+    // Register the no-op ABI probe first. If the v84 route gate cannot be
+    // registered, roll the first registration back rather than leaving a
+    // partially initialized registry behind.
+    if (!dqprobe::register_probe(g_api.register_function)) {
+        return JNI_FALSE;
+    }
+    if (!dqroute::register_route_gate(g_api.register_function)) {
+        dqprobe::unregister_probe(g_api.unregister_function);
+        return JNI_FALSE;
+    }
+
+    g_registered = true;
+    return JNI_TRUE;
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
@@ -75,7 +88,18 @@ Java_com_shinybox_smash_DqNativeProbe_nativeInvokeProbe(JNIEnv*, jclass) {
     if (!g_registered || !resolve_engine_api()) {
         return JNI_FALSE;
     }
-    return dqprobe::invoke_probe(g_api.call_client_function) ? JNI_TRUE : JNI_FALSE;
+
+    // First exercise the inert 21 -> 42 callback; then exercise lookup,
+    // typed argument marshalling and fail-closed status return for the
+    // native v84 route gate. Neither path mutates game state.
+    if (!dqprobe::invoke_probe(g_api.call_client_function)) {
+        return JNI_FALSE;
+    }
+    dqroute::Status status = dqroute::Status::InvalidRequest;
+    const bool gate_ok =
+        dqroute::invoke_route_gate_self_test(g_api.call_client_function, &status);
+    return gate_ok && status == dqroute::Status::HandlerUnavailable
+        ? JNI_TRUE : JNI_FALSE;
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
@@ -87,9 +111,13 @@ Java_com_shinybox_smash_DqNativeProbe_nativeUnregisterProbe(JNIEnv*, jclass) {
     if (!resolve_engine_api()) {
         return JNI_FALSE;
     }
-    const bool ok = dqprobe::unregister_probe(g_api.unregister_function);
-    if (ok) {
+
+    const bool gate_ok =
+        dqroute::unregister_route_gate(g_api.unregister_function);
+    const bool probe_ok =
+        dqprobe::unregister_probe(g_api.unregister_function);
+    if (gate_ok && probe_ok) {
         g_registered = false;
     }
-    return ok ? JNI_TRUE : JNI_FALSE;
+    return gate_ok && probe_ok ? JNI_TRUE : JNI_FALSE;
 }
