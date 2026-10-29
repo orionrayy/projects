@@ -52,7 +52,7 @@ int mock_call(int argc, const dqprobe::AIVariableView* args,
     return it->second->pCallback(argc - 1, args + 1, outputs);
 }
 
-dqprobe::AIVariableView number(float value) {
+dqprobe::AIVariableView number(double value) {
     dqprobe::AIVariableView v{};
     v.type = dqprobe::kNumberType;
     v.payload.number = value;
@@ -101,7 +101,7 @@ int main() {
     check(dqroute::validate_request("progression.add_levels", dqroute::ValueKind::None, 1.0)
               == dqroute::Status::OutOfRange, "action with an unexpected value is rejected");
     check(dqroute::validate_request("economy.gold_balance_target", dqroute::ValueKind::Integer, 20000000.0)
-              == dqroute::Status::PrecisionLoss, "integer values beyond float32 exactness are rejected");
+              == dqroute::Status::ValidatedOnly, "20 million is exactly representable in binary64 and within the catalog range");
     check(dqroute::validate_request("progression.player_level", dqroute::ValueKind::Integer, 5.5)
               == dqroute::Status::OutOfRange, "fractional integer input is rejected");
     check(dqroute::validate_request("player.movement_multiplier", dqroute::ValueKind::Number,
@@ -122,17 +122,17 @@ int main() {
     request[0].payload.string = dqroute::kRouteGateFunctionName;
     request[1].type = dqprobe::kStringType;
     request[1].payload.string = "progression.add_levels";
-    request[2] = number(static_cast<float>(dqroute::ValueKind::None));
-    request[3] = number(0.0f);
+    request[2] = number(static_cast<double>(dqroute::ValueKind::None));
+    request[3] = number(0.0);
     dqprobe::AIVariableView result{};
     check(mock_call(4, request, &result) == 1, "registered route callback returns one status value");
     check(result.type == dqprobe::kNumberType &&
-              result.payload.number == static_cast<float>(dqroute::Status::HandlerUnavailable),
+              result.payload.number == static_cast<double>(dqroute::Status::HandlerUnavailable),
           "native route callback never claims an unapplied effect succeeded");
 
-    request[2].payload.number = 99.0f;
+    request[2].payload.number = 99.0;
     check(mock_call(4, request, &result) == 1 &&
-              result.payload.number == static_cast<float>(dqroute::Status::InvalidRequest),
+              result.payload.number == static_cast<double>(dqroute::Status::InvalidRequest),
           "invalid native value-kind code fails closed");
 
     check(!dqroute::unregister_route_gate(nullptr), "null unregister API fails closed");
