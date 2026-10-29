@@ -6,7 +6,6 @@
 
 namespace dqroute {
 
-// Numeric codes cross the legacy AIVariable boundary as float32 values.
 enum class ValueKind : int {
     None = 0,
     Number = 1,
@@ -16,15 +15,15 @@ enum class ValueKind : int {
 };
 
 enum class Status : int {
-    ValidatedOnly = 0,       // Input is valid; this is not an applied effect.
+    ValidatedOnly = 0,
     UnknownEffect = 1,
     InvalidRequest = 2,
     TypeMismatch = 3,
     OutOfRange = 4,
     StepMismatch = 5,
-    PrecisionLoss = 6,       // float32 cannot represent this integer exactly.
-    HandlerUnavailable = 7,  // Current target has no verified handler for this ID.
-    BackendUnavailable = 8,  // Reserved for a future verified handler with no executor.
+    PrecisionLoss = 6,
+    HandlerUnavailable = 7,
+    BackendUnavailable = 8,
 };
 
 struct CheatSpec {
@@ -39,7 +38,7 @@ struct CheatSpec {
 };
 
 inline constexpr char kRouteGateFunctionName[] = "dq_cheat_route_gate_v84";
-inline constexpr double kMaxExactFloat32Integer = 16777216.0; // 2^24
+inline constexpr double kMaxExactFloat32Integer = 16777216.0;
 
 std::size_t spec_count();
 const CheatSpec* spec_at(std::size_t index);
@@ -48,14 +47,16 @@ std::size_t static_route_candidate_count();
 Status validate_request(const char* id, ValueKind actual_kind, double value);
 Status route_request(const char* id, ValueKind actual_kind, double value);
 
-// Callback contract:
-// inputs[0] = effect ID (string), inputs[1] = ValueKind numeric code,
-// inputs[2] = requested value (number); outputs[0] = Status numeric code.
-// This gate validates requests only. It never mutates game state.
 int route_gate_callback(int input_count, const dqprobe::AIVariableView* inputs,
                         dqprobe::AIVariableView* outputs);
 dqprobe::AIFunctionView* route_gate_function();
 bool register_route_gate(dqprobe::RegisterFunctionFn register_function);
 bool unregister_route_gate(dqprobe::UnregisterFunctionFn unregister_function);
+
+// Calls the registered name through the engine's script dispatcher with a
+// harmless request and succeeds only when the callback returns
+// HandlerUnavailable (proving validation/dispatch without applying an effect).
+bool invoke_route_gate_self_test(
+    dqprobe::CallClientFunctionFn call_client_function, Status* status_out);
 
 }  // namespace dqroute
