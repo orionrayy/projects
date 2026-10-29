@@ -2,36 +2,40 @@
 
 Purpose: test the ShiVa client-function callback contract with a deterministic zero-game-state probe. This is not a cheat and does not change Gold, player stats, saves, progression, IAP, network state, or game files.
 
-## Probe behavior
+## Probe and v84 route-gate behavior
 
-- Registers the stable name dq_native_probe_roundtrip_v64 with S3DClient_RegisterFunction.
-- The callback accepts exactly one numeric AIVariable with value 21 and returns one numeric AIVariable with value 42.
-- Invocation uses the exported S3DX script dispatcher observed in the pinned ARM64 binary. It validates registry and callback marshalling in a mock test; it does not prove that a serialized HUD/AIM action can invoke the same function.
-- Unregisters the probe by name through S3DClient_UnregisterFunction.
-- The JNI shim resolves symbols from an already-loaded libS3DClient.so and fails closed if a required symbol is missing.
+- Registers the stable name \`dq_native_probe_roundtrip_v64\` with \`S3DClient_RegisterFunction\`.
+- Also registers \`dq_cheat_route_gate_v84\`, a typed validation gate containing the 50 canonical stable IDs.
+- The baseline callback accepts exactly one numeric AIVariable with value 21 and returns one numeric AIVariable with value 42.
+- The v84 self-test sends a harmless \`player.god_mode=false\` request through the named script dispatcher. It succeeds only when the callback returns \`HandlerUnavailable\`, demonstrating that the gate was reached without applying a game effect.
+- Unregisters both names by calling \`S3DClient_UnregisterFunction\`.
+- The JNI shim resolves symbols from an already-loaded \`libS3DClient.so\` and fails closed if a required symbol is missing.
+
+## v84 safety contract
+
+All 50 IDs are present in the source route table, with type/range/step/select validation checked against \`first50_flexible_cheats_v81.json\`. All entries remain \`runtime_enabled=false\`. The 11 known static route candidates are evidence labels only. A validated request returns \`HandlerUnavailable\`, not success. No native game-state backend is connected.
+
+This is still not a HUD/AIM integration. No serialized menu action calling \`system.callClientFunction("dq_cheat_route_gate_v84", ...)\` has been proven or added, and no live target runtime has exercised the callback in this increment.
 
 ## ABI assumptions and guards
 
-Compile-time checks require a 16-byte AIVariable layout view with a type byte at offset 0 and payload at offset +8, and a 48-byte legacy ARM64 AIFunction view with callback at offset +8. Number storage is float32, matching the legacy ShiVa header. The exact target SDK header, allocator/string ownership, and native callback lifecycle are still unverified.
+Compile-time checks require a 16-byte AIVariable layout view with a type byte at offset 0 and payload at offset +8, and a 48-byte legacy ARM64 AIFunction view with callback at offset +8. Number storage is float32, matching the legacy ShiVa header. The exact target SDK header, allocator/string ownership, and native callback lifecycle remain unverified.
 
 ## Strict runtime contract
 
-This prototype is not wired into Dungeon Quest. A separate authorized development package must arrange a call sequence on the engine-owning thread:
-
-1. Wait until the native engine and main pack are initialized.
-2. Load libdqbridge.so from the same development app process.
-3. Call nativeRegisterProbe(), then nativeInvokeProbe(); both must return true.
-4. Call nativeUnregisterProbe() on the same engine-owning thread before engine shutdown.
-
-The dlsym exports and callback ABI are supported by static evidence, but their visibility, thread affinity, and lifetime behavior are not verified by running this code in the actual game. Do not call from an arbitrary UI thread, do not add gameplay handlers, and do not bypass licensing or integrity checks. A missing symbol is a stop condition.
+This prototype is not wired into Dungeon Quest. A separately authorized development build must call registration only after successful engine initialization, run the no-op and route-gate self-tests on the engine-owning thread, and unregister both callbacks before engine shutdown. Do not call from an arbitrary UI thread or bypass licensing or integrity checks. A missing symbol or unexpected status is a stop condition.
 
 ## Build and synthetic tests
 
-The host test mocks function registration, name lookup, callback dispatch, typed input/output, and unregister. It verifies the prototype's code only; it does not emulate the real engine. CI syntax-checks the JNI source against installed JDK headers. It does not package or install an Android APK.
+The host tests mock registration, name lookup, callback dispatch, typed input/output and unregister. They validate source behavior only, not the real engine.
 
 For an authorized Android NDK source build:
 
-    cmake -S . -B build-arm64 -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-23
-    cmake --build build-arm64 --config Release
+\`\`\`sh
+cmake -S . -B build-arm64 \\
+  -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \\
+  -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-23
+cmake --build build-arm64 --config Release
+\`\`\`
 
-Status: source prototype only; no APK/XAPK built; no real-device invocation; no game state changed.
+Status: source prototype only; no APK/XAPK built; no real-device invocation; no gameplay state changed.
