@@ -5,7 +5,7 @@
 namespace dqprobe {
 namespace {
 
-AIVariableView make_number(float value) {
+AIVariableView make_number(double value) {
     AIVariableView result{};
     result.type = kNumberType;
     result.payload.number = value;
